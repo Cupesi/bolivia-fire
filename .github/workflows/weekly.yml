@@ -1,0 +1,134 @@
+name: Weekly experimental estimate
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: weekly-live-pages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    outputs:
+      data_sha: ${{ steps.commit.outputs.data_sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: live-data
+          path: live-data
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          python-version: '3.12'
+          enable-cache: true
+          cache-dependency-glob: source/uv.lock
+      - name: Install Python dependencies
+        working-directory: source
+        run: uv sync --frozen --no-dev --extra covariates
+      - name: Update forecasts and verify observed targets
+        id: live
+        working-directory: source
+        env:
+          FIRMS_MAP_KEY: ${{ secrets.FIRMS_MAP_KEY }}
+        run: |
+          if [ -z "$FIRMS_MAP_KEY" ]; then
+            echo '::error::FIRMS_MAP_KEY repository secret is required'
+            exit 1
+          fi
+          printf '::add-mask::%s\n' "$FIRMS_MAP_KEY"
+          test -f ../live-data/state/daily_counts.parquet || {
+            echo '::error::live-data must be bootstrapped locally before the weekly workflow'
+            exit 1
+          }
+          uv run --no-sync bolivia-fire live update --out ../live-data > "$RUNNER_TEMP/live-result.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          result = json.loads((Path(os.environ['RUNNER_TEMP']) / 'live-result.json').read_text())
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
+              stream.write(f"issue={result['issue_date']}\n")
+              stream.write(f"previous={result['previous_issue']}\n")
+          PY
+      - name: Commit and push weekly outputs
+        id: commit
+        working-directory: live-data
+        env:
+          ISSUE: ${{ steps.live.outputs.issue }}
+          PREVIOUS: ${{ steps.live.outputs.previous }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add state model static forecasts observations verification index.json
+          if ! git diff --cached --quiet; then
+            git -c commit.gpgsign=false -c commit.cleanup=verbatim commit \
+              -m "chore(live): forecast $ISSUE and verify $PREVIOUS"
+            push_authorization="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w 0)"
+            printf '::add-mask::%s\n' "$push_authorization"
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $push_authorization" \
+              push "https://github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/live-data
+          fi
+          printf 'data_sha=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.update.outputs.data_sha }}
+          path: live-data
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: source/frontend/package-lock.json
+      - name: Build static explorer
+        working-directory: source/frontend
+        env:
+          LIVE_DATA_DIR: ${{ github.workspace }}/live-data
+          PAGES_BASE: /bolivia-fire/
+        run: |
+          npm ci
+          npm run build:static
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: source/frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+        id: deployment

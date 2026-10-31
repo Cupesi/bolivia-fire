@@ -62,6 +62,42 @@ class DailyHistory:
             .agg(count=("cell_id", "size"), frp=("frp", "sum"))
             .reset_index()
         )
+        self._initialize(grouped, national)
+
+    @classmethod
+    def from_daily_counts(
+        cls,
+        cells: pd.DataFrame,
+        daily_counts: pd.DataFrame,
+        acquisition_days: pd.DataFrame,
+        start: str | pd.Timestamp,
+        end: str | pd.Timestamp,
+        prior: pd.DataFrame,
+    ) -> DailyHistory:
+        history = cls.__new__(cls)
+        history.cells = cells.reset_index(drop=True)
+        history.start, history.end = pd.Timestamp(start).normalize(), pd.Timestamp(end).normalize()
+        dates = pd.date_range(history.start, history.end)
+        available = acquisition_days.set_index("date")
+        history.acquired = available.acquired.reindex(dates, fill_value=False)
+        history.observed = history.acquired & available.observed.reindex(dates, fill_value=False)
+        history.prior_seen = history.cells.cell_id.isin(prior.cell_id).to_numpy()
+        selected = daily_counts[daily_counts.date.between(history.start, history.end)].copy()
+        national = selected.groupby("date").n.sum().reindex(dates, fill_value=0).to_numpy()
+        history.national_counts = np.concatenate(([0], np.cumsum(national, dtype=np.int64)))
+        selected["cell_index"] = pd.Index(history.cells.cell_id).get_indexer(selected.cell_id)
+        grouped = selected[selected.cell_index >= 0].rename(
+            columns={"date": "day", "n": "count", "frp_sum": "frp"}
+        )
+        history._initialize(grouped, national, prior)
+        return history
+
+    def _initialize(
+        self, grouped: pd.DataFrame, national: NDArray, prior: pd.DataFrame | None = None
+    ) -> None:
+        cells = self.cells
+        dates = pd.date_range(self.start, self.end)
+        self.national_counts = np.concatenate(([0], np.cumsum(national, dtype=np.int64)))
         daily_dtype = np.int16 if grouped["count"].max() <= np.iinfo(np.int16).max else np.int32
         daily = np.zeros((len(dates), len(cells)), dtype=daily_dtype)
         day_indices = (grouped.day - self.start).dt.days.to_numpy()
@@ -75,6 +111,12 @@ class DailyHistory:
         self.last_seen = np.where(daily > 0, np.arange(1, len(dates) + 1)[:, None], 0).astype(
             last_dtype
         )
+        if prior is not None and not prior.empty:
+            old = prior[prior.date.between(self.start, self.end)].copy()
+            positions = pd.Index(cells.cell_id).get_indexer(old.cell_id)
+            valid = positions >= 0
+            offsets = (old.date - self.start).dt.days.to_numpy(dtype=np.int64)
+            self.last_seen[offsets[valid], positions[valid]] = offsets[valid] + 1
         np.maximum.accumulate(self.last_seen, axis=0, out=self.last_seen)
         del daily
         # Float64 accumulation avoids cancellation in 28-day FRP differences.

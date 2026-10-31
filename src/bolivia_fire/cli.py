@@ -15,6 +15,7 @@ from bolivia_fire.firms.acquire import Acquisition, partition_plan
 from bolivia_fire.firms.client import FirmsClient
 from bolivia_fire.firms.quota import Quota
 from bolivia_fire.firms.storage import durable_write
+from bolivia_fire.live_cli import register as register_live
 from bolivia_fire.pipeline_cli import register
 from bolivia_fire.redact import RedactionFilter, Redactor
 
@@ -67,6 +68,7 @@ def _parser() -> argparse.ArgumentParser:
     register(commands)
     register_covariates(commands)
     register_experiments(commands)
+    register_live(commands)
     return parser
 
 

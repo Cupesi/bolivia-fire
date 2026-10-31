@@ -1,0 +1,146 @@
+# Weekly live estimates
+
+The site labels this product **Experimental weekly estimate (near-real-time
+data)**. It estimates whether a grid cell contains at least one selected
+satellite detection in a seven-day target interval. It is not a warning, an
+ignition probability, a count of fires, or an estimate of burned area.
+
+## Data and model
+
+Bootstrap reads the frozen local VIIRS S-NPP standard-processing (SP) detection
+bundle through January 4, 2026, acquires SP observations for January 5 through
+July 31, and acquires near-real-time (NRT) observations from August 1 onward.
+Requests use the existing quota ledger, retries, response-size limit, credential
+redaction, and five-day maximum. Validated source responses and request identities
+are cached outside the live-data checkout; reruns verify hashes before reuse.
+The current UTC day is excluded because its observations are incomplete.
+
+The [FIRMS Area API](https://firms.modaps.eosdis.nasa.gov/api/area/) currently
+returns the 14-column S-NPP NRT schema with version `2.0NRT`. Unlike SP, it has no
+source-type column. The NRT proxy retains nominal/high-confidence rows outside
+375 m great-circle buffers around all SP type-1 and type-2 locations observed
+from January 20, 2012, through July 31, 2026. The mask approximates the SP
+vegetation-source filter; unseen static sources can remain and nearby vegetation
+detections can be removed. The model card, metadata, index, forecasts, and
+observations disclose this proxy. Metadata records mask size and weekly removed
+row counts in the acquisition bounding box.
+
+The frozen selected strict model is exported as LightGBM native text, with
+isotonic thresholds in JSON. Export verifies the original model, calibrator, and
+protocol hashes against the primary opening in
+`artifacts/evaluation/final_test_log.json`. No fitting, selection, or final-test
+evaluation runs during bootstrap or updates. Updates load the exported files;
+the large benchmark dataset and original serialized estimators are unnecessary.
+Calibration restores the frozen threshold dtype and uses the same interpolation
+path as the benchmark; full-issue prediction parity is checked exactly.
+
+Live features use the benchmark's `DailyHistory` implementation. The rolling
+state contains 400 days of sparse selected-detection counts and FRP sums, daily
+acquisition/observation coverage, and a compact older-detection summary that
+preserves the 730-day recency cap and the no-prior-detection flag. A regression
+test compares all 21 strict features with saved SP panel rows for September 6
+and September 13, 2021, using exact equality over all 37,146 cells.
+
+The model was trained on SP detections and is applied to NRT detections; the
+track record measures how well it holds up. SP-to-NRT equivalence has not been
+established. The strict model also covers geographic holdout cells in the live
+grid. Their missing cell climatology remains missing for model inference; the
+comparison baseline uses training department climatology for those cells.
+
+## Timing and publication
+
+An issue is Monday 00:00 UTC and its target is `[issue, issue + 7 days)`.
+Features use only acquisition times strictly before the issue. The GitHub
+workflow runs Monday at 06:00 UTC, allowing NRT processing of the previous day.
+It normally publishes about six hours into its target week, excludes detections
+from those hours from its inputs, and scores the full seven-day target.
+
+`prospective=true` means the scheduled GitHub workflow generated the forecast
+within 24 hours after the issue. Manual initialization and later forecasts are
+backfills, with `prospective=false`. Every forecast and verification row records
+`generated_utc` and `publication_lag_hours`. Performance summaries must use only
+prospective rows and display backfills separately. The initialized October 19
+and October 26, 2026, forecasts are backfills.
+
+Forecasts are immutable once written. Repeating an update reuses existing
+forecasts, replaces fetched daily state by date instead of accumulating it, and
+adds missing outputs. Verification catches up every published forecast with a
+fully observed target, including forecasts stranded by missed weekly runs.
+Incomplete observations can become complete on a later
+update. Bootstrap refuses an archive containing forecasts; use `live update`
+after initialization. A local lock and workflow concurrency prevent overlapping
+writers. The workflow publishes outputs on the separate `live-data` branch,
+builds the site from `main` plus those outputs, and deploys GitHub Pages. The
+data branch is never merged into `main`.
+Update, build, and deployment use separate jobs with the permissions each needs.
+Checkout credentials are not retained; the push step supplies its token only to
+the push command, and the build reads the exact data commit that was pushed.
+
+## Observation coverage and verification
+
+Every update re-fetches the
+[MODAPS S-NPP outage list](https://modaps.modaps.eosdis.nasa.gov/services/production/outages_suomi_npp.html).
+A day is observed only when acquired and documented outage intervals cover
+strictly less than six UTC hours, using the union of overlapping intervals.
+Missing or unobserved target days make every cell label null. Counts from the
+available days remain visible, but incomplete weeks are not scored. Successful
+empty responses establish acquisition, not proof of fire absence.
+The preceding issue's recorded score is withdrawn if refreshed outage coverage
+makes that target incomplete.
+
+`verification/track_record.csv` reports AP, Brier score, ROC AUC, recall at 5%
+and 10% national area, equal-frequency calibration error, and training
+climatology AP on the same week and cells. Undefined metrics are empty CSV
+fields with a reason in `notes`. Area recall uses the benchmark's fractional
+boundary-cell allocation. Climatology uses cell estimates where available and
+department estimates otherwise. Weekly samples are small, cells are dependent,
+and a short record cannot establish reliability or a stable improvement.
+
+## Local execution
+
+Set `FIRMS_MAP_KEY` in the environment or repository `.env`; commands never print
+the credential. Bootstrap requires the locally prepared benchmark data and
+frozen artifacts. Use an orphan `live-data` worktree outside the repository.
+
+```powershell
+uv sync --all-extras --frozen
+git worktree add --orphan -b live-data C:/work/live-data-wt
+uv run bolivia-fire live bootstrap --out C:/work/live-data-wt
+uv run bolivia-fire live update --out C:/work/live-data-wt --issue 2026-10-26
+uv run bolivia-fire live update --out C:/work/live-data-wt
+```
+
+Bootstrap initializes the latest available issue and its preceding issue as
+labelled backfills. The default update issue is the latest Monday with an
+acquired 365-day input window. `--cache` selects an external response cache;
+otherwise it is a sibling directory named `.<checkout-name>-cache`. Keep that
+cache for interrupted-bootstrap recovery. Weekly updates need only the data
+checkout, source code, Python dependencies, and FIRMS credential.
+
+Repository maintainers must publish the initialized data branch, configure the
+`FIRMS_MAP_KEY` repository secret, enable GitHub Pages with Actions, and permit
+the `github-pages` deployment environment. The workflow fails when its secret
+or initialized state is missing. It uses `npm run build:static` with
+`LIVE_DATA_DIR` and `PAGES_BASE=/bolivia-fire/`. No remote publication is performed
+by the local commands. Publication rejects outputs at or above 200 MB; older
+archives then need an explicit retention decision.
+
+## Observed initialization
+
+The October 31, 2026, acquisition bootstrap took 77.190 seconds; a complete
+regeneration from cached responses took 49.149 seconds, and the corrected
+October 26 update took 2.140 seconds. Bootstrap acquired 208 additional SP days and
+91 closed NRT days with 61 area requests, reserving 598 data transaction units;
+the subsequent update required no area requests. The initialized checkout was
+14.4 MB, excluding Git metadata and the external raw-response cache.
+
+The mask contains 23,359 unique locations. It would remove 8,904 of 6,742,418
+nominal/high SP type-0 rows in the bounding box: 0.1321%. The retained state
+contains 23 unobserved days, including five NRT dates. October 19's target week
+is complete; October 26's target week is incomplete at this run.
+
+The October 19 backfill contains 1,713 positive cells out of 37,146. Its AP is
+0.233179, Brier score 0.0392505, ROC AUC 0.863095, recall at 5% area 0.294804,
+recall at 10% area 0.464682, calibration error 0.0127555, and climatology AP
+0.155052. This is a retrospective initialization check and provides no
+prospective performance evidence.
