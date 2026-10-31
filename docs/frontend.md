@@ -2,10 +2,10 @@
 
 The frontend uses Svelte 5, TypeScript, Vite 8 and Tailwind CSS 4. Node
 22.12 or newer is required. The lockfile pins dependencies. The default build
-uses same-origin `/api/v1` URLs; the GitHub Pages build reads relative data files.
+uses same-origin `/api/v1` URLs; the static build reads relative data files.
 Neither mode uses tile, map, font or chart services.
 
-## GitHub Pages mode
+## Static hosting
 
 Build from a local checkout of the `live-data` branch:
 
@@ -13,16 +13,18 @@ Build from a local checkout of the `live-data` branch:
 cd frontend
 npm ci
 $env:LIVE_DATA_DIR = '..\..\live-data'  # a checkout of the live-data branch
-$env:PAGES_BASE = '/bolivia-fire/'
+# PAGES_BASE optionally overrides the default root path: '/'
 npm run build:static
 npm run preview -- --mode static
 ```
 
-Open the preview URL followed by `/bolivia-fire/`. `PAGES_BASE` defaults to that
-path; use `/` for root hosting. Preview must use `--mode static` and the same
+The site is served at `https://bolivia-fire.cupesi.org/`. Open the preview at
+its root URL. `PAGES_BASE` defaults to `/`; set it explicitly for subpath hosting.
+Preview must use `--mode static` and the same
 `PAGES_BASE` as the build. The default `npm run build` remains the API build.
 
-The static build copies `index.json`, the grid, ADM0/ADM1 boundaries, metadata,
+The static build copies `index.json`, the grid, cell places,
+ADM0/ADM1/ADM2/ADM3 boundaries, metadata,
 the latest 52 issues' declared forecasts and observations, and the verification
 CSV into `dist/data/`. It excludes model files, rolling state and Parquet files.
 Missing declared weekly files fail the build; a missing verification CSV is
@@ -69,7 +71,7 @@ npm run test:e2e:static
 ```
 
 The suite builds the explicitly synthetic four-cell fixture and starts Vite
-preview at `http://127.0.0.1:4174/bolivia-fire/`. Chromium, Firefox and WebKit
+preview at `http://127.0.0.1:4174/`. Chromium, Firefox and WebKit
 use the shared host browser cache. The suite covers relative paths, forecast
 metadata, week switching, observed layers, history, track-record groups,
 backfill-only data, incomplete weeks, offline recovery and missing files.
@@ -78,7 +80,7 @@ Screenshots and JSON results are under `frontend/test-results/static/`.
 For a real checkout, set `LIVE_DATA_DIR`, then run
 `npm run test:e2e:static -- --grep @smoke --output=test-results/static-real`.
 Set `STATIC_REPORT=test-results/static-real/results.json` to retain the
-synthetic JSON report. The two smoke cases run in all three engines and
+synthetic JSON report. The three smoke cases run in all three engines and
 capture desktop and mobile screenshots without assuming a particular issue.
 
 ## API mode
@@ -103,7 +105,7 @@ For development, `npm run dev` serves port 5173 and proxies `/api` to
 `npm run test:api` checks the real local API, including bounded CSV export and
 null labels. Set `API_BASE_URL` to change that script's origin.
 
-## Current build verification
+## Earlier static presentation verification
 
 On 2026-10-31, `npm run check` reported zero errors and warnings, `npm run test`
 passed 33 tests, and `npm run build` and `npm run build:static` passed.
@@ -163,11 +165,25 @@ and does not establish completeness. About text and source attributions cover
 NASA FIRMS, geoBoundaries and CHIRPS; MapBiomas is absent from the acquired data.
 Provenance uses curated labels, with shared protocol, cell and source hashes
 shown once and year-specific panel identifiers available in an expandable view.
+Only supplied provenance fields are rendered, including experiments, cell places,
+model and calibrator hashes and the recorded final-test opening time.
+
+Place names come from GeoNames (CC BY 4.0). Cell detail and hover tooltips show
+the municipality, province, department, nearest populated place and rounded
+distance in kilometres, and up to three populated places inside the cell.
+Names retain their source accents. Static mode reads `static/cell_places.json`
+in exact grid order; API mode reads the corresponding `/grid` columns.
 
 The map raster has one pixel per eligible grid cell. Nearest-neighbor scaling
 preserves cell blocks. It uses a north-up geographic projection with square
-0.05-degree blocks; these do not represent equal ground area. Simplified ADM0
-and ADM1 boundaries from the API are drawn on top. Null or absent values are
+0.05-degree blocks; these do not represent equal ground area. Simplified national
+and department outlines are always drawn on top. Province
+(geoBoundaries ADM2) outlines appear at 2 times the fitted scale; thin, low-contrast
+municipality (ADM3) outlines appear at 4 times. Town labels appear from 2 times
+for populations of at least 20,000, deduplicated by GeoNames ID and positioned
+at the containing cell centre. Labels are prioritized by population and rejected
+when their measured boxes overlap or extend outside the map. Null or absent
+values are
 gray, complete negatives pale yellow, and detected positives teal. Probabilities
 use an ordered viridis-like scale with a 0–1 legend. There is no interpolation
 between cells and no conversion of missing labels to zero.
@@ -199,7 +215,7 @@ There is no decorative animation.
 
 ## Browser tests
 
-`frontend/e2e/explorer.spec.ts` contains nine scenarios for each of Chromium,
+`frontend/e2e/explorer.spec.ts` contains ten scenarios for each of Chromium,
 Firefox and WebKit: initial render and console errors, available-week navigation,
 estimate availability, mouse/keyboard cell selection and zoom, sortable table
 and CSV download, offline recovery, a mobile viewport, observation-coverage
@@ -248,22 +264,22 @@ preserves earlier screenshots and reports.
 
 Observed against the backend serving local artifacts at port 8765:
 
-| Check | Result |
-|---|---|
-| `npm ci` | Passed |
-| `npm run check` | Passed, no errors or warnings |
-| `npm run test` | Passed, 19 tests in three files |
-| `npm run build` | Passed; JavaScript 27,922 bytes gzip, below 120,000-byte target |
-| `npm run test:api` | Passed on real artifacts |
-| `npx playwright test --list` | Collected 21 tests across three engines |
-| `npx playwright install chromium firefox webkit` | Passed using the shared host cache |
-| Host Playwright suite | Passed, 21 tests in 25.7 seconds; no retries, skips or flaky results |
+| Check                                            | Result                                                               |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
+| `npm ci`                                         | Passed                                                               |
+| `npm run check`                                  | Passed, no errors or warnings                                        |
+| `npm run test`                                   | Passed, 19 tests in three files                                      |
+| `npm run build`                                  | Passed; JavaScript 27,922 bytes gzip, below 120,000-byte target      |
+| `npm run test:api`                               | Passed on real artifacts                                             |
+| `npx playwright test --list`                     | Collected 21 tests across three engines                              |
+| `npx playwright install chromium firefox webkit` | Passed using the shared host cache                                   |
+| Host Playwright suite                            | Passed, 21 tests in 25.7 seconds; no retries, skips or flaky results |
 
-| Host engine | Passed | Failed |
-|---|---:|---:|
-| Chromium 156.0.8078.4 | 7 | 0 |
-| Firefox 157.0 | 7 | 0 |
-| WebKit 27.2 | 7 | 0 |
+| Host engine           | Passed | Failed |
+| --------------------- | -----: | -----: |
+| Chromium 156.0.8078.4 |      7 |      0 |
+| Firefox 157.0         |      7 |      0 |
+| WebKit 27.2           |      7 |      0 |
 
 The API smoke check observed 37,146 cells and 678 issue weeks, ending
 2025-12-29. The current-week layer and CSV each contained 37,146 rows. The CSV
@@ -293,11 +309,11 @@ Diagnostics are in `frontend/test-results/f2-review/browser-diagnostics.json`.
 
 Screenshot paths below are relative to `frontend/test-results/f2-review`:
 
-| Engine | Desktop map/detail | Mobile map/detail | Desktop table/detail | Mobile table/detail |
-|---|---|---|---|---|
+| Engine   | Desktop map/detail     | Mobile map/detail     | Desktop table/detail         | Mobile table/detail         |
+| -------- | ---------------------- | --------------------- | ---------------------------- | --------------------------- |
 | Chromium | `chromium-desktop.png` | `chromium-mobile.png` | `chromium-desktop-table.png` | `chromium-mobile-table.png` |
-| Firefox | `firefox-desktop.png` | `firefox-mobile.png` | `firefox-desktop-table.png` | `firefox-mobile-table.png` |
-| WebKit | `webkit-desktop.png` | `webkit-mobile.png` | `webkit-desktop-table.png` | `webkit-mobile-table.png` |
+| Firefox  | `firefox-desktop.png`  | `firefox-mobile.png`  | `firefox-desktop-table.png`  | `firefox-mobile-table.png`  |
+| WebKit   | `webkit-desktop.png`   | `webkit-mobile.png`   | `webkit-desktop-table.png`   | `webkit-mobile-table.png`   |
 
 The shared browser cache measured 4,417,989,594 bytes (4.115 GiB), including
 pre-existing versions and browser profiles. The five installed engine/helper
@@ -323,21 +339,21 @@ The consistency checks on 2026-10-31 used a separate backend started with
 The existing port 8765 process was left running. Host browsers came from the
 shared cache; no browser installation or data download was needed.
 
-| Check | Result |
-|---|---|
-| `npm run check` | Passed; no errors or warnings |
-| `npm run test` | 19 passed |
-| `npm run build` | Passed; JavaScript 28,294 bytes gzip |
-| `uv run pytest -q backend/tests -p no:cacheprovider` | 34 passed |
-| `uv run pytest -q tests backend/tests -p no:cacheprovider` | 290 passed; one live test deselected |
-| `uv run ruff check backend` | Passed |
-| Host Playwright suite | 27 passed in 30.9 seconds; no retries, skips or flaky results |
+| Check                                                      | Result                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------- |
+| `npm run check`                                            | Passed; no errors or warnings                                 |
+| `npm run test`                                             | 19 passed                                                     |
+| `npm run build`                                            | Passed; JavaScript 28,294 bytes gzip                          |
+| `uv run pytest -q backend/tests -p no:cacheprovider`       | 34 passed                                                     |
+| `uv run pytest -q tests backend/tests -p no:cacheprovider` | 290 passed; one live test deselected                          |
+| `uv run ruff check backend`                                | Passed                                                        |
+| Host Playwright suite                                      | 27 passed in 30.9 seconds; no retries, skips or flaky results |
 
-| Engine | Passed | Failed |
-|---|---:|---:|
-| Chromium | 9 | 0 |
-| Firefox | 9 | 0 |
-| WebKit | 9 | 0 |
+| Engine   | Passed | Failed |
+| -------- | -----: | -----: |
+| Chromium |      9 |      0 |
+| Firefox  |      9 |      0 |
+| WebKit   |      9 |      0 |
 
 Both the backend and E2E regressions check 2022-08-01, with 37,146 missing
 labels, and 2025-12-29, with 37,146 complete labels. The latter overlaps a
@@ -375,20 +391,20 @@ geographic models were present, with model and calibrator hashes checked against
 the single final-test opening. No training, selection or evaluation command was
 run during this verification.
 
-| Check | Result |
-|---|---|
-| `npm run check` | Passed; zero errors or warnings |
-| `npm run test` | 19 passed |
-| `npm run build` | Passed; JavaScript 28,360 bytes gzip |
-| `uv run --no-sync ruff check src tests backend` | Passed |
-| `uv run --no-sync pytest -q tests backend/tests -p no:cacheprovider` | 385 passed; one live test deselected; 201.13 seconds |
-| Host Playwright suite | 33 passed in 55.8 seconds; zero failures, retries, skips or flaky results |
+| Check                                                                | Result                                                                    |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `npm run check`                                                      | Passed; zero errors or warnings                                           |
+| `npm run test`                                                       | 19 passed                                                                 |
+| `npm run build`                                                      | Passed; JavaScript 28,360 bytes gzip                                      |
+| `uv run --no-sync ruff check src tests backend`                      | Passed                                                                    |
+| `uv run --no-sync pytest -q tests backend/tests -p no:cacheprovider` | 385 passed; one live test deselected; 201.13 seconds                      |
+| Host Playwright suite                                                | 33 passed in 55.8 seconds; zero failures, retries, skips or flaky results |
 
-| Engine | Passed | Failed |
-|---|---:|---:|
-| Chromium | 11 | 0 |
-| Firefox | 11 | 0 |
-| WebKit | 11 | 0 |
+| Engine   | Passed | Failed |
+| -------- | -----: | -----: |
+| Chromium |     11 |      0 |
+| Firefox  |     11 |      0 |
+| WebKit   |     11 |      0 |
 
 The host browser command, run from `frontend`, was:
 
@@ -413,3 +429,46 @@ Pytest reported 11 warnings: the Starlette/httpx deprecation, eight DuckDB/panda
 deprecations, and two tkinter cleanup warnings emitted during the real-artifact
 API test. Playwright reported the `NO_COLOR`/`FORCE_COLOR` environment warning.
 The verification server on port 8767 was stopped after all checks.
+
+## Place and root-domain verification
+
+Verification on 2026-10-31 used the enriched real live-data checkout and a fresh
+API server on `127.0.0.1:8768`. The final static source was commit
+`16784a1e04b59e1941b3dc2c30068819eabc22bc`. No dependencies were added.
+
+| Check | Result |
+|---|---|
+| `npm run check` | Passed; zero errors and warnings |
+| `npm run test` | 41 passed in seven files |
+| `npm run build` | Passed; JavaScript 32,743 bytes gzip, below 120,000 bytes |
+| `npm run build:static` with real live data and default `/` | Passed; JavaScript 34,383 bytes gzip, below 43,922 bytes |
+| `npm run test:api` | Passed; 37,146 cells, 678 weeks, 37,146 CSV rows |
+| API Playwright suite | 36 passed; three existing opt-in documentation-media captures skipped |
+| Synthetic static Playwright suite | 30 passed |
+| Real static Playwright `--grep '@smoke'` | Nine passed |
+| Static smoke with `PAGES_BASE='/bolivia-fire/'`, Chromium | Three passed |
+| UTF-8 and whitespace checks | Passed; accented synthetic names checked exactly |
+
+The API, synthetic static and real static suites exercised Chromium, Firefox
+and WebKit with no failures or retries. The real static distribution contains
+13 data files totaling 13,214,724 bytes; the full distribution is 13,329,769
+bytes. SHA-256 comparisons confirmed all 23 source-checkout files were unchanged
+after the read-only build and tests. The temporary API server was stopped.
+
+Place regressions check exact municipality, province and department names,
+nearest-place text, in-cell places, progressive boundary levels, and pairwise
+town-label rectangle separation. Unit tests reject reordered place rows and
+retain zero distances, accents, annual panel hashes and recorded artifact
+provenance. Real static checks compare displayed provenance with the supplied
+protocol, experiments, cells, sources, model and calibrator hashes and final-test
+opening time, and check that unused CHIRPS attribution is absent.
+
+Zoomed municipality/label and place-tooltip screenshots were visually inspected
+in all three engines for API and real static mode. Settled cell histories,
+thin municipality outlines, town labels and accented place names rendered
+without clipping. Real static screenshots include
+`municipalities-labels.png` and `municipalities-labels-places.png` in each
+engine's scenario directory under `frontend/test-results/l4-static-real-final/`.
+Reports are under `frontend/test-results/l4-api-final/`,
+`l4-api-places-settled/`, `l4-static-synthetic-final/`, `l4-static-real-final/` and
+`l4-static-subpath/`.

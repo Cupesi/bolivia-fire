@@ -104,6 +104,10 @@ export function normalizeMeta(payload: unknown): Meta {
     end: string(dates.end),
     protocolVersion: string(protocol.version),
     protocolHash: string(protocol.sha256),
+    modelId: string(raw.model_id),
+    modelHash: string(raw.source_model_sha256),
+    calibratorHash: string(raw.source_calibrator_sha256),
+    finalTestOpened: string(raw.primary_opening_utc),
     snapshots: object(raw.dataset_snapshot_ids),
     layers: strings(raw.available_layers),
     models: Object.fromEntries(
@@ -128,9 +132,21 @@ export function normalizeGrid(payload: unknown): Grid {
   const cols = array(raw.col);
   const departments = array(raw.department);
   const areas = array(raw.national_area_km2);
+  const placeColumns = [
+    "province",
+    "municipality",
+    "nearest_place_name",
+    "nearest_place_distance_km",
+    "populated_places",
+  ];
   if (
     ![rows, cols, departments, areas].every(
       (column) => column.length === ids.length,
+    ) ||
+    placeColumns.some(
+      (key) =>
+        key in raw &&
+        (!Array.isArray(raw[key]) || array(raw[key]).length !== ids.length),
     )
   )
     throw new ApiError(
@@ -145,6 +161,26 @@ export function normalizeGrid(payload: unknown): Grid {
     col: Number(cols[index]),
     department: string(departments[index]),
     area: Number(areas[index]),
+    province: string(array(raw.province)[index]),
+    municipality: string(array(raw.municipality)[index]),
+    nearestPlace: string(array(raw.nearest_place_name)[index])
+      ? {
+          name: string(array(raw.nearest_place_name)[index]),
+          distanceKm: numberOrNull(array(raw.nearest_place_distance_km)[index]),
+        }
+      : undefined,
+    populatedPlaces: array(array(raw.populated_places)[index])
+      .slice(0, 3)
+      .map((value) => {
+        const place = object(value);
+        return {
+          name: string(place.name),
+          geonames_id: Number(place.geonames_id),
+          population: Number(place.population),
+          feature_code: string(place.feature_code),
+        };
+      })
+      .filter((place) => Boolean(place.name)),
   }));
   const origin = array(raw.origin);
   const resolution = Number(raw.resolution_deg);
@@ -255,18 +291,20 @@ export async function loadInitial(signal?: AbortSignal): Promise<{
   weeks: Week[];
   boundaries: Boundaries[];
 }> {
-  const [meta, grid, weeks, adm0, adm1] = await Promise.all([
+  const [meta, grid, weeks, ...boundaries] = await Promise.all([
     getJson("/meta", signal),
     getJson("/grid", signal),
     loadWeeks(signal),
     getJson<Boundaries>("/boundaries?level=0", signal),
     getJson<Boundaries>("/boundaries?level=1", signal),
+    getJson<Boundaries>("/boundaries?level=2", signal),
+    getJson<Boundaries>("/boundaries?level=3", signal),
   ]);
   return {
     meta: normalizeMeta(meta),
     grid: normalizeGrid(grid),
     weeks,
-    boundaries: [adm0, adm1],
+    boundaries,
   };
 }
 

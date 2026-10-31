@@ -166,13 +166,17 @@ export function createStaticClient(base: string) {
     return metadata;
   }
   async function loadInitial(signal?: AbortSignal) {
-    const [live, metaRaw, gridRaw, adm0, adm1] = await Promise.all([
-      index(signal),
-      loadMetadata(signal),
-      json("static/grid.json", signal),
-      json<Boundaries>("static/boundaries_adm0.json", signal),
-      json<Boundaries>("static/boundaries_adm1.json", signal),
-    ]);
+    const [live, metaRaw, gridRaw, placesRaw, ...boundaries] =
+      await Promise.all([
+        index(signal),
+        loadMetadata(signal),
+        json<Record<string, unknown>>("static/grid.json", signal),
+        json<Record<string, unknown>>("static/cell_places.json", signal),
+        json<Boundaries>("static/boundaries_adm0.json", signal),
+        json<Boundaries>("static/boundaries_adm1.json", signal),
+        json<Boundaries>("static/boundaries_adm2.json", signal),
+        json<Boundaries>("static/boundaries_adm3.json", signal),
+      ]);
     const meta = normalizeMeta({
       ...metaRaw,
       protocol: metaRaw.protocol ?? { sha256: metaRaw.protocol_sha256 },
@@ -184,6 +188,9 @@ export function createStaticClient(base: string) {
             "protocol_sha256",
             "frozen_sp_bundle_sha256",
             "outage_sha256",
+            "experiments_sha256",
+            "cells_sha256",
+            "sources_sha256",
           ].flatMap((key) =>
             typeof metaRaw[key] === "string" ? [[key, metaRaw[key]]] : [],
           ),
@@ -193,11 +200,20 @@ export function createStaticClient(base: string) {
     meta.limitations = [
       ...new Set([...meta.limitations, ...(live.limitations ?? [])]),
     ];
+    if (
+      !Array.isArray(placesRaw.cell_id) ||
+      !Array.isArray(gridRaw.cell_id) ||
+      placesRaw.cell_id.length !== gridRaw.cell_id.length ||
+      placesRaw.cell_id.some(
+        (id, index) => id !== (gridRaw.cell_id as unknown[])[index],
+      )
+    )
+      throw invalid("The place data do not align with the grid cells.");
     return {
       live,
       meta,
-      grid: normalizeGrid(gridRaw),
-      boundaries: [adm0, adm1],
+      grid: normalizeGrid({ ...gridRaw, ...placesRaw }),
+      boundaries,
       weeks: live.issues
         .filter((issue) => issue.forecast)
         .map((issue) => ({

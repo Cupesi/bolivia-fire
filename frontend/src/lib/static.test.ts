@@ -36,6 +36,38 @@ describe("static client with synthetic data", () => {
       area: 21,
     });
     expect(result.meta.layers).toContain("estimate");
+    expect(result.grid.cells[0]).toMatchObject({
+      municipality: "Concepción",
+      province: "Ñuflo de Chávez",
+      nearestPlace: { name: "San Ignacio de Velasco", distanceKm: 12.4 },
+    });
+    expect(result.boundaries).toHaveLength(4);
+  });
+  it("uses root-relative data URLs for custom-domain hosting", async () => {
+    syntheticFetch();
+    const original = fetch;
+    const requests: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      requests.push(url);
+      return original(`/bolivia-fire${url}`);
+    });
+    await createStaticClient("/").loadInitial(signal());
+    expect(requests).toContain("/data/static/cell_places.json");
+    expect(requests.every((url) => url.startsWith("/data/"))).toBe(true);
+  });
+  it("rejects place rows in a different order instead of mislabelling cells", async () => {
+    syntheticFetch();
+    const original = fetch;
+    vi.stubGlobal("fetch", async (url: string) => {
+      const response = await original(url);
+      if (!url.endsWith("cell_places.json")) return response;
+      const raw = await response.json();
+      raw.cell_id.reverse();
+      return new Response(JSON.stringify(raw));
+    });
+    await expect(client().loadInitial(signal())).rejects.toThrow(
+      "place data do not align",
+    );
   });
   it("reads source credits and protocol provenance from the live pipeline metadata", async () => {
     syntheticFetch();

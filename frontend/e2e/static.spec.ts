@@ -1,4 +1,32 @@
 import { expect, test } from "@playwright/test";
+import { inspectMapDetail } from "./map-detail";
+
+test("@smoke displays places, zoomed municipality outlines and nonoverlapping town labels", async ({
+  page,
+}, testInfo) => {
+  await page.goto("./");
+  await expect(page.getByTestId("layer-status")).toContainText("Showing");
+  await expect(page.locator(".provenance")).not.toContainText("Not supplied");
+  await expect(page.locator("#about")).toContainText(
+    "Place names: GeoNames (CC BY 4.0)",
+  );
+  await expect(page.locator("#about")).toContainText("geoBoundaries ADM2/ADM3");
+  await expect(page.locator("#about")).not.toContainText("CHIRPS");
+  const meta = await (await page.request.get("data/static/meta.json")).json();
+  for (const value of [
+    meta.protocol?.version,
+    meta.protocol?.sha256,
+    meta.experiments_sha256,
+    meta.cells_sha256,
+    meta.sources_sha256,
+    meta.source_model_sha256,
+    meta.source_calibrator_sha256,
+    meta.primary_opening_utc,
+  ]) {
+    if (value) await expect(page.locator(".provenance")).toContainText(value);
+  }
+  await inspectMapDetail(page, testInfo, true);
+});
 
 test("@smoke serves the latest forecast and cell history under the Pages base path", async ({
   page,

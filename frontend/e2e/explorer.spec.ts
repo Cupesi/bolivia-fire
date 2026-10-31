@@ -2,6 +2,14 @@ import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { normalizeGrid, normalizeWeeks } from "../src/lib/api";
 import { fitGrid, screenPoint } from "../src/lib/projection";
+import { inspectMapDetail } from "./map-detail";
+
+test("displays place detail, municipality outlines and nonoverlapping town labels", async ({
+  page,
+}, testInfo) => {
+  await openExplorer(page);
+  await inspectMapDetail(page, testInfo, false);
+});
 
 async function openExplorer(page: Page) {
   await page.goto("/");
@@ -133,23 +141,32 @@ test("project identity and curated provenance describe the sources used", async 
     .click();
   await expect(about).not.toContainText("MapBiomas");
   for (const name of ["NASA FIRMS", "geoBoundaries", "CHIRPS"]) {
-    await expect(about.getByRole("link", { name, exact: true })).toBeVisible();
+    await expect(
+      about.getByRole("link", { name, exact: true }).first(),
+    ).toBeVisible();
   }
   await expect(about).toContainText("GeoBolivia (derived from ADM3 layer)");
   await expect(about).toContainText("gbOpen BOL ADM0/ADM1, revision 9469f09");
   await expect(about).toContainText("Public Domain");
   await expect(about).toContainText("CHIRPS v3.0 final daily rnl");
   await expect(about).toContainText("ERA5 temporal disaggregation");
-  await expect(about.getByRole("link", { name: /^CC BY 4.0/ })).toHaveAttribute(
-    "href", "https://creativecommons.org/licenses/by/4.0/",
-  );
+  await expect(
+    about.getByRole("link", { name: /^CC BY 4.0, with provider/ }),
+  ).toHaveAttribute("href", "https://creativecommons.org/licenses/by/4.0/");
   await expect(about.locator(".provenance > dl > div > dt")).toHaveText([
     "Protocol version",
     "Protocol SHA-256",
     "Cells SHA-256",
     "Panel snapshot",
     "Sources SHA-256",
+    "Experiments SHA-256",
+    "Cell places SHA-256",
+    "Evaluation sources SHA-256",
+    "Final-test opening (UTC)",
   ]);
+  await expect(about).toContainText("Place names: GeoNames (CC BY 4.0)");
+  await expect(about).toContainText("geoBoundaries ADM2/ADM3");
+  await expect(about).not.toContainText("Not supplied");
   await about.getByText("View identifiers", { exact: true }).click();
   await expect(about.locator(".provenance")).toContainText(
     "FIRMS manifest SHA-256",

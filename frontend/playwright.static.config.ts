@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 import { resolve } from "node:path";
 
-const base = process.env.PAGES_BASE || "/bolivia-fire/";
+const base = process.env.PAGES_BASE || "/";
 const origin = "http://127.0.0.1:4174";
 export default defineConfig({
   testDir: "./e2e",

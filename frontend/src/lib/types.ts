@@ -9,6 +9,16 @@ export interface Cell {
   col: number;
   department: string;
   area: number;
+  province?: string;
+  municipality?: string;
+  nearestPlace?: { name: string; distanceKm: number | null };
+  populatedPlaces?: PopulatedPlace[];
+}
+export interface PopulatedPlace {
+  name: string;
+  geonames_id: number;
+  population: number;
+  feature_code: string;
 }
 export interface Grid {
   origin: [number, number];
@@ -22,6 +32,10 @@ export interface Meta {
   end: string;
   protocolVersion: string;
   protocolHash: string;
+  modelId: string;
+  modelHash: string;
+  calibratorHash: string;
+  finalTestOpened: string;
   snapshots: Record<string, unknown>;
   layers: string[];
   models: Record<string, string[]>;

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import { colorForValue, formatValue } from "../lib/color";
+  import CellPlaces from "./CellPlaces.svelte";
+  import { boundaryLevels, placeLabels } from "../lib/map-detail";
   import {
     cellAtPoint,
     fitGrid,
@@ -39,13 +41,31 @@
   let hovered = $state<Cell | null>(null);
   let cursor = $state<Cell | null>(null);
   let focused = $state(false);
-  let drag: {
+  let pointer = $state({ x: 0, y: 0 });
+  let tooltipHeight = $state(200);
+  const zoomLevel = $derived(
+    view.scale / fitGrid(grid.bounds, width, height).scale,
+  );
+  const visibleLevels = $derived(boundaryLevels(zoomLevel));
+  const labels = $derived.by(() => {
+    if (zoomLevel < 2 || !canvas) return [];
+    const context = canvas.getContext("2d")!;
+    context.font = "600 11px system-ui";
+    return placeLabels(
+      grid,
+      view,
+      width,
+      height,
+      (name) => context.measureText(name).width,
+    );
+  });
+  let drag = $state<{
     x: number;
     y: number;
     startX: number;
     startY: number;
     moved: boolean;
-  } | null = null;
+  } | null>(null);
   const byPosition = $derived(
     new Map(grid.cells.map((cell) => [`${cell.row}:${cell.col}`, cell])),
   );
@@ -136,14 +156,17 @@
       raster.width * view.scale,
       raster.height * view.scale,
     );
-    [...boundaries].reverse().forEach((collection, index) => {
+    [...visibleLevels].reverse().forEach((level) => {
+      const collection = boundaries[level];
+      if (!collection) return;
       context.beginPath();
       collection.features.forEach((feature) => {
         if (feature.geometry) traceGeometry(context, feature.geometry);
       });
-      context.strokeStyle =
-        index === boundaries.length - 1 ? "#294541" : "#607b77";
-      context.lineWidth = index === boundaries.length - 1 ? 1.3 : 0.65;
+      context.strokeStyle = ["#294541", "#607b77", "#7c8d8999", "#89979270"][
+        level
+      ];
+      context.lineWidth = [1.3, 0.75, 0.6, 0.45][level];
       context.stroke();
     });
     for (const [cell, color] of [
@@ -201,6 +224,7 @@
   }
   function pointerMove(event: PointerEvent) {
     const point = local(event);
+    pointer = point;
     if (drag) {
       if (Math.hypot(point.x - drag.startX, point.y - drag.startY) > 4)
         drag.moved = true;
@@ -307,6 +331,8 @@
   <!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions (The application owns spatial keyboard interaction; the table provides the semantic alternative.) -->
   <div
     class="map-canvas"
+    data-zoom={zoomLevel.toFixed(3)}
+    data-boundary-levels={visibleLevels.join(",")}
     bind:clientWidth={width}
     bind:clientHeight={height}
     role="application"
@@ -336,6 +362,33 @@
         hovered = null;
       }}
     ></canvas>
+    {#each labels as label (label.geonames_id)}
+      <span
+        class="town-label"
+        aria-hidden="true"
+        style:left="{label.x}px"
+        style:top="{label.y}px"
+        style:width="{label.width}px">{label.name}</span
+      >
+    {/each}
+    {#if hovered && !drag}
+      <div
+        class="place-tooltip"
+        role="tooltip"
+        bind:clientHeight={tooltipHeight}
+        style:left="{Math.max(8, Math.min(pointer.x + 14, width - 292))}px"
+        style:top="{Math.max(
+          52,
+          Math.min(pointer.y + 14, height - tooltipHeight - 8),
+        )}px"
+      >
+        <strong>{hovered.id}</strong> · {formatValue(
+          values.get(hovered.index),
+          kind,
+        )}
+        <CellPlaces cell={hovered} />
+      </div>
+    {/if}
     <div class="map-controls" aria-label="Map controls">
       <button aria-label="Zoom in" onclick={() => zoom(1.4)}>+</button>
       <button aria-label="Zoom out" onclick={() => zoom(1 / 1.4)}>−</button>
@@ -359,3 +412,33 @@
       : "Press Enter to select a central cell."}</span
   >
 </div>
+
+<style>
+  .town-label {
+    position: absolute;
+    pointer-events: none;
+    height: 18px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    font: 600 11px/18px system-ui;
+    color: #173c38;
+    background: #ffffffe6;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px #173c381a;
+  }
+  .place-tooltip {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    width: min(284px, calc(100% - 16px));
+    box-sizing: border-box;
+    padding: 10px 12px;
+    color: #173c38;
+    background: #fffffff5;
+    border: 1px solid #afc3be;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px #173c3826;
+    font-size: 0.8rem;
+  }
+</style>

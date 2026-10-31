@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import CellMap from "./components/CellMap.svelte";
+  import CellPlaces from "./components/CellPlaces.svelte";
+  import { provenanceRows } from "./lib/provenance";
   import CellTable from "./components/CellTable.svelte";
   import SeriesChart from "./components/SeriesChart.svelte";
   import TrackRecord from "./components/TrackRecord.svelte";
@@ -49,57 +51,8 @@
     data?.weeks.findIndex((week) => week.date === date) ?? -1,
   );
   const currentWeek = $derived(data?.weeks[weekIndex]);
-  const provenance = $derived([
-    ["Protocol version", data?.meta.protocolVersion],
-    [
-      "Protocol SHA-256",
-      data?.meta.protocolHash || data?.meta.snapshots.protocol_sha256,
-    ],
-    ["Cells SHA-256", data?.meta.snapshots.cells_sha256],
-    ["Panel snapshot", panelIdentifiers(data?.meta.snapshots ?? {})],
-    ["Sources SHA-256", data?.meta.snapshots.sources_sha256],
-    ...(staticMode
-      ? [
-          [
-            "Frozen SP bundle SHA-256",
-            data?.meta.snapshots.frozen_sp_bundle_sha256,
-          ],
-          ["Outage snapshot SHA-256", data?.meta.snapshots.outage_sha256],
-        ]
-      : []),
-  ]);
+  const provenance = $derived(data ? provenanceRows(data.meta) : []);
 
-  function panelIdentifiers(snapshots: Record<string, unknown>): string | null {
-    const panel = snapshots.panel;
-    if (!panel || typeof panel !== "object" || Array.isArray(panel))
-      return null;
-    const labels: Record<string, string> = {
-      protocol_sha256: "Protocol SHA-256",
-      sources_sha256: "Sources SHA-256",
-      cells_sha256: "Cells SHA-256",
-      firms_manifest_sha256: "FIRMS manifest SHA-256",
-      outage_snapshot_sha256: "Outage snapshot SHA-256",
-      detections_sha256: "Detections SHA-256",
-      acquisition_days_sha256: "Acquisition days SHA-256",
-    };
-    const years = Object.entries(panel).flatMap(([year, identifiers]) => {
-      if (
-        !identifiers ||
-        typeof identifiers !== "object" ||
-        Array.isArray(identifiers)
-      )
-        return [];
-      const entries = Object.entries(identifiers).flatMap(([key, value]) =>
-        labels[key] && typeof value === "string" && value !== snapshots[key]
-          ? [[labels[key], value]]
-          : [],
-      );
-      return entries.length ? [[year, Object.fromEntries(entries)]] : [];
-    });
-    return years.length
-      ? JSON.stringify(Object.fromEntries(years), null, 2)
-      : null;
-  }
   const availableModels = $derived(data?.meta.models[variant] ?? []);
   const estimatesAvailable = $derived(
     Boolean(
@@ -673,11 +626,8 @@
           </div>
           {#if selected}
             <h3 class="cell-id" data-testid="selected-cell">{selected.id}</h3>
+            <CellPlaces cell={selected} />
             <dl class="cell-facts">
-              <div>
-                <dt>Department</dt>
-                <dd>{selected.department || "Unassigned"}</dd>
-              </div>
               <div>
                 <dt>National area</dt>
                 <dd>{selected.area.toFixed(2)} km²</dd>
@@ -796,6 +746,16 @@
                   </p>{/each}
               </details>{/if}
             <h3>Sources</h3>
+            <p class="small">
+              Place names: <a href="https://www.geonames.org/">GeoNames</a> (<a
+                href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a
+              >)
+            </p>
+            <p class="small">
+              Province and municipality boundaries: <a
+                href="https://www.geoboundaries.org/">geoBoundaries ADM2/ADM3</a
+              >.
+            </p>
             {#each data.meta.attributions as source}<p class="small">
                 {#if safeLink(source.url)}<a href={source.url}>{source.name}</a
                   >{:else}{source.name}{/if}
@@ -819,30 +779,25 @@
               </p>{/each}
           </div>
         </div>
-        <div class="provenance">
-          <h3>Data provenance</h3>
-          <dl>
-            {#each provenance as [name, value]}<div>
-                <dt>{name}</dt>
-                <dd class="hash">
-                  {#if name === "Panel snapshot" && typeof value === "string"}<details
-                    >
-                      <summary>View identifiers</summary>
-                      <pre>{value}</pre>
-                    </details>{:else}{typeof value === "string" && value
-                      ? value
-                      : "Not supplied"}{/if}
-                </dd>
-              </div>{/each}
-          </dl>
-          {#if !Object.keys(data.meta.snapshots).length}<p class="muted small">
-              No dataset snapshot identifiers were supplied.
-            </p>{/if}
-          <p class="small muted">
-            Grid cells use geographic coordinates and vary in area. Area values
-            measure each cell’s national intersection on WGS84.
-          </p>
-        </div>
+        {#if provenance.length}<div class="provenance">
+            <h3>Data provenance</h3>
+            <dl>
+              {#each provenance as [name, value]}<div>
+                  <dt>{name}</dt>
+                  <dd class="hash">
+                    {#if name === "Panel snapshot" && typeof value === "string"}<details
+                      >
+                        <summary>View identifiers</summary>
+                        <pre>{value}</pre>
+                      </details>{:else}{value}{/if}
+                  </dd>
+                </div>{/each}
+            </dl>
+            <p class="small muted">
+              Grid cells use geographic coordinates and vary in area. Area
+              values measure each cell’s national intersection on WGS84.
+            </p>
+          </div>{/if}
       </details>
     </section>
   {/if}

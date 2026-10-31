@@ -30,6 +30,9 @@ const files = [
   "static/grid.json",
   "static/boundaries_adm0.json",
   "static/boundaries_adm1.json",
+  "static/boundaries_adm2.json",
+  "static/boundaries_adm3.json",
+  "static/cell_places.json",
   "static/meta.json",
 ];
 for (const issue of index.issues) {
