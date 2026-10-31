@@ -31,13 +31,25 @@ def same_annual_url(left: str, right: str) -> bool:
             and first.path.startswith("/products/CHIRPS/v3.0/daily/final/rnl/netcdf/byYear/"))
 
 
+def annual_identity_validator(source: AnnualSource, saved: dict[str, Any]) -> str | None:
+    if (saved.get("bytes") != source.size
+            or not same_annual_url(saved.get("url", ""), source.url)):
+        return None
+    same_modified = (bool(source.last_modified)
+                     and saved.get("last_modified") == source.last_modified)
+    if saved.get("url") != source.url and not same_modified:
+        return None
+    if source.etag and not source.etag.startswith("W/") and saved.get("etag"):
+        return source.etag if saved["etag"] == source.etag else None
+    return source.last_modified if same_modified else None
+
+
 def prepare_download(
     source: AnnualSource, path: Path, budget: Budget,
 ) -> tuple[dict[str, Any], int, str | None]:
     path.parent.mkdir(parents=True, exist_ok=True)
     identity = {"url": source.url, "bytes": source.size, "etag": source.etag,
                 "last_modified": source.last_modified}
-    key = "etag" if source.etag and not source.etag.startswith("W/") else "last_modified"
     state_path = path.with_suffix(path.suffix + ".json")
     offset = path.stat().st_size if path.exists() else 0
     saved = read_json(state_path) if state_path.exists() else {}
@@ -47,16 +59,16 @@ def prepare_download(
                       and saved.get("last_modified") == source.last_modified)
     if offset and (not (same_url or cross_protocol) or saved.get("bytes") != source.size):
         raise RuntimeError("Annual CHIRPS partial file identity changed; refusing resume")
-    if source.etag and not saved.get("etag") and cross_protocol:
-        key = "last_modified"
-    validator = identity[key]
+    validator = annual_identity_validator(source, saved)
     if offset > source.size:
         raise RuntimeError("Annual CHIRPS partial file exceeds verified remote size")
-    if offset and (not validator or saved.get(key) != validator):
+    if offset and not validator:
         budget.check_storage(source.size)
         with path.open("wb"):
             pass
         offset = 0
+    validator = validator or (source.etag if source.etag and not source.etag.startswith("W/")
+                              else source.last_modified)
     budget.check_storage(source.size - offset)
     atomic_json(state_path, identity)
     return identity, offset, validator

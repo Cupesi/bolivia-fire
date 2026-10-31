@@ -20,8 +20,8 @@ from numpy.typing import NDArray
 from rasterio.windows import from_bounds
 
 from bolivia_fire.covariates.annual_transport import AnnualSource as AnnualSource
+from bolivia_fire.covariates.annual_transport import annual_identity_validator, prepare_download
 from bolivia_fire.covariates.annual_transport import download_ftp as download_ftp
-from bolivia_fire.covariates.annual_transport import prepare_download, same_annual_url
 from bolivia_fire.covariates.chirps import _array_hash, extract_year
 from bolivia_fire.covariates.raster import BBOX, grid_alignment, rainfall_nodata
 from bolivia_fire.covariates.storage import Budget, append_jsonl, atomic_json, read_json
@@ -421,13 +421,7 @@ def completed_annual(
     for line in reversed(manifest.read_text(encoding="utf-8").splitlines()):
         record = json.loads(line)
         identity = record["annual_source"]
-        validator_matches = (identity["etag"] == source.etag
-                             if source.etag and identity.get("etag") else
-                             bool(source.last_modified)
-                             and identity.get("last_modified") == source.last_modified)
-        same_file = same_annual_url(identity["url"], source.url)
-        if (record["year"] == year and same_file
-                and identity.get("bytes") == source.size and validator_matches
+        if (record["year"] == year and annual_identity_validator(source, identity)
                 and record["sha256"] == complete["sha256"]):
             if sha256_file(complete_path.parent / "part.npz") != complete["sha256"]:
                 raise RuntimeError("Completed CHIRPS year checksum mismatch")
