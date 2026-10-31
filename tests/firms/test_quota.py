@@ -13,9 +13,9 @@ from bolivia_fire.firms.quota import Quota
 
 def test_sliding_window_backpressure(tmp_path: Path, synthetic_clock) -> None:
     quota = Quota(tmp_path, budget=5, clock=synthetic_clock.time, sleep=synthetic_clock.sleep)
-    quota.reserve(3)
+    quota.record_response(quota.reserve(3))
     synthetic_clock.now += 100
-    quota.reserve(2)
+    quota.record_response(quota.reserve(2))
     quota.reserve(3)
     assert synthetic_clock.sleeps == [500]
     assert synthetic_clock.now == 1600
@@ -24,7 +24,7 @@ def test_sliding_window_backpressure(tmp_path: Path, synthetic_clock) -> None:
 def test_two_coordinators_share_reservations(tmp_path: Path, synthetic_clock) -> None:
     first = Quota(tmp_path, budget=5, clock=synthetic_clock.time, sleep=synthetic_clock.sleep)
     second = Quota(tmp_path, budget=5, clock=synthetic_clock.time, sleep=synthetic_clock.sleep)
-    first.reserve(5)
+    first.record_response(first.reserve(5))
     second.reserve(1)
     assert synthetic_clock.sleeps == [600]
 
@@ -136,3 +136,55 @@ def test_corrupt_ledger_fails_closed(tmp_path: Path) -> None:
 def test_invalid_budget(tmp_path: Path, budget: int) -> None:
     with pytest.raises(ValueError, match="Budget"):
         Quota(tmp_path, budget=budget)
+
+
+def test_synthetic_delayed_response_survives_two_process_status_snapshots(tmp_path: Path) -> None:
+    code = """
+import json, sys
+from pathlib import Path
+from bolivia_fire.firms.quota import Quota
+directory, action, now = Path(sys.argv[1]), sys.argv[2], float(sys.argv[3])
+quota = Quota(directory, budget=5000, clock=lambda: now)
+if action == "reserve":
+    token = quota.reserve(10)
+    (directory / "synthetic-token.txt").write_text(token)
+elif action == "response":
+    quota.record_response((directory / "synthetic-token.txt").read_text())
+else:
+    quota.reconcile(lambda: {"transaction_limit": 5000, "current_transactions": 4980,
+                            "transaction_interval": "10 minutes"}, fresh=True)
+    with quota.lock:
+        print(quota._usage(quota._read(), now))
+"""
+
+    def run(action: str, now: int) -> str:
+        result = subprocess.run(
+            [sys.executable, "-c", code, str(tmp_path), action, str(now)],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=True,
+        )
+        return result.stdout.strip()
+
+    run("reserve", 1000)
+    assert int(run("status", 1001)) >= 4990
+    # A second snapshot cannot erase a still-unresolved request from the other process.
+    assert int(run("status", 1061)) >= 4990
+    run("response", 1062)
+    quota = Quota(tmp_path, clock=lambda: 1063)
+    with quota.lock:
+        assert quota._usage(quota._read(), 1063) >= 4990
+    assert int(run("status", 1122)) < 4990
+
+
+def test_synthetic_unresolved_reservation_survives_window_expiry(
+    tmp_path: Path, synthetic_clock
+) -> None:
+    quota = Quota(tmp_path, clock=synthetic_clock.time, sleep=synthetic_clock.sleep)
+    token = quota.reserve(10)
+    synthetic_clock.now += 601
+    with quota.lock:
+        state = quota._read()
+        assert quota._usage(state, synthetic_clock.now) == 10
+        assert token in state["reservations"]

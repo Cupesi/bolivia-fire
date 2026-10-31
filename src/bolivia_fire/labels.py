@@ -24,7 +24,7 @@ def labels_for_issue(
     start = pd.Timestamp(issue).tz_localize(None).normalize()
     target = target_rows(detections, start)
     days = acquisition_days.set_index("date").reindex(pd.date_range(start, periods=7))
-    complete = bool(days.acquired.fillna(False).all())
+    complete = bool((days.acquired.fillna(False) & days.observed.fillna(False)).all())
     low_coverage = bool(
         ((days.bbox_detection_count.fillna(0) == 0) & days.index.month.isin(range(6, 12))).any()
     )

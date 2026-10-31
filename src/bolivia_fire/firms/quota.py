@@ -7,6 +7,7 @@ import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from filelock import FileLock
 
@@ -35,6 +36,7 @@ class Quota:
         if not self.path.exists():
             return {
                 "events": [],
+                "reservations": {},
                 "last_reconcile": None,
                 "last_status_request": None,
                 "remote_request_start": None,
@@ -47,6 +49,31 @@ class Quota:
                 raise ValueError
             state.setdefault("last_status_request", state["last_reconcile"])
             state.setdefault("remote_request_start", state["last_reconcile"])
+            # Legacy events have no durable response evidence and remain unresolved.
+            if "reservations" not in state:
+                state["reservations"] = {
+                    uuid4().hex: {"start": event[0], "cost": event[1], "response": None}
+                    for event in state["events"]
+                }
+            if not isinstance(state["reservations"], dict):
+                raise ValueError
+            for reservation in state["reservations"].values():
+                if (
+                    not isinstance(reservation, dict)
+                    or type(reservation.get("cost")) is not int
+                    or not 1 <= reservation["cost"] <= 5000
+                    or type(reservation.get("start")) not in {int, float}
+                    or not math.isfinite(reservation["start"])
+                    or "response" not in reservation
+                ):
+                    raise ValueError
+                response = reservation.get("response")
+                if response is not None and (
+                    type(response) not in {int, float}
+                    or not math.isfinite(response)
+                    or response < reservation["start"]
+                ):
+                    raise ValueError
             for event in state["events"]:
                 if (
                     not isinstance(event, list)
@@ -76,7 +103,7 @@ class Quota:
             ):
                 raise ValueError
             return state
-        except (ValueError, KeyError, TypeError):
+        except (ValueError, KeyError, TypeError, IndexError):
             raise RuntimeError("Quota ledger is corrupt; preserve it and investigate") from None
 
     def _write(self, state: dict[str, Any]) -> None:
@@ -91,15 +118,23 @@ class Quota:
         state["events"] = [event for event in state["events"] if event[0] > now - WINDOW]
         local = sum(event[1] for event in state["events"])
         observed = state["last_reconcile"]
+        snapshot = state["remote_request_start"]
+        reservations = state["reservations"]
+        for token, reservation in list(reservations.items()):
+            response = reservation["response"]
+            if response is not None and snapshot is not None and snapshot > response:
+                del reservations[token]
+        pending = sum(
+            reservation["cost"]
+            for reservation in reservations.values()
+            if reservation["response"] is None or now < reservation["response"] + WINDOW
+        )
         if state["remote"] is not None and observed is not None and now < observed + WINDOW:
             self.budget = min(self.budget, state["remote"]["transaction_limit"])
-            since = sum(
-                event[1] for event in state["events"] if event[0] >= state["remote_request_start"]
-            )
-            return max(local, state["remote"]["current_transactions"] + since)
-        return local
+            return max(local, state["remote"]["current_transactions"] + pending)
+        return max(local, pending)
 
-    def reserve(self, cost: int = 1, *, status_request: bool = False) -> None:
+    def reserve(self, cost: int = 1, *, status_request: bool = False) -> str:
         if not 1 <= cost <= self.budget:
             raise ValueError("Request cost must fit within the quota budget")
         while True:
@@ -113,10 +148,12 @@ class Quota:
                 gate = last_status + 60 if status_request and last_status is not None else 0
                 if now >= max(state["blocked_until"], gate) and usage + cost <= self.budget:
                     state["events"].append([now, cost])
+                    token = uuid4().hex
+                    state["reservations"][token] = {"start": now, "cost": cost, "response": None}
                     if status_request:
                         state["last_status_request"] = now
                     self._write(state)
-                    return
+                    return token
                 deadlines = [event[0] + WINDOW for event in state["events"]]
                 if state["remote"] is not None and state["last_reconcile"] is not None:
                     deadlines.append(state["last_reconcile"] + WINDOW)
@@ -126,6 +163,16 @@ class Quota:
                 delay = max(0.001, min(future) - now) if future else WINDOW
                 self._write(state)
             self.sleep(delay)
+
+    def record_response(self, token: str) -> None:
+        with self.lock:
+            state = self._read()
+            reservation = state["reservations"].get(token)
+            if reservation is None:
+                raise ValueError("Unknown quota reservation")
+            if reservation["response"] is None:
+                reservation["response"] = self.clock()
+            self._write(state)
 
     def reconcile(
         self,
@@ -143,9 +190,10 @@ class Quota:
                 and state["remote"] is not None
             ):
                 return state["remote"]
-        self.reserve(1, status_request=True)
+        token = self.reserve(1, status_request=True)
         requested_at = self.clock()
         status = fetch_status()
+        self.record_response(token)
         limit, used = status.get("transaction_limit"), status.get("current_transactions")
         if (
             not isinstance(limit, int)

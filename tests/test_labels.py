@@ -30,6 +30,7 @@ def synthetic_days():
         {
             "date": pd.date_range("2024-09-01", "2024-09-15"),
             "acquired": True,
+            "observed": True,
             "bbox_detection_count": 1,
         }
     )

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import time
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -11,6 +12,7 @@ import pyarrow.dataset as ds
 import pyarrow.parquet as pq
 
 from bolivia_fire.config import Paths
+from bolivia_fire.detections import resolve_detection_bundle
 from bolivia_fire.features import DailyHistory, TrainingClimatology
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.grid import provenance_metadata
@@ -18,9 +20,9 @@ from bolivia_fire.labels import labels_for_issue
 from bolivia_fire.splits import issue_dates, partition_for_issue
 
 
-def _read_interval(paths: Paths, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
+def _read_interval(source: Path, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
     return pd.read_parquet(
-        paths.datasets / "interim" / "detections.parquet",
+        source,
         columns=["cell_id", "acq_datetime", "in_bolivia", "type", "confidence", "frp"],
         filters=[
             ("acq_datetime", ">=", start.tz_localize("UTC")),
@@ -29,8 +31,8 @@ def _read_interval(paths: Paths, start: pd.Timestamp, end: pd.Timestamp) -> pd.D
     )
 
 
-def _prior_cells(paths: Paths, before: pd.Timestamp) -> set[str]:
-    dataset = ds.dataset(paths.datasets / "interim" / "detections.parquet", format="parquet")
+def _prior_cells(source: Path, before: pd.Timestamp) -> set[str]:
+    dataset = ds.dataset(source, format="parquet")
     condition = (
         ds.field("in_bolivia")
         & (ds.field("type") == 0)
@@ -44,11 +46,11 @@ def _prior_cells(paths: Paths, before: pd.Timestamp) -> set[str]:
 
 
 def fit_climatology(
-    paths: Paths, cells: pd.DataFrame, days: pd.DataFrame, protocol: dict[str, Any]
+    source: Path, cells: pd.DataFrame, days: pd.DataFrame, protocol: dict[str, Any]
 ) -> TrainingClimatology:
     first, last = map(pd.Timestamp, protocol["partitions"]["train"])
     fitted = TrainingClimatology(cells, range(first.year, last.year + 1))
-    available = days.set_index("date").acquired
+    available = days.set_index("date").observed
     training = [
         issue
         for issue in issue_dates(protocol, first, last)
@@ -57,7 +59,7 @@ def fit_climatology(
     ]
     for year in sorted({issue.year for issue in training}):
         issues = [issue for issue in training if issue.year == year]
-        detections = _read_interval(paths, min(issues), max(issues) + pd.Timedelta(days=7))
+        detections = _read_interval(source, min(issues), max(issues) + pd.Timedelta(days=7))
         for issue in issues:
             fitted.add(issue, labels_for_issue(cells, detections, days, issue))
     return fitted
@@ -68,34 +70,45 @@ def build_panel(
     protocol: dict[str, Any],
     start_issue: str | pd.Timestamp | None = None,
     end_issue: str | pd.Timestamp | None = None,
+    output_directory: Path | None = None,
 ) -> dict[str, Any]:
     tick = time.perf_counter()
-    cells = pd.read_parquet(paths.datasets / "processed" / "cells.parquet")
-    days = pd.read_parquet(paths.datasets / "interim" / "acquisition_days.parquet")
+    cells_source = (output_directory or paths.datasets / "processed") / "cells.parquet"
+    detections_source, days_source, bundle_provenance = resolve_detection_bundle(
+        paths, protocol, output_directory
+    )
+    cells = pd.read_parquet(cells_source)
+    days = pd.read_parquet(days_source)
     issues = issue_dates(protocol, start_issue, end_issue)
     if not len(issues):
         raise ValueError("Issue range contains no protocol Monday")
-    climatology = fit_climatology(paths, cells, days, protocol)
+    climatology = fit_climatology(detections_source, cells, days, protocol)
     summary: dict[str, Any] = {"rows": 0, "issues": [], "files": []}
     provenance = provenance_metadata(paths, protocol)
-    detection_metadata = pq.read_schema(paths.datasets / "interim" / "detections.parquet").metadata
-    if detection_metadata and b"firms_manifest_sha256" in detection_metadata:
-        provenance[b"firms_manifest_sha256"] = detection_metadata[b"firms_manifest_sha256"]
+    provenance.update(bundle_provenance)
+    cell_metadata = pq.read_schema(cells_source).metadata or {}
+    if cell_metadata.get(b"protocol_sha256") != provenance[b"protocol_sha256"]:
+        raise ValueError("Cells and detection bundle protocol provenance mismatch")
     for name, source in (
-        ("cells", paths.datasets / "processed" / "cells.parquet"),
-        ("detections", paths.datasets / "interim" / "detections.parquet"),
-        ("acquisition_days", paths.datasets / "interim" / "acquisition_days.parquet"),
+        ("cells", cells_source),
+        ("detections", detections_source),
+        ("acquisition_days", days_source),
     ):
         provenance[f"{name}_sha256".encode()] = sha256_file(source).encode()
     for year in sorted(set(issues.year)):
         year_issues = issues[issues.year == year]
         first, last = year_issues.min(), year_issues.max()
         history_start = first - pd.Timedelta(days=730)
-        detections = _read_interval(paths, history_start, last + pd.Timedelta(days=7))
+        detections = _read_interval(detections_source, history_start, last + pd.Timedelta(days=7))
         history = DailyHistory(
-            cells, detections, days, history_start, last, _prior_cells(paths, history_start)
+            cells,
+            detections,
+            days,
+            history_start,
+            last,
+            _prior_cells(detections_source, history_start),
         )
-        directory = paths.datasets / "processed" / "panel" / f"year={year}"
+        directory = (output_directory or paths.datasets / "processed") / "panel" / f"year={year}"
         directory.mkdir(parents=True, exist_ok=True)
         destination = directory / "part.parquet"
         temporary = directory / "part.parquet.tmp"
@@ -103,7 +116,8 @@ def build_panel(
         try:
             for issue in year_issues:
                 features = history.features(issue)
-                features["train_climatology"] = climatology.predict(issue)
+                features["train_climatology_cell"] = climatology.predict(issue)
+                features["train_climatology_dept"] = climatology.predict_department(issue)
                 labels = labels_for_issue(cells, detections, days, issue)
                 row = pd.concat(
                     [cells, features.drop(columns="cell_id"), labels.drop(columns="cell_id")],
@@ -135,13 +149,15 @@ def build_panel(
                         else None,
                         "feature_window_complete": bool(features.feature_window_complete.all()),
                         "window_complete_28d": bool(features.window_complete_28d.all()),
+                        "window_obs_complete_28d": bool(features.window_obs_complete_28d.all()),
+                        "window_obs_complete_365d": bool(features.window_obs_complete_365d.all()),
                     }
                 )
         finally:
             if writer is not None:
                 writer.close()
         os.replace(temporary, destination)
-        summary["files"].append(destination.relative_to(paths.root).as_posix())
+        summary["files"].append(str(destination.resolve()))
         del history, detections
     summary["runtime_seconds"] = time.perf_counter() - tick
     return summary

@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
 import pytest
+from pipeline_fixtures import pin_synthetic_outages, publish_synthetic_bundle
 
 from bolivia_fire.config import Paths, load_protocol
 from bolivia_fire.features import DailyHistory, train_climatology
+from bolivia_fire.grid import provenance_metadata, write_parquet
 
 
 def synthetic_cells():
@@ -13,6 +15,7 @@ def synthetic_cells():
             "row": [10, 10, 13],
             "col": [10, 11, 13],
             "geo_holdout": [False, False, True],
+            "department": "Synthetic",
         }
     )
 
@@ -46,6 +49,7 @@ def synthetic_days():
         {
             "date": pd.date_range("2023-01-01", "2024-09-10"),
             "acquired": True,
+            "observed": True,
         }
     )
 
@@ -129,6 +133,7 @@ def test_synthetic_climatology_excludes_own_year_and_wraps_weeks():
             "partition": ["train", "train", "train", "val_select"],
             "y_primary": pd.array([0, 1, 1, 1], dtype="Int8"),
             "geo_holdout": False,
+            "department": "Synthetic",
         }
     )
     queries = pd.DataFrame(
@@ -145,20 +150,23 @@ def test_synthetic_panel_streams_week_rows_with_partial_targets(tmp_path):
     from bolivia_fire.panel import build_panel
 
     paths = Paths(tmp_path)
+    outage_hash = pin_synthetic_outages(paths)
     processed, interim = paths.datasets / "processed", paths.datasets / "interim"
     processed.mkdir(parents=True)
     interim.mkdir(parents=True)
     cells = synthetic_cells().assign(
         santa_cruz=False, department="Synthetic", national_area_km2=1.0
     )
-    cells.to_parquet(processed / "cells.parquet", index=False)
+    metadata = provenance_metadata(paths, load_protocol())
+    metadata[b"firms_manifest_sha256"] = b"synthetic"
+    metadata[b"outage_snapshot_sha256"] = outage_hash.encode()
+    write_parquet(cells, processed / "cells.parquet", metadata)
     detections = synthetic_history_detections()
     detections.loc[detections.cell_id.eq("b"), "acq_datetime"] = pd.Timestamp(
         "2021-01-01", tz="UTC"
     )
-    detections.to_parquet(interim / "detections.parquet", index=False)
     days = synthetic_days().assign(bbox_detection_count=1)
-    days.to_parquet(interim / "acquisition_days.parquet", index=False)
+    publish_synthetic_bundle(paths, detections, days, metadata)
     summary = build_panel(paths, load_protocol(), "2024-09-02", "2024-09-09")
     result = pd.read_parquet(processed / "panel" / "year=2024" / "part.parquet")
     assert summary["rows"] == 6
@@ -167,7 +175,8 @@ def test_synthetic_panel_streams_week_rows_with_partial_targets(tmp_path):
     assert result.geo_holdout.sum() == 2
     assert result.loc[result.issue_date.eq("2024-09-02"), "target_complete"].all()
     assert result.loc[result.issue_date.eq("2024-09-09"), "y_primary"].isna().all()
-    assert result.train_climatology.isna().all()
+    assert result.train_climatology_cell.isna().all()
+    assert result.train_climatology_dept.isna().all()
     assert not result.loc[result.cell_id.eq("b"), "no_prior_detection"].any()
     assert (result.loc[result.cell_id.eq("b"), "days_since_last"] == 730).all()
 

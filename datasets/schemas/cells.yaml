@@ -1,4 +1,4 @@
-version: 1
+version: 2
 path: datasets/processed/cells.parquet
 primary_key: [cell_id]
 crs: EPSG:4326
@@ -6,7 +6,9 @@ grid:
   resolution_deg: 0.05
   origin: [-180, -90]
   closure: "[west, east) x [south, north)"
-  index: floor(round((coordinate - origin) * 20, 9))
+  index: floor((round(coordinate, 9) - origin) / 0.05)
+  snapping_deg: 0.000000001
+  source_max_decimals: 6
   eligibility: positive-area ADM0 intersection
 columns:
   cell_id: {dtype: string, format: "r{row:04d}c{col:04d}"}

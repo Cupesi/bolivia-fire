@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 import os
 import shutil
@@ -13,7 +15,13 @@ from typing import Any
 from bolivia_fire.config import Paths
 from bolivia_fire.firms.client import Download, FirmsClient
 from bolivia_fire.firms.locking import RunLock
-from bolivia_fire.firms.storage import append_manifest, durable_write, read_manifest, sha256_file
+from bolivia_fire.firms.storage import (
+    append_manifest,
+    durable_write,
+    read_manifest,
+    request_identity,
+    sha256_file,
+)
 from bolivia_fire.firms.validation import BBOX, BBox, validate_csv
 
 LOGGER = logging.getLogger("bolivia_fire.acquire")
@@ -75,6 +83,37 @@ class Acquisition:
                 f"Insufficient free disk: {free} bytes; require {self.minimum_free_bytes} bytes",
             )
 
+    def _canonical(self, partition: Partition) -> Path:
+        request = json.dumps({"product": PRODUCT, "bbox": list(self.bbox)}, sort_keys=True)
+        namespace = hashlib.sha256(request.encode()).hexdigest()[:8]
+        return (
+            self.paths.firms_raw
+            / f"request_{namespace}"
+            / str(partition.start.year)
+            / partition.filename
+        )
+
+    def _stage(self, partition: Partition, download: Download) -> tuple[Path, Path]:
+        canonical = self._canonical(partition)
+        digest = hashlib.sha256(download.body).hexdigest()
+        destination = self._destination(canonical, digest)
+        namespace = canonical.parent.parent.name
+        temporary = self.paths.temporary / f"{namespace}_{partition.filename}.part"
+        identity = {
+            "product": PRODUCT,
+            "bbox": list(self.bbox),
+            "start": str(partition.start),
+            "day_range": partition.day_range,
+            "sha256": digest,
+            "path": destination.relative_to(self.paths.root).as_posix(),
+            "staged_path": temporary.relative_to(self.paths.root).as_posix(),
+        }
+        append_manifest(
+            self.paths.manifests / "firms_request_identities.jsonl", identity, self.client.redactor
+        )
+        durable_write(temporary, download.body)
+        return temporary, canonical
+
     def _record(
         self,
         partition: Partition,
@@ -111,14 +150,14 @@ class Acquisition:
             if (
                 existing.get("path") == record["path"]
                 and existing.get("sha256") == record["sha256"]
+                and request_identity(existing) == request_identity(record)
+                and existing.get("outcome") in {"ok_rows", "ok_empty"}
             ):
                 return existing
         append_manifest(self.paths.firms_manifest, record, self.client.redactor)
         return record
 
-    def revalidate_quarantine(
-        self, source: Path, partition: Partition
-    ) -> dict[str, Any]:
+    def revalidate_quarantine(self, source: Path, partition: Partition) -> dict[str, Any]:
         source = source.resolve()
         if not source.is_relative_to(self.paths.quarantine.resolve()):
             raise ValueError("Recovery source must be inside the quarantine directory")
@@ -131,16 +170,15 @@ class Acquisition:
             if not validation.ok or self.client._key.encode() in body:
                 raise ValueError("Quarantine body failed re-validation; source preserved")
             download = Download(
-                body, validation,
-                self.client.redactor.text(self.client.area_url(
-                    partition.start, partition.day_range, self.bbox
-                )), 0, "",
+                body,
+                validation,
+                self.client.redactor.text(
+                    self.client.area_url(partition.start, partition.day_range, self.bbox)
+                ),
+                0,
+                "",
             )
-            temporary = self.paths.temporary / (partition.filename + ".part")
-            if temporary.exists() and temporary.read_bytes() != body:
-                raise RuntimeError("Recovery would overwrite a different partial snapshot")
-            durable_write(temporary, body)
-            canonical = self.paths.firms_raw / str(partition.start.year) / partition.filename
+            temporary, canonical = self._stage(partition, download)
             destination = self._promote(temporary, canonical)
             record = self._record(
                 partition, destination, download, recovered=True, quarantine_file=source.name
@@ -150,7 +188,10 @@ class Acquisition:
             source.unlink()
             LOGGER.info(
                 "partition=%s action=quarantine_revalidation outcome=%s rows=%s bytes=%s "
-                "data_requests=0", partition.filename, record["outcome"], record["rows"],
+                "data_requests=0",
+                partition.filename,
+                record["outcome"],
+                record["rows"],
                 record["bytes"],
             )
             return record
@@ -158,7 +199,7 @@ class Acquisition:
     def _destination(self, canonical: Path, digest: str) -> Path:
         if not canonical.exists() or sha256_file(canonical) == digest:
             return canonical
-        return canonical.with_name(f"{canonical.stem}__sha256_{digest}{canonical.suffix}")
+        return canonical.with_name(f"{canonical.stem}__sha256_{digest[:16]}{canonical.suffix}")
 
     def _promote(self, temporary: Path, canonical: Path) -> Path:
         digest = sha256_file(temporary)
@@ -198,16 +239,12 @@ class Acquisition:
         partition: Partition,
         records: list[dict[str, Any]],
     ) -> tuple[str, dict[str, Any]] | None:
-        canonical = self.paths.firms_raw / str(partition.start.year) / partition.filename
+        expected = (PRODUCT, tuple(self.bbox), str(partition.start), partition.day_range)
         relevant = [
             record
             for record in records
-            if (
-                record.get("product") == PRODUCT
-                and record.get("start") == str(partition.start)
-                and record.get("day_range") == partition.day_range
-                and record.get("bbox") == list(self.bbox)
-            )
+            if request_identity(record) == expected
+            and record.get("outcome") in {"ok_rows", "ok_empty"}
         ]
         for record in reversed(relevant):
             path = (self.paths.root / record["path"]).resolve()
@@ -215,32 +252,29 @@ class Acquisition:
                 raise RuntimeError("Manifest snapshot path is outside the FIRMS raw directory")
             if path.exists() and sha256_file(path) == record["sha256"]:
                 return "skipped", record
-        candidates = [
-            canonical,
-            *sorted(
-                canonical.parent.glob(
-                    f"{canonical.stem}__sha256_*{canonical.suffix}",
-                )
-            ),
-        ]
-        recorded_paths = {record["path"] for record in relevant}
-        for path in candidates:
-            relative = path.relative_to(self.paths.root).as_posix()
-            if not path.exists() or relative in recorded_paths:
+        journal = read_manifest(self.paths.manifests / "firms_request_identities.jsonl")
+        for identity in reversed(journal):
+            if request_identity(identity) != expected:
                 continue
-            download = self._validate_existing(path, partition)
-            if download is not None:
-                record = self._record(partition, path, download, recovered=True)
-                records.append(record)
-                return "recovered", record
-        temporary = self.paths.temporary / (partition.filename + ".part")
-        if temporary.exists():
-            download = self._validate_existing(temporary, partition)
-            if download is not None:
-                destination = self._promote(temporary, canonical)
-                record = self._record(partition, destination, download, recovered=True)
-                records.append(record)
-                return "recovered", record
+            destination = (self.paths.root / identity["path"]).resolve()
+            temporary = (self.paths.root / identity["staged_path"]).resolve()
+            if not destination.is_relative_to(
+                self.paths.firms_raw.resolve()
+            ) or not temporary.is_relative_to(self.paths.temporary.resolve()):
+                raise RuntimeError("Recorded request path is outside its storage directory")
+            for path in (destination, temporary):
+                if not path.exists() or sha256_file(path) != identity["sha256"]:
+                    continue
+                download = self._validate_existing(path, partition)
+                if download is not None:
+                    recovered = self._promote(path, destination) if path == temporary else path
+                    record = self._record(partition, recovered, download, recovered=True)
+                    records.append(record)
+                    return "recovered", record
+        LOGGER.info(
+            "partition=%s action=reject_unrecorded_orphans reason=no_exact_request_identity",
+            partition.filename,
+        )
         return None
 
     def run(
@@ -284,11 +318,7 @@ class Acquisition:
                             self.client.data_requests - initial_requests,
                         )
                         raise
-                    temporary = self.paths.temporary / (partition.filename + ".part")
-                    durable_write(temporary, download.body)
-                    canonical = (
-                        self.paths.firms_raw / str(partition.start.year) / partition.filename
-                    )
+                    temporary, canonical = self._stage(partition, download)
                     destination = self._promote(temporary, canonical)
                     record = self._record(partition, destination, download)
                     records.append(record)

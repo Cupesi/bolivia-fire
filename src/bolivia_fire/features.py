@@ -45,6 +45,9 @@ class DailyHistory:
         self.start, self.end = pd.Timestamp(start).normalize(), pd.Timestamp(end).normalize()
         dates = pd.date_range(self.start, self.end)
         self.acquired = acquisition_days.set_index("date").acquired.reindex(dates, fill_value=False)
+        self.observed = self.acquired & acquisition_days.set_index("date").observed.reindex(
+            dates, fill_value=False
+        )
         selected = detections[detections.in_bolivia & selection_mask(detections)].copy()
         selected["day"] = selected.acq_datetime.dt.tz_localize(None).dt.normalize()
         prior = set(prior_cells) | set(selected.loc[selected.day < self.start, "cell_id"])
@@ -82,9 +85,10 @@ class DailyHistory:
     def _offset(self, day: pd.Timestamp) -> int:
         return int(np.clip((day - self.start).days, 0, len(self.counts) - 1))
 
-    def _complete(self, issue: pd.Timestamp, length: int) -> bool:
+    def _complete(self, issue: pd.Timestamp, length: int, *, observed: bool = False) -> bool:
         days = pd.date_range(issue - pd.Timedelta(days=length), periods=length)
-        return bool(self.acquired.reindex(days, fill_value=False).all())
+        available = self.observed if observed else self.acquired
+        return bool(available.reindex(days, fill_value=False).fillna(False).all())
 
     def features(self, issue: str | pd.Timestamp) -> pd.DataFrame:
         issue = pd.Timestamp(issue).tz_localize(None)
@@ -121,13 +125,15 @@ class DailyHistory:
                 self.national_counts[stop]
                 - self.national_counts[self._offset(issue - pd.Timedelta(days=length))]
             )
-        angle = 2 * np.pi * (issue.isocalendar().week - 1) / 52
+        angle = 2 * np.pi * week_index(issue) / 52
         result["week_of_year_sin"], result["week_of_year_cos"] = (
             np.float32(np.sin(angle)),
             np.float32(np.cos(angle)),
         )
         result["feature_window_complete"] = self._complete(issue, 365)
         result["window_complete_28d"] = self._complete(issue, 28)
+        result["window_obs_complete_28d"] = self._complete(issue, 28, observed=True)
+        result["window_obs_complete_365d"] = self._complete(issue, 365, observed=True)
         return result
 
 
@@ -135,6 +141,7 @@ class TrainingClimatology:
     def __init__(self, cells: pd.DataFrame, train_years: Iterable[int]) -> None:
         self.cell_ids = pd.Index(cells.cell_id)
         self.held = cells.geo_holdout.to_numpy(dtype=bool)
+        self.departments = cells.department.to_numpy()
         self.years = list(train_years)
         self.sums = np.zeros((len(self.years), 52, len(cells)), dtype=np.int32)
         self.counts = np.zeros_like(self.sums)
@@ -160,11 +167,25 @@ class TrainingClimatology:
         np.divide(sums, counts, out=result, where=counts > 0)
         return result
 
+    def predict_department(self, issue: pd.Timestamp) -> NDArray[np.float32]:
+        years = [index for index, year in enumerate(self.years) if year != issue.year]
+        weeks = [(week_index(issue) + delta) % 52 for delta in range(-2, 3)]
+        sums = self.sums[np.ix_(years, weeks)].sum(axis=(0, 1))
+        counts = self.counts[np.ix_(years, weeks)].sum(axis=(0, 1))
+        result = np.full(len(self.cell_ids), np.nan, dtype=np.float32)
+        for department in np.unique(self.departments):
+            members = self.departments == department
+            eligible = members & ~self.held
+            denominator = counts[eligible].sum()
+            if denominator:
+                result[members] = sums[eligible].sum() / denominator
+        return result
+
 
 def train_climatology(
     labels: pd.DataFrame, queries: pd.DataFrame, *, train_years: Iterable[int]
 ) -> NDArray[np.float32]:
-    cells = labels[["cell_id", "geo_holdout"]].drop_duplicates("cell_id")
+    cells = labels[["cell_id", "geo_holdout", "department"]].drop_duplicates("cell_id")
     estimator = TrainingClimatology(cells, train_years)
     for issue, subset in labels[labels.partition.eq("train")].groupby("issue_date", sort=False):
         estimator.add(pd.Timestamp(issue), subset)

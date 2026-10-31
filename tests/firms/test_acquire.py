@@ -59,7 +59,8 @@ def test_quarantine_revalidation_promotes_original_bytes_without_requests(
     unrelated = paths.quarantine / "firms_truncated_unrelated_synthetic.txt"
     unrelated.write_bytes(b"synthetic invalid response")
     with FirmsClient(
-        synthetic_key, paths.quarantine,
+        synthetic_key,
+        paths.quarantine,
         transport=httpx.MockTransport(
             lambda request: pytest.fail("Offline recovery requested data")
         ),
@@ -77,8 +78,11 @@ def test_quarantine_revalidation_promotes_original_bytes_without_requests(
         assert record["retrieval_utc"] is None
         assert record["http_status"] is None
         assert record["row_validation"] == {
-            "dates_outside_interval": 0, "coords_outside_bbox": 0,
-            "invalid_acq_time": 0, "unexpected_codes": 0, "invalid_numeric": 0,
+            "dates_outside_interval": 0,
+            "coords_outside_bbox": 0,
+            "invalid_acq_time": 0,
+            "unexpected_codes": 0,
+            "invalid_numeric": 0,
         }
         assert len(read_manifest(paths.firms_manifest)) == 1
         assert Acquisition(paths, client, minimum_free_bytes=0).run(START, END).skipped == 1
@@ -92,9 +96,13 @@ def test_quarantine_revalidation_preserves_invalid_or_unowned_files(
     paths.quarantine.mkdir(parents=True)
     source = (tmp_path if outside_quarantine else paths.quarantine) / "synthetic.txt"
     source.write_bytes(b"synthetic incomplete response")
-    with FirmsClient(synthetic_key, paths.quarantine, transport=httpx.MockTransport(
-        lambda request: pytest.fail("Offline recovery requested data")
-    )) as client:
+    with FirmsClient(
+        synthetic_key,
+        paths.quarantine,
+        transport=httpx.MockTransport(
+            lambda request: pytest.fail("Offline recovery requested data")
+        ),
+    ) as client:
         with pytest.raises(ValueError):
             Acquisition(paths, client, minimum_free_bytes=0).revalidate_quarantine(
                 source, Partition(START, 5)
@@ -159,7 +167,7 @@ def test_crash_after_part_write_is_recovered_without_request(
         assert read_manifest(paths.firms_manifest)[0]["retrieval_utc"] is None
 
 
-def test_raw_orphan_is_revalidated_without_request(
+def test_synthetic_raw_orphan_without_manifest_identity_is_rejected_and_refetched(
     tmp_path: Path,
     synthetic_key: str,
     synthetic_csv: Callable[..., bytes],
@@ -172,15 +180,17 @@ def test_raw_orphan_is_revalidated_without_request(
         synthetic_key,
         paths.quarantine,
         transport=httpx.MockTransport(
-            lambda request: pytest.fail("Orphan recovery must not request data"),
+            lambda request: httpx.Response(200, content=synthetic_csv()),
         ),
     ) as client:
         result = Acquisition(paths, client, minimum_free_bytes=0).run(START, END)
-        assert result.recovered == 1
-        assert result.data_requests == 0
+        assert result.recovered == 0
+        assert result.downloaded == 1
+        assert result.data_requests == 1
+        assert path.read_bytes() == synthetic_csv()
 
 
-def test_invalid_part_is_quarantined_and_refetched(
+def test_synthetic_unrecorded_part_is_preserved_and_refetched(
     tmp_path: Path,
     synthetic_key: str,
     synthetic_csv: Callable[..., bytes],
@@ -200,8 +210,8 @@ def test_invalid_part_is_quarantined_and_refetched(
         assert result.downloaded == 1
         assert result.data_requests == 1
         quarantine = list(paths.quarantine.glob("*.txt"))
-        assert len(quarantine) == 1
-        assert synthetic_key not in quarantine[0].read_text()
+        assert quarantine == []
+        assert path.read_text() == f"Invalid MAP_KEY. {synthetic_key}"
 
 
 def test_changed_refetch_preserves_both_versions(

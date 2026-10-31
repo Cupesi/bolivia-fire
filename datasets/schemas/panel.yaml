@@ -1,4 +1,4 @@
-version: 1
+version: 2
 path: datasets/processed/panel/year=YYYY/part.parquet
 primary_key: [cell_id, issue_date]
 inherits: datasets/schemas/cells.yaml
@@ -22,16 +22,19 @@ columns:
   neighborhood_7x7_last_28d: {dtype: float32}
   national_last_7d: {dtype: float32}
   national_last_28d: {dtype: float32}
-  week_of_year_sin: {dtype: float32, formula: sin(2*pi*(ISO_week-1)/52)}
-  week_of_year_cos: {dtype: float32, formula: cos(2*pi*(ISO_week-1)/52)}
-  train_climatology: {dtype: float32, nullable: true}
+  week_of_year_sin: {dtype: float32, formula: sin(2*pi*w/52)}
+  week_of_year_cos: {dtype: float32, formula: cos(2*pi*w/52)}
+  train_climatology_cell: {dtype: float32, nullable: true}
+  train_climatology_dept: {dtype: float32, nullable: true}
   feature_window_complete: {dtype: bool, description: all 365 prior UTC days acquired}
   window_complete_28d: {dtype: bool, description: all 28 prior UTC days acquired}
+  window_obs_complete_28d: {dtype: bool, description: all 28 prior UTC days observed; required for fitting}
+  window_obs_complete_365d: {dtype: bool, description: all 365 prior UTC days observed}
   n_primary: {dtype: int32, description: observed primary national target detections}
   n_allconf: {dtype: int32, description: observed all-confidence national target detections}
   y_primary: {dtype: int8, nullable: true, values: [0, 1]}
   y_allconf: {dtype: int8, nullable: true, values: [0, 1]}
-  target_complete: {dtype: bool, description: all seven target UTC days acquired}
+  target_complete: {dtype: bool, description: all seven target UTC days observed}
   target_low_coverage: {dtype: bool, description: a June-November target day has zero bbox detections}
 history:
   selection: primary and in_bolivia
@@ -39,10 +42,11 @@ history:
   neighborhood: centered on cell, includes center, outside eligibility contributes zero
   national: includes every covered primary point, including points in boundary-only ineligible cells
 climatology:
+  department: equal weight per non-held-out train cell-week within department
   training_labels: complete non-purged train rows excluding geographic holdout
   week_index: min((day_of_year - 1) // 7, 51)
   smoother: pooled arithmetic mean across circular offsets [-2, -1, 0, 1, 2]
   train_year_rows: leave query year out
   later_rows: all train years
   missing_history: null
-metadata: [protocol_sha256, sources_sha256, firms_manifest_sha256, cells_sha256, detections_sha256, acquisition_days_sha256, feature_information_rule]
+metadata: [protocol_sha256, sources_sha256, firms_manifest_sha256, outage_snapshot_sha256, cells_sha256, detections_sha256, acquisition_days_sha256, feature_information_rule]

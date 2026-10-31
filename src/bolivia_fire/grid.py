@@ -29,8 +29,13 @@ def coordinate_indices(lon: ArrayLike, lat: ArrayLike) -> tuple[NDArray, NDArray
     longitude, latitude = np.asarray(lon, dtype=float), np.asarray(lat, dtype=float)
     if not (np.isfinite(longitude).all() and np.isfinite(latitude).all()):
         raise ValueError("Grid coordinates must be finite")
-    cols = np.floor(np.round((longitude + 180) * 20, 9)).astype(np.int32)
-    rows = np.floor(np.round((latitude + 90) * 20, 9)).astype(np.int32)
+    # Integer nanodegrees make decimal snapping and exact cell edges reproducible.
+    cols = ((np.rint(longitude * 1e9).astype(np.int64) + 180_000_000_000) // 50_000_000).astype(
+        np.int32
+    )
+    rows = ((np.rint(latitude * 1e9).astype(np.int64) + 90_000_000_000) // 50_000_000).astype(
+        np.int32
+    )
     return rows, cols
 
 
@@ -172,9 +177,11 @@ def build_cells(
     return frame
 
 
-def write_cells(paths: Paths, protocol: dict[str, Any]) -> pd.DataFrame:
+def write_cells(
+    paths: Paths, protocol: dict[str, Any], output_directory: Path | None = None
+) -> pd.DataFrame:
     cells = build_cells(*load_boundary_geometries(paths), protocol)
-    output = paths.datasets / "processed" / "cells.parquet"
+    output = (output_directory or paths.datasets / "processed") / "cells.parquet"
     output.parent.mkdir(parents=True, exist_ok=True)
     write_parquet(cells, output, provenance_metadata(paths, protocol))
     return cells

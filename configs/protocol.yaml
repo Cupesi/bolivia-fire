@@ -1,7 +1,13 @@
 # Evaluation protocol for the Bolivia Fire weekly detection benchmark.
 # Frozen before any model optimization. Changes after freezing must be recorded in
 # docs/protocol.md under "Amendments" with a date and reason.
-protocol_version: "1.0"
+protocol_version: "1.1"
+amendments:
+  - date: "2026-10-31"
+    reason: independent review V1 before any model fitting
+    no_model_fitted: true
+    decisions: [A1_observation_coverage, A2_request_identity, A3_geographic_climatology,
+                A4_calendar, A5_grid_snapping, A6_decision_rules]
 
 target:
   name: any_detection_next_7d
@@ -25,6 +31,18 @@ selection:
       type: [0]
       confidence: [l, n, h]
   deduplication: exact duplicate rows across all source columns
+  request_identity: exact manifest-recorded product, bbox, start and day_range; reject missing identity
+
+observation_coverage:
+  outage_source: https://modaps.modaps.eosdis.nasa.gov/services/production/outages_suomi_npp.html
+  outage_pin: datasets/sources.yaml#snpp_outages
+  outage_table: datasets/manifests/snpp_outages.csv
+  observed_day: acquired and union of documented S-NPP outage intervals covers strictly less than 6 UTC hours
+  outage_interval_closure: "[start, end)"
+  incomplete_target: labels null if any target UTC day is not observed
+  history_flags: [window_obs_complete_28d, window_obs_complete_365d]
+  fitting_required: window_obs_complete_28d
+  low_coverage_sensitivity: exclude target_low_coverage rows; flag does not define primary observation coverage
 
 study_area:
   country: Bolivia
@@ -38,8 +56,10 @@ grid:
   resolution_deg: 0.05
   origin: [-180.0, -90.0]     # cell edges at integer multiples of 0.05 deg
   cell_closure: "[west, east) x [south, north)"
-  col_index: "floor((lon + 180) / 0.05)"
-  row_index: "floor((lat + 90) / 0.05)"
+  coordinate_snapping_deg: 0.000000001
+  source_coordinate_max_decimals: 6
+  col_index: "floor((round(lon, 9) + 180) / 0.05)"
+  row_index: "floor((round(lat, 9) + 90) / 0.05)"
   eligibility: cell intersects the ADM0 polygon with positive area
   cell_area: geodesic WGS84 area of the cell part inside ADM0 (km2)
 
@@ -63,12 +83,24 @@ partitions:
       1-degree blocks (integer-degree edges) ranked by sha256("{seed}:{block_id}");
       the lowest 20% are held out of all fitting, selection and calibration.
       Reported on the test years as a spatiotemporal test.
+  temporal_test_population: non-held-out cells in test years
+  geographic_test_population: held-out cells in test years
 
 features:
-  information_rule: features use only observations with acquisition time < issue_time
+  information_rule: >-
+    Observation-derived features use acquisition time < issue_time; climatology is a
+    cross-fitted training statistic with the explicitly frozen LOYO exception below.
   strict:
     description: FIRMS-derived features; assumes NRT detections at issue time match SP detections
     groups: [cell_history, neighborhood_history, recency, seasonality, train_climatology]
+  strict_geo:
+    description: strict feature set excluding train_climatology_cell; same fitting and selection procedure
+    excluded_columns: [train_climatology_cell]
+    climatology_baseline: train_climatology_dept
+  held_out_history: past detections may enter recency, neighborhood and national observation features
+  calendar:
+    week_index: "w = min((day_of_year(issue) - 1) // 7, 51)"
+    seasonality_angle: "2*pi*w/52"
   retrospective:
     description: strict features plus covariates whose historical vintages were not available at issue time
     groups: [chirps_v3_antecedent_rainfall, mapbiomas_previous_year_land_cover]
@@ -76,6 +108,11 @@ features:
     fit_years: train partition only
     training_rows: leave-one-year-out
     smoothing_weeks: 2
+    columns: [train_climatology_cell, train_climatology_dept]
+    cell: cell by week index; complete non-purged train labels outside geographic holdout
+    department: department by week index; equal weight per non-held-out cell-week
+    loyo_exception: other train calendar years, including later train years; never val/test years
+    held_out_labels: never used in fitting, selection, calibration or either climatology
 
 models:
   baselines: [train_climatology, persistence]
@@ -84,6 +121,8 @@ models:
     logistic_regression: {negative_fraction: 0.1, reweight: true}
     lightgbm: none
   lightgbm_search:
+    frozen_config: configs/experiments.yaml
+    selection_provenance: record experiments config sha256 at selection time
     method: random
     configurations: 20
     seed: 7
@@ -93,16 +132,24 @@ models:
 metrics:
   primary: average_precision     # sklearn step-wise AP over all eligible cell-weeks
   secondary: [brier_score, log_loss, roc_auc, recall_at_area_budget_5pct, recall_at_area_budget_10pct, expected_calibration_error]
+  expected_calibration_error: 10 equal-frequency bins
   area_budget: >-
     For each issue week, rank cells by predicted probability and select from the top until the
     cumulative national cell area reaches the budget share of national area; recall is the share
-    of positive cell-weeks selected, pooled over weeks.
+    of positive cell-weeks selected, pooled over weeks. For a regional report, the denominator
+    is the summed national area of that region's eligible cells in that week.
   uncertainty:
     temporal: block bootstrap over calendar months, 500 replicates
     spatial: block bootstrap over 1-degree blocks, 500 replicates (geographic holdout)
   undefined_metric_rule: report as null with the reason (e.g. single-class subset)
+  hypothesis_decisions:
+    H1: 95% paired calendar-month-block bootstrap CI of temporal-test AP(best strict candidate, calibrated) minus AP(best baseline) lies entirely above 0
+    H2: 95% paired calendar-month-block bootstrap CI of temporal-test AP(retrospective) minus AP(strict) contains 0
+    candidate_selection: best strict candidate and best baseline selected using val_select only
 
 final_test_access:
   rule: >-
     Test metrics are computed only by the evaluation command with an explicit open flag; every
-    opening is appended to artifacts/evaluation/final_test_log.json with the protocol hash.
+    opening is appended to artifacts/evaluation/final_test_log.json. The first opening is single;
+    every later opening requires --reopen-reason and is reported as a reopening. Record sha256
+    hashes of selected model files, calibrators, panel snapshot, protocol and experiments config.

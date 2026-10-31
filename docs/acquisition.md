@@ -49,16 +49,21 @@ bytes remain unchanged. Column types, units, and codes are in
 
 Partitions are written durably to `datasets/.tmp/*.csv.part`, validated, and
 promoted with `os.replace` to
-`datasets/raw/firms/VIIRS_SNPP_SP/{year}/VIIRS_SNPP_SP_{start}_{n}d.csv`.
+`datasets/raw/firms/VIIRS_SNPP_SP/request_{identity_hash}/{year}/VIIRS_SNPP_SP_{start}_{n}d.csv`.
 `datasets/manifests/firms_VIIRS_SNPP_SP.jsonl` records sanitized URLs, hashes,
 byte and row counts, header, versions, row-validation counters, and retrieval
 metadata. Each distinct stored snapshot has one record. `--force` requests fresh
-data; changed bytes receive a `__sha256_{digest}` suffix, preserving the original.
+data; changed bytes receive a `__sha256_{digest_prefix}` suffix (16 hexadecimal
+characters, full hash verified), preserving the original.
 Identical bytes reuse the existing snapshot and manifest record.
 
 Resume verifies stored bytes against manifest hashes before skipping requests.
-Matching-plan raw files without records and interrupted `.part` files are
-revalidated. Recovered files have null HTTP status and retrieval time when those
+Raw files and interrupted `.part` files are recovered only with exact product,
+bbox, start and day_range identity plus matching content hash recorded in
+`datasets/manifests/firms_request_identities.jsonl`. This durable manifest is
+written before staging and records staging and intended final paths. Files
+lacking identity are preserved, rejected and reported; filenames never establish
+identity. Request namespaces hash product and bbox. Recovered files have null HTTP status and retrieval time when those
 facts were not durably recorded; recovery time is recorded separately. A torn
 last manifest record is archived before repairing the JSONL stream. Other
 manifest corruption stops the run. Modified snapshots are preserved and require
@@ -86,8 +91,9 @@ of planned partitions examined, including existing partitions skipped on resume.
 ## Shared quota
 
 All cooperating processes use `datasets/.tmp/firms_quota.lock` and an atomically
-updated `firms_quota.json` ledger. Reservations expire individually after 600
-seconds. Every area attempt reserves its day range, including retries. The
+updated `firms_quota.json` ledger. Completed request costs age out after 600
+seconds; unresolved reservations remain conservative outstanding costs.
+Every area attempt reserves its day range, including retries. The
 default cost is two transactions per requested day, including retries;
 `--transactions-per-day N` configures this positive integer multiplier. A five-day
 attempt therefore reserves ten transactions. The default budget is 4000 of the
@@ -96,8 +102,10 @@ The ledger accounts for status queries and availability requests and imposes
 backpressure when its local or reconciled usage reaches the budget.
 
 Reconciliation with `mapkey_status` occurs at most once per minute. The observed
-server count is a conservative floor, with subsequent local reservations added;
-reservations are never refunded on transport failures. Explicit `firms status`
+server count is a conservative floor plus unresolved requests and responses not
+covered by a later snapshot. A response is recorded by reservation token; a
+snapshot releases that reservation only if its request began strictly after
+the recorded response. Transport failures remain unresolved. Explicit `firms status`
 waits for a fresh query if the minute gate is closed. Other commands reuse recent
 status. The [documented limit](https://firms.modaps.eosdis.nasa.gov/api/area/) is
 5000 transactions per ten minutes; FIRMS does not publish a larger-request cost
@@ -118,7 +126,8 @@ estimate is about one hour if each partition takes the observed 3.495 seconds
 for the September 6-10 sample; that rate stays below the configured quota.
 These are estimates from limited samples: response sizes, network latency,
 validation, retries, and other key users can change the duration. The full
-acquisition has not been run.
+acquisition is managed separately; use a frozen manifest copy for derived builds
+while acquisition is active.
 
 Availability is validated as CSV and sanitized before writing
 `datasets/manifests/firms_availability_{UTC-date}.csv`.
@@ -184,3 +193,14 @@ Boundary acquisition stored ADM0 with one feature and 4,034,693 bytes, and ADM1
 with nine features and 9,273,745 bytes. ADM1 contains Santa Cruz. Both pins use
 revision `9469f09`; identifiers, licenses, and hashes are in `datasets/sources.yaml`.
 The availability export has twelve product rows and 442 bytes.
+
+## Observation coverage
+
+Successful retrieval establishes acquisition, not sensor observation coverage.
+Protocol 1.1 pins the [NASA MODAPS S-NPP outage table](https://modaps.modaps.eosdis.nasa.gov/services/production/outages_suomi_npp.html)
+in `datasets/raw/outages/snpp_modaps_2026-10-31.html` and records its SHA256 in
+`datasets/sources.yaml`. The parsed table is
+`datasets/manifests/snpp_outages.csv`, with UTC start/end and its own pinned hash.
+A day is observed only when acquired and the union of documented outages covers
+strictly less than six hours. Detection and observation days publish as one
+versioned bundle; `docs/dataset.md` describes pointer and provenance checks.

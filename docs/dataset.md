@@ -23,8 +23,9 @@ destination only after all selected issues in that year have been written.
 ## Grid and provenance
 
 `datasets/processed/cells.parquet` contains eligible 0.05-degree cells with edges
-anchored at (-180, -90). Indices use `floor(round((coordinate-origin)*20, 9))` to
-stabilize source coordinates at grid edges. Cells use half-open bounds. Only
+anchored at (-180, -90). Coordinates are rounded to 1e-9 degrees before floor
+indices are computed; source coordinates have at most six decimals. The
+tolerance is part of the grid contract. Cells use half-open snapped bounds. Only
 positive-area intersections with ADM0 are eligible; corner and edge touches alone
 are excluded. Areas use WGS84 geodesics on oriented polygon intersections,
 including holes. Department assignment uses the largest national intersection
@@ -36,10 +37,12 @@ eligible blocks are ranked by SHA256 of `20261031:{block_id}`; the first
 alongside temporal partitions. All fitting, selection, and calibration must
 exclude these rows.
 
-`datasets/interim/detections.parquet` retains all bbox observations and selection
+`datasets/interim/detection_bundles/BUILD_ID/detections.parquet` retains all bbox observations and selection
 flags. Raw source fields are read as explicit strings and deduplicated across all
 15 source columns before numeric conversion or HHMM normalization. Canonical
-partitions are chosen by descending day range, ascending start date, then
+partitions require exact manifest-recorded product, bbox, start and day_range
+identity. Missing or mismatching identity is rejected and reported in metadata
+and statistics. Eligible partitions are chosen by descending day range, ascending start date, then
 manifest order. Five-day chunks therefore take precedence over shorter chunks.
 Fully covered partitions are skipped; partially covered partitions contribute
 only uncovered UTC dates. The first remaining occurrence supplies provenance.
@@ -67,7 +70,7 @@ inputs. Column definitions are in `datasets/schemas/{cells,detections,panel}.yam
 
 ## Labels and missing data
 
-`datasets/interim/acquisition_days.parquet` has one row for every date from
+`acquisition_days.parquet` in the same versioned bundle has one row for every date from
 acquisition start through acquisition end, inclusive. Only hash-verified
 `ok_rows` and `ok_empty` partitions establish acquisition. Counts describe
 deduplicated bbox observations and observations covered by ADM0, across every
@@ -75,7 +78,7 @@ type and confidence.
 
 Targets cover `[issue, issue+7 days)` and use only national observations.
 `n_primary` and `n_allconf` count observed selected rows. `y_primary` and
-`y_allconf` are nullable indicators: both are null if any target day is missing.
+`y_allconf` are nullable indicators: both are null if any target day is not observed.
 Observed counts remain available for incomplete targets and do not establish a
 complete negative label. `explain-label` prints the file and data-line references
 behind the primary count, plus target completeness and the nullable label.
@@ -96,7 +99,7 @@ Observation-derived features use primary national detections strictly before
 Monday 00:00 UTC. Counts cover the previous 7, 14, 28, 91, and 365 UTC days.
 The panel also contains a seven-day indicator, 28-day FRP sum, capped recency,
 the count in `[issue-364 days, issue-357 days)`, national counts for 7/28 days,
-centered 3x3 and 7x7 neighborhood counts for 7/28 days, and ISO-week sine/cosine.
+centered 3x3 and 7x7 neighborhood counts for 7/28 days, and calendar-week-index sine/cosine.
 Neighborhoods include the center cell and assign zero to cells outside
 eligibility. National counts include covered boundary points even if their
 assigned cells have no positive-area national intersection.
@@ -124,13 +127,21 @@ the build.
 missing. Counts over incomplete history represent observed detections and must
 be interpreted with these flags.
 
-`train_climatology` fits complete, non-purged training labels outside geographic
+`train_climatology_cell` fits complete, non-purged training labels outside geographic
 holdout. Its week index is `min((day_of_year-1)//7, 51)`. The feature is the pooled
 arithmetic mean of labels at circular week offsets -2 through +2. Training-year
 rows exclude their own year's labels; later years use all training years. This
 is the protocol's cross-fitted training statistic, while the remaining history
-features are computed directly from observations before the issue. With no
-eligible training labels, climatology is null.
+features are computed directly from observations before the issue.
+`train_climatology_dept` pools the same labels by department, giving each
+non-held-out cell-week equal weight. Held-out cells receive department
+climatology whenever their department has eligible history. Held-out labels
+never contribute. With no eligible training labels, climatology is null.
+
+The temporal test uses the full strict feature set and non-held-out cells. The
+geographic test uses held-out cells in test years and `strict_geo` (excluding
+`train_climatology_cell`), with department climatology as its baseline. Past
+held-out detections remain eligible observation history.
 
 ## Verification
 
@@ -147,3 +158,38 @@ Canonical-selection tests cover longer-partition precedence, fully covered
 partition exclusion, partial-overlap date filtering with original source-line
 retention, and manifest-snapshot hashing. Measurements should be regenerated
 after acquisition finishes; appending partitions changes the build input.
+
+## Protocol 1.1 observation coverage and publication
+
+The dated NASA MODAPS outage HTML and parsed UTC intervals are pinned by SHA256
+in `datasets/sources.yaml`. Outage intervals are half-open; a single-date row
+ending at 00:00 ends at the following midnight. Overlapping intervals contribute
+their union, clipped to each UTC day. `observed = acquired and outage_hours < 6`.
+This documents major sensor outages; it does not prove cloud-free observation.
+Both target labels are null if any of seven target days is not observed.
+`target_low_coverage` defines a sensitivity analysis excluding flagged rows,
+not the primary missing-label rule.
+
+History values remain available across outages. `window_obs_complete_28d` and
+`window_obs_complete_365d` require every antecedent UTC day to be observed;
+fitting requires the 28-day flag. The older `feature_window_complete` and
+`window_complete_28d` columns describe acquisition only. Seasonality and
+climatology share `w = min((day_of_year(issue)-1)//7, 51)`; seasonality uses
+`2*pi*w/52`. Training-row climatology explicitly uses other train calendar years,
+including later train years, and excludes all validation and test years.
+
+Detection builds write detections and acquisition/observation days into a fresh
+`datasets/interim/detection_bundles/BUILD_ID/` directory. They publish both by
+atomically replacing `datasets/interim/detection_bundle.json` after both
+files are complete. A failed build leaves the previous pointer usable. The
+pointer records file hashes and manifest-snapshot, outage-snapshot and protocol
+hashes. Panel construction resolves the pointer once, verifies hashes and
+requires matching provenance on both files and the current protocol/outage pins.
+Cells must have the same protocol hash. Legacy unbundled files are rejected.
+
+While acquisition appends to the manifest, copy it and use
+`build detections --manifest-snapshot PATH --output-dir DIRECTORY`. Run
+`build cells --output-dir DIRECTORY` and `build panel --output-dir DIRECTORY`
+with that same directory. These commands read local raw files and write no
+acquisition data. Availability refers to the exact frozen manifest, not later
+appends. Default output paths remain those documented above.

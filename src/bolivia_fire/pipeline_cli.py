@@ -4,12 +4,13 @@ import argparse
 import sys
 import time
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
 from bolivia_fire.config import Paths, load_protocol
-from bolivia_fire.detections import build_detections
+from bolivia_fire.detections import build_detections, resolve_detection_bundle
 from bolivia_fire.grid import write_cells
 from bolivia_fire.labels import explain_label, labels_for_issue
 from bolivia_fire.panel import build_panel, print_summary
@@ -60,7 +61,7 @@ def run(args: argparse.Namespace, paths: Paths) -> int:
     protocol = load_protocol(paths.root)
     if args.command == "build":
         if args.dataset == "cells":
-            cells = write_cells(paths, protocol)
+            cells = write_cells(paths, protocol, args.output_dir)
             summary: dict[str, Any] = {
                 "eligible_cells": len(cells),
                 "national_area_km2": float(cells.national_area_km2.sum()),
@@ -69,16 +70,21 @@ def run(args: argparse.Namespace, paths: Paths) -> int:
                 "santa_cruz_cells": int(cells.santa_cruz.sum()),
             }
         elif args.dataset == "detections":
-            summary = build_detections(paths, protocol)
+            summary = build_detections(
+                paths, protocol, args.output_dir, manifest_snapshot=args.manifest_snapshot
+            )
         else:
-            summary = build_panel(paths, protocol, args.start_issue, args.end_issue)
+            summary = build_panel(
+                paths, protocol, args.start_issue, args.end_issue, args.output_dir
+            )
     else:
         cells = pd.read_parquet(paths.datasets / "processed" / "cells.parquet")
         cell = cells[cells.cell_id == args.cell_id]
         if cell.empty:
             raise ValueError("Cell is not eligible")
-        data = pd.read_parquet(paths.datasets / "interim" / "detections.parquet")
-        days = pd.read_parquet(paths.datasets / "interim" / "acquisition_days.parquet")
+        detection_source, days_source, _ = resolve_detection_bundle(paths, protocol)
+        data = pd.read_parquet(detection_source)
+        days = pd.read_parquet(days_source)
         labels = labels_for_issue(cell, data, days, args.issue_date)
         rows = explain_label(data, args.cell_id, args.issue_date)
         complete = bool(labels.target_complete.iloc[0])
@@ -101,6 +107,9 @@ def register(subparsers: argparse._SubParsersAction) -> None:
     for name in ("cells", "detections", "panel"):
         command = build.add_parser(name)
         command.set_defaults(pipeline_handler=run)
+        command.add_argument("--output-dir", type=Path)
+        if name == "detections":
+            command.add_argument("--manifest-snapshot", type=Path)
         if name == "panel":
             command.add_argument("--start-issue", type=date.fromisoformat)
             command.add_argument("--end-issue", type=date.fromisoformat)

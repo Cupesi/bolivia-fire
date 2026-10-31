@@ -4,6 +4,7 @@ from datetime import date
 
 import pandas as pd
 import pytest
+from pipeline_fixtures import pin_synthetic_outages
 from shapely.geometry import box
 
 from bolivia_fire.config import Paths, load_protocol
@@ -12,6 +13,7 @@ from bolivia_fire.detections import read_detections
 
 def synthetic_manifest(tmp_path, synthetic_csv):
     paths = Paths(tmp_path)
+    pin_synthetic_outages(paths)
     path = paths.firms_raw / "2024" / "synthetic.csv"
     path.parent.mkdir(parents=True)
     first = synthetic_csv(acq_date="2024-02-29", acq_time="5")
@@ -20,9 +22,10 @@ def synthetic_manifest(tmp_path, synthetic_csv):
     body = first + first.split(b"\n", 1)[1] + second.split(b"\n", 1)[1]
     body += outside.split(b"\n", 1)[1]
     path.write_bytes(body)
-    paths.manifests.mkdir(parents=True)
+    paths.manifests.mkdir(parents=True, exist_ok=True)
     record = {
         "product": "VIIRS_SNPP_SP",
+        "bbox": [-70, -23, -57, -9],
         "path": path.relative_to(tmp_path).as_posix(),
         "sha256": hashlib.sha256(body).hexdigest(),
         "start": "2024-02-29",

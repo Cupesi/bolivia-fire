@@ -112,10 +112,11 @@ class FirmsClient:
 
     def _request(self, url: str, cost: int = 1, *, status_request: bool = False) -> httpx.Response:
         for attempt in range(self.retries + 1):
+            reservation = None
             if self.quota is not None and not status_request:
-                self.quota.reserve(cost)
+                reservation = self.quota.reserve(cost)
             elif self.quota is not None and attempt > 0:
-                self.quota.reserve(1, status_request=True)
+                reservation = self.quota.reserve(1, status_request=True)
             chunks = bytearray()
             try:
                 if "/api/area/" in url:
@@ -143,6 +144,8 @@ class FirmsClient:
                         content=bytes(chunks),
                         request=stream.request,
                     )
+                if reservation is not None and self.quota is not None:
+                    self.quota.record_response(reservation)
             except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError) as exc:
                 if chunks:
                     self._quarantine(bytes(chunks), Outcome.TRUNCATED)

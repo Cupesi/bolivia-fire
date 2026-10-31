@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 from collections.abc import Callable, Iterator
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import duckdb
 import numpy as np
@@ -17,7 +19,7 @@ import shapely
 from shapely.geometry.base import BaseGeometry
 
 from bolivia_fire.config import Paths
-from bolivia_fire.firms.storage import sha256_file
+from bolivia_fire.firms.storage import durable_write, request_identity, sha256_file
 from bolivia_fire.firms.validation import HEADER, validate_csv
 from bolivia_fire.grid import (
     coordinate_indices,
@@ -25,6 +27,7 @@ from bolivia_fire.grid import (
     provenance_metadata,
     write_parquet,
 )
+from bolivia_fire.outages import load_outages, observation_days
 
 SOURCE_DTYPES = dict.fromkeys(HEADER, "string")
 type Statistics = dict[str, int | float | str]
@@ -55,16 +58,30 @@ def _manifest_snapshot(path: Path) -> tuple[list[dict[str, Any]], str]:
 def _canonical_partitions(
     records: list[dict[str, Any]], protocol: dict[str, Any]
 ) -> tuple[list[tuple[dict[str, Any], set[date]]], list[dict[str, Any]]]:
-    candidates = [
-        (index, record)
-        for index, record in enumerate(records)
-        if record.get("outcome") in {"ok_rows", "ok_empty"}
-        and record.get("product") == protocol["target"]["source_product"]
-    ]
+    candidates = []
+    rejected = []
+    for index, record in enumerate(records):
+        if record.get("outcome") not in {"ok_rows", "ok_empty"}:
+            continue
+        identity = request_identity(record)
+        if (
+            identity is None
+            or identity[0] != protocol["target"]["source_product"]
+            or identity[1] != tuple(protocol["study_area"]["acquisition_bbox"])
+        ):
+            rejected.append(
+                {
+                    "path": record.get("path"),
+                    "manifest_index": index,
+                    "reason": "request_identity_mismatch",
+                }
+            )
+            continue
+        candidates.append((index, record))
     candidates.sort(key=lambda item: (-int(item[1]["day_range"]), item[1]["start"], item[0]))
     covered: set[date] = set()
     chosen = []
-    overlaps = []
+    overlaps = rejected
     for _, record in candidates:
         start = date.fromisoformat(record["start"])
         length = int(record["day_range"])
@@ -160,8 +177,11 @@ def _process_detections(
     protocol: dict[str, Any],
     country: BaseGeometry,
     sink: Callable[[pd.DataFrame, dict[bytes, bytes]], None],
+    *,
+    manifest_snapshot: Path | None = None,
 ) -> tuple[pd.DataFrame, Statistics, dict[bytes, bytes]]:
-    records, manifest_hash = _manifest_snapshot(paths.firms_manifest)
+    records, manifest_hash = _manifest_snapshot(manifest_snapshot or paths.firms_manifest)
+    outages, outage_hash = load_outages(paths)
     partitions, overlaps = _canonical_partitions(records, protocol)
     days = pd.DataFrame(
         {
@@ -176,6 +196,7 @@ def _process_detections(
     paths.temporary.mkdir(parents=True, exist_ok=True)
     metadata = provenance_metadata(paths, protocol)
     metadata[b"firms_manifest_sha256"] = manifest_hash.encode()
+    metadata[b"outage_snapshot_sha256"] = outage_hash.encode()
     metadata[b"overlap_partitions"] = json.dumps(overlaps, sort_keys=True).encode()
     metadata[b"canonical_partition_rule"] = (
         b"longest, earliest start, manifest order; uncovered days"
@@ -188,8 +209,13 @@ def _process_detections(
         "firms_manifest_sha256": manifest_hash,
         "manifest_records": len(records),
         "canonical_partitions": len(partitions),
-        "overlap_partitions_skipped": sum(record["fully_covered"] for record in overlaps),
-        "overlap_days_skipped": sum(len(record["excluded_dates"]) for record in overlaps),
+        "overlap_partitions_skipped": sum(
+            record.get("fully_covered", False) for record in overlaps
+        ),
+        "overlap_days_skipped": sum(len(record.get("excluded_dates", [])) for record in overlaps),
+        "identity_rejections": sum("reason" in record for record in overlaps),
+        "outage_snapshot_sha256": outage_hash,
+        "outage_table_rows": len(outages),
     }
     with (
         tempfile.TemporaryDirectory(prefix="detections-", dir=paths.temporary) as scratch,
@@ -247,6 +273,8 @@ def _process_detections(
         statistics["in_bolivia"] / statistics["rows"] if statistics["rows"] else 0.0
     )
     statistics["acquired_days"] = int(days.acquired.sum())
+    days = observation_days(days, outages)
+    statistics["observed_days"] = int(days.observed.sum())
     return days, statistics, metadata
 
 
@@ -260,12 +288,19 @@ def read_detections(
     return pd.concat(frames, ignore_index=True), days, statistics
 
 
-def build_detections(paths: Paths, protocol: dict[str, Any]) -> Statistics:
+def build_detections(
+    paths: Paths,
+    protocol: dict[str, Any],
+    output_directory: Path | None = None,
+    *,
+    manifest_snapshot: Path | None = None,
+) -> Statistics:
     country, _ = load_boundary_geometries(paths)
-    interim = paths.datasets / "interim"
+    interim = output_directory or paths.datasets / "interim"
     interim.mkdir(parents=True, exist_ok=True)
-    destination = interim / "detections.parquet"
-    temporary = destination.with_suffix(".parquet.tmp")
+    bundle = interim / "detection_bundles" / uuid4().hex
+    bundle.mkdir(parents=True)
+    destination = bundle / "detections.parquet"
     writer = None
 
     def write_batch(frame: pd.DataFrame, metadata: dict[bytes, bytes]) -> None:
@@ -273,14 +308,57 @@ def build_detections(paths: Paths, protocol: dict[str, Any]) -> Statistics:
         table = pa.Table.from_pandas(frame, preserve_index=False)
         table = table.replace_schema_metadata({**(table.schema.metadata or {}), **metadata})
         if writer is None:
-            writer = pq.ParquetWriter(temporary, table.schema, compression="zstd")
+            writer = pq.ParquetWriter(destination, table.schema, compression="zstd")
         writer.write_table(table)
 
     try:
-        days, statistics, metadata = _process_detections(paths, protocol, country, write_batch)
+        days, statistics, metadata = _process_detections(
+            paths, protocol, country, write_batch, manifest_snapshot=manifest_snapshot
+        )
     finally:
         if writer is not None:
             writer.close()
-    temporary.replace(destination)
-    write_parquet(days, interim / "acquisition_days.parquet", metadata)
+    availability = bundle / "acquisition_days.parquet"
+    write_parquet(days, availability, metadata)
+    for source in (destination, availability):
+        with source.open("r+b") as stream:
+            os.fsync(stream.fileno())
+    pointer = {
+        "directory": bundle.relative_to(interim).as_posix(),
+        "files": {path.name: sha256_file(path) for path in (destination, availability)},
+        "provenance": {
+            key.decode(): metadata[key].decode()
+            for key in (b"protocol_sha256", b"firms_manifest_sha256", b"outage_snapshot_sha256")
+        },
+    }
+    temporary = interim / f"detection_bundle.{bundle.name}.tmp"
+    durable_write(temporary, json.dumps(pointer, sort_keys=True).encode())
+    os.replace(temporary, interim / "detection_bundle.json")
+    statistics["bundle_id"] = bundle.name
     return statistics
+
+
+def resolve_detection_bundle(
+    paths: Paths, protocol: dict[str, Any], input_directory: Path | None = None
+) -> tuple[Path, Path, dict[bytes, bytes]]:
+    interim = input_directory or paths.datasets / "interim"
+    pointer = json.loads((interim / "detection_bundle.json").read_text(encoding="utf-8"))
+    bundle = (interim / pointer["directory"]).resolve()
+    if not bundle.is_relative_to((interim / "detection_bundles").resolve()):
+        raise ValueError("Detection bundle is outside its versioned directory")
+    expected = {key.encode(): value.encode() for key, value in pointer["provenance"].items()}
+    current_protocol = provenance_metadata(paths, protocol)[b"protocol_sha256"]
+    _, outage_hash = load_outages(paths)
+    if expected.get(b"protocol_sha256") != current_protocol:
+        raise ValueError("Detection bundle protocol provenance mismatch")
+    if expected.get(b"outage_snapshot_sha256") != outage_hash.encode():
+        raise ValueError("Detection bundle outage provenance mismatch")
+    files = [bundle / name for name in ("detections.parquet", "acquisition_days.parquet")]
+    for source in files:
+        if sha256_file(source) != pointer["files"][source.name]:
+            raise ValueError("Detection bundle file hash mismatch")
+        metadata = pq.read_schema(source).metadata or {}
+        for key in (b"protocol_sha256", b"firms_manifest_sha256", b"outage_snapshot_sha256"):
+            if key not in expected or metadata.get(key) != expected[key]:
+                raise ValueError(f"Detection bundle provenance mismatch: {key.decode()}")
+    return files[0], files[1], expected

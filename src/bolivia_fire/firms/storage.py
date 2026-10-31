@@ -2,11 +2,38 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 from bolivia_fire.redact import Redactor
+
+
+def request_identity(record: dict[str, Any]) -> tuple[str, tuple[float, ...], str, int] | None:
+    product, bbox = record.get("product"), record.get("bbox")
+    start, length = record.get("start"), record.get("day_range")
+    if (
+        not isinstance(product, str)
+        or not product
+        or not isinstance(bbox, list)
+        or len(bbox) != 4
+        or type(length) is not int
+        or not 1 <= length <= 5
+        or not isinstance(start, str)
+    ):
+        return None
+    if any(type(value) not in {int, float} or not math.isfinite(value) for value in bbox):
+        return None
+    if not bbox[0] < bbox[2] or not bbox[1] < bbox[3]:
+        return None
+    try:
+        if date.fromisoformat(start).isoformat() != start:
+            return None
+    except ValueError:
+        return None
+    return product, tuple(bbox), start, length
 
 
 def sha256_file(path: Path) -> str:
