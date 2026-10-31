@@ -5,10 +5,39 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from matplotlib import font_manager
 from PIL import Image
 from shapely.geometry import box
 
 from bolivia_fire import figures
+
+
+def test_chart_style_uses_times_and_ordered_serif_fallbacks() -> None:
+    assert figures.STYLE["font.family"] == "serif"
+    assert figures.STYLE["font.serif"] == [
+        "Times New Roman", "Liberation Serif", "TeX Gyre Termes", "DejaVu Serif"
+    ]
+    assert figures.STYLE["mathtext.fontset"] == "stix"
+
+
+def test_chart_font_falls_back_to_available_serif(monkeypatch: pytest.MonkeyPatch) -> None:
+    serif = font_manager.findfont(font_manager.FontProperties(family=["DejaVu Serif"]))
+    monkeypatch.setattr(figures.font_manager, "findfont", lambda *args, **kwargs: serif)
+    with figures.chart_style() as resolved:
+        assert resolved == "DejaVu Serif"
+
+
+def test_static_export_rejects_sans_serif(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, synthetic_dataset: tuple
+) -> None:
+    sans = font_manager.findfont(font_manager.FontProperties(family=["DejaVu Sans"]))
+    monkeypatch.setattr(figures.font_manager, "findfont", lambda *args, **kwargs: sans)
+    data = figures.collect_dataset(*synthetic_dataset)
+    with pytest.raises(RuntimeError, match="serif.*DejaVu Sans"):
+        figures.write_dataset_figures(
+            data, box(-65, -18, -62, -16), {}, artifact_directory=tmp_path
+        )
+    assert not list(tmp_path.glob("*.png"))
 
 
 @pytest.fixture
@@ -166,6 +195,8 @@ def test_synthetic_artifacts_are_readable_and_small(
         assert output.name == f"dataset_{name}.png"
         assert 0 < output.stat().st_size < 300_000
         with Image.open(output) as image:
+            assert image.info["FontFamily"] in figures.STYLE["font.serif"]
+            assert image.info["MathTextFontSet"] == "stix"
             assert image.width >= 1200
             assert image.info["dpi"][0] == pytest.approx(300, abs=1)
             from bolivia_fire.animations import clear_border

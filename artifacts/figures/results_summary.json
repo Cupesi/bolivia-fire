@@ -5,7 +5,7 @@
       "sha256": "31242d34ef75076678dc0675ea578c96acfadf97d68c6503415c31b54b126cec"
     },
     "artifacts/evaluation/final_test_log.json": {
-      "sha256": "897d332e9c25d8fb035877ccf258da849e9cadd5b0af93a6cda5f58904e9c9fe"
+      "sha256": "cacb616dd5b098be0203cf59d6ab5c8d876025a40be8aebfb4a9e1bfacf68563"
     },
     "artifacts/evaluation/selection_retrospective.json": {
       "sha256": "a269225593db82c5c65fee4f725f90c2d4825e591088ad66f9de3b7662e870a8"
@@ -28,6 +28,9 @@
     "artifacts/evaluation/selection_strict_drop_neighborhood.json": {
       "sha256": "fa40e6265145cea0c4cf47307d61ad27fcedefb4af1cc8db60aa395a8d9e9ac6"
     },
+    "artifacts/evaluation/selection_strict_exclude_low_coverage.json": {
+      "sha256": "8bbf44204922c819ecaaf3e9a68ae3bb4907570b1ea3a9ce92d94d54012bf826"
+    },
     "artifacts/evaluation/selection_strict_geo.json": {
       "sha256": "2f139f5227c68efce95a97b0e898b6cacf025677e52e96d2711073cca867ce0d"
     },
@@ -42,6 +45,9 @@
     },
     "artifacts/evaluation/selection_strict_geo_drop_neighborhood.json": {
       "sha256": "337245fd2c11e00ef13507e918a1f15c79f480e83af3f7fd105d031f0fc089f1"
+    },
+    "artifacts/evaluation/selection_strict_geo_exclude_low_coverage.json": {
+      "sha256": "ddd1416db8afcaa32624a641e8d8afd6d370d15d6d6afecc777f2865f7a7404d"
     },
     "datasets/processed/cells.parquet": {
       "sha256": "332ec6bb56b96227a4229d95721f3aa900ed4827f2a65f9aca2e2fdcce65d3d4"
@@ -130,6 +136,16 @@
         "lightgbm_03": "1f542a280db6580528cd9ae930a9d80ee2e36e04651340c8efa8ce057992df67"
       }
     },
+    "selection_strict_exclude_low_coverage": {
+      "selected_model": "lightgbm_08",
+      "best_baseline": "train_climatology",
+      "model_ids": {
+        "train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "b8fcab4022416052eb9eeb420463bc5ad23e9f7d4099cc3a2db2b0cb6035404f",
+        "lightgbm_08": "ed72987f3dcbb1407601ee262b0e416d06a31f047a20e2386c1c4f4e7021b65b"
+      }
+    },
     "selection_strict_geo": {
       "selected_model": "lightgbm_04",
       "best_baseline": "persistence",
@@ -179,11 +195,21 @@
         "logistic_regression": "b83e1c07333667fe55539bcaf2aaa01a8cdfee36ae4f2ddbd2379ca9ab46f54a",
         "lightgbm_04": "f5d26f3f1efa5cf9a328317b0754dacb57f6f01b5c57287322c0aaa45f7fd0fb"
       }
+    },
+    "selection_strict_geo_exclude_low_coverage": {
+      "selected_model": "lightgbm_04",
+      "best_baseline": "persistence",
+      "model_ids": {
+        "train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "600b6e86875324d967514fb81d7517ef2949234bd1911f113d3cc807fd0fef74",
+        "lightgbm_04": "dfe436de916d6984f317bdb64582d0f01847c15a0ec6d0cd02b19a82ff173887"
+      }
     }
   },
   "final_test_access": {
     "source": "artifacts/evaluation/final_test_log.json",
-    "recorded_openings_at_read": 5,
+    "recorded_openings_at_read": 6,
     "evaluation_opening": "2026-10-31T10:30:00.578581+00:00"
   },
   "figures": {
@@ -308,7 +334,7 @@
       "caption": "Temporal test, strict; 2023\u20132025. Original baseline probabilities; fitted candidates are calibrated. Points are recorded APs; differences subtract recorded APs on identical support. 95% paired calendar-month-block bootstrap intervals use 500 recorded replicates. Comparator: Climatology (chosen on val_select).",
       "output": {
         "png": "artifacts/figures/results_temporal.png",
-        "png_bytes": 194214,
+        "png_bytes": 170411,
         "dpi": 300
       }
     },
@@ -433,7 +459,7 @@
       "caption": "Geographic holdout, strict_geo; 2023\u20132025. Original baseline probabilities; fitted candidates are calibrated. Points are recorded APs; differences subtract recorded APs on identical support. 95% paired one-degree spatial-block bootstrap intervals use 500 recorded replicates. Comparator: Persistence (chosen on val_select).",
       "output": {
         "png": "artifacts/figures/results_geographic.png",
-        "png_bytes": 195926,
+        "png_bytes": 171389,
         "dpi": 300
       }
     },
@@ -580,7 +606,7 @@
       "caption": "Temporal test, 2023\u20132025. Recorded equal-frequency reliability bins; each point retains its recorded bin mass. The second panel expands the low-probability range; the dashed line is perfect reliability.",
       "output": {
         "png": "artifacts/figures/results_reliability.png",
-        "png_bytes": 193176,
+        "png_bytes": 168669,
         "dpi": 300
       }
     },
@@ -687,7 +713,7 @@
       "caption": "Temporal-test AP by issue year. Original baselines and calibrated fitted candidates; all values are recorded, with no annual intervals.",
       "output": {
         "png": "artifacts/figures/results_per_year.png",
-        "png_bytes": 175366,
+        "png_bytes": 174129,
         "dpi": 300
       }
     },
@@ -820,7 +846,7 @@
       "caption": "Recorded recall at 5% and 10% of eligible cell area per issue week. Crossing cells contribute fractionally; positive contributions are pooled over weeks. Original baselines; calibrated fitted candidates.",
       "output": {
         "png": "artifacts/figures/results_area_budget.png",
-        "png_bytes": 201008,
+        "png_bytes": 180994,
         "dpi": 300
       }
     },
@@ -849,7 +875,7 @@
       "caption": "H2: retrospective minus strict AP, calibrated selected candidates. The recorded 95% paired month-block interval is shown without a point: the artifact does not record the paired point estimate. The frozen H2 rule tests whether this interval contains zero; it is not an equivalence test.",
       "output": {
         "png": "artifacts/figures/results_h2.png",
-        "png_bytes": 107341,
+        "png_bytes": 92249,
         "dpi": 300
       }
     },
@@ -260911,7 +260937,7 @@
       },
       "output": {
         "png": "artifacts/figures/results_map.png",
-        "png_bytes": 430179,
+        "png_bytes": 414942,
         "dpi": 300
       }
     }

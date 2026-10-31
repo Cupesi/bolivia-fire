@@ -29,6 +29,7 @@ from bolivia_fire.figures import (
     _country_path,
     _map_axes,
     _outline,
+    chart_style,
     collect_dataset,
     plot_results_area_budget,
     plot_results_h2,
@@ -180,7 +181,7 @@ def render_animation(
         raise ValueError("An animation needs at least one step")
     publication_directory.mkdir(parents=True, exist_ok=True)
     frames = []
-    with plt.rc_context(STYLE):
+    with chart_style() as font:
         try:
             for step in range(steps):
                 figure = draw(step)
@@ -192,6 +193,8 @@ def render_animation(
                 finally:
                     plt.close(figure)
             result = write_gif(frames, destination)
+            result["font_family"] = font
+            result["mathtext_fontset"] = STYLE["mathtext.fontset"]
             shutil.copyfile(destination, publication_directory / destination.name)
             return result
         finally:
@@ -604,7 +607,7 @@ def assemble_screenshots(frame_directory: Path, root: Path = REPO_ROOT) -> dict[
     return _write_manifest(assets, output, {})
 
 
-def build_animations(root: Path = REPO_ROOT) -> dict[str, Any]:
+def build_animations(root: Path = REPO_ROOT, *, charts_only: bool = False) -> dict[str, Any]:
     from bolivia_fire.diagrams import animate_partitions, animate_pipeline, animate_products
 
     weeks, rows, calendar = load_animation_inputs(root)
@@ -706,6 +709,8 @@ def build_animations(root: Path = REPO_ROOT) -> dict[str, Any]:
         ),
     ]
     for name, make in jobs:
+        if charts_only and not name.startswith("charts/"):
+            continue
         output[name] = make()
     sources = [
         summary_path,
@@ -728,10 +733,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Render media from existing local artifacts")
     parser.add_argument("--screenshot-frames", type=Path)
+    parser.add_argument("--charts-only", action="store_true")
     args = parser.parse_args()
     result = (
         assemble_screenshots(args.screenshot_frames)
         if args.screenshot_frames
-        else build_animations()
+        else build_animations(charts_only=args.charts_only)
     )
     print(json.dumps(result, indent=2))

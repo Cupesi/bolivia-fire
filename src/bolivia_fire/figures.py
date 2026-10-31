@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import shapely
+from matplotlib import font_manager
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
@@ -30,6 +32,9 @@ TableSource = pd.DataFrame | Path | Sequence[Path]
 PARTITIONS = ("train", "val_select", "val_calib", "test")
 COLORS = ("#0072B2", "#E69F00", "#009E73", "#CC79A7")
 STYLE = {
+    "font.family": "serif",
+    "font.serif": ["Times New Roman", "Liberation Serif", "TeX Gyre Termes", "DejaVu Serif"],
+    "mathtext.fontset": "stix",
     "font.size": 9,
     "axes.titlesize": 11,
     "axes.labelsize": 9,
@@ -42,6 +47,21 @@ STYLE = {
     "figure.constrained_layout.w_pad": 0.2,
     "figure.constrained_layout.h_pad": 0.2,
 }
+
+
+@contextmanager
+def chart_style() -> Iterator[str]:
+    with plt.rc_context(STYLE):
+        try:
+            path = font_manager.findfont(
+                font_manager.FontProperties(family=STYLE["font.serif"]), fallback_to_default=False
+            )
+        except ValueError as error:
+            raise RuntimeError("No approved serif chart font is available") from error
+        family = font_manager.get_font(path).family_name
+        if family.casefold() not in {name.casefold() for name in STYLE["font.serif"]}:
+            raise RuntimeError(f"Chart font must resolve to an approved serif; resolved {family}")
+        yield family
 
 
 @dataclass
@@ -494,7 +514,7 @@ def write_dataset_figures(
 ) -> dict[str, Path]:
     artifact_directory.mkdir(parents=True, exist_ok=True)
     outputs = {}
-    with plt.rc_context(STYLE):
+    with chart_style() as font:
         for name, make in (
             ("map", lambda: plot_training_map(data, country, departments)),
             ("weekly", lambda: plot_weekly_detections(data)),
@@ -510,6 +530,7 @@ def write_dataset_figures(
                     bbox_inches="tight",
                     pad_inches=0.25,
                     pil_kwargs={"optimize": True},
+                    metadata={"FontFamily": font, "MathTextFontSet": STYLE["mathtext.fontset"]},
                 )
                 outputs[name] = output
             finally:
@@ -1128,7 +1149,7 @@ def write_results_figures(
         "h2": lambda: plot_results_h2(data),
     }
     outputs = {}
-    with plt.rc_context(STYLE):
+    with chart_style() as font:
         for name, make in makers.items():
             figure = make()
             try:
@@ -1139,6 +1160,7 @@ def write_results_figures(
                     bbox_inches="tight",
                     pad_inches=0.25,
                     pil_kwargs={"optimize": True},
+                    metadata={"FontFamily": font, "MathTextFontSet": STYLE["mathtext.fontset"]},
                 )
                 outputs[name] = output
             finally:

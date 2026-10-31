@@ -1,64 +1,76 @@
 {
   "media": {
     "charts/national_weekly.gif": {
-      "bytes": 59623,
+      "bytes": 60601,
       "frames": 73,
       "width": 1026,
       "height": 443,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/seasonal_cycle.gif": {
-      "bytes": 554123,
+      "bytes": 511164,
       "frames": 73,
       "width": 960,
       "height": 476,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/fire_season_2024.gif": {
-      "bytes": 2037452,
+      "bytes": 2242133,
       "frames": 73,
       "width": 982,
       "height": 608,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/temporal_ap.gif": {
-      "bytes": 70968,
+      "bytes": 67650,
       "frames": 73,
       "width": 1092,
       "height": 487,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/reliability.gif": {
-      "bytes": 245224,
+      "bytes": 264944,
       "frames": 73,
       "width": 982,
       "height": 476,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/geographic_ap.gif": {
-      "bytes": 76184,
+      "bytes": 74586,
       "frames": 73,
       "width": 1092,
       "height": 487,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "diagrams/pipeline.gif": {
       "bytes": 93709,
@@ -141,49 +153,57 @@
       "border_clear": false
     },
     "charts/area_budget.gif": {
-      "bytes": 391961,
+      "bytes": 387334,
       "frames": 73,
       "width": 1136,
       "height": 564,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/dataset_map.gif": {
-      "bytes": 1611219,
+      "bytes": 1621140,
       "frames": 73,
       "width": 575,
       "height": 575,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/h2_interval.gif": {
-      "bytes": 119106,
+      "bytes": 118720,
       "frames": 73,
       "width": 982,
       "height": 377,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     },
     "charts/per_year_ap.gif": {
-      "bytes": 394647,
+      "bytes": 370797,
       "frames": 73,
       "width": 850,
       "height": 531,
       "duration_ms": 6100,
       "final_hold_ms": 2500,
       "fps": 20,
-      "border_clear": true
+      "border_clear": true,
+      "font_family": "Times New Roman",
+      "mathtext_fontset": "stix"
     }
   },
   "sources": {
     "artifacts/figures/results_summary.json": {
-      "sha256": "d1fc0166d37ae18504ac7306c21f78fa3dc0c10aeb8021639f16a29baffb6b5d"
+      "sha256": "6ede65e87d902ad1a6c9467ed9780d4db424e34ca154293aea1099851ae3b6b0"
     },
     "artifacts/evaluation/test_strict.json": {
       "sha256": "31242d34ef75076678dc0675ea578c96acfadf97d68c6503415c31b54b126cec"

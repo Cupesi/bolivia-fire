@@ -1,0 +1,385 @@
+{
+  "review_date": "2026-10-31",
+  "resolved_font": "Times New Roman",
+  "mathtext_fontset": "stix",
+  "border_margin_px": 12,
+  "gif_frames_checked_for_border": "All 73 frames",
+  "gif_frames_visually_inspected": [
+    0,
+    36,
+    72
+  ],
+  "unchanged_diagram_and_screenshot_files": 12,
+  "files": {
+    "artifacts/figures/dataset_map.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 260577,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif title, coordinates, colorbar and outside legend are complete and separated.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/dataset_partitions.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 175608,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif partition labels, rotated purge dates, inset coordinates and caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/dataset_seasonal.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 233832,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif calendar ticks, prevalence units, title and four legend entries are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/dataset_weekly.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 185330,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif UTC ticks, count units and the two-row outside legend do not overlap.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_area_budget.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 180994,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif panel titles, percent ticks, model legend and wrapped caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_geographic.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 171389,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif model labels, both interval axes and three-line caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_h2.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 92249,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif interval endpoints, zero-reference ticks and three-line caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_map.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 414942,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif map titles, coordinates, both colorbars and four-line caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_per_year.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 174129,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif year ticks, four model labels and two-line caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_reliability.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 168669,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif scales, omitted-bin notice, outside legend and caption are separated.",
+      "clipping_or_text_overlap": false
+    },
+    "artifacts/figures/results_temporal.png": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 170411,
+      "frames_reviewed": [
+        0
+      ],
+      "visual_qa": "Serif model labels, both interval axes and three-line caption are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/area_budget.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 387334,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif panel titles, scales, four model labels and caption stay complete through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/area_budget.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 387334,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif panel titles, scales, four model labels and caption stay complete through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/dataset_map.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 1621140,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, coordinates, colorbar and outside legend are complete and separated.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/dataset_map.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 1621140,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, coordinates, colorbar and outside legend are complete and separated.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/fire_season_2024.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 2242133,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif issue labels, coordinates, fixed colorbars and changing coverage captions are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/fire_season_2024.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 2242133,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif issue labels, coordinates, fixed colorbars and changing coverage captions are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/geographic_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 74586,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif model labels, AP annotations, spatial comparator and interval axes are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/geographic_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 74586,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif model labels, AP annotations, spatial comparator and interval axes are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/h2_interval.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 118720,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif endpoints, zero-reference ticks and caption stay separated through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/h2_interval.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 118720,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif endpoints, zero-reference ticks and caption stay separated through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/national_weekly.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 60601,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, UTC scale, count units and all three outside legend labels are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/national_weekly.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 60601,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, UTC scale, count units and all three outside legend labels are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/per_year_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 370797,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif year ticks, four model labels and caption stay complete through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/per_year_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 370797,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif year ticks, four model labels and caption stay complete through the reveal.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/reliability.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 264944,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif titles, both scales, omitted-bin notice and outside legend stay separated.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/reliability.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 264944,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif titles, both scales, omitted-bin notice and outside legend stay separated.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/seasonal_cycle.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 511164,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, calendar ticks, count units and all 14 final year labels are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/seasonal_cycle.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 511164,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif title, calendar ticks, count units and all 14 final year labels are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "docs/assets/charts/temporal_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 67650,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif model labels, AP annotations, temporal comparator and interval axes are complete.",
+      "clipping_or_text_overlap": false
+    },
+    "data/figures/temporal_ap.gif": {
+      "resolved_font": "Times New Roman",
+      "border_12px": true,
+      "bytes": 67650,
+      "frames_reviewed": [
+        0,
+        36,
+        72
+      ],
+      "publication_copy_identical": true,
+      "visual_qa": "Serif model labels, AP annotations, temporal comparator and interval axes are complete.",
+      "clipping_or_text_overlap": false
+    }
+  }
+}

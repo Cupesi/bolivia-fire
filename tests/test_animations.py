@@ -3,10 +3,11 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from matplotlib import font_manager
 from PIL import Image
 from shapely.geometry import box
 
-from bolivia_fire import animations, diagrams
+from bolivia_fire import animations, diagrams, figures
 from bolivia_fire.figures import unobserved_spans
 
 
@@ -57,8 +58,22 @@ def test_synthetic_weekly_reveal_and_publication(tmp_path, synthetic_weeks):
         {"start_utc": pd.to_datetime(["2023-08-08"]), "end_utc": pd.to_datetime(["2023-08-09"])}
     )
     path = tmp_path / "weekly.gif"
-    animations.animate_weekly(synthetic_weeks, outages, path, tmp_path / "publication", steps=3)
+    info = animations.animate_weekly(
+        synthetic_weeks, outages, path, tmp_path / "publication", steps=3
+    )
+    assert info["font_family"] in figures.STYLE["font.serif"]
+    assert info["mathtext_fontset"] == "stix"
     assert_media(path, 3, tmp_path / "publication")
+
+
+def test_animation_export_rejects_sans_serif(tmp_path, synthetic_weeks, monkeypatch):
+    sans = font_manager.findfont(font_manager.FontProperties(family=["DejaVu Sans"]))
+    monkeypatch.setattr(figures.font_manager, "findfont", lambda *args, **kwargs: sans)
+    with pytest.raises(RuntimeError, match="serif.*DejaVu Sans"):
+        animations.animate_weekly(
+            synthetic_weeks, pd.DataFrame(), tmp_path / "weekly.gif", tmp_path / "publication"
+        )
+    assert not list(tmp_path.rglob("*.gif"))
 
 
 def test_synthetic_seasonal_years(tmp_path, synthetic_weeks):
