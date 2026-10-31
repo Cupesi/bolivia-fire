@@ -5,7 +5,7 @@ description = "Open data and reproducible evaluation of satellite fire activity 
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
-authors = [{ name = "Cupesí Labs" }]
+authors = [{ name = "Victor Hugo Cuellar Flores" }]
 dependencies = [
     "filelock>=3.16",
     "httpx>=0.27",

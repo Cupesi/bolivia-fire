@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Please cite this software and attribute the source datasets when using Bolivia Fire."
 title: "Bolivia Fire"
 authors:
-  - name: "Victor Cuellar"
-    affiliation: "Cupesí Labs"
+  - given-names: "Victor Hugo"
+    family-names: "Cuellar Flores"
 repository-code: "https://github.com/Cupesi/bolivia-fire"
 license: MIT
 version: "0.1.0"
