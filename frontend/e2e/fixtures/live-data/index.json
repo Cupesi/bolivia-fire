@@ -1,0 +1,11 @@
+{
+  "synthetic": true,
+  "latest_issue": "2026-10-26",
+  "last_updated_utc": "2026-10-31T06:00:00Z",
+  "issues": [
+    {"issue_date":"2026-10-12","forecast":true,"observation":true,"verified":true},
+    {"issue_date":"2026-10-19","forecast":true,"observation":true,"verified":true},
+    {"issue_date":"2026-10-26","forecast":true,"observation":true,"verified":false}
+  ],
+  "limitations": ["Synthetic fixture for browser tests."]
+}

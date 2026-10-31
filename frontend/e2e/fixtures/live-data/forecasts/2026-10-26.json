@@ -1,0 +1,1 @@
+{"issue_date":"2026-10-26","target_start":"2026-10-26","target_end":"2026-11-02","model_id":"synthetic/lightgbm","variant":"strict","generated_utc":"2026-10-26T06:00:00Z","input_window":{"first_day":"2025-10-26","last_day":"2026-10-25","unobserved_days":[]},"cell_index":[0,1,2,3],"p":[0.9,0.7,0.2,null],"prospective":true,"publication_lag_hours":6}

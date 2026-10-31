@@ -171,10 +171,9 @@ main {
 }
 .filter-bar {
   display: grid;
-  grid-template-columns: minmax(210px, 1fr) minmax(340px, 1.5fr) minmax(
-      140px,
-      0.8fr
-    ) minmax(130px, 0.7fr);
+  grid-template-columns:
+    minmax(210px, 1fr) minmax(340px, 1.5fr) minmax(140px, 0.8fr)
+    minmax(130px, 0.7fr);
   gap: 20px;
   align-items: end;
   border-block: 1px solid #d7e1dc;
@@ -193,6 +192,50 @@ main {
 .week-input input {
   min-width: 0;
   width: 100%;
+}
+.week-input select {
+  min-width: 0;
+  width: 100%;
+}
+.forecast-summary {
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+.forecast-summary p + p {
+  margin-top: 5px;
+}
+.track-panel {
+  margin-top: 26px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #d4dfd9;
+  border-radius: 6px;
+  min-width: 0;
+}
+.track-panel > p {
+  margin-block: 10px;
+}
+.track-panel .table-scroll {
+  margin-block: 14px;
+}
+.track-panel th,
+.track-panel td {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.track-chart {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin-block: 18px;
+}
+.track-chart text {
+  font-size: 11px;
+  fill: #566f62;
+}
+.baseline-key {
+  width: 12px;
+  border-top: 2px dashed #8b4a18;
 }
 .week-input button {
   flex-shrink: 0;

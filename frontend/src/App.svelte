@@ -3,14 +3,15 @@
   import CellMap from "./components/CellMap.svelte";
   import CellTable from "./components/CellTable.svelte";
   import SeriesChart from "./components/SeriesChart.svelte";
+  import TrackRecord from "./components/TrackRecord.svelte";
   import {
-    ApiError,
-    exportUrl,
-    getJson,
     loadInitial,
     loadLayer,
-    normalizeSeries,
-  } from "./lib/api";
+    loadSeries,
+    liveClient,
+    staticMode,
+  } from "./lib/data-client";
+  import { ApiError, exportUrl } from "./lib/api";
   import { formatValue } from "./lib/color";
   import type {
     Cell,
@@ -18,13 +19,16 @@
     LayerKind,
     NullableNumber,
     SeriesPoint,
+    Observation,
   } from "./lib/types";
 
   let data = $state<Awaited<ReturnType<typeof loadInitial>> | null>(null);
   let bootLoading = $state(true);
   let bootError = $state<Error | null>(null);
   let date = $state("");
-  let kind = $state<LayerKind>("observed");
+  let kind = $state<LayerKind>(staticMode ? "estimate" : "observed");
+  let observation = $state<Observation | null>(null);
+  let observationError = $state<Error | null>(null);
   let model = $state("");
   let variant = $state("");
   let view = $state<"map" | "table">("map");
@@ -52,6 +56,15 @@
     ["Cells SHA-256", data?.meta.snapshots.cells_sha256],
     ["Panel snapshot", panelIdentifiers(data?.meta.snapshots ?? {})],
     ["Sources SHA-256", data?.meta.snapshots.sources_sha256],
+    ...(staticMode
+      ? [
+          [
+            "Frozen SP bundle SHA-256",
+            data?.meta.snapshots.frozen_sp_bundle_sha256,
+          ],
+          ["Outage snapshot SHA-256", data?.meta.snapshots.outage_sha256],
+        ]
+      : []),
   ]);
 
   function panelIdentifiers(snapshots: Record<string, unknown>): string | null {
@@ -114,7 +127,7 @@
       const result = await loadInitial(controller.signal);
       if (controller.signal.aborted) return;
       data = result;
-      date = result.weeks.at(-1)?.date ?? "";
+      date = result.live?.latest_issue ?? result.weeks.at(-1)?.date ?? "";
       variant = result.meta.variants.includes("strict")
         ? "strict"
         : (result.meta.variants[0] ?? "");
@@ -145,6 +158,25 @@
 
   $effect(() => {
     if (!availableModels.includes(model)) model = availableModels[0] ?? "";
+  });
+
+  $effect(() => {
+    const selectedDate = date;
+    const week = currentWeek;
+    observation = null;
+    observationError = null;
+    if (!staticMode || !week?.observation) return;
+    const controller = new AbortController();
+    liveClient
+      .loadLayer(selectedDate, "observed", "", "", controller.signal)
+      .then((result) => {
+        if (!controller.signal.aborted)
+          observation = result.observation ?? null;
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) observationError = asError(error);
+      });
+    return () => controller.abort();
   });
 
   $effect(() => {
@@ -213,16 +245,17 @@
       return;
     }
     const controller = new AbortController();
-    const query = new URLSearchParams({ start, end });
-    if (selectedModel) query.set("model", selectedModel);
-    if (selectedVariant) query.set("variant", selectedVariant);
     seriesLoading = true;
-    getJson(
-      `/cells/${encodeURIComponent(cell.id)}/series?${query}`,
+    loadSeries(
+      cell,
+      start,
+      end,
+      selectedModel,
+      selectedVariant,
       controller.signal,
     )
       .then((result) => {
-        if (!controller.signal.aborted) series = normalizeSeries(result);
+        if (!controller.signal.aborted) series = result;
       })
       .catch((error: unknown) => {
         if (!controller.signal.aborted) seriesError = asError(error);
@@ -236,7 +269,10 @@
   function changeWeek(direction: number) {
     if (!data) return;
     const target = data.weeks[weekIndex + direction];
-    if (target) date = target.date;
+    if (target) {
+      date = target.date;
+      if (staticMode) kind = "estimate";
+    }
   }
   function weekKeyboard(event: KeyboardEvent) {
     if (event.altKey && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
@@ -254,8 +290,8 @@
 <a class="skip-link" href="#explorer">Skip to data explorer</a>
 <header class="page-header">
   <div class="header-inner">
-    <a class="project-name" href="/">Bolivia Fire</a><a href="#about"
-      >About & limitations</a
+    <a class="project-name" href={import.meta.env.BASE_URL}>Bolivia Fire</a><a
+      href="#about">About & limitations</a
     >
   </div>
 </header>
@@ -264,8 +300,9 @@
     <p class="eyebrow">Satellite observations · Weekly · 0.05°</p>
     <h1>Weekly fire detections</h1>
     <p class="intro-copy">
-      Explore observed satellite detections and prepared retrospective estimates
-      across Bolivia.
+      {staticMode
+        ? "Experimental weekly estimate (near-real-time data)"
+        : "Explore observed satellite detections and prepared retrospective estimates across Bolivia."}
     </p>
   </div>
 
@@ -278,7 +315,9 @@
     <div class="state-panel error" role="alert">
       <h2>
         {bootError instanceof ApiError && bootError.kind === "offline"
-          ? "API offline"
+          ? staticMode
+            ? "Data files offline"
+            : "API offline"
           : "Data service unavailable"}
       </h2>
       <p>{bootError.message}</p>
@@ -298,15 +337,27 @@
               aria-label="Previous week"
               disabled={weekIndex <= 0}
               onclick={() => changeWeek(-1)}>←</button
-            ><input
-              id="issue-week"
-              type="date"
-              bind:value={date}
-              min={data.weeks[0]?.date}
-              max={data.weeks.at(-1)?.date}
-              aria-describedby="week-hint"
-              disabled={!data.weeks.length}
-            /><button
+            >{#if staticMode}<select
+                id="issue-week"
+                bind:value={date}
+                onchange={() => {
+                  kind = "estimate";
+                }}
+                aria-describedby="week-hint"
+                disabled={!data.weeks.length}
+              >
+                {#each data.weeks as week}<option value={week.date}
+                    >{week.date}</option
+                  >{/each}
+              </select>{:else}<input
+                id="issue-week"
+                type="date"
+                bind:value={date}
+                min={data.weeks[0]?.date}
+                max={data.weeks.at(-1)?.date}
+                aria-describedby="week-hint"
+                disabled={!data.weeks.length}
+              />{/if}<button
               aria-label="Next week"
               disabled={weekIndex < 0 || weekIndex >= data.weeks.length - 1}
               onclick={() => changeWeek(1)}>→</button
@@ -318,65 +369,115 @@
           <div class="segmented">
             <button
               aria-pressed={kind === "observed"}
+              disabled={staticMode && observation?.complete !== true}
               onclick={() => {
                 kind = "observed";
               }}>Observed detections</button
             ><button
               aria-pressed={kind === "estimate"}
-              disabled={!estimatesAvailable}
-              aria-describedby={!estimatesAvailable
+              disabled={!staticMode && !estimatesAvailable}
+              aria-describedby={!staticMode && !estimatesAvailable
                 ? "missing-predictions"
                 : undefined}
               onclick={() => {
                 kind = "estimate";
-              }}>Retrospective estimate</button
+              }}
+              >{staticMode
+                ? "Weekly estimate"
+                : "Retrospective estimate"}</button
             >
           </div>
         </fieldset>
-        <label for="model"
-          >Model<select
-            id="model"
-            bind:value={model}
-            disabled={!availableModels.length}
-            ><option value="" disabled>None available</option
-            >{#each availableModels as option}<option value={option}
-                >{option.replaceAll("_", " ")}</option
-              >{/each}</select
-          ></label
-        >
-        <label for="variant"
-          >Variant<select
-            id="variant"
-            bind:value={variant}
-            disabled={!data.meta.variants.length}
-            ><option value="" disabled>None available</option
-            >{#each data.meta.variants as option}<option value={option}
-                >{option.replaceAll("_", " ")}</option
-              >{/each}</select
-          ></label
-        >
+        {#if !staticMode}<label for="model"
+            >Model<select
+              id="model"
+              bind:value={model}
+              disabled={!availableModels.length}
+              ><option value="" disabled>None available</option
+              >{#each availableModels as option}<option value={option}
+                  >{option.replaceAll("_", " ")}</option
+                >{/each}</select
+            ></label
+          >
+          <label for="variant"
+            >Variant<select
+              id="variant"
+              bind:value={variant}
+              disabled={!data.meta.variants.length}
+              ><option value="" disabled>None available</option
+              >{#each data.meta.variants as option}<option value={option}
+                  >{option.replaceAll("_", " ")}</option
+                >{/each}</select
+            ></label
+          >
+        {/if}
       </div>
       <div class="filter-notes">
         <p id="week-hint" class="muted small">
           Alt + ← / → changes the issue week. Targets cover the following seven
           days.
         </p>
-        {#if !estimatesAvailable}<p
+        {#if !staticMode && !estimatesAvailable}<p
             id="missing-predictions"
             class="muted small"
           >
             Missing predictions: no prepared estimates are available.
           </p>{/if}
       </div>
-      {#if kind === "estimate"}<p class="notice">
+      {#if !staticMode && kind === "estimate"}<p class="notice">
           Retrospective model estimate, not an operational forecast.
         </p>{/if}
-      {#if currentWeek?.targetComplete === false}<p
+      {#if staticMode && layer?.forecast}
+        <div class="forecast-summary" aria-label="Forecast metadata">
+          <p class="forecast-timing">
+            {layer.forecast.prospective
+              ? "Prospective estimate"
+              : "Backfill estimate · generated after issue time"}
+          </p>
+          <p>
+            Issue: <strong>{layer.forecast.issue_date} 00:00 UTC</strong> ·
+            Target:
+            <strong
+              >[{layer.forecast.target_start}, {layer.forecast.target_end}) UTC</strong
+            >
+          </p>
+          <p class="small muted">
+            Published: {layer.forecast.generated_utc} · {layer.forecast.publication_lag_hours.toFixed(
+              1,
+            )} h after issue · Model: {layer.forecast.model_id} · Variant: {layer
+              .forecast.variant}
+          </p>
+          <p class="small muted">
+            Input window: {layer.forecast.input_window.first_day} through {layer
+              .forecast.input_window.last_day} 23:59 UTC, before the issue time.
+          </p>
+          {#if layer.forecast.input_window.unobserved_days.length}<p
+              class="notice"
+            >
+              Unobserved input days: {layer.forecast.input_window.unobserved_days.join(
+                ", ",
+              )}. Input history is incomplete.
+            </p>{/if}
+        </div>
+      {/if}
+      {#if staticMode && observationError}<p class="notice">
+          Observation file unavailable: {observationError.message}
+        </p>{/if}
+      {#if staticMode && currentWeek && !currentWeek.observation}<p
+          class="notice"
+        >
+          Observation week is not available yet. Observed detections can be
+          selected after all seven target days are observed.
+        </p>{/if}
+      {#if currentWeek?.targetComplete === false || (staticMode && observation?.complete === false)}<p
           class="notice"
           data-testid="observation-notice"
         >
           This week includes unobserved target days. Incomplete labels are
           missing, never zero.
+          {#if staticMode}Incomplete observation week. Unobserved days: {observation?.unobserved_days.join(
+              ", ",
+            )}.{/if}
         </p>{/if}
       {#if currentWeek?.lowCoverage}<p
           class="notice"
@@ -392,7 +493,9 @@
               <h2>
                 {kind === "observed"
                   ? "Observed detections"
-                  : "Retrospective estimate"}
+                  : staticMode
+                    ? "Weekly estimate"
+                    : "Retrospective estimate"}
               </h2>
               <p class="muted small">
                 {date ||
@@ -445,7 +548,9 @@
                   ? "Missing predictions"
                   : layerError instanceof ApiError &&
                       layerError.kind === "offline"
-                    ? "API offline"
+                    ? staticMode
+                      ? "Data files offline"
+                      : "API offline"
                     : "Selection unavailable"}
               </h3>
               <p>{layerError.message}</p>
@@ -504,7 +609,7 @@
               Gray means unavailable data. A missing label does not establish
               absence.
             </p>
-            {#if layer && !layerLoading && !layerError}<a
+            {#if !staticMode && layer && !layerLoading && !layerError}<a
                 class="download-link"
                 href={exportUrl(date, kind, model, variant)}
                 download>Download week CSV</a
@@ -587,6 +692,7 @@
         </aside>
       </div>
     </section>
+    {#if staticMode}<TrackRecord />{/if}
     <section id="about" class="about-panel" aria-label="About and limitations">
       <details open>
         <summary>About & limitations</summary>
@@ -594,9 +700,11 @@
           <div>
             <h3>What is a detection?</h3>
             <p>
-              The target is at least one VIIRS S-NPP standard-processing
-              detection of presumed vegetation fire, with nominal or high
-              confidence, in the national part of a cell during the target week.
+              The target is at least one VIIRS S-NPP {staticMode
+                ? "near-real-time"
+                : "standard-processing"}
+              detection of presumed vegetation fire, with nominal or high confidence,
+              in the national part of a cell during the target week.
             </p>
             <p>
               Detections are not fires, ignitions, burned area, or official
@@ -612,14 +720,25 @@
             </p>
           </div>
           <div>
-            <h3>Retrospective estimates</h3>
-            <p>
-              These are retrospective model estimates, not operational
-              forecasts. The strict simulation assumes standard-processing
-              detections approximate those available in near real time; that
-              equivalence is not validated. Revised CHIRPS rainfall covariates
-              do not recreate historical information availability.
-            </p>
+            <h3>
+              {staticMode
+                ? "Experimental weekly estimates"
+                : "Retrospective estimates"}
+            </h3>
+            {#if staticMode}<p>
+                The model was trained on standard-processing detections and is
+                applied to near-real-time detections. The track record measures
+                how well it holds up. Processing revisions and data delays can
+                change detection availability. This is an experimental estimate.
+              </p>{:else}
+              <p>
+                These are retrospective model estimates, not operational
+                forecasts. The strict simulation assumes standard-processing
+                detections approximate those available in near real time; that
+                equivalence is not validated. Revised CHIRPS rainfall covariates
+                do not recreate historical information availability.
+              </p>
+            {/if}
             {#if data.meta.limitations.length}<details class="api-limitations">
                 <summary>Dataset-specific limitations</summary
                 >{#each data.meta.limitations as limitation}<p>
@@ -630,8 +749,10 @@
             {#each data.meta.attributions as source}<p class="small">
                 {#if safeLink(source.url)}<a href={source.url}>{source.name}</a
                   >{:else}{source.name}{/if}
-                {#if source.product} · {source.product}{/if}
-                {#if source.provider} · {source.provider}{/if}
+                {#if source.product}
+                  · {source.product}{/if}
+                {#if source.provider}
+                  · {source.provider}{/if}
                 {#if source.license}
                   · {#if safeLink(source.licenseUrl)}<a href={source.licenseUrl}
                       >{source.license}</a
@@ -641,7 +762,8 @@
                 {#if source.citation}<br />{source.citation}{/if}
               </p>{:else}<p>
                 Source credits are unavailable. See the
-                <a href="https://github.com/Cupesi/bolivia-fire/blob/main/datasets/dataset_card.md"
+                <a
+                  href="https://github.com/Cupesi/bolivia-fire/blob/main/datasets/dataset_card.md"
                   >dataset source terms</a
                 >.
               </p>{/each}
@@ -659,12 +781,12 @@
                       <pre>{value}</pre>
                     </details>{:else}{typeof value === "string" && value
                       ? value
-                      : "Not supplied by API"}{/if}
+                      : "Not supplied"}{/if}
                 </dd>
               </div>{/each}
           </dl>
           {#if !Object.keys(data.meta.snapshots).length}<p class="muted small">
-              No dataset snapshot identifiers were supplied by the API.
+              No dataset snapshot identifiers were supplied.
             </p>{/if}
           <p class="small muted">
             Grid cells use geographic coordinates and vary in area. Area values

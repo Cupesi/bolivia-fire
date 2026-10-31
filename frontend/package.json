@@ -9,8 +9,10 @@
     "test": "vitest run",
     "test:api": "node scripts/smoke-api.mjs",
     "build": "vite build && node scripts/bundle-size.mjs",
+    "build:static": "node scripts/build-static.mjs && node scripts/bundle-size.mjs --static",
     "preview": "vite preview --host 0.0.0.0",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:static": "playwright test --config playwright.static.config.ts"
   },
   "dependencies": {
     "svelte": "5.57.3"
