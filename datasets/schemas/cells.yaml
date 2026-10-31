@@ -1,0 +1,28 @@
+version: 1
+path: datasets/processed/cells.parquet
+primary_key: [cell_id]
+crs: EPSG:4326
+grid:
+  resolution_deg: 0.05
+  origin: [-180, -90]
+  closure: "[west, east) x [south, north)"
+  index: floor(round((coordinate - origin) * 20, 9))
+  eligibility: positive-area ADM0 intersection
+columns:
+  cell_id: {dtype: string, format: "r{row:04d}c{col:04d}"}
+  row: {dtype: int32}
+  col: {dtype: int32}
+  west: {dtype: float64, unit: degrees_east}
+  east: {dtype: float64, unit: degrees_east}
+  south: {dtype: float64, unit: degrees_north}
+  north: {dtype: float64, unit: degrees_north}
+  longitude: {dtype: float64, description: full-cell center longitude}
+  latitude: {dtype: float64, description: full-cell center latitude}
+  national_area_km2: {dtype: float64, unit: km2, description: WGS84 geodesic ADM0 intersection area}
+  full_area_km2: {dtype: float64, unit: km2}
+  national_fraction: {dtype: float64, description: national area divided by full cell area}
+  department: {dtype: string, description: ADM1 with largest national intersection area}
+  santa_cruz: {dtype: bool, description: department equals Santa Cruz}
+  block_id: {dtype: string, format: "b{floor(longitude)}_{floor(latitude)}"}
+  geo_holdout: {dtype: bool, description: lowest floor(0.2 * block_count) SHA256-ranked blocks}
+metadata: [protocol_sha256, sources_sha256]

@@ -1,0 +1,48 @@
+version: 1
+path: datasets/processed/panel/year=YYYY/part.parquet
+primary_key: [cell_id, issue_date]
+inherits: datasets/schemas/cells.yaml
+issue_time: Monday 00:00 UTC
+columns:
+  issue_date: {dtype: timestamp, timezone: UTC midnight stored without timezone}
+  partition: {dtype: string, nullable: true, values: [train, val_select, val_calib, test], description: null when purged}
+  count_last_7d: {dtype: float32}
+  count_last_14d: {dtype: float32}
+  count_last_28d: {dtype: float32}
+  count_last_91d: {dtype: float32}
+  count_last_365d: {dtype: float32}
+  any_last_7d: {dtype: bool}
+  days_since_last: {dtype: float32, unit: days, maximum: 730}
+  no_prior_detection: {dtype: bool, description: no primary national detection in available prior history}
+  frp_sum_28d: {dtype: float32, unit: MW}
+  same_week_last_year: {dtype: float32, window: "[issue - 364d, issue - 357d)"}
+  neighborhood_3x3_last_7d: {dtype: float32}
+  neighborhood_7x7_last_7d: {dtype: float32}
+  neighborhood_3x3_last_28d: {dtype: float32}
+  neighborhood_7x7_last_28d: {dtype: float32}
+  national_last_7d: {dtype: float32}
+  national_last_28d: {dtype: float32}
+  week_of_year_sin: {dtype: float32, formula: sin(2*pi*(ISO_week-1)/52)}
+  week_of_year_cos: {dtype: float32, formula: cos(2*pi*(ISO_week-1)/52)}
+  train_climatology: {dtype: float32, nullable: true}
+  feature_window_complete: {dtype: bool, description: all 365 prior UTC days acquired}
+  window_complete_28d: {dtype: bool, description: all 28 prior UTC days acquired}
+  n_primary: {dtype: int32, description: observed primary national target detections}
+  n_allconf: {dtype: int32, description: observed all-confidence national target detections}
+  y_primary: {dtype: int8, nullable: true, values: [0, 1]}
+  y_allconf: {dtype: int8, nullable: true, values: [0, 1]}
+  target_complete: {dtype: bool, description: all seven target UTC days acquired}
+  target_low_coverage: {dtype: bool, description: a June-November target day has zero bbox detections}
+history:
+  selection: primary and in_bolivia
+  count_windows: "[issue - Nd, issue)"
+  neighborhood: centered on cell, includes center, outside eligibility contributes zero
+  national: includes every covered primary point, including points in boundary-only ineligible cells
+climatology:
+  training_labels: complete non-purged train rows excluding geographic holdout
+  week_index: min((day_of_year - 1) // 7, 51)
+  smoother: pooled arithmetic mean across circular offsets [-2, -1, 0, 1, 2]
+  train_year_rows: leave query year out
+  later_rows: all train years
+  missing_history: null
+metadata: [protocol_sha256, sources_sha256, firms_manifest_sha256, cells_sha256, detections_sha256, acquisition_days_sha256, feature_information_rule]

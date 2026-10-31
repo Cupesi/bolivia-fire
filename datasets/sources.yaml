@@ -1,0 +1,54 @@
+firms:
+  product: VIIRS_SNPP_SP
+  provider: NASA FIRMS
+  api_documentation: https://firms.modaps.eosdis.nasa.gov/api/area/
+  bbox:
+  - -70
+  - -23
+  - -57
+  - -9
+  manifest: datasets/manifests/firms_VIIRS_SNPP_SP.jsonl
+  schema: datasets/schemas/firms_viirs_sp.yaml
+boundaries:
+  ADM0:
+    provider: geoBoundaries
+    release: gbOpen
+    country: BOL
+    level: ADM0
+    metadata_url: https://www.geoboundaries.org/api/current/gbOpen/BOL/ADM0/
+    url: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/BOL/ADM0/geoBoundaries-BOL-ADM0.geojson
+    boundaryID: BOL-ADM0-4181665
+    version: 9469f09
+    boundaryYearRepresented: '2015'
+    sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
+    buildDate: Dec 12, 2023
+    license: Public Domain
+    licenseDetail: Public Domain; free use and access to information
+    licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
+    sha256: 65d3926f721a1810fb7659f4bd1b575db1a02ab5c9658a38cc83b6a13e85ba15
+    bytes: 4034693
+    path: datasets/raw/boundaries/geoBoundaries-BOL-ADM0_65d3926f721a1810fb7659f4bd1b575db1a02ab5c9658a38cc83b6a13e85ba15.geojson
+    retrieval_utc: '2026-10-31T04:56:35.323194+00:00'
+    features: 1
+    contains_santa_cruz: false
+  ADM1:
+    provider: geoBoundaries
+    release: gbOpen
+    country: BOL
+    level: ADM1
+    metadata_url: https://www.geoboundaries.org/api/current/gbOpen/BOL/ADM1/
+    url: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/BOL/ADM1/geoBoundaries-BOL-ADM1.geojson
+    boundaryID: BOL-ADM1-26024454
+    version: 9469f09
+    boundaryYearRepresented: '2015'
+    sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
+    buildDate: Dec 12, 2023
+    license: Public Domain
+    licenseDetail: Public Domain; free use and access to information
+    licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
+    sha256: 6710415c0a9a32f17ce0e6e53eaf4a719ad74a0528f4cbe8006355b08d4ca55e
+    bytes: 9273745
+    path: datasets/raw/boundaries/geoBoundaries-BOL-ADM1_6710415c0a9a32f17ce0e6e53eaf4a719ad74a0528f4cbe8006355b08d4ca55e.geojson
+    retrieval_utc: '2026-10-31T04:56:36.355959+00:00'
+    features: 9
+    contains_santa_cruz: true

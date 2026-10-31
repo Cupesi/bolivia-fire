@@ -1,0 +1,42 @@
+product: VIIRS_SNPP_SP
+format: CSV
+encoding: UTF-8
+timezone: UTC
+documentation:
+  - https://modaps.modaps.eosdis.nasa.gov/services/about/products/viirs-land-c2-nrt/vj114imgtdl_nrt.html
+  - https://www.earthdata.nasa.gov/s3fs-public/2024-07/VIIRS_C2_AF-375m_User_Guide_1.0.pdf
+columns:
+  - {name: latitude, type: float, units: degrees_north}
+  - {name: longitude, type: float, units: degrees_east}
+  - {name: bright_ti4, type: float, units: K, description: VIIRS I4 brightness temperature}
+  - {name: scan, type: float, units: km, description: Pixel dimension along scan}
+  - {name: track, type: float, units: km, description: Pixel dimension along track}
+  - {name: acq_date, type: date, format: YYYY-MM-DD}
+  - name: acq_time
+    type: string
+    format: HHMM
+    units: UTC
+    description: Zero-pad to four digits before interpreting hours and minutes
+  - name: satellite
+    type: string
+    codes: {N: S-NPP}
+    description: Platform code; N is unrelated to the daynight N code
+  - {name: instrument, type: string, codes: {VIIRS: Visible Infrared Imaging Radiometer Suite}}
+  - name: confidence
+    type: string
+    codes: {l: low, n: nominal, h: high}
+  - name: version
+    type: string
+    description: Collection and processing version supplied by FIRMS; retain verbatim
+  - {name: bright_ti5, type: float, units: K, description: VIIRS I5 brightness temperature}
+  - {name: frp, type: float, units: MW, description: Fire radiative power}
+  - name: daynight
+    type: string
+    codes: {D: day, N: night}
+  - name: type
+    type: integer
+    codes:
+      0: presumed vegetation fire
+      1: active volcano
+      2: other static land source
+      3: offshore detection, including detections over water

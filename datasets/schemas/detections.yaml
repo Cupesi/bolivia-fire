@@ -1,0 +1,39 @@
+version: 1
+path: datasets/interim/detections.parquet
+source_schema: datasets/schemas/firms_viirs_sp.yaml
+deduplication: exact equality across all 15 original source strings before parsing
+canonical_partitions: descending day range, ascending start date, manifest order; retain uncovered days
+duplicate_provenance: first occurrence in canonical partition order, then source-line order
+columns:
+  latitude: {dtype: float64, unit: degrees_north}
+  longitude: {dtype: float64, unit: degrees_east}
+  bright_ti4: {dtype: float32, unit: K}
+  scan: {dtype: float32, unit: km}
+  track: {dtype: float32, unit: km}
+  acq_date: {dtype: string, format: YYYY-MM-DD}
+  acq_time: {dtype: string, format: HHMM, description: zero-padded to four digits}
+  satellite: {dtype: string, values: [N]}
+  instrument: {dtype: string, values: [VIIRS]}
+  confidence: {dtype: string, values: [l, n, h]}
+  version: {dtype: string}
+  bright_ti5: {dtype: float32, unit: K}
+  frp: {dtype: float32, unit: MW}
+  daynight: {dtype: string, values: [D, N]}
+  type: {dtype: int8, values: [0, 1, 2, 3]}
+  source_file: {dtype: string, description: manifest-recorded path relative to repository root}
+  source_line: {dtype: int64, description: one-based data row excluding header}
+  acq_datetime: {dtype: timestamp, timezone: UTC}
+  in_bolivia: {dtype: bool, description: ADM0 covers point, including boundary}
+  cell_id: {dtype: string, description: protocol grid cell for every bbox point}
+  primary: {dtype: bool, description: type 0 and confidence n or h}
+  allconf: {dtype: bool, description: type 0 and confidence l or n or h}
+metadata: [protocol_sha256, sources_sha256, firms_manifest_sha256, exact_duplicates_removed, overlap_partitions, canonical_partition_rule]
+acquisition_days:
+  path: datasets/interim/acquisition_days.parquet
+  primary_key: [date]
+  window: protocol acquisition_start through acquisition_end, inclusive
+  columns:
+    date: {dtype: timestamp, timezone: UTC calendar date stored without timezone}
+    acquired: {dtype: bool, description: covered by a hash-verified ok_rows or ok_empty partition}
+    bbox_detection_count: {dtype: int64, description: deduplicated rows of all types and confidences}
+    bolivia_detection_count: {dtype: int64, description: deduplicated rows covered by ADM0}
