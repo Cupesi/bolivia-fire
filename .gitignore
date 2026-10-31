@@ -44,3 +44,4 @@ Thumbs.db
 artifacts/.cache/
 artifacts/serving/
 *.joblib
+artifacts/predictions/

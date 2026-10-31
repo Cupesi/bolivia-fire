@@ -146,6 +146,69 @@ The test run emitted one upstream Starlette deprecation warning for its httpx
 TestClient adapter. The `local_data` test ran against the prepared local panel;
 it skips when the cell or panel artifacts are absent.
 
+## Published strict estimates, 2026-10-31
+
+The three `uv run --no-sync bolivia-fire predict --variant strict --split SPLIT`
+commands published the following files under `artifacts/predictions/strict/`.
+Each Parquet contains four calibrated candidates for temporal cells and four for
+geographic holdout cells; row counts include all eight model identifiers.
+The CLI does not accept `strict_geo` for prediction: the geographic models are
+included in the strict export and use the `strict_geo/` model prefix.
+
+| Split | Rows | Parquet bytes | JSON sidecar bytes | CLI runtime (seconds) | Peak RAM (MiB) |
+|---|---:|---:|---:|---:|---:|
+| `val_select` | 6,983,448 | 16,518,109 | 9,602 | 4.481 | 1,065.13 |
+| `val_calib` | 6,091,944 | 14,523,236 | 9,605 | 4.054 | 997.27 |
+| `test` | 17,087,160 | 40,222,899 | 10,724 | 9.049 | 1,516.54 |
+
+Filenames are `<split>.parquet` and `<split>.json`. Sidecar checksums matched
+the Parquets. All eight model and calibrator hashes matched the sole final-test
+opening, `2026-10-31T10:30:00.578581+00:00`, and their closed selections.
+The selected models are `strict/lightgbm_08` and `strict_geo/lightgbm_04`.
+For each selected model and split, 256 exported probabilities matched fresh
+calibrated inference exactly; embedded isotonic thresholds matched the pinned
+calibrator artifacts. Evidence is in
+`artifacts/serving/model_verification.json` and
+`artifacts/serving/prediction_verification.json`.
+
+`uv run --no-sync python -m backend.app.prepare` rebuilt
+`artifacts/serving/series.parquet` and `manifest.json` in 7.691 seconds:
+25,184,988 rows, 22,930,369 Parquet bytes. The prepared index passed input and
+output hash validation.
+
+An isolated uvicorn worker on `127.0.0.1:8767` exposed both layers in `/meta`.
+For issue `2024-09-02`, explicitly requesting `variant=strict` with
+`model=strict/lightgbm_08` returned 29,506 probabilities, and requesting
+`model=strict_geo/lightgbm_04` returned 7,640. These populations cover separate
+grid cells; cells outside the selected model's population have no estimate.
+Both responses matched the prediction Parquet exactly. The series for
+`r1431c2446` during 2024 had 53 weeks, 28 available probabilities and 43 observed
+labels, matching prediction and panel files while retaining missing values.
+`/metrics?variant=strict&split=test` matched the existing test report. The single
+opening matched the protocol hash; the synthetic API regression also verified
+404 before a matching opening. API comparisons are recorded in
+`artifacts/serving/api_verification.json`.
+
+After API and browser verification, a persistent HTTP client sequentially made
+50 identical requests to `/api/v1/layer?issue_date=2024-09-02&kind=estimate&variant=strict&model=strict%2Flightgbm_08`.
+All returned 200 with 29,506 probabilities. Timings include download, gzip
+decompression and JSON decoding; OS caches were warm, and background sensitivity
+tasks remained active. Percentiles use linear interpolation between sorted
+samples. The same Windows/Python host described above was used.
+
+| Measurement | Estimate layer |
+|---|---:|
+| Requests | 50 |
+| p50 (ms) | 171.41 |
+| p95 (ms) | 190.68 |
+| Decoded response bytes | 836,538 |
+| Server RSS after workload (bytes) | 413,478,912 |
+| Free disk after workload (bytes) | 106,720,079,872 |
+
+Raw timings, parameters and snapshot identifiers are in
+`backend/measurements_estimate.json`, measured at 11:26:23 UTC.
+The verification server on port 8767 was stopped afterward; the port was closed.
+
 ## Exact response examples
 
 The responses below were obtained from the explicitly synthetic fixtures in

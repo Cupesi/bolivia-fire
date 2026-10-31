@@ -400,6 +400,11 @@
                   {" · "}{(currentWeek.completeness * 100).toFixed(1)}% label
                   completeness{/if}
               </p>
+              {#if kind === "estimate" && layer?.model}
+                <p class="muted small">
+                  Model: {layer.model} · Variant: {layer.variant}
+                </p>
+              {/if}
             </div>
             <div class="segmented view-toggle">
               <button

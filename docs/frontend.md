@@ -34,6 +34,11 @@ predictions, incompatible filters, empty responses and connection failures have
 separate text states. Estimates are enabled only when metadata lists prepared
 prediction layers and models; their label states that they are retrospective
 model estimates, not operational forecasts.
+The estimate panel displays the exact model identifier and API variant returned
+with the loaded layer. The `strict` export includes both temporal models such as
+`strict/lightgbm_08` and geographic models such as `strict_geo/lightgbm_04`;
+choose the model for the required population. Gray cells can be outside that
+model's population or lack complete input history.
 
 The missing-observation notice uses `/weeks.target_complete`, independently of
 the `outage` flag for any documented overlap. Short outages can coexist with
@@ -86,6 +91,10 @@ consistency, and project identity/source provenance. They use the real
 backend and local artifacts. Only the offline test intercepts API requests,
 aborting them rather than returning fixture data. Screenshots, downloads and
 failure traces go to `frontend/test-results`.
+`frontend/e2e/estimates.spec.ts` adds desktop and mobile scenarios that require
+the published strict predictions, check temporal and geographic population
+counts, verify model identity and the probability legend, and compare chart
+points and table values against the real cell-series response.
 
 Prefer the official image matching the pinned `@playwright/test` version. From
 the repository root on Windows:
@@ -241,3 +250,50 @@ Pytest emitted the existing upstream Starlette TestClient/httpx deprecation
 warning. Playwright emitted the existing `NO_COLOR`/`FORCE_COLOR` environment
 warning. Prepared prediction layers were absent, so estimate availability was
 verified through the disabled control and its explanation.
+
+## Published estimate verification
+
+Verification on 2026-10-31 used the host browser cache and a separate backend
+started on `127.0.0.1:8767`. The three strict prediction splits and their
+geographic models were present, with model and calibrator hashes checked against
+the single final-test opening. No training, selection or evaluation command was
+run during this verification.
+
+| Check | Result |
+|---|---|
+| `npm run check` | Passed; zero errors or warnings |
+| `npm run test` | 19 passed |
+| `npm run build` | Passed; JavaScript 28,360 bytes gzip |
+| `uv run --no-sync ruff check src tests backend` | Passed |
+| `uv run --no-sync pytest -q tests backend/tests -p no:cacheprovider` | 385 passed; one live test deselected; 201.13 seconds |
+| Host Playwright suite | 33 passed in 55.8 seconds; zero failures, retries, skips or flaky results |
+
+| Engine | Passed | Failed |
+|---|---:|---:|
+| Chromium | 11 | 0 |
+| Firefox | 11 | 0 |
+| WebKit | 11 | 0 |
+
+The host browser command, run from `frontend`, was:
+
+```powershell
+$env:BASE_URL='http://127.0.0.1:8767'
+$env:PLAYWRIGHT_JSON_OUTPUT_FILE='test-results/p1-host-final/results.json'
+npm run test:e2e -- --output=test-results/p1-host-final
+```
+
+All six `desktop-estimate-history.png` and `mobile-estimate-history.png` images
+under `frontend/test-results/p1-host-final` were visually inspected. The
+retrospective notice, exact model ID and variant, 0–1 legend, and probability
+line alongside observed indicators were readable in all engines, with no
+horizontal overflow at 390 pixels. The tests also checked both selected model
+populations on 2024-09-02: 29,506 temporal cells and 7,640 geographic cells.
+
+The new estimate test initially demonstrated the missing exact model identity
+in the map panel, then passed after adding it. The complete final browser report
+is `frontend/test-results/p1-host-final/results.json`.
+
+Pytest reported 11 warnings: the Starlette/httpx deprecation, eight DuckDB/pandas
+deprecations, and two tkinter cleanup warnings emitted during the real-artifact
+API test. Playwright reported the `NO_COLOR`/`FORCE_COLOR` environment warning.
+The verification server on port 8767 was stopped after all checks.

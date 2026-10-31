@@ -37,6 +37,8 @@ export interface Week {
   lowCoverage: boolean;
 }
 export interface Layer {
+  model: string | null;
+  variant: string;
   cell_index: number[];
   value: NullableNumber[];
   n_primary?: NullableNumber[];
