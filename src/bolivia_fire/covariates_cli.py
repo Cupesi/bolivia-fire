@@ -71,6 +71,12 @@ def run(args: argparse.Namespace, paths: Paths) -> int:
                 result["years"].append(record)
                 print(json.dumps({"completed_year": year, "days": record["days"],
                                   "bytes_transferred": budget.transferred}), flush=True)
+    elif args.operation == "chirps-annual":
+        from bolivia_fire.covariates.annual import extract_annual_range
+
+        with FileLock(str(root / ".chirps.lock"), timeout=0):
+            result = extract_annual_range(args.start_year, args.end_year, root,
+                                          transport=args.transport)
     elif args.operation == "features":
         protocol = load_protocol(paths.root)
         cells = pd.read_parquet(paths.datasets / "processed" / "cells.parquet")
@@ -106,11 +112,15 @@ def register(subparsers: argparse._SubParsersAction) -> None:
     rain.add_argument("--start", type=date.fromisoformat, required=True)
     rain.add_argument("--end", type=date.fromisoformat, required=True)
     rain.add_argument("--workers", type=int, choices=(1,), default=1)
+    annual = commands.add_parser("chirps-annual")
+    annual.add_argument("--start-year", type=int, required=True)
+    annual.add_argument("--end-year", type=int, required=True)
+    annual.add_argument("--transport", choices=("https", "ftp"), default="https")
     features = commands.add_parser("features")
     features.add_argument("--start-issue", type=date.fromisoformat)
     features.add_argument("--end-issue", type=date.fromisoformat)
     land = commands.add_parser("mapbiomas")
     land.add_argument("--year", type=int, choices=range(2012, 2025), required=True)
     summary = commands.add_parser("summary")
-    for parser in (probe, rain, features, land, summary):
+    for parser in (probe, rain, annual, features, land, summary):
         parser.set_defaults(pipeline_handler=run)

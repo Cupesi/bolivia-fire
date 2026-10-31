@@ -190,14 +190,13 @@ def rainfall_features(
         dry[~frame.rain_complete_30d.to_numpy()] = np.nan
         frame["dry_days_30d"] = dry
         baseline = []
-        for year in training:
+        reference_years = tuple(year for year in training if year != issue.year)
+        for year in reference_years:
             # February 29 is paired with February 28 in non-leap training years.
             try:
                 reference = issue.replace(year=year)
             except ValueError:
                 reference = issue.replace(year=year, day=28)
-            if reference > issue:
-                continue
             values, complete = _window(dates, rain, reference, 90)
             total = np.sum(values, axis=0, dtype=np.float64)
             total[~complete] = np.nan
@@ -214,7 +213,7 @@ def rainfall_features(
                             out=np.full(len(cell_ids), np.nan), where=mean > 0)
         frame["rain_anomaly_90d"] = anomaly.astype(np.float32)
         frame["rain_climatology_years"] = count.astype(np.int16)
-        frame["rain_climatology_complete"] = (count == len(training)) & (count > 0)
+        frame["rain_climatology_complete"] = (count == len(reference_years)) & (count > 0)
         output.append(frame)
     return pd.concat(output, ignore_index=True) if output else pd.DataFrame()
 
@@ -266,7 +265,7 @@ def build_features(
         metadata = {
             b"product": PRODUCT.encode(),
             b"train_years": json.dumps(training).encode(),
-            b"reference_rule": b"training years only, reference window end <= issue",
+            b"reference_rule": b"training years only; LOYO for train issues, all for later issues",
         }
         if manifest.exists():
             metadata[b"manifest_sha256"] = sha256_file(manifest).encode()

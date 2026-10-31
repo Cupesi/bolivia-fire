@@ -106,3 +106,18 @@ covariates:
     selected_for_acquisition: false
     access_evidence: datasets/processed/covariates/probe_mapbiomas.json
     verified_date: '2026-10-31'
+  chirps_annual:
+    provider: Climate Hazards Center, University of California Santa Barbara
+    product: CHIRPS v3.0 final daily rnl
+    disaggregation: ECMWF ERA5
+    listing_url: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/netcdf/byYear/
+    url_template: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/netcdf/byYear/chirps-v3.0.rnl.{year}.days_p05.nc
+    acquisition: sequential HTTPS GET or passive FTP RETR with verified size and resumable identity
+    local_retention: annual download deleted after native-window extraction and manifest commit
+    annual_manifest: datasets/processed/covariates/chirps_annual_manifest.jsonl
+    daily_manifest: datasets/processed/covariates/chirps_manifest.jsonl
+    variant: retrospective
+    verified_date: '2026-10-31'
+    ftp_directory: ftp://ftp.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/netcdf/byYear/
+    ftp_identity: binary SIZE and MDTM; matching modification time required for resume
+    ftp_selection: HTTP 429 fallback or explicit --transport ftp

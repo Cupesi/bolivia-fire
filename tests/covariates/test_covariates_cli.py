@@ -64,3 +64,31 @@ def test_synthetic_root_cli_registration(tmp_path, monkeypatch, capsys):
     monkeypatch.delenv("FIRMS_MAP_KEY", raising=False)
     assert main(["covariates", "summary"], root=tmp_path) == 0
     assert json.loads(capsys.readouterr().out)["bytes_transferred_total"] == 0
+
+
+def test_synthetic_annual_cli_uses_year_bounds(tmp_path, monkeypatch, capsys):
+    calls = []
+
+    def synthetic_annual(start_year, end_year, root, *, transport="https"):
+        calls.append((start_year, end_year, root))
+        return {"years": []}
+
+    monkeypatch.setattr("bolivia_fire.covariates.annual.extract_annual_range", synthetic_annual)
+    assert main(["covariates", "chirps-annual", "--start-year", "2012", "--end-year", "2026"],
+                root=tmp_path) == 0
+    assert calls == [(2012, 2026, tmp_path / "datasets/processed/covariates")]
+    assert json.loads(capsys.readouterr().out)["years"] == []
+
+
+def test_synthetic_annual_cli_can_select_ftp(tmp_path, monkeypatch, capsys):
+    calls = []
+
+    def synthetic_annual(start_year, end_year, root, *, transport):
+        calls.append((start_year, end_year, transport))
+        return {"years": []}
+
+    monkeypatch.setattr("bolivia_fire.covariates.annual.extract_annual_range", synthetic_annual)
+    assert main(["covariates", "chirps-annual", "--start-year", "2018", "--end-year", "2026",
+                 "--transport", "ftp"], root=tmp_path) == 0
+    assert calls == [(2018, 2026, "ftp")]
+    assert json.loads(capsys.readouterr().out)["years"] == []

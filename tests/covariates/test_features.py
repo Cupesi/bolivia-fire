@@ -62,13 +62,26 @@ def test_synthetic_missing_days_and_zero_climatology():
     assert result.rain_anomaly_90d.isna().all()
 
 
-def test_synthetic_training_issue_anomaly_does_not_read_future_training_rain():
-    dates = pd.date_range("2019-01-01", "2020-12-31")
+def test_synthetic_training_anomaly_uses_seven_other_train_years():
+    dates = pd.date_range("2012-01-01", "2025-12-31")
     synthetic_rain = np.ones((len(dates), 1), dtype=np.float32)
-    issue = date(2019, 4, 8)
-    before = rainfall_features(dates, synthetic_rain, ["a"], [issue], [2019, 2020])
-    synthetic_rain[dates >= pd.Timestamp(issue)] = 1000
-    after = rainfall_features(dates, synthetic_rain, ["a"], [issue], [2019, 2020])
+    for year in range(2013, 2021):
+        synthetic_rain[dates.year == year] = year - 2012
+    issues = [date(year, 4, 8) for year in range(2013, 2026)]
+    result = rainfall_features(dates, synthetic_rain, ["a"], issues, range(2013, 2021))
+    assert result.rain_climatology_years.tolist() == [7] * 8 + [8] * 5
+    assert result.rain_climatology_complete.tolist() == [True] * 13
+    np.testing.assert_allclose(result.rain_anomaly_90d.iloc[:8],
+                               [7/35, 14/34, 21/33, 28/32, 35/31, 42/30, 49/29, 56/28])
+
+
+def test_synthetic_training_anomalies_ignore_all_validation_and_test_rainfall():
+    dates = pd.date_range("2012-01-01", "2025-12-31")
+    synthetic_rain = np.ones((len(dates), 1), dtype=np.float32)
+    issues = [date(year, 4, 8) for year in range(2013, 2021)]
+    before = rainfall_features(dates, synthetic_rain, ["a"], issues, range(2013, 2021))
+    synthetic_rain[dates.year >= 2021] = 1000
+    after = rainfall_features(dates, synthetic_rain, ["a"], issues, range(2013, 2021))
     pd.testing.assert_frame_equal(before, after)
 
 

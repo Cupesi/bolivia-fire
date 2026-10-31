@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-covariates = ["rasterio>=1.4"]
+covariates = ["rasterio>=1.4", "netCDF4>=1.7"]
 api = ["fastapi>=0.115", "uvicorn>=0.30"]
 
 [project.scripts]
