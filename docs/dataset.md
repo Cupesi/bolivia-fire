@@ -111,9 +111,8 @@ geoBoundaries, Public Domain, with the citations in
 [the licence notes](../datasets/licenses/geoBoundaries.md).
 
 The 2026-10-31 build contains 37,146 cells, all with province and municipality
-assignments; median nearest-place distance is 4.7200047695 km. Spot checks
-preserved `San José de Chiquitos` and `Concepción` in the GeoNames and derived
-Parquet records. These place fields are display metadata and do not enter
+assignments; median nearest-place distance is 4.720 km. Source spelling includes
+`San José de Chiquitos` and `Concepción`. These place fields are display metadata and do not enter
 model training or prediction.
 
 ## Labels and missing data

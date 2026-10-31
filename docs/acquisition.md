@@ -96,8 +96,8 @@ seconds; unresolved reservations remain conservative outstanding costs.
 Every area attempt reserves its day range, including retries. The
 default cost is two transactions per requested day, including retries;
 `--transactions-per-day N` configures this positive integer multiplier. A five-day
-attempt therefore reserves ten transactions. The default budget is 4000 of the
-5000 server transactions; `--budget N` accepts 1 through 5000.
+attempt therefore reserves ten transactions. The default budget is 4,000 of the
+5,000 server transactions; `--budget N` accepts 1 through 5,000.
 The ledger accounts for status queries and availability requests and imposes
 backpressure when its local or reconciled usage reaches the budget.
 
@@ -108,26 +108,23 @@ snapshot releases that reservation only if its request began strictly after
 the recorded response. Transport failures remain unresolved. Explicit `firms status`
 waits for a fresh query if the minute gate is closed. Other commands reuse recent
 status. The [documented limit](https://firms.modaps.eosdis.nasa.gov/api/area/) is
-5000 transactions per ten minutes; FIRMS does not publish a larger-request cost
+5,000 transactions per ten minutes; FIRMS does not publish a larger-request cost
 formula. A single sample does not establish a universal cost. Other key users
 outside this coordinator can consume quota between observations.
 
-The isolated one-day request on 2026-10-31 increased `current_transactions` from
-20 to 22, with exactly one data request and fresh status queries before and
-after. The previously measured five-day request cost ten transactions. Both
-samples cost two transactions per day, so five-day chunks are retained.
+The recorded one-day and five-day samples cost two transactions per day;
+the quota estimates below use that measured multiplier.
 
-For 2012-01-20 through 2026-01-04 inclusive, the plan has 5099 days and 1020
-requests (1019 five-day chunks and one four-day chunk). At the measured cost,
+For 2012-01-20 through 2026-01-04 inclusive, the plan has 5,099 days and 1,020
+requests (1,019 five-day chunks and one four-day chunk). At the measured cost,
 the estimate is 10,198 area transactions, plus status queries and any retries.
-This spans three 4000-transaction quota windows, or about 25.5 minutes at a
-uniform rate of 4000 transactions per ten minutes. An end-to-end duration
+This spans three 4,000-transaction quota windows, or about 25.5 minutes at a
+uniform rate of 4,000 transactions per ten minutes. An end-to-end duration
 estimate is about one hour if each partition takes the observed 3.495 seconds
 for the September 6-10 sample; that rate stays below the configured quota.
 These are estimates from limited samples: response sizes, network latency,
 validation, retries, and other key users can change the duration. The full
-acquisition is managed separately; use a frozen manifest copy for derived builds
-while acquisition is active.
+acquisition manifest supplies the source identities for derived builds.
 
 Availability is validated as CSV and sanitized before writing
 `datasets/manifests/firms_availability_{UTC-date}.csv`.
@@ -160,7 +157,7 @@ uv run --no-sync pytest -q tests backend/tests -m "not live and not local_data"
 Tests use synthetic data and `httpx.MockTransport`. Real HTTP transports are
 blocked unless the test has the `live` marker, which pytest excludes by default.
 
-Live acceptance on 2026-10-31 produced these snapshots:
+The source manifest records these snapshots acquired on 2026-10-31:
 
 | Interval | Rows | Bytes | Acquisition |
 | --- | ---: | ---: | --- |
@@ -168,16 +165,9 @@ Live acceptance on 2026-10-31 produced these snapshots:
 | 2024-09-06..2024-09-10 | 135,681 | 10,808,689 | One live data request |
 | 2024-09-01 | 25,165 | 2,006,741 | Isolated one-day cost measurement |
 
-The recovered five-day source lacks a final newline and has zero row-validation
-failures. Its unchanged SHA-256 is
+The recovered five-day source lacks a final newline; its SHA-256 is
 `fcbcdab9dc2602431bd974f88f3bc38d416e46fd4cde48b19758f26e414c4e3e`.
-Recovery made zero HTTP requests and removed only
-`firms_truncated_203d4dd3a884419594ef2b723f97f8e5.txt`; the other quarantine
-files remain. The first ten-day CLI run logged
-`downloaded=1 skipped=1 recovered=0 data_requests=1`. Repeating the same command
-logged `downloaded=0 skipped=2 recovered=0 data_requests=0`, with both manifest
-hashes verified before skipping. Evidence is in `datasets/.tmp/acquire_firms.log`
-and `datasets/manifests/firms_VIIRS_SNPP_SP.jsonl`.
+Snapshot identities and hashes are in `datasets/manifests/firms_VIIRS_SNPP_SP.jsonl`.
 
 Boundary acquisition stored ADM0 with one feature and 4,034,693 bytes, and ADM1
 with nine features and 9,273,745 bytes. ADM1 contains Santa Cruz. Both pins use

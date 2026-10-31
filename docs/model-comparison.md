@@ -4,6 +4,10 @@ This experiment checks whether the benchmark's conclusion is robust to the learn
 
 The validation decision was frozen at 2026-10-31T19:35:50.785313+00:00, before its exploratory scoring began at 2026-10-31T19:36:43.128562+00:00. The decision is in [comparison_selection.json](../artifacts/evaluation/comparison_selection.json), SHA-256 `338e530a9eea33b4f7bd559c258c572ec1892905a6d92a58079b6ea89e5a0e00`. It uses validation evidence only.
 
+Metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001
+retain two significant digits. Counts are exact. Exact values are in the cited evaluation
+JSON artifacts.
+
 ## Models and information
 
 XGBoost hist tests a different histogram tree implementation and depth-wise growth. CatBoost tests symmetric trees and regularization; no categorical predictors were added. The spatial CNN tests learned directional local interactions using the same strict feature types on weekly national grids. Neighboring values expand spatial context beyond each tabular row. LightGBM and logistic regression are read from the recorded selection artifact and fitted model files without refitting.
@@ -12,9 +16,9 @@ All models use the benchmark target, partitions, boundary purges, geographic hol
 
 | Partition | Eligible rows | Positives | Prevalence |
 | --- | ---: | ---: | ---: |
-| train | 11,979,436 | 255,339 | 0.021315 |
-| val_select | 1,357,276 | 30,302 | 0.022326 |
-| val_calib | 1,180,240 | 31,110 | 0.026359 |
+| train | 11,979,436 | 255,339 | 0.021 |
+| val_select | 1,357,276 | 30,302 | 0.022 |
+| val_calib | 1,180,240 | 31,110 | 0.026 |
 
 ## Frozen configuration
 
@@ -91,39 +95,39 @@ Point metrics reuse `bolivia_fire.evaluation.metrics`; uncertainty reuses `boliv
 
 | Model | AP [95% CI] | ROC-AUC | Brier | Log loss | ECE | Recall 5% | Recall 10% |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| LightGBM (recorded) | 0.346855 [0.206830, 0.399072] | 0.929182 | 0.017539 | 0.069103 | 0.004706 | 0.385886 | 0.566827 |
-| Logistic regression (recorded) | 0.326496 [0.182567, 0.381861] | 0.924399 | 0.017694 | 0.069925 | 0.002513 | 0.373706 | 0.551266 |
-| XGBoost hist | 0.345404 [0.206813, 0.399745] | 0.928937 | 0.017621 | 0.069558 | 0.005613 | 0.385106 | 0.569674 |
-| CatBoost | 0.348614 [0.211545, 0.404176] | 0.929784 | 0.017380 | 0.067864 | 0.002020 | 0.390153 | 0.571446 |
-| Spatial CNN | 0.350462 [0.211483, 0.404733] | 0.932444 | 0.017434 | 0.067418 | 0.003659 | 0.389975 | 0.576957 |
+| LightGBM (recorded) | 0.347 [0.207, 0.399] | 0.929 | 0.018 | 0.069 | 0.0047 | 0.386 | 0.567 |
+| Logistic regression (recorded) | 0.326 [0.183, 0.382] | 0.924 | 0.018 | 0.070 | 0.0025 | 0.374 | 0.551 |
+| XGBoost hist | 0.345 [0.207, 0.400] | 0.929 | 0.018 | 0.070 | 0.0056 | 0.385 | 0.570 |
+| CatBoost | 0.349 [0.212, 0.404] | 0.930 | 0.017 | 0.068 | 0.0020 | 0.390 | 0.571 |
+| Spatial CNN | 0.350 [0.211, 0.405] | 0.932 | 0.017 | 0.067 | 0.0037 | 0.390 | 0.577 |
 
 ### 2022 calibration, uncalibrated
 
 | Model | AP [95% CI] | ROC-AUC | Brier | Log loss | ECE | Recall 5% | Recall 10% |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| LightGBM (recorded) | 0.319169 [0.227738, 0.374718] | 0.918242 | 0.021261 | 0.082471 | 0.006673 | 0.394379 | 0.573101 |
-| Logistic regression (recorded) | 0.286024 [0.195610, 0.344419] | 0.912998 | 0.021728 | 0.084373 | 0.004822 | 0.380808 | 0.562342 |
-| XGBoost hist | 0.313248 [0.225110, 0.368256] | 0.917260 | 0.021391 | 0.083462 | 0.008239 | 0.392232 | 0.570577 |
-| CatBoost | 0.323372 [0.234115, 0.382338] | 0.918117 | 0.021039 | 0.081529 | 0.004043 | 0.396598 | 0.574931 |
-| Spatial CNN | 0.317202 [0.231040, 0.371167] | 0.919792 | 0.021231 | 0.082347 | 0.007302 | 0.395960 | 0.577203 |
+| LightGBM (recorded) | 0.319 [0.228, 0.375] | 0.918 | 0.021 | 0.082 | 0.0067 | 0.394 | 0.573 |
+| Logistic regression (recorded) | 0.286 [0.196, 0.344] | 0.913 | 0.022 | 0.084 | 0.0048 | 0.381 | 0.562 |
+| XGBoost hist | 0.313 [0.225, 0.368] | 0.917 | 0.021 | 0.083 | 0.0082 | 0.392 | 0.571 |
+| CatBoost | 0.323 [0.234, 0.382] | 0.918 | 0.021 | 0.082 | 0.0040 | 0.397 | 0.575 |
+| Spatial CNN | 0.317 [0.231, 0.371] | 0.920 | 0.021 | 0.082 | 0.0073 | 0.396 | 0.577 |
 
 ### 2022 calibration, isotonic calibrated
 
 | Model | AP [95% CI] | ROC-AUC | Brier | Log loss | ECE | Recall 5% | Recall 10% |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| LightGBM (recorded) | 0.316166 [0.224760, 0.371130] | 0.918423 | 0.020989 | 0.080765 | 0.000071 | 0.395651 | 0.573677 |
-| Logistic regression (recorded) | 0.282937 [0.193392, 0.340900] | 0.913217 | 0.021526 | 0.082922 | 0.000113 | 0.381270 | 0.563389 |
-| XGBoost hist | 0.310469 [0.221893, 0.364531] | 0.917493 | 0.021039 | 0.081067 | 0.000072 | 0.392198 | 0.571058 |
-| CatBoost | 0.319312 [0.230376, 0.377624] | 0.918329 | 0.020959 | 0.080764 | 0.000074 | 0.396794 | 0.574717 |
-| Spatial CNN | 0.313585 [0.227954, 0.367153] | 0.920003 | 0.020994 | 0.080471 | 0.000051 | 0.396492 | 0.578875 |
+| LightGBM (recorded) | 0.316 [0.225, 0.371] | 0.918 | 0.021 | 0.081 | 7.1e-05 | 0.396 | 0.574 |
+| Logistic regression (recorded) | 0.283 [0.193, 0.341] | 0.913 | 0.022 | 0.083 | 0.00011 | 0.381 | 0.563 |
+| XGBoost hist | 0.310 [0.222, 0.365] | 0.917 | 0.021 | 0.081 | 7.2e-05 | 0.392 | 0.571 |
+| CatBoost | 0.319 [0.230, 0.378] | 0.918 | 0.021 | 0.081 | 7.4e-05 | 0.397 | 0.575 |
+| Spatial CNN | 0.314 [0.228, 0.367] | 0.920 | 0.021 | 0.080 | 5.1e-05 | 0.396 | 0.579 |
 
 ### Paired 2022 AP differences versus LightGBM
 
 | Alternative | Uncalibrated difference [95% CI] | Calibrated difference [95% CI] |
 | --- | --- | --- |
-| XGBoost hist | -0.005921 [-0.009516, -0.000078] | -0.005697 [-0.009951, +0.000178] |
-| CatBoost | +0.004203 [-0.001047, +0.011021] | +0.003145 [-0.001901, +0.009632] |
-| Spatial CNN | -0.001967 [-0.006205, +0.003870] | -0.002581 [-0.007026, +0.003533] |
+| XGBoost hist | -0.006 [-0.010, -7.8e-05] | -0.006 [-0.010, +0.00018] |
+| CatBoost | +0.004 [-0.001, +0.011] | +0.003 [-0.002, +0.010] |
+| Spatial CNN | -0.002 [-0.006, +0.004] | -0.003 [-0.007, +0.004] |
 
 Isotonic regression is fit on `val_calib` only after every model/configuration/epoch choice is frozen. Calibrated 2022 diagnostics reuse those fitting labels; they are not an independent calibration assessment. Isotonic ties may reduce AP while improving probability error. Calibration is then applied unchanged to test.
 
@@ -135,13 +139,13 @@ The source study's recorded values are preserved in [comparison_reference.json](
 
 | Model | Source 2021 AP | Rerun 2021 AP | Difference | Source 2022 AP | Rerun 2022 AP | Difference |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| LightGBM (recorded) | 0.346854928 | 0.346854928 | +0.000e+00 | 0.319169022 | 0.319169022 | -5.551e-17 |
-| Logistic regression (recorded) | 0.326495523 | 0.326495523 | +0.000e+00 | 0.286024306 | 0.286024306 | +0.000e+00 |
-| XGBoost hist | 0.345404347 | 0.345404347 | -5.551e-17 | 0.313248133 | 0.313248133 | +0.000e+00 |
-| CatBoost | 0.348835811 | 0.348614079 | -2.217e-04 | 0.324293156 | 0.323371885 | -9.213e-04 |
-| Spatial CNN | 0.350462066 | 0.350462066 | -5.551e-17 | 0.317202114 | 0.317202114 | +0.000e+00 |
+| LightGBM (recorded) | 0.347 | 0.347 | +0.000 | 0.319 | 0.319 | -5.6e-17 |
+| Logistic regression (recorded) | 0.326 | 0.326 | +0.000 | 0.286 | 0.286 | +0.000 |
+| XGBoost hist | 0.345 | 0.345 | -5.6e-17 | 0.313 | 0.313 | +0.000 |
+| CatBoost | 0.349 | 0.349 | -0.00022 | 0.324 | 0.323 | -0.00092 |
+| Spatial CNN | 0.350 | 0.350 | -5.6e-17 | 0.317 | 0.317 | +0.000 |
 
-AP differences beyond the 1e-6 alternative tolerance: catboost/val_select/uncalibrated: -2.217e-04; catboost/val_select/calibrated: -1.922e-03; catboost/val_calib/uncalibrated: -9.213e-04; catboost/val_calib/calibrated: -1.846e-03.
+AP differences beyond the 1e-6 alternative tolerance: catboost/val_select/uncalibrated: -0.00022; catboost/val_select/calibrated: -0.002; catboost/val_calib/uncalibrated: -0.00092; catboost/val_calib/calibrated: -0.002.
 
 [CatBoost documents nondeterministic GPU floating-point summations](https://catboost.ai/docs/en/features/training-on-gpu). The measured differences above are retained rather than changing its search or selecting a rerun. The CNN uses deterministic flags and the source seed. XGBoost prediction rebuilds the train-referenced QuantileDMatrix, preserving float-level ties from selection. Selected model roundtrip differences are recorded in [comparison_roundtrip.json](../artifacts/evaluation/comparison_roundtrip.json).
 
@@ -149,34 +153,34 @@ AP differences beyond the 1e-6 alternative tolerance: catboost/val_select/uncali
 
 Training/selection arrays are byte-identical to the source study. The CatBoost binary matches the source binary. Trial parameter identity and AP differences are recorded in [comparison_determinism_audit.json](../artifacts/evaluation/comparison_determinism_audit.json). GPU floating-point reduction nondeterminism prevents exact reproduction here.
 
-The source selected trial 1; this rerun selected trial 19. The 2022 calibrated paired interval was [-0.001438, +0.010196] in the source and is [-0.001901, +0.009632] here. The superiority conclusion did not change.
+The source selected trial 1; this rerun selected trial 19. The 2022 calibrated paired interval was [-0.001, +0.010] in the source and is [-0.002, +0.010] here. The superiority conclusion did not change.
 
 | Trial | Source AP | Rerun AP | Difference | Source trees | Rerun trees |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 0 | 0.347661656 | 0.347518760 | -1.429e-04 | 150 | 160 |
-| 1 | 0.348835811 | 0.347382186 | -1.454e-03 | 90 | 40 |
-| 2 | 0.345147904 | 0.345145044 | -2.860e-06 | 120 | 120 |
-| 3 | 0.346171609 | 0.346532632 | +3.610e-04 | 300 | 340 |
-| 4 | 0.344811744 | 0.345186440 | +3.747e-04 | 250 | 270 |
-| 5 | 0.345997240 | 0.345863169 | -1.341e-04 | 180 | 110 |
-| 6 | 0.347453908 | 0.347456511 | +2.603e-06 | 160 | 160 |
-| 7 | 0.343902007 | 0.343657716 | -2.443e-04 | 90 | 130 |
-| 8 | 0.345694191 | 0.345731676 | +3.749e-05 | 380 | 320 |
-| 9 | 0.347072738 | 0.346606307 | -4.664e-04 | 350 | 340 |
-| 10 | 0.344020160 | 0.344370860 | +3.507e-04 | 190 | 230 |
-| 11 | 0.346813794 | 0.346813068 | -7.256e-07 | 100 | 100 |
-| 12 | 0.344563110 | 0.343514703 | -1.048e-03 | 170 | 270 |
-| 13 | 0.344708779 | 0.344703780 | -4.999e-06 | 400 | 400 |
-| 14 | 0.343139870 | 0.343015402 | -1.245e-04 | 160 | 210 |
-| 15 | 0.346107897 | 0.345665879 | -4.420e-04 | 240 | 310 |
-| 16 | 0.346888804 | 0.346450792 | -4.380e-04 | 140 | 250 |
-| 17 | 0.342134980 | 0.341720153 | -4.148e-04 | 60 | 30 |
-| 18 | 0.346532579 | 0.345274957 | -1.258e-03 | 100 | 100 |
-| 19 | 0.348513805 | 0.348614079 | +1.003e-04 | 100 | 200 |
+| 0 | 0.348 | 0.348 | -0.00014 | 150 | 160 |
+| 1 | 0.349 | 0.347 | -0.001 | 90 | 40 |
+| 2 | 0.345 | 0.345 | -2.9e-06 | 120 | 120 |
+| 3 | 0.346 | 0.347 | +0.00036 | 300 | 340 |
+| 4 | 0.345 | 0.345 | +0.00037 | 250 | 270 |
+| 5 | 0.346 | 0.346 | -0.00013 | 180 | 110 |
+| 6 | 0.347 | 0.347 | +2.6e-06 | 160 | 160 |
+| 7 | 0.344 | 0.344 | -0.00024 | 90 | 130 |
+| 8 | 0.346 | 0.346 | +3.7e-05 | 380 | 320 |
+| 9 | 0.347 | 0.347 | -0.00047 | 350 | 340 |
+| 10 | 0.344 | 0.344 | +0.00035 | 190 | 230 |
+| 11 | 0.347 | 0.347 | -7.3e-07 | 100 | 100 |
+| 12 | 0.345 | 0.344 | -0.001 | 170 | 270 |
+| 13 | 0.345 | 0.345 | -5.0e-06 | 400 | 400 |
+| 14 | 0.343 | 0.343 | -0.00012 | 160 | 210 |
+| 15 | 0.346 | 0.346 | -0.00044 | 240 | 310 |
+| 16 | 0.347 | 0.346 | -0.00044 | 140 | 250 |
+| 17 | 0.342 | 0.342 | -0.00041 | 60 | 30 |
+| 18 | 0.347 | 0.345 | -0.001 | 100 | 100 |
+| 19 | 0.349 | 0.349 | +0.00010 | 100 | 200 |
 
 ### Separate CPU reproducibility check
 
-One CPU refit uses GPU-selected trial 19 at the fixed GPU-selected tree count 200; it fitted 200 trees in 131.0 seconds with 5.29 GiB peak RAM. Its uncalibrated selection AP is 0.347266. This single refit does not establish between-fit identity. Its saved-model prediction roundtrip is exact. It is not calibrated, scored on test, or used to select a learner; the frozen GPU search remains the reference. [comparison_cpu_check.json](../artifacts/evaluation/comparison_cpu_check.json) records its settings, completion status and model hash.
+One CPU refit uses GPU-selected trial 19 at the fixed GPU-selected tree count 200; it fitted 200 trees in 131.0 seconds with 5.29 GiB peak RAM. Its uncalibrated selection AP is 0.347. This single refit does not establish between-fit identity. Its saved-model prediction roundtrip is exact. It is not calibrated, scored on test, or used to select a learner; the frozen GPU search remains the reference. [comparison_cpu_check.json](../artifacts/evaluation/comparison_cpu_check.json) records its settings, completion status and model hash.
 
 ## Exploratory post-hoc test: previously opened 2023-2025 holdout
 
@@ -186,11 +190,11 @@ The test population contains 3,127,636 eligible non-held-out cell-weeks and 61,1
 
 | Model | Raw AP | Calibrated AP | ROC-AUC | Brier | Log loss | ECE | Recall 5% | Recall 10% |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| LightGBM (recorded) | 0.327991 | 0.323393 | 0.927621 | 0.015533 | 0.062067 | 0.003132 | 0.384318 | 0.557699 |
-| Logistic regression (recorded) | 0.297390 | 0.293042 | 0.923338 | 0.015900 | 0.063911 | 0.003878 | 0.369967 | 0.544833 |
-| XGBoost hist | 0.323951 | 0.318529 | 0.926856 | 0.015570 | 0.062220 | 0.003249 | 0.383617 | 0.557492 |
-| CatBoost | 0.336571 | 0.330587 | 0.928048 | 0.015483 | 0.062047 | 0.003805 | 0.386857 | 0.561787 |
-| Spatial CNN | 0.323695 | 0.318591 | 0.929615 | 0.015554 | 0.061903 | 0.003246 | 0.386150 | 0.567649 |
+| LightGBM (recorded) | 0.328 | 0.323 | 0.928 | 0.016 | 0.062 | 0.0031 | 0.384 | 0.558 |
+| Logistic regression (recorded) | 0.297 | 0.293 | 0.923 | 0.016 | 0.064 | 0.0039 | 0.370 | 0.545 |
+| XGBoost hist | 0.324 | 0.319 | 0.927 | 0.016 | 0.062 | 0.0032 | 0.384 | 0.557 |
+| CatBoost | 0.337 | 0.331 | 0.928 | 0.015 | 0.062 | 0.0038 | 0.387 | 0.562 |
+| Spatial CNN | 0.324 | 0.319 | 0.930 | 0.016 | 0.062 | 0.0032 | 0.386 | 0.568 |
 
 ## Resource costs and environment
 

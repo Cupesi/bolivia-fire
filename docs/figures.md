@@ -89,15 +89,15 @@ npm run test:e2e -- e2e/screenshots.spec.ts --project=chromium --output=test-res
 Then, from the repository root:
 
 ```powershell
-uv run --no-sync python docs/assets/screenshots/optimize.py --frames frontend/test-results/docs-media
+uv run --no-sync python scripts/optimize_screenshots.py --frames frontend/test-results/docs-media
 ```
 
 Ordinary browser tests skip these captures. Readiness checks wait for network idle,
 loaded fonts, a populated map canvas, a selected cell and its rendered history path,
-and the absence of loading text. Desktop images use 1440 × 900; mobile uses 390 × 844.
+and the absence of loading text. Desktop images use 1,440 × 900; mobile uses 390 × 844.
 PNGs use an indexed palette and remain below 400,000 bytes.
 
 The navigation GIF shows four complete weekly states without interpolated probabilities.
 It has 61 frames at 20 fps, a 2,500 ms final hold and a clear 18-pixel border.
 Its total duration is 5,500 ms; it remains below 3,000,000 bytes.
-The screenshot inventory and current checks are in [the refresh report](media-refresh.md).
+The [media inventory](media.md) lists every image's content, source, language, dimensions and size.

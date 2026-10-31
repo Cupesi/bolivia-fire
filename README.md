@@ -8,11 +8,11 @@ experimental weekly estimate from near-real-time data; the local API explores th
 benchmark. The target is at least one selected NASA FIRMS VIIRS S-NPP detection in the national
 part of a 0.05° cell during the seven days beginning Monday 00:00 UTC.
 
-The calibrated strict LightGBM achieves temporal-test AP 0.323393
-(95% CI [0.221655, 0.382973]). H1 is supported: the paired AP gain over the validation-selected,
-uncalibrated climatology baseline has 95% CI [0.099838, 0.217886]. H2 meets the frozen rule because
-the retrospective-minus-strict AP interval [-0.004107, 0.001889] contains zero; this is not an
-equivalence test. Geographic-holdout AP is 0.383912 (95% CI [0.250128, 0.467940]).
+The calibrated strict LightGBM achieves temporal-test AP 0.323
+(95% CI [0.222, 0.383]). H1 is supported: the paired AP gain over the validation-selected,
+uncalibrated climatology baseline has 95% CI [0.100, 0.218]. H2 meets the frozen rule because
+the retrospective-minus-strict AP interval [-0.004, 0.002] contains zero; this is not an
+equivalence test. Geographic-holdout AP is 0.384 (95% CI [0.250, 0.468]).
 See [results and sensitivity analyses](docs/results.md), the source
 [evaluation](artifacts/evaluation/test_strict.json), and the
 [post-hoc learner comparison](docs/model-comparison.md), which retains the published LightGBM

@@ -72,7 +72,7 @@ def write_navigation(frames: list[Image.Image], destination: Path) -> None:
 
 
 def optimize(frames_directory: Path) -> dict[str, int]:
-    destination = Path(__file__).resolve().parent
+    destination = Path(__file__).resolve().parents[1] / "docs" / "assets" / "screenshots"
     for path in destination.glob("*.png"):
         with Image.open(path) as image:
             image.convert("RGB").quantize(colors=256, dither=Image.Dither.NONE).save(

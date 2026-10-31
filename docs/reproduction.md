@@ -6,8 +6,13 @@ and [source pins](../datasets/sources.yaml) unchanged. The strict snapshot has
 37,146 cells and 678 issues; [the summary](../artifacts/figures/dataset_summary.json)
 records exact input hashes for comparison.
 
-Primary results, all pre-registered sensitivity analyses and the exploratory learner
+Primary results, all five pre-registered sensitivity analyses and the exploratory learner
 comparison are published in [results](results.md) and [model comparison](model-comparison.md).
+Sensitivity artifacts cover [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json),
+[low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
+[neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json),
+[climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and
+[national-activity removal](../artifacts/evaluation/test_strict_drop_national.json).
 Later test openings are logged separately with their reasons. The commands below reproduce
 the pipeline and require the named local artifacts and credentials.
 

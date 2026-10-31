@@ -60,8 +60,7 @@ selects it explicitly. On 2026-10-31 the verified FTP directory was
 The `/pub/org/chc/` prefix in the provider's older FTP examples returned 550.
 FTP verifies listing names, binary SIZE and MDTM before each transfer, resumes
 only against a matching modification identity, and checks final bytes and
-SHA256 before extraction. The 2018 FTP size and modification time matched
-HTTPS Content-Length and Last-Modified exactly. Both transports remain
+SHA256 before extraction. Both transports remain
 sequential, with one annual file retained at a time.
 
 Each annual file is read on its native grid without interpolation, reversing
@@ -96,8 +95,8 @@ flushing so redirected background logs remain useful.
 
 Before each extraction or output batch, the code requires at least **55 GB of
 free space on the output drive**, including room for the planned temporary
-write. This replaces the earlier fixed transfer/storage ceilings. The default
-output drive is D:. Do not run multiple independent extraction processes.
+write. Do not run multiple independent extraction processes against the same
+output directory.
 
 The COG command reads full-resolution windows covering `[-70,-23,-57,-9]`. A
 local counting relay supplies `/vsicurl/` and forwards only bounded ranged GETs,
@@ -114,9 +113,8 @@ edges differ by about `1e-6` degrees. The extracted native window starts at
 `(-70.04999836161733, -8.950001027435064)` and includes the entire requested
 bbox. Project cell centers are mapped through the exact inverse native affine
 transform. There is no interpolation or silent resampling. Records retain the
-native transform, pixel-size errors and alignment flag. The first exploratory
-record used a looser alignment tolerance; subsequent records use exact-scale
-checks.
+native transform, pixel-size errors and alignment flag. Extraction requires
+exact-scale checks.
 
 ## Feature definitions
 
@@ -164,11 +162,8 @@ are pixel-count fractions, not fractional polygon intersections.
 
 The exact [official download page](https://bolivia.mapbiomas.org/downloads/mapas-para-descargar-geotiff/)
 publishes the Collection 4 URL template recorded in `datasets/sources.yaml`.
-On 2026-10-31, anonymous HEAD for 2023 and 2012 and a ranged GET for 2023
-returned HTTP 403. The GET returned a 458-byte `AccessDenied` XML document;
-it states that anonymous callers lack object access, or the object may not
-exist. Three legacy primary portal paths returned 404 and supplied no verified
-older public raster URL. No account, Earth Engine or credentials were used.
+Anonymous access to the official 2012 and 2023 raster URLs returned HTTP 403
+on 2026-10-31. No accessible public raster URL is recorded in the source registry.
 MapBiomas is therefore omitted from the acquired retrospective dataset. The
 aggregation and Y-1 join remain tested for future accessible files.
 
@@ -198,9 +193,9 @@ All paths below are under `datasets/processed/covariates/`:
 The annual acquisition is complete: **5,118 days**, 2012-01-01 through
 2026-01-04, on the native **281 x 261** window. The 15 annual source files
 totalled **59,446,803,959 bytes** and were deleted after extraction. Retained
-daily archives total **960,037,821 bytes**. Every compressed-file and daily
-window checksum, date sequence, shape and transform passed revalidation;
-there are no missing rainfall values or annual staging files.
+daily archives total **960,037,821 bytes**. There are no missing rainfall values
+or annual staging files. Source identities and daily window checksums are retained
+in the acquisition manifests.
 
 | Year | Days | Annual source bytes | Runtime (s) | Daily archive bytes |
 |---|---:|---:|---:|---:|
@@ -222,22 +217,16 @@ there are no missing rainfall values or annual staging files.
 
 The 2014 runtime covers resume and extraction of a completed download; its
 initial transfer duration is unavailable. Source bytes and SHA256 are retained.
-HTTPS supplied 2012-2017; an HTTP 429 before 2018 triggered the verified FTP
-continuation for 2018-2026. Full-axis validation was applied to 2014-2026.
+HTTPS supplied 2012-2017 and FTP supplied 2018-2026.
 
 All **188 pre-existing COG days** matched the NetCDF windows exactly:
 147 in 2012 and 41 in 2024, with maximum absolute difference **0.0**.
-Stored 2012-2013 outputs also passed all 731 daily hashes and native-grid checks.
-Four independent COG spot checks with seed 20261031 also matched exactly:
-2012-05-03, 2012-06-05, 2013-02-07 and 2013-07-12. One HTTP 429 was handled
-with a 645.64-second cooldown before the remaining checks passed. Evidence is
-in chirps_cog_spotchecks.jsonl and annual_cog_validation.json.
+The native-grid source comparisons are recorded in annual_cog_validation.json.
 
 The protocol feature build produced **25,184,988 unique cell-issue rows** for
 37,146 cells and 678 Monday issues, 2013-01-07 through 2025-12-29. The 2012
 rainfall is warm-up input. All 7/30/90-day windows and applicable climatology
-references are complete, with no null rainfall anomalies. Protocol and daily
-manifest metadata hashes match the audited inputs.
+references are complete, with no null rainfall anomalies.
 
 | Issue year | Rows | Complete 7/30/90-day windows (%) | Climatology complete (%) | Reference years |
 |---|---:|---:|---:|---:|
@@ -256,7 +245,7 @@ manifest metadata hashes match the audited inputs.
 | 2025 | 1,931,592 | 100/100/100 | 100 | 8 |
 
 Feature construction took **127.788 seconds**, with
-**2042.35 MiB** peak working set. Feature Parquet files
+**2,042.35 MiB** peak working set. Feature Parquet files
 total **598,171,516 bytes**.
 The FTP acquisition process peaked at **598.72 MiB**. The 55 GB free-space
 floor remained enforced before downloads and output writes.
@@ -265,10 +254,9 @@ Measured audit details are in annual_daily_validation.json and
 annual_feature_validation.json. MapBiomas remains unavailable through the
 verified anonymous URLs and is omitted from the retrospective dataset.
 
-Final stored covariate tree: **1,563,039,121 bytes**, including
-daily archives, features, manifests, access logs and audit records. D: had
-**107.88 GB free** at acceptance measurement.
-The consolidated acceptance record is acceptance_annual.json.
+The stored covariate tree totals **1,563,039,121 bytes**, including
+daily archives, features, manifests, access logs and audit records.
+The resource summary is acceptance_annual.json.
 
 ## Verification
 

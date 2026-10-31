@@ -7,14 +7,14 @@ para las detecciones satelitales de incendios en Bolivia. El
 [explorador en línea](https://bolivia-fire.cupesi.org) presenta una estimación semanal experimental
 con datos casi en tiempo real; la API local permite explorar la evaluación histórica. La variable
 objetivo indica si hay al menos una detección seleccionada de NASA FIRMS VIIRS S-NPP en la porción
-nacional de una celda de 0.05° durante los siete días que comienzan el lunes a las 00:00 UTC.
+nacional de una celda de 0,05° durante los siete días que comienzan el lunes a las 00:00 UTC.
 
-El LightGBM estricto calibrado alcanza una precisión promedio (AP) de 0.323393 en la prueba temporal
-(IC del 95% [0.221655, 0.382973]). H1 recibe respaldo: el IC del 95% de la mejora pareada de AP
-frente a la climatología sin calibrar, seleccionada en validación, es [0.099838, 0.217886].
+El LightGBM estricto calibrado alcanza una precisión promedio (AP) de 0,323 en la prueba temporal
+(IC del 95% [0,222; 0,383]). H1 recibe respaldo: el IC del 95% de la mejora pareada de AP
+frente a la climatología sin calibrar, seleccionada en validación, es [0,100; 0,218].
 H2 cumple la regla fijada porque el intervalo de AP retrospectiva menos estricta
-[-0.004107, 0.001889] contiene cero; esto no constituye una prueba de equivalencia.
-La AP en la reserva geográfica es 0.383912 (IC del 95% [0.250128, 0.467940]).
+[-0,004; 0,002] contiene cero; esto no constituye una prueba de equivalencia.
+La AP en la reserva geográfica es 0,384 (IC del 95% [0,250; 0,468]).
 Consulte los [resultados y análisis de sensibilidad](docs/results.md), la
 [evaluación de origen](artifacts/evaluation/test_strict.json) y la
 [comparación posterior de modelos](docs/model-comparison.md), que conserva el LightGBM publicado

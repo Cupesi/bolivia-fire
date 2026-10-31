@@ -13,7 +13,7 @@
 - [API](api.md): local artifact serving, endpoint contracts, preparation and measured request costs.
 - [Frontend](frontend.md): installation, explorer behavior, accessibility and browser verification.
 - [Live estimates](live.md): near-real-time inputs, publication timing, backfills and verification.
-- [Media refresh](media-refresh.md): current screenshot inventory and validation evidence.
+- [Media inventory](media.md): screenshot, animation, chart and diagram contents, sources and sizes.
 - [Related work](related-work.md): references comparing targets, datasets and evaluation approaches.
 - [Dataset directory](../datasets/README.md): storage layout, manifests, schemas and rebuilding.
 - [Dataset card](../datasets/dataset_card.md): population, coverage, variables, biases and licences.

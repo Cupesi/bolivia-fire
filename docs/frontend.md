@@ -237,6 +237,5 @@ text separator.
 Use the static suite above for isolated synthetic coverage and the real-data smoke
 suite for a live-data checkout. Capture commands and media sizes are in [figures](figures.md).
 
-## Current build verification
-
-Validation commands and measured outcomes are recorded in [the refresh report](media-refresh.md).
+The [media inventory](media.md) lists screenshots and animations with their source issues,
+languages, dimensions and sizes.

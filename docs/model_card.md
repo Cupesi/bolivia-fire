@@ -11,8 +11,8 @@ the spatial grid, observation rules and target precisely.
 
 | Population | Selected model | Validation AP before calibration | Validation-selected baseline |
 |---|---|---|---|
-| Temporal | `strict/lightgbm_08` | 0.346855 | `train_climatology` |
-| Geographic | `strict_geo/lightgbm_04` | 0.326202 | `persistence` |
+| Temporal | `strict/lightgbm_08` | 0.347 | `train_climatology` |
+| Geographic | `strict_geo/lightgbm_04` | 0.326 | `persistence` |
 
 Closed identities (SHA256):
 
@@ -40,7 +40,7 @@ for LightGBM, without negative sampling.
 
 | Selected model | Leaves | Learning rate | Minimum leaf rows | Feature fraction | L2 penalty |
 |---|---|---|---|---|---|
-| `strict/lightgbm_08` | 15 | 0.03 | 1000 | 0.7 | 10 |
+| `strict/lightgbm_08` | 15 | 0.03 | 1,000 | 0.7 | 10 |
 | `strict_geo/lightgbm_04` | 63 | 0.03 | 200 | 0.7 | 10 |
 
 The displayed configuration values are reconstructed from each selection artifact's recorded
@@ -115,14 +115,14 @@ The primary recorded evaluation gives:
 
 | Metric | Temporal strict winner | Geographic strict_geo winner |
 |---|---|---|
-| AP | 0.323393 | 0.383912 |
-| AP 95% CI | [0.221655, 0.382973] | [0.250128, 0.467940] |
-| Brier score | 0.015533 | 0.010553 |
-| Log loss | 0.062067 | 0.043102 |
-| ROC-AUC | 0.927621 | 0.944192 |
-| ECE | 0.003132 | 0.000917 |
-| Recall at 5% area | 0.384318 | 0.469404 |
-| Recall at 10% area | 0.557699 | 0.672829 |
+| AP | 0.323 | 0.384 |
+| AP 95% CI | [0.222, 0.383] | [0.250, 0.468] |
+| Brier score | 0.016 | 0.011 |
+| Log loss | 0.062 | 0.043 |
+| ROC-AUC | 0.928 | 0.944 |
+| ECE | 0.0031 | 0.00092 |
+| Recall at 5% area | 0.384 | 0.469 |
+| Recall at 10% area | 0.558 | 0.673 |
 
 AP is the primary metric. ECE uses the protocol's equal-frequency bins. Recall budgets apply to
 eligible geodesic cell area per week, with fractional crossing-cell contributions. The AP

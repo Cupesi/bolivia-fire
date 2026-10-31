@@ -57,8 +57,14 @@ and the closed input lists described in the [model card](model_card.md):
    lets training rows use other training calendar years, including later training years;
    validation, test and held-out geographic labels never enter climatology fitting. The
    geographic model omits cell climatology. One primary final-test opening follows closed
-   selection; pre-registered sensitivity runs require separately logged reopenings with reasons.
-   [Primary results and logged sensitivity analyses](results.md) remain distinct.
+   selection. All five pre-registered sensitivity analyses are published:
+   [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json),
+   [low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
+   [neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json),
+   [climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and
+   [national-activity removal](../artifacts/evaluation/test_strict_drop_national.json).
+   Each has a separately logged reopening with its reason;
+   [primary and sensitivity results](results.md) remain distinct.
 5. **Probability evaluation.** Step-wise average precision is primary, with Brier score, log
    loss, ROC-AUC, equal-frequency ECE and recall at 5% and 10% area budgets. Training climatology
    and persistence provide baselines. These metrics assess detection probabilities under the

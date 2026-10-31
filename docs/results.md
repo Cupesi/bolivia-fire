@@ -7,7 +7,9 @@ are logged separately with their reasons; they do not replace the primary result
 Measured values come from [test_strict.json](../artifacts/evaluation/test_strict.json), the
 [closed selections](../artifacts/evaluation/selection_strict.json), and
 [results_summary.json](../artifacts/figures/results_summary.json). Metrics and interval endpoints
-are rounded to six decimals; counts are exact. AP means average precision over eligible
+are rounded to three decimals; ECE and values below 0.001 retain two significant digits.
+Counts are exact. Exact metric values are in the cited evaluation JSON artifacts.
+AP means average precision over eligible
 cell-weeks, rather than a mean of annual scores.
 
 ## Protocol and comparator
@@ -42,10 +44,10 @@ The table follows the primary probability rule above; losses and ECE are better 
 
 | Model (probabilities) | AP [95% CI] | Brier | Log loss | ROC-AUC | ECE |
 |---|---|---|---|---|---|
-| `train_climatology` (uncalibrated) | 0.166677 [0.105385, 0.214274] | 0.017580 | 0.107625 | 0.829648 | 0.007013 |
-| `persistence` (uncalibrated) | 0.143290 [0.085345, 0.186614] | 0.017225 | 0.082888 | 0.648148 | 0.010927 |
-| `logistic_regression` (calibrated) | 0.293042 [0.195122, 0.353043] | 0.015900 | 0.063911 | 0.923338 | 0.003878 |
-| `lightgbm_08` (calibrated) | 0.323393 [0.221655, 0.382973] | 0.015533 | 0.062067 | 0.927621 | 0.003132 |
+| `train_climatology` (uncalibrated) | 0.167 [0.105, 0.214] | 0.018 | 0.108 | 0.830 | 0.0070 |
+| `persistence` (uncalibrated) | 0.143 [0.085, 0.187] | 0.017 | 0.083 | 0.648 | 0.011 |
+| `logistic_regression` (calibrated) | 0.293 [0.195, 0.353] | 0.016 | 0.064 | 0.923 | 0.0039 |
+| `lightgbm_08` (calibrated) | 0.323 [0.222, 0.383] | 0.016 | 0.062 | 0.928 | 0.0031 |
 
 Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` and
 `candidate_bootstrap.temporal`; the AP values and intervals are also copied in
@@ -59,10 +61,10 @@ Temporal-test AP and paired intervals reveal the recorded models from `artifacts
 
 | Hypothesis | Paired AP comparison | 95% interval | Frozen decision |
 |---|---|---|---|
-| H1 | Calibrated strict winner minus uncalibrated climatology | [0.099838, 0.217886] | Supported: interval entirely above zero |
-| H2 | Calibrated retrospective winner minus calibrated strict winner | [-0.004107, 0.001889] | Supported: interval contains zero |
+| H1 | Calibrated strict winner minus uncalibrated climatology | [0.100, 0.218] | Supported: interval entirely above zero |
+| H2 | Calibrated retrospective winner minus calibrated strict winner | [-0.004, 0.002] | Supported: interval contains zero |
 
-H1's recorded AP difference is 0.156716,
+H1's recorded AP difference is 0.157,
 derived in the figure summary by subtracting recorded APs on identical support. H2 compares
 `retrospective/lightgbm_16` with `strict/lightgbm_08` on
 3,127,636 paired rows. Its point estimate is
@@ -88,13 +90,13 @@ contribute history features under the frozen information rule.
 
 | Model (probabilities) | AP [95% CI] | Brier | Log loss | ROC-AUC | ECE |
 |---|---|---|---|---|---|
-| `train_climatology` (uncalibrated) | 0.070585 [0.030861, 0.134639] | 0.013395 | 0.061348 | 0.850038 | 0.002280 |
-| `persistence` (uncalibrated) | 0.180757 [0.102250, 0.243008] | 0.012134 | 0.062331 | 0.671958 | 0.009641 |
-| `logistic_regression` (calibrated) | 0.350909 [0.218061, 0.436205] | 0.010939 | 0.045585 | 0.940450 | 0.002792 |
-| `lightgbm_04` (calibrated) | 0.383912 [0.250128, 0.467940] | 0.010553 | 0.043102 | 0.944192 | 0.000917 |
+| `train_climatology` (uncalibrated) | 0.071 [0.031, 0.135] | 0.013 | 0.061 | 0.850 | 0.0023 |
+| `persistence` (uncalibrated) | 0.181 [0.102, 0.243] | 0.012 | 0.062 | 0.672 | 0.0096 |
+| `logistic_regression` (calibrated) | 0.351 [0.218, 0.436] | 0.011 | 0.046 | 0.940 | 0.0028 |
+| `lightgbm_04` (calibrated) | 0.384 [0.250, 0.468] | 0.011 | 0.043 | 0.944 | 0.00092 |
 
 The calibrated geographic winner's paired AP-gain interval against uncalibrated persistence is
-[0.145437, 0.232513].
+[0.145, 0.233].
 This population differs from the temporal test, so its higher AP is not evidence that spatial
 transfer is easier.
 
@@ -113,9 +115,9 @@ no model is reselected within a year.
 
 | Issue year | Eligible rows | Climatology AP | Persistence AP | Logistic AP | LightGBM AP |
 |---|---|---|---|---|---|
-| 2023 | 1,239,252 | 0.208612 | 0.155952 | 0.332315 | 0.346671 |
-| 2024 | 678,638 | 0.099630 | 0.208314 | 0.318806 | 0.373736 |
-| 2025 | 1,209,746 | 0.166328 | 0.083709 | 0.228523 | 0.246341 |
+| 2023 | 1,239,252 | 0.209 | 0.156 | 0.332 | 0.347 |
+| 2024 | 678,638 | 0.100 | 0.208 | 0.319 | 0.374 |
+| 2025 | 1,209,746 | 0.166 | 0.084 | 0.229 | 0.246 |
 
 Santa Cruz contains 1,095,934 eligible temporal-test
 cell-weeks. Its area-budget denominator is the eligible national cell area within the department
@@ -123,10 +125,10 @@ for each issue week.
 
 | Model (probabilities) | AP | Brier | ECE | Recall at 5% area | Recall at 10% area |
 |---|---|---|---|---|---|
-| `train_climatology` (uncalibrated) | 0.161291 | 0.022136 | 0.011712 | 0.215629 | 0.353170 |
-| `persistence` (uncalibrated) | 0.201772 | 0.020462 | 0.012715 | 0.294971 | 0.366773 |
-| `logistic_regression` (calibrated) | 0.332745 | 0.019132 | 0.004489 | 0.372504 | 0.557984 |
-| `lightgbm_08` (calibrated) | 0.380798 | 0.018364 | 0.003777 | 0.388074 | 0.572590 |
+| `train_climatology` (uncalibrated) | 0.161 | 0.022 | 0.012 | 0.216 | 0.353 |
+| `persistence` (uncalibrated) | 0.202 | 0.020 | 0.013 | 0.295 | 0.367 |
+| `logistic_regression` (calibrated) | 0.333 | 0.019 | 0.0045 | 0.373 | 0.558 |
+| `lightgbm_08` (calibrated) | 0.381 | 0.018 | 0.0038 | 0.388 | 0.573 |
 
 Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `per_year` and `santa_cruz`.
 Annual differences reflect the evaluated populations, including observation exclusions; the
@@ -145,14 +147,14 @@ for sensitivity only; primary baseline comparisons retain their original probabi
 
 | Population and model | ECE uncalibrated | ECE calibrated |
 |---|---|---|
-| Temporal: `train_climatology` | 0.007013 | 0.008773 |
-| Temporal: `persistence` | 0.010927 | 0.010346 |
-| Temporal: `logistic_regression` | 0.002279 | 0.003878 |
-| Temporal: `lightgbm_08` | 0.003985 | 0.003132 |
-| Geographic: `train_climatology` | 0.002280 | 0.006658 |
-| Geographic: `persistence` | 0.009641 | 0.010429 |
-| Geographic: `logistic_regression` | 0.002803 | 0.002792 |
-| Geographic: `lightgbm_04` | 0.010395 | 0.000917 |
+| Temporal: `train_climatology` | 0.0070 | 0.0088 |
+| Temporal: `persistence` | 0.011 | 0.010 |
+| Temporal: `logistic_regression` | 0.0023 | 0.0039 |
+| Temporal: `lightgbm_08` | 0.0040 | 0.0031 |
+| Geographic: `train_climatology` | 0.0023 | 0.0067 |
+| Geographic: `persistence` | 0.0096 | 0.010 |
+| Geographic: `logistic_regression` | 0.0028 | 0.0028 |
+| Geographic: `lightgbm_04` | 0.010 | 0.00092 |
 
 Calibration lowers the selected LightGBM's pooled ECE in both populations, but does not improve
 every model or every annual subset. In particular, temporal logistic-regression ECE increases.
@@ -178,14 +180,14 @@ These are shares of positive cell-weeks captured, not shares of detected fires o
 
 | Population and model (probabilities) | Recall at 5% area | Recall at 10% area |
 |---|---|---|
-| Temporal: `train_climatology` (uncalibrated) | 0.251441 | 0.397374 |
-| Temporal: `persistence` (uncalibrated) | 0.265362 | 0.322522 |
-| Temporal: `logistic_regression` (calibrated) | 0.369967 | 0.544833 |
-| Temporal: `lightgbm_08` (calibrated) | 0.384318 | 0.557699 |
-| Geographic: `train_climatology` (uncalibrated) | 0.103675 | 0.121960 |
-| Geographic: `persistence` (uncalibrated) | 0.299788 | 0.361417 |
-| Geographic: `logistic_regression` (calibrated) | 0.452851 | 0.651184 |
-| Geographic: `lightgbm_04` (calibrated) | 0.469404 | 0.672829 |
+| Temporal: `train_climatology` (uncalibrated) | 0.251 | 0.397 |
+| Temporal: `persistence` (uncalibrated) | 0.265 | 0.323 |
+| Temporal: `logistic_regression` (calibrated) | 0.370 | 0.545 |
+| Temporal: `lightgbm_08` (calibrated) | 0.384 | 0.558 |
+| Geographic: `train_climatology` (uncalibrated) | 0.104 | 0.122 |
+| Geographic: `persistence` (uncalibrated) | 0.300 | 0.361 |
+| Geographic: `logistic_regression` (calibrated) | 0.453 | 0.651 |
+| Geographic: `lightgbm_04` (calibrated) | 0.469 | 0.673 |
 
 Source: [test_strict.json](../artifacts/evaluation/test_strict.json),
 `recall_at_area_budget_5pct` and `recall_at_area_budget_10pct` in each population;
@@ -243,13 +245,7 @@ and validation eligibility; [test_strict.json](../artifacts/evaluation/test_stri
 
 All pre-registered sensitivity analyses are published below. Each was evaluated as a logged
 reopening after the frozen primary opening, with `reopening: true` and its recorded reason in
-[final_test_log.json](../artifacts/evaluation/final_test_log.json):
-
-- All confidence classes: `pre-registered sensitivity analysis: all confidence classes (selection frozen; primary opening a7e198a)`.
-- Excluding low-coverage target weeks: `pre-registered sensitivity analysis: exclude low-coverage target weeks (selection frozen; primary opening a7e198a; rerun after an input-change abort)`.
-- Without neighborhood features: `pre-registered sensitivity analysis: ablation without neighborhood features (selection frozen; primary opening a7e198a)`.
-- Without climatology features: `pre-registered sensitivity analysis: ablation without climatology features (selection frozen; primary opening a7e198a)`.
-- Without national activity features: `pre-registered sensitivity analysis: ablation without national activity features (selection frozen; primary opening a7e198a)`.
+[final_test_log.json](../artifacts/evaluation/final_test_log.json).
 
 All-confidence targets retain primary-selection history features. The ablations remove
 neighborhood history, cell and department climatology, or national activity features,
@@ -260,11 +256,11 @@ its AP from the calibrated selected model's AP on paired rows.
 
 | Run and source report | Selected temporal model | Calibrated temporal AP [95% CI] | Paired AP difference vs protocol comparator [95% CI] | H1 decision | Calibrated geographic-holdout AP [95% CI] (selected model) |
 |---|---|---|---|---|---|
-| [All confidence classes](../artifacts/evaluation/test_strict_all_confidence.json) | `lightgbm_03` | 0.332164 [0.228555, 0.390995] | 0.161794 [0.105869, 0.222490] | Supported | 0.384894 [0.251013, 0.473038] (`lightgbm_04`) |
-| [Excluding low-coverage target weeks](../artifacts/evaluation/test_strict_exclude_low_coverage.json) | `lightgbm_08` | 0.323393 [0.221655, 0.382973] | 0.156716 [0.099838, 0.217886] | Supported | 0.383912 [0.250128, 0.467940] (`lightgbm_04`) |
-| [Without neighborhood features](../artifacts/evaluation/test_strict_drop_neighborhood.json) | `lightgbm_03` | 0.310103 [0.215534, 0.364255] | 0.143427 [0.095249, 0.198396] | Supported | 0.348085 [0.213783, 0.438110] (`lightgbm_04`) |
-| [Without climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) | `lightgbm_03` | 0.315992 [0.215438, 0.375218] | 0.149316 [0.090848, 0.220613] | Supported | 0.387314 [0.252149, 0.471952] (`lightgbm_03`) |
-| [Without national activity features](../artifacts/evaluation/test_strict_drop_national.json) | `lightgbm_14` | 0.326971 [0.227608, 0.385530] | 0.160295 [0.105699, 0.220780] | Supported | 0.389078 [0.252019, 0.475680] (`lightgbm_04`) |
+| [All confidence classes](../artifacts/evaluation/test_strict_all_confidence.json) | `lightgbm_03` | 0.332 [0.229, 0.391] | 0.162 [0.106, 0.222] | Supported | 0.385 [0.251, 0.473] (`lightgbm_04`) |
+| [Excluding low-coverage target weeks](../artifacts/evaluation/test_strict_exclude_low_coverage.json) | `lightgbm_08` | 0.323 [0.222, 0.383] | 0.157 [0.100, 0.218] | Supported | 0.384 [0.250, 0.468] (`lightgbm_04`) |
+| [Without neighborhood features](../artifacts/evaluation/test_strict_drop_neighborhood.json) | `lightgbm_03` | 0.310 [0.216, 0.364] | 0.143 [0.095, 0.198] | Supported | 0.348 [0.214, 0.438] (`lightgbm_04`) |
+| [Without climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) | `lightgbm_03` | 0.316 [0.215, 0.375] | 0.149 [0.091, 0.221] | Supported | 0.387 [0.252, 0.472] (`lightgbm_03`) |
+| [Without national activity features](../artifacts/evaluation/test_strict_drop_national.json) | `lightgbm_14` | 0.327 [0.228, 0.386] | 0.160 [0.106, 0.221] | Supported | 0.389 [0.252, 0.476] (`lightgbm_04`) |
 
 Sources are linked by run: `selected_model`, `best_baseline`, `models`, `bootstrap`,
 `hypotheses.H1` and `geographic_holdout`. Point differences subtract the recorded APs;
@@ -281,7 +277,7 @@ paired baseline comparisons match the primary evaluation. Source:
 `exclusions`, `models`, `geographic_holdout` and `bootstrap`.
 
 Relative to the primary AP reproduced by the low-coverage run, temporal AP changes by
--0.013290 without neighborhood features, -0.007401 without climatology features and +0.003578
+-0.013 without neighborhood features, -0.007 without climatology features and +0.004
 without national activity features, calculated from the linked reports' calibrated APs.
 Their AP and comparator-gain intervals are shown above; no paired ablation-minus-primary
 intervals are recorded. These point changes measure predictive performance after feature

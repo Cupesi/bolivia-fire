@@ -10,8 +10,14 @@ in the national part of the cell during `[issue, issue + 7 days)`, issued at
 It does not count fires, ignitions or burned area, and is not an official warning.
 
 The strict dataset, CHIRPS acquisition and retrospective features are complete.
-The [primary final-test results](../docs/results.md) are published; pre-registered
-sensitivity results remain pending and require separately logged reopenings.
+The [primary final-test results and all five pre-registered sensitivity analyses](../docs/results.md)
+are published. The sensitivity artifacts cover
+[all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json),
+[excluding low-coverage target weeks](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
+[removing neighborhood features](../artifacts/evaluation/test_strict_drop_neighborhood.json),
+[removing climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) and
+[removing national activity features](../artifacts/evaluation/test_strict_drop_national.json).
+Each sensitivity analysis has a separately logged test reopening and reason.
 Model selection and calibration use validation years only. MapBiomas fractions
 are absent because verified anonymous raster requests returned HTTP 403. See
 [the covariate guide](../docs/covariates.md) for acquisition verification.

@@ -82,10 +82,10 @@ The temporal climatology baseline uses `train_climatology_cell` directly, clippe
 count bins `0`, `1`, `2–4`, `5+`; an empty bin uses the overall training frequency.
 
 Logistic regression uses lbfgs with at most 1,000 iterations. Nonnegative numeric
-features receive log1p; signed seasonal sine/cosine and boolean history flags
-remain on their original scales. Missing values are imputed with training means
-after transformation, with zero used for a wholly missing training column.
-Means and scales are fitted on the complete eligible training population only.
+features receive log1p; signed seasonal sine/cosine terms and boolean flags bypass
+log1p. Every column is then imputed and standardized using means and scales fitted
+on the complete eligible training population only. A wholly missing training
+column uses zero for imputation; a column with negligible variance uses unit scale.
 All positives and a seeded 10% sample of negatives are fitted. The negative
 sample count is rounded up, and each sampled negative receives weight
 `N_neg / sampled_count`, preserving the eligible negative population's total

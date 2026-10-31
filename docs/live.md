@@ -166,22 +166,24 @@ CHIRPS for its retrospective layers. No placeholder provenance values are
 exported. `boundary_simplification_tolerance_deg` maps each ADM level to the
 actual display tolerance in degrees.
 
-## Observed initialization
+## Reference snapshot
 
-The October 31, 2026, acquisition bootstrap took 77.190 seconds; a complete
-regeneration from cached responses took 49.149 seconds, and the corrected
-October 26 update took 2.140 seconds. Bootstrap acquired 208 additional SP days and
-91 closed NRT days with 61 area requests, reserving 598 data transaction units;
-the subsequent update required no area requests. The initialized checkout was
-14.4 MB, excluding Git metadata and the external raw-response cache.
+The snapshot initialized on October 31, 2026, occupies 14.4 MB, excluding Git
+metadata and the external raw-response cache. Its acquisition bootstrap used
+61 area requests for 208 additional SP days and 91 closed NRT days, reserving
+598 data transaction units.
+
+| Operation | Wall time (seconds) |
+|---|---:|
+| Acquisition bootstrap | 77.190 |
+| Regeneration from cached responses | 49.149 |
+| October 26 issue update | 2.140 |
 
 The mask contains 23,359 unique locations. It would remove 8,904 of 6,742,418
-nominal/high SP type-0 rows in the bounding box: 0.1321%. The retained state
+nominal/high SP type-0 rows in the bounding box: 0.132%. The retained state
 contains 23 unobserved days, including five NRT dates. October 19's target week
-is complete; October 26's target week is incomplete at this run.
+is complete; October 26's target week is incomplete in this snapshot.
 
-The October 19 backfill contains 1,713 positive cells out of 37,146. Its AP is
-0.233179, Brier score 0.0392505, ROC AUC 0.863095, recall at 5% area 0.294804,
-recall at 10% area 0.464682, calibration error 0.0127555, and climatology AP
-0.155052. This is a retrospective initialization check and provides no
-prospective performance evidence.
+The October 19 backfill contains 1,713 positive cells out of 37,146. Backfill
+scores are published separately in `verification/track_record.csv`; this snapshot
+contains no prospective performance evidence.
