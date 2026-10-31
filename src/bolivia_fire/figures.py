@@ -17,9 +17,11 @@ import shapely
 from matplotlib import font_manager
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.layout_engine import ConstrainedLayoutEngine
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch, PathPatch, Rectangle
 from matplotlib.path import Path as PlotPath
+from matplotlib.text import Text
 from shapely.geometry.base import BaseGeometry
 
 from bolivia_fire.config import REPO_ROOT, Paths, load_protocol
@@ -62,6 +64,52 @@ def chart_style() -> Iterator[str]:
         if family.casefold() not in {name.casefold() for name in STYLE["font.serif"]}:
             raise RuntimeError(f"Chart font must resolve to an approved serif; resolved {family}")
         yield family
+
+
+def configure_figure(
+    figure: Figure,
+    *,
+    figsize: tuple[float, float] | None = None,
+    base_font_size: float | None = None,
+    show_title: bool = True,
+    show_caption: bool = True,
+    panel_layout: tuple[int, int] | None = None,
+) -> Figure:
+    """Apply optional physical dimensions and typography to an existing chart."""
+    if figsize is not None:
+        if len(figsize) != 2 or any(not np.isfinite(size) or size <= 0 for size in figsize):
+            raise ValueError("Figure dimensions must be two positive finite inch values")
+        figure.set_size_inches(*figsize)
+    if base_font_size is not None:
+        if not np.isfinite(base_font_size) or base_font_size < 8.5:
+            raise ValueError("Base font size must be finite and at least 8.5 points")
+        for text in figure.findobj(Text):
+            text.set_fontsize(base_font_size)
+        for ax in figure.axes:
+            ax.tick_params(axis="both", labelsize=base_font_size - 1)
+            ax.xaxis.get_offset_text().set_fontsize(base_font_size - 1)
+            ax.yaxis.get_offset_text().set_fontsize(base_font_size - 1)
+    if not show_title:
+        for ax in figure.axes:
+            for location in ("left", "center", "right"):
+                ax.set_title("", loc=location)
+        if figure._suptitle is not None:
+            figure._suptitle.set_text("")
+    if not show_caption and figure._supxlabel is not None:
+        figure._supxlabel.set_text("")
+    if panel_layout is not None:
+        rows, columns = panel_layout
+        axes = [ax for ax in figure.axes if ax.get_subplotspec() is not None]
+        if rows < 1 or columns < 1 or rows * columns != len(axes):
+            raise ValueError("Panel layout must provide one slot per subplot")
+        grid = figure.add_gridspec(rows, columns)
+        for index, ax in enumerate(axes):
+            ax.set_subplotspec(grid[index])
+    if figsize is not None or base_font_size is not None or panel_layout is not None:
+        engine = figure.get_layout_engine()
+        if isinstance(engine, ConstrainedLayoutEngine):
+            engine.set(w_pad=0.04, h_pad=0.04)
+    return figure
 
 
 @dataclass

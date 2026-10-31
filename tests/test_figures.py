@@ -12,6 +12,57 @@ from shapely.geometry import box
 from bolivia_fire import figures
 
 
+@pytest.fixture(autouse=True)
+def raster_backend() -> None:
+    figures.plt.switch_backend("Agg")
+
+
+def test_render_defaults_preserve_pixels(synthetic_results_root: Path) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    with figures.chart_style():
+        figure = figures.plot_results_per_year(figures.collect_results(synthetic_results_root))
+        try:
+            figure.canvas.draw()
+            before = np.asarray(figure.canvas.buffer_rgba()).copy()
+            assert figures.configure_figure(figure) is figure
+            figure.canvas.draw()
+            assert np.array_equal(before, np.asarray(figure.canvas.buffer_rgba()))
+        finally:
+            plt.close(figure)
+
+
+def test_render_at_final_size_without_duplicate_explanations(tmp_path: Path) -> None:
+    import matplotlib.pyplot as plt
+
+    with figures.chart_style():
+        figure, axes = plt.subplots(1, 2, layout="constrained")
+        for ax in axes:
+            ax.plot([0, 1], [0, 1], label="Synthetic series")
+            ax.set(title="Synthetic title", xlabel="Probability", ylabel="Fraction")
+            ax.legend()
+        figure.suptitle("Synthetic heading")
+        figure.supxlabel("Synthetic caption")
+        try:
+            figures.configure_figure(
+                figure, figsize=(3.15, 4.0), base_font_size=9,
+                show_title=False, show_caption=False, panel_layout=(2, 1),
+            )
+            output = tmp_path / "synthetic_render.png"
+            figure.savefig(output, dpi=300)
+            with Image.open(output) as image:
+                assert image.size == (945, 1200)
+            assert all(not ax.get_title() for ax in axes)
+            assert not figure._suptitle.get_text()
+            assert not figure._supxlabel.get_text()
+            assert axes[0].get_position().y0 > axes[1].get_position().y1
+            assert axes[0].xaxis.label.get_fontsize() == 9
+            assert axes[0].get_xticklabels()[0].get_fontsize() == 8
+        finally:
+            plt.close(figure)
+
+
 def test_chart_style_uses_times_and_ordered_serif_fallbacks() -> None:
     assert figures.STYLE["font.family"] == "serif"
     assert figures.STYLE["font.serif"] == [
