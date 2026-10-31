@@ -41,3 +41,6 @@ frontend/playwright-report/
 Thumbs.db
 .vscode/
 .idea/
+artifacts/.cache/
+artifacts/serving/
+*.joblib

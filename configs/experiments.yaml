@@ -1,0 +1,54 @@
+version: 1
+seed: 7
+batch_size: 100000
+bootstrap_replicates: 500
+minimum_free_gb: 55
+columns:
+  completeness_28d: window_obs_complete_28d
+  completeness_365d: window_obs_complete_365d
+  climatology_cell: train_climatology_cell
+  climatology_department: train_climatology_dept
+  low_coverage: target_low_coverage
+strict_features:
+  - count_last_7d
+  - count_last_14d
+  - count_last_28d
+  - count_last_91d
+  - count_last_365d
+  - any_last_7d
+  - days_since_last
+  - no_prior_detection
+  - frp_sum_28d
+  - same_week_last_year
+  - neighborhood_3x3_last_7d
+  - neighborhood_7x7_last_7d
+  - neighborhood_3x3_last_28d
+  - neighborhood_7x7_last_28d
+  - national_last_7d
+  - national_last_28d
+  - week_of_year_sin
+  - week_of_year_cos
+  - train_climatology_cell
+  - train_climatology_dept
+  - window_obs_complete_365d
+retrospective_features: []
+drop_groups:
+  neighborhood:
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+  climatology: [train_climatology_cell, train_climatology_dept]
+  national: [national_last_7d, national_last_28d]
+lightgbm_search:
+  configurations: 20
+  boosting_rounds: 400
+  early_stopping_rounds: 30
+  max_bin: 63
+  num_threads: 4
+  space:
+    num_leaves: [7, 15, 31, 63]
+    learning_rate: [0.03, 0.06, 0.1]
+    min_data_in_leaf: [50, 200, 1000]
+    feature_fraction: [0.7, 0.85, 1.0]
+    lambda_l2: [0, 1, 10]
