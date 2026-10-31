@@ -1,3 +1,4 @@
+import { en } from "./messages/en";
 import type {
   Boundaries,
   Grid,
@@ -45,29 +46,21 @@ export async function getJson<T = unknown>(
     });
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") throw error;
-    throw new ApiError(
-      "offline",
-      0,
-      "API offline. The local data service could not be reached.",
-    );
+    throw new ApiError("offline", 0, en.apiOfflineTheLocalDataService);
   }
   if (!response.ok) {
     if (response.status === 404)
-      throw new ApiError(
-        "missing",
-        404,
-        "No prepared data are available for this selection.",
-      );
+      throw new ApiError("missing", 404, en.noPreparedDataAreAvailableFor);
     if ([400, 409, 422].includes(response.status))
       throw new ApiError(
         "filters",
         response.status,
-        "Incompatible filters. Choose an available week, model and variant.",
+        en.incompatibleFiltersChooseAnAvailableWeek,
       );
     throw new ApiError(
       "server",
       response.status,
-      "The data service could not complete this request.",
+      en.theDataServiceCouldNotComplete,
     );
   }
   try {
@@ -76,7 +69,7 @@ export async function getJson<T = unknown>(
     throw new ApiError(
       "invalid",
       response.status,
-      "The data service returned an unreadable response.",
+      en.theDataServiceReturnedAnUnreadable,
     );
   }
 }
@@ -149,11 +142,7 @@ export function normalizeGrid(payload: unknown): Grid {
         (!Array.isArray(raw[key]) || array(raw[key]).length !== ids.length),
     )
   )
-    throw new ApiError(
-      "invalid",
-      200,
-      "The grid response has inconsistent columns.",
-    );
+    throw new ApiError("invalid", 200, en.invalidGridColumns);
   const cells = ids.map((id, index) => ({
     id: string(id),
     index,
@@ -195,7 +184,7 @@ export function normalizeGrid(payload: unknown): Grid {
         !Number.isFinite(cell.area),
     )
   )
-    throw new ApiError("invalid", 200, "The grid response is incomplete.");
+    throw new ApiError("invalid", 200, en.theGridResponseIsIncomplete);
   const bounds = cells.reduce(
     (bounds, cell) => ({
       rowMin: Math.min(bounds.rowMin, cell.row),

@@ -1,18 +1,24 @@
 <script lang="ts">
+  import { i18n } from "../lib/i18n";
   import type { Cell } from "../lib/types";
   import { nearestPlaceText } from "../lib/map-detail";
   let { cell }: { cell: Cell } = $props();
 </script>
 
 <div class="cell-places" data-testid="cell-places">
-  {#if cell.municipality}<p>Municipality: {cell.municipality}</p>{/if}
-  {#if cell.province}<p>Province: {cell.province}</p>{/if}
-  {#if cell.department}<p>Department: {cell.department}</p>{/if}
-  {#if cell.nearestPlace}<p>{nearestPlaceText(cell)}</p>{/if}
+  {#if cell.municipality}<p>
+      {$i18n.messages.municipality3}
+      {cell.municipality}
+    </p>{/if}
+  {#if cell.province}<p>{$i18n.messages.province3} {cell.province}</p>{/if}
+  {#if cell.department}<p>
+      {$i18n.messages.department3}
+      {cell.department}
+    </p>{/if}
+  {#if cell.nearestPlace}<p>{nearestPlaceText(cell, $i18n)}</p>{/if}
   {#if cell.populatedPlaces?.length}<p>
-      Places in cell: {cell.populatedPlaces
-        .map((place) => place.name)
-        .join("; ")}
+      {$i18n.messages.placesInCell}
+      {cell.populatedPlaces.map((place) => place.name).join("; ")}
     </p>{/if}
 </div>
 

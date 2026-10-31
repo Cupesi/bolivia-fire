@@ -1,3 +1,4 @@
+import { formatDate, formatTime } from "../src/lib/i18n";
 import { expect, test } from "@playwright/test";
 import { inspectMapDetail } from "./map-detail";
 import { inspectCellTable, inspectObservedTable } from "./cell-table";
@@ -90,16 +91,13 @@ test("@smoke serves the latest forecast and cell history under the Pages base pa
   const catalog = await (await page.request.get("data/index.json")).json();
   await expect(page.getByLabel("Issue week")).toHaveValue(catalog.latest_issue);
   await expect(page.getByLabel("Forecast metadata")).toContainText(
-    catalog.latest_issue,
+    formatDate(catalog.latest_issue, "en"),
   );
   const forecast = await (
     await page.request.get(`data/forecasts/${catalog.latest_issue}.json`)
   ).json();
   await expect(page.getByLabel("Forecast metadata")).toContainText(
-    new Date(forecast.generated_utc)
-      .toISOString()
-      .slice(0, 16)
-      .replace("T", " ") + " UTC",
+    formatTime(forecast.generated_utc, "en"),
   );
   await expect(page.getByLabel("Forecast metadata")).toContainText(
     `${Math.round(forecast.publication_lag_hours)} h after issue`,
@@ -146,7 +144,7 @@ test("@smoke serves the latest forecast and cell history under the Pages base pa
     await expect(inputDetails).not.toHaveAttribute("open", "");
     await inputDetails.locator("summary").click();
     for (const day of forecast.input_window.unobserved_days)
-      await expect(inputDetails).toContainText(day);
+      await expect(inputDetails).toContainText(formatDate(day, "en"));
     await page.screenshot({
       path: testInfo.outputPath("desktop-input-details.png"),
       fullPage: true,
@@ -228,14 +226,14 @@ test("switches synthetic weeks and renders complete observations and verificatio
   await page.goto("./");
   await page.getByLabel("Issue week").selectOption("2026-10-19");
   await expect(page.getByLabel("Forecast metadata")).toContainText(
-    "2026-10-19",
+    "19 Oct 2026",
   );
   await page
     .getByRole("button", { name: "Observed detections", exact: true })
     .click();
   await expect(page.getByTestId("layer-status")).toContainText("4 with data");
   await page.getByRole("button", { name: "Table view" }).click();
-  const cells = page.getByRole("table", { name: "Current week cells" });
+  const cells = page.getByRole("table", { name: "Selected week cells" });
   await expect(cells.locator('tbody [data-column="value"]')).toHaveText([
     "1",
     "1",
@@ -267,7 +265,7 @@ test("switches synthetic weeks and renders complete observations and verificatio
   });
   await expect(scores.getByRole("row")).toHaveCount(2);
   await expect(
-    scores.getByRole("row").filter({ hasText: "2026-10-19" }),
+    scores.getByRole("row").filter({ hasText: "19 Oct 2026" }),
   ).toContainText("0.063");
   await expect(
     page.getByRole("img", { name: /Weekly average precision/ }),
@@ -287,11 +285,11 @@ test("switches synthetic weeks and renders complete observations and verificatio
   const backfill = page.getByRole("table", {
     name: "Backfill verification scores",
   });
-  await expect(backfill).toContainText("2026-10-12");
-  await expect(scores).not.toContainText("2026-10-12");
+  await expect(backfill).toContainText("12 Oct 2026");
+  await expect(scores).not.toContainText("12 Oct 2026");
   await expect(
     page.getByRole("img", { name: /Weekly average precision/ }),
-  ).not.toContainText("2026-10-12");
+  ).not.toContainText("12 Oct 2026");
 });
 
 test("keeps a synthetic target week in progress informational while labels remain missing", async ({
@@ -299,7 +297,7 @@ test("keeps a synthetic target week in progress informational while labels remai
 }) => {
   await page.goto("./");
   await expect(page.getByTestId("target-progress")).toHaveText(
-    "Target week in progress: observations available through 2026-10-30",
+    "Target week in progress: observations available through 30 Oct 2026",
   );
   await expect(page.getByTestId("target-progress")).not.toHaveClass(/notice/);
   await expect(page.getByTestId("observation-notice")).toHaveCount(0);
@@ -329,25 +327,25 @@ test("distinguishes synthetic past outages from pending days and expands input o
   });
   await page.goto("./");
   await expect(page.getByTestId("target-progress")).toContainText(
-    "observations available through 2026-10-30",
+    "observations available through 30 Oct 2026",
   );
   const notice = page.getByTestId("observation-notice");
   await expect(notice).toContainText(
-    "Unobserved target days (sensor outages): 2026-10-28",
+    "Unobserved target days (sensor outages): 28 Oct 2026",
   );
-  await expect(notice).not.toContainText("2026-10-31");
-  await expect(notice).not.toContainText("2026-11-01");
+  await expect(notice).not.toContainText("31 Oct 2026");
+  await expect(notice).not.toContainText("1 Nov 2026");
   const details = page.getByTestId("input-history");
   await expect(details.locator("summary")).toHaveText(
     "2 input days in the 365-day window were unobserved (sensor outages)",
   );
   await expect(
-    details.getByText("2026-10-13", { exact: true }),
+    details.getByText("13 Oct 2026", { exact: true }),
   ).not.toBeVisible();
   await details.locator("summary").focus();
   await page.keyboard.press("Enter");
-  await expect(details.getByText("2026-10-13", { exact: true })).toBeVisible();
-  await expect(details.getByText("2026-10-14", { exact: true })).toBeVisible();
+  await expect(details.getByText("13 Oct 2026", { exact: true })).toBeVisible();
+  await expect(details.getByText("14 Oct 2026", { exact: true })).toBeVisible();
 });
 
 test("keeps backfill-only verification out of the prospective performance chart", async ({

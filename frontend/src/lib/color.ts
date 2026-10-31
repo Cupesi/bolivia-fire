@@ -1,4 +1,5 @@
 import type { LayerKind, NullableNumber } from "./types";
+import { englishState, formatNumber, type LanguageState } from "./i18n";
 
 export const MISSING_COLOR = "#aeb5b6";
 const stops = [
@@ -33,11 +34,12 @@ export function colorForValue(
 export function formatValue(
   value: NullableNumber | undefined,
   kind: LayerKind,
+  state: LanguageState = englishState,
 ): string {
-  if (value == null || !Number.isFinite(value)) return "Missing";
+  if (value == null || !Number.isFinite(value)) return state.messages.missing;
   return kind === "estimate"
-    ? value.toFixed(3)
+    ? formatNumber(value, state.language, 3)
     : value > 0
-      ? "Detected"
-      : "Not detected";
+      ? state.messages.detected
+      : state.messages.notDetected;
 }

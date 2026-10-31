@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { i18n, message, countMessage, formatNumber } from "../lib/i18n";
   import {
     nearestPlaceLabel,
     tableCells,
@@ -34,19 +35,48 @@
   });
   const limit = 25;
   const columns = $derived([
-    { key: "id", label: "Cell", aria: "cell id" },
-    { key: "municipality", label: "Municipality", aria: "municipality" },
-    { key: "province", label: "Province", aria: "province" },
-    { key: "department", label: "Department", aria: "department" },
-    { key: "nearestPlace", label: "Nearest place", aria: "nearest place" },
-    { key: "area", label: "Area (km²)", aria: "national area" },
+    { key: "id", label: $i18n.messages.cell, aria: $i18n.messages.cellId },
+    {
+      key: "municipality",
+      label: $i18n.messages.municipality,
+      aria: $i18n.messages.municipality2,
+    },
+    {
+      key: "province",
+      label: $i18n.messages.province,
+      aria: $i18n.messages.province2,
+    },
+    {
+      key: "department",
+      label: $i18n.messages.department,
+      aria: $i18n.messages.department2,
+    },
+    {
+      key: "nearestPlace",
+      label: $i18n.messages.nearestPlace,
+      aria: $i18n.messages.nearestPlace2,
+    },
+    {
+      key: "area",
+      label: $i18n.messages.areaKm,
+      aria: $i18n.messages.nationalArea2,
+    },
     {
       key: "value",
-      label: kind === "estimate" ? "Probability" : "Detected",
-      aria: "value",
+      label:
+        kind === "estimate"
+          ? $i18n.messages.probability
+          : $i18n.messages.detected,
+      aria: $i18n.messages.value,
     },
     ...(kind === "observed"
-      ? [{ key: "count", label: "Count", aria: "count" }]
+      ? [
+          {
+            key: "count",
+            label: $i18n.messages.count,
+            aria: $i18n.messages.count2,
+          },
+        ]
       : []),
   ] as { key: CellSort; label: string; aria: string }[]);
   const sorted = $derived(
@@ -79,33 +109,33 @@
 <div class="cell-table" class:observed={kind === "observed"}>
   <div class="table-toolbar">
     <label class="place-filter" for="place-filter"
-      >Filter places<input
+      >{$i18n.messages.filterPlaces}<input
         id="place-filter"
         type="search"
         bind:value={query}
-        placeholder="Municipality, province, department or place"
+        placeholder={$i18n.messages.municipalityProvinceDepartmentOrPlace}
         oninput={() => {
           page = 0;
         }}
       /></label
     >
     <label for="top-cells"
-      >Top cells<select
+      >{$i18n.messages.topCells}<select
         id="top-cells"
         bind:value={top}
         onchange={() => {
           page = 0;
         }}
-        ><option value="50">Top 50 by value</option><option value="100"
-          >Top 100 by value</option
-        ><option value="500">Top 500 by value</option><option value="all"
-          >All cells</option
+        ><option value="50">{$i18n.messages.top50ByValue}</option><option
+          value="100">{$i18n.messages.top100ByValue}</option
+        ><option value="500">{$i18n.messages.top500ByValue}</option><option
+          value="all">{$i18n.messages.allCells}</option
         ></select
       ></label
     >
     <div class="cell-sort">
       <label for="cell-sort"
-        >Sort cells by<select
+        >{$i18n.messages.sortCellsBy}<select
           id="cell-sort"
           value={sort}
           onchange={(event) =>
@@ -115,24 +145,25 @@
             >{/each}</select
         ></label
       ><button
-        aria-label="Reverse cell sort"
+        aria-label={$i18n.messages.reverseCellSort}
         onclick={() => {
           descending = !descending;
           page = 0;
-        }}>{descending ? "Descending ↓" : "Ascending ↑"}</button
+        }}
+        >{descending
+          ? $i18n.messages.descending
+          : $i18n.messages.ascending}</button
       >
     </div>
     <p class="muted small" id="cell-table-hint">
-      Filter before ranking. Missing values sort last. Arrow keys move between
-      rows; Enter selects.
+      {$i18n.messages.filterBeforeRankingMissingValuesSort}
     </p>
   </div>
-  <table aria-label="Current week cells" aria-describedby="cell-table-hint">
-    <caption class="sr-only"
-      >Current week grid values, filtered by place, ranked by value before
-      sorting and pagination. Detected is 1 for a detection and 0 otherwise.
-      Count is the number of detections.</caption
-    >
+  <table
+    aria-label={$i18n.messages.currentWeekCells}
+    aria-describedby="cell-table-hint"
+  >
+    <caption class="sr-only">{$i18n.messages.tableCaption}</caption>
     <thead
       ><tr
         >{#each columns as column}<th
@@ -146,7 +177,9 @@
               : "none"}
             ><button
               onclick={() => changeSort(column.key)}
-              aria-label={`Sort by ${column.aria}`}>{column.label}</button
+              aria-label={message($i18n, "sortByColumn", {
+                column: column.aria,
+              })}>{column.label}</button
             ></th
           >{/each}</tr
       ></thead
@@ -159,60 +192,71 @@
           <td data-column="id"
             ><button
               class="text-button"
-              aria-label={`Select cell ${cell.id}`}
+              aria-label={message($i18n, "selectCellId", { id: cell.id })}
               aria-pressed={selected?.id === cell.id}
               onclick={() => onselect(cell)}
               onkeydown={(event) => rowKeyboard(event, index)}>{cell.id}</button
             ></td
           >
           <td data-column="municipality"
-            >{cell.municipality || "Unassigned"}
+            >{cell.municipality || $i18n.messages.unassigned}
             <div class="place-secondary">
-              <span>{cell.province || "Unassigned"}</span><span
-                >{nearestPlaceLabel(cell)}</span
+              <span>{cell.province || $i18n.messages.unassigned}</span><span
+                >{nearestPlaceLabel(cell, $i18n)}</span
               >
             </div>
             <span class="place-department"
-              >{cell.department || "Unassigned"}</span
+              >{cell.department || $i18n.messages.unassigned}</span
             ></td
           >
-          <td data-column="province">{cell.province || "Unassigned"}</td>
-          <td data-column="department">{cell.department || "Unassigned"}</td>
-          <td data-column="nearestPlace">{nearestPlaceLabel(cell)}</td>
-          <td data-column="area" class="numeric">{cell.area.toFixed(2)}</td>
+          <td data-column="province"
+            >{cell.province || $i18n.messages.unassigned}</td
+          >
+          <td data-column="department"
+            >{cell.department || $i18n.messages.unassigned}</td
+          >
+          <td data-column="nearestPlace">{nearestPlaceLabel(cell, $i18n)}</td>
+          <td data-column="area" class="numeric"
+            >{formatNumber(cell.area, $i18n.language, 2)}</td
+          >
           <td data-column="value" class="numeric"
             >{values.get(cell.index) == null
-              ? "Missing"
+              ? $i18n.messages.missing
               : kind === "estimate"
-                ? values.get(cell.index)!.toFixed(3)
-                : values.get(cell.index)}</td
+                ? formatNumber(values.get(cell.index)!, $i18n.language, 3)
+                : formatNumber(values.get(cell.index)!, $i18n.language)}</td
           >
           {#if kind === "observed"}<td data-column="count" class="numeric"
-              >{counts.get(cell.index) ?? "Missing"}</td
+              >{counts.get(cell.index) == null
+                ? $i18n.messages.missing
+                : formatNumber(counts.get(cell.index)!, $i18n.language)}</td
             >{/if}
         </tr>{/each}</tbody
     >
   </table>
   {#if !visible.length}<p class="empty-state" role="status">
       {query.trim()
-        ? "No cells match this place filter."
-        : "No cells are available for this week."}
+        ? $i18n.messages.noCellsMatchThisPlaceFilter
+        : $i18n.messages.noCellsAreAvailableForThis}
     </p>{/if}
   <div class="pagination">
     <button
-      aria-label="Previous table page"
+      aria-label={$i18n.messages.previousTablePage}
       disabled={safePage === 0}
       onclick={() => {
         page = safePage - 1;
-      }}>Previous</button
+      }}>{$i18n.messages.previous}</button
     ><span data-testid="table-page" role="status"
-      >Page {safePage + 1} of {pageCount} · {sorted.length.toLocaleString("en")} cells</span
+      >{countMessage($i18n, "tablePage", sorted.length, {
+        page: formatNumber(safePage + 1, $i18n.language),
+        pages: formatNumber(pageCount, $i18n.language),
+      })}</span
     ><button
-      aria-label="Next table page"
+      aria-label={$i18n.messages.nextTablePage}
       disabled={safePage >= pageCount - 1}
       onclick={() => {
         page = safePage + 1;
-      }}>Next</button
+      }}>{$i18n.messages.next}</button
     >
   </div>
 </div>

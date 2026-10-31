@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { normalizeGrid } from "./api";
-import { boundaryLevels, placeLabels } from "./map-detail";
+import { boundaryLevels, placeLabels, nearestPlaceText } from "./map-detail";
+import { es } from "./messages/es";
 
 describe("map detail with synthetic cells", () => {
   const grid = normalizeGrid({
@@ -44,6 +45,15 @@ describe("map detail with synthetic cells", () => {
         province: [],
       }),
     ).toThrow(/columns/);
+  });
+
+  it("keeps nearest-place names and distance units together in both languages", () => {
+    expect(nearestPlaceText(grid.cells[0])).toBe(
+      "Nearest place: Concepción, 12\u00a0km",
+    );
+    expect(
+      nearestPlaceText(grid.cells[0], { language: "es", messages: es }),
+    ).toBe("Lugar más cercano: Concepción, 12\u00a0km");
   });
 
   it("shows departments always and finer boundaries at the requested zoom thresholds", () => {

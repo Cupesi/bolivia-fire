@@ -1,21 +1,25 @@
 import type { Meta } from "./types";
+import { en, type Messages } from "./messages/en";
 
-const labels: Record<string, string> = {
-  protocol_sha256: "Protocol SHA-256",
-  experiments_sha256: "Experiments SHA-256",
-  sources_sha256: "Sources SHA-256",
-  cells_sha256: "Cells SHA-256",
-  cell_places_sha256: "Cell places SHA-256",
-  evaluation_sources_sha256: "Evaluation sources SHA-256",
-  firms_manifest_sha256: "FIRMS manifest SHA-256",
-  outage_snapshot_sha256: "Outage snapshot SHA-256",
-  detections_sha256: "Detections SHA-256",
-  acquisition_days_sha256: "Acquisition days SHA-256",
-  frozen_sp_bundle_sha256: "Frozen SP bundle SHA-256",
-  outage_sha256: "Outage snapshot SHA-256",
-};
+const labels = (messages: Messages): Record<string, string> => ({
+  protocol_sha256: messages.protocolSha256,
+  experiments_sha256: messages.experimentsSha256,
+  sources_sha256: messages.sourcesSha256,
+  cells_sha256: messages.cellsSha256,
+  cell_places_sha256: messages.cellPlacesSha256,
+  evaluation_sources_sha256: messages.evaluationSourcesSha256,
+  firms_manifest_sha256: messages.firmsManifestSha256,
+  outage_snapshot_sha256: messages.outageSnapshotSha256,
+  detections_sha256: messages.detectionsSha256,
+  acquisition_days_sha256: messages.acquisitionDaysSha256,
+  frozen_sp_bundle_sha256: messages.frozenSpBundleSha256,
+  outage_sha256: messages.outageSnapshotSha256,
+});
 
-function panelIdentifiers(snapshots: Record<string, unknown>): string | null {
+function panelIdentifiers(
+  snapshots: Record<string, unknown>,
+  labels: Record<string, string>,
+): string | null {
   const panel = snapshots.panel;
   if (!panel || typeof panel !== "object" || Array.isArray(panel)) return null;
   const years = Object.entries(panel).flatMap(([year, identifiers]) => {
@@ -42,23 +46,30 @@ function panelIdentifiers(snapshots: Record<string, unknown>): string | null {
     : null;
 }
 
-export function provenanceRows(meta: Meta): [string, string][] {
+export function provenanceRows(
+  meta: Meta,
+  messages: Messages = en,
+): [string, string][] {
+  const names = labels(messages);
   const rows: [string, unknown][] = [
-    ["Protocol version", meta.protocolVersion],
-    ["Protocol SHA-256", meta.protocolHash || meta.snapshots.protocol_sha256],
-    ["Cells SHA-256", meta.snapshots.cells_sha256],
-    ["Panel snapshot", panelIdentifiers(meta.snapshots)],
-    ["Sources SHA-256", meta.snapshots.sources_sha256],
-    ...Object.entries(labels)
+    [messages.protocolVersion, meta.protocolVersion],
+    [
+      messages.protocolSha256,
+      meta.protocolHash || meta.snapshots.protocol_sha256,
+    ],
+    [messages.cellsSha256, meta.snapshots.cells_sha256],
+    [messages.panelSnapshot, panelIdentifiers(meta.snapshots, names)],
+    [messages.sourcesSha256, meta.snapshots.sources_sha256],
+    ...Object.entries(names)
       .filter(
         ([key]) =>
           !["protocol_sha256", "cells_sha256", "sources_sha256"].includes(key),
       )
       .map(([key, label]): [string, unknown] => [label, meta.snapshots[key]]),
-    ["Model identifier", meta.modelId],
-    ["Model SHA-256", meta.modelHash],
-    ["Calibrator SHA-256", meta.calibratorHash],
-    ["Final-test opening (UTC)", meta.finalTestOpened],
+    [messages.modelIdentifier, meta.modelId],
+    [messages.modelSha256, meta.modelHash],
+    [messages.calibratorSha256, meta.calibratorHash],
+    [messages.finalTestOpeningUtc, meta.finalTestOpened],
   ];
   return rows.filter(
     (row): row is [string, string] =>

@@ -1,3 +1,4 @@
+import { formatDate, formatNumber } from "../src/lib/i18n";
 import { test, expect } from "@playwright/test";
 
 for (const [viewport, width, height] of [
@@ -95,11 +96,13 @@ for (const [viewport, width, height] of [
           series.issue_date.flatMap((date: string, index: number) => [
             ...(series.p[index] === null
               ? []
-              : [`${date}: p = ${series.p[index].toFixed(3)}`]),
+              : [
+                  `${formatDate(date, "en")}: p = ${series.p[index].toFixed(3)}`,
+                ]),
             ...(series.y[index] === null
               ? []
               : [
-                  `${date}: observed y = ${series.y[index]}; detections = ${series.n_primary[index] ?? "missing"}`,
+                  `${formatDate(date, "en")}: observed y = ${series.y[index]}; detections = ${series.n_primary[index] == null ? "Missing" : formatNumber(series.n_primary[index], "en")}`,
                 ]),
           ]),
         ),
@@ -111,9 +114,11 @@ for (const [viewport, width, height] of [
     await expect(rows).toHaveCount(series.issue_date.length);
     for (const index of [0, 35, 52]) {
       await expect(rows.nth(index).locator("td")).toHaveText([
-        series.issue_date[index],
+        formatDate(series.issue_date[index], "en"),
         String(series.y[index] ?? "Missing"),
-        String(series.n_primary[index] ?? "Missing"),
+        series.n_primary[index] == null
+          ? "Missing"
+          : formatNumber(series.n_primary[index], "en"),
         series.p[index]?.toFixed(3) ?? "Missing",
       ]);
     }

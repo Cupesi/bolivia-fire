@@ -1,5 +1,11 @@
 import { screenPoint, type View } from "./projection";
 import type { Grid, PopulatedPlace } from "./types";
+import {
+  englishState,
+  formatDistance,
+  message,
+  type LanguageState,
+} from "./i18n";
 
 export function boundaryLevels(zoom: number): number[] {
   return zoom >= 4 ? [0, 1, 2, 3] : zoom >= 2 ? [0, 1, 2] : [0, 1];
@@ -71,9 +77,16 @@ export function placeLabels(
   return labels;
 }
 
-export function nearestPlaceText(cell: Grid["cells"][number]): string {
+export function nearestPlaceText(
+  cell: Grid["cells"][number],
+  state: LanguageState = englishState,
+): string {
   const place = cell.nearestPlace;
   if (!place) return "";
   const distance = place.distanceKm;
-  return `Nearest place: ${place.name}${distance === null ? "" : `, ${distance > 0 && distance < 1 ? "<1" : Math.round(distance)} km`}`;
+  return message(state, "nearestPlaceNameDistance", {
+    name: place.name,
+    distance:
+      distance === null ? "" : `, ${formatDistance(distance, state.language)}`,
+  });
 }

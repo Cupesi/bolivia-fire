@@ -1,7 +1,15 @@
 <script lang="ts">
+  import {
+    i18n,
+    formatNumber,
+    formatDate,
+    formatTime,
+    localizeText,
+    errorText,
+  } from "../lib/i18n";
+  import { en } from "../lib/messages/en";
   import { onMount } from "svelte";
   import { liveClient } from "../lib/data-client";
-  import { publishedTime } from "../lib/live-presentation";
   import type { TrackRecord } from "../lib/types";
   let records = $state<TrackRecord[]>([]);
   let loading = $state(true);
@@ -10,13 +18,13 @@
   const prospective = $derived(records.filter((record) => record.prospective));
   const groups = $derived([
     {
-      title: "Prospective weeks",
-      label: "Weekly verification scores",
+      title: $i18n.messages.prospectiveWeeks,
+      label: $i18n.messages.weeklyVerificationScores,
       rows: prospective,
     },
     {
-      title: "Backfill weeks · generated after issue time",
-      label: "Backfill verification scores",
+      title: $i18n.messages.backfillWeeksGeneratedAfterIssueTime,
+      label: $i18n.messages.backfillVerificationScores,
       rows: records.filter((record) => !record.prospective),
     },
   ]);
@@ -32,9 +40,7 @@
     } catch (cause) {
       if (!request.signal.aborted)
         error =
-          cause instanceof Error
-            ? cause
-            : new Error("Track record unavailable.");
+          cause instanceof Error ? cause : new Error(en.trackRecordUnavailable);
     } finally {
       if (!request.signal.aborted) loading = false;
     }
@@ -61,36 +67,42 @@
       .join(" ");
   }
   const metric = (value: number | null) =>
-    value === null ? "Undefined" : value.toFixed(3);
+    value === null
+      ? $i18n.messages.undefined
+      : formatNumber(value, $i18n.language, 3);
 </script>
 
-<section class="track-panel" aria-label="Track record">
-  <h2>Track record</h2>
+<section class="track-panel" aria-label={$i18n.messages.trackRecord}>
+  <h2>{$i18n.messages.trackRecord}</h2>
   <p class="muted small">
-    Completed target weeks only. Climatology uses the same week and cells. A few
-    weeks give limited evidence about performance.
+    {$i18n.messages.verificationHint}
   </p>
-  {#if loading}<p role="status">Loading verification scores…</p>
+  {#if loading}<p role="status">{$i18n.messages.loadingVerificationScores}</p>
   {:else if error}<div role="alert" class="error-text">
-      <p>{error.message}</p>
-      <button onclick={() => void load()}>Retry track record</button>
+      <p>{errorText($i18n, error)}</p>
+      <button onclick={() => void load()}
+        >{$i18n.messages.retryTrackRecord}</button
+      >
     </div>
-  {:else if !records.length}<p class="empty-state">No verified weeks yet.</p>
+  {:else if !records.length}<p class="empty-state">
+      {$i18n.messages.noVerifiedWeeksYet}
+    </p>
   {:else}
     {#if prospective.length}
       <p class="small muted">
-        The chart shows prospective weeks only. Backfills do not measure
-        prospective performance.
+        {$i18n.messages.prospectiveHint}
       </p>
       <svg
         class="track-chart"
         viewBox="0 0 560 185"
         role="img"
-        aria-label="Weekly average precision compared with training climatology for prospective weeks only, from zero to one"
+        aria-label={$i18n.messages.verificationChartLabel}
       >
         {#each [0, 0.5, 1] as tick}
           <line x1="42" x2="512" y1={y(tick)} y2={y(tick)} stroke="#d1dada" />
-          <text x="30" y={y(tick) + 4} text-anchor="end">{tick}</text>
+          <text x="30" y={y(tick) + 4} text-anchor="end"
+            >{formatNumber(tick, $i18n.language, tick === 0.5 ? 1 : 0)}</text
+          >
         {/each}
         <path
           d={path("climatology_ap")}
@@ -106,7 +118,10 @@
               cy={y(record.ap)}
               r="3"
               fill="#176577"
-              ><title>{record.issue_date}: AP {metric(record.ap)}</title
+              ><title
+                >{formatDate(record.issue_date, $i18n.language)}{$i18n.messages
+                  .ap}
+                {metric(record.ap)}</title
               ></circle
             >{/if}
           {#if record.climatology_ap !== null}<circle
@@ -115,23 +130,27 @@
               r="2"
               fill="#8b4a18"
               ><title
-                >{record.issue_date}: climatology AP {metric(
-                  record.climatology_ap,
-                )}</title
+                >{formatDate(record.issue_date, $i18n.language)}{$i18n.messages
+                  .climatologyAp}
+                {metric(record.climatology_ap)}</title
               ></circle
             >{/if}
         {/each}
-        <text x="42" y="172">{prospective[0].issue_date}</text>
+        <text x="42" y="172"
+          >{formatDate(prospective[0].issue_date, $i18n.language)}</text
+        >
         {#if prospective.length > 1}<text x="512" y="172" text-anchor="end"
-            >{prospective.at(-1)!.issue_date}</text
+            >{formatDate(prospective.at(-1)!.issue_date, $i18n.language)}</text
           >{/if}
       </svg>
       <p class="chart-key">
-        <span><i class="line-key"></i>Estimate AP</span><span
-          ><i class="baseline-key"></i>Climatology AP</span
+        <span><i class="line-key"></i>{$i18n.messages.estimateAp}</span><span
+          ><i class="baseline-key"></i>{$i18n.messages.climatologyAp2}</span
         >
       </p>
-    {:else}<p class="empty-state">No prospective verified weeks yet.</p>{/if}
+    {:else}<p class="empty-state">
+        {$i18n.messages.noProspectiveVerifiedWeeksYet}
+      </p>{/if}
     {#each groups as group}{#if group.rows.length}
         <h3>{group.title}</h3>
         <!-- svelte-ignore a11y_no_noninteractive_tabindex (The scrolling table needs keyboard access.) -->
@@ -139,47 +158,53 @@
           class="table-scroll"
           tabindex="0"
           role="region"
-          aria-label="Verification scores, scroll horizontally for all metrics"
+          aria-label={$i18n.messages.verificationScroll}
         >
           <table aria-label={group.label}>
             <thead
               ><tr
-                ><th scope="col">Issue week</th><th scope="col"
-                  >Published UTC</th
-                ><th scope="col">Lag (hours)</th><th scope="col">Cells</th><th
-                  scope="col">Positives</th
-                ><th scope="col">AP</th><th scope="col">Brier</th><th
-                  scope="col">Recall at 5% area</th
-                ><th scope="col">Recall at 10% area</th><th scope="col"
-                  >Climatology AP</th
-                ><th scope="col">ROC AUC</th><th scope="col">ECE</th><th
-                  scope="col">Notes</th
-                ></tr
+                ><th scope="col">{$i18n.messages.issueWeek}</th><th scope="col"
+                  >{$i18n.messages.publishedUtc}</th
+                ><th scope="col">{$i18n.messages.lagHours}</th><th scope="col"
+                  >{$i18n.messages.cells2}</th
+                ><th scope="col">{$i18n.messages.positives}</th><th scope="col"
+                  >{$i18n.messages.ap2}</th
+                ><th scope="col">{$i18n.messages.brier}</th><th scope="col"
+                  >{$i18n.messages.recallAt5Area}</th
+                ><th scope="col">{$i18n.messages.recallAt10Area}</th><th
+                  scope="col">{$i18n.messages.climatologyAp2}</th
+                ><th scope="col">{$i18n.messages.rocAuc}</th><th scope="col"
+                  >{$i18n.messages.ece}</th
+                ><th scope="col">{$i18n.messages.notes}</th></tr
               ></thead
             >
             <tbody
               >{#each group.rows as record}<tr
-                  ><th scope="row">{record.issue_date}</th><td
-                    >{publishedTime(record.generated_utc)}</td
-                  ><td>{Math.round(record.publication_lag_hours)}</td><td
-                    >{record.n_cells.toLocaleString("en")}</td
-                  ><td>{record.positives.toLocaleString("en")}</td><td
-                    >{metric(record.ap)}</td
-                  ><td>{metric(record.brier)}</td><td
-                    >{metric(record.recall_area_5)}</td
-                  ><td>{metric(record.recall_area_10)}</td><td
-                    >{metric(record.climatology_ap)}</td
-                  ><td>{metric(record.roc_auc)}</td><td>{metric(record.ece)}</td
-                  ><td>{record.notes}</td></tr
+                  ><th scope="row"
+                    >{formatDate(record.issue_date, $i18n.language)}</th
+                  ><td>{formatTime(record.generated_utc, $i18n.language)}</td
+                  ><td
+                    >{formatNumber(
+                      record.publication_lag_hours,
+                      $i18n.language,
+                    )}</td
+                  ><td>{formatNumber(record.n_cells, $i18n.language)}</td><td
+                    >{formatNumber(record.positives, $i18n.language)}</td
+                  ><td>{metric(record.ap)}</td><td>{metric(record.brier)}</td
+                  ><td>{metric(record.recall_area_5)}</td><td
+                    >{metric(record.recall_area_10)}</td
+                  ><td>{metric(record.climatology_ap)}</td><td
+                    >{metric(record.roc_auc)}</td
+                  ><td>{metric(record.ece)}</td><td
+                    >{localizeText($i18n, record.notes)}</td
+                  ></tr
                 >{/each}</tbody
             >
           </table>
         </div>
       {/if}{/each}
     <p class="muted small">
-      AP is average precision; higher is better. Lower Brier and expected
-      calibration error (ECE) are better. Undefined scores are missing, never
-      zero.
+      {$i18n.messages.metricHint}
     </p>
   {/if}
 </section>

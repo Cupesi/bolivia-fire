@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { i18n, formatNumber } from "../lib/i18n";
   import { untrack } from "svelte";
   import { colorForValue, formatValue } from "../lib/color";
   import CellPlaces from "./CellPlaces.svelte";
@@ -337,7 +338,7 @@
     bind:clientHeight={height}
     role="application"
     tabindex="0"
-    aria-label="Bolivia cell map"
+    aria-label={$i18n.messages.boliviaCellMap}
     aria-describedby="map-help map-cursor"
     onkeydown={keydown}
     onfocus={() => {
@@ -385,31 +386,40 @@
         <strong>{hovered.id}</strong> · {formatValue(
           values.get(hovered.index),
           kind,
+          $i18n,
         )}
         <CellPlaces cell={hovered} />
       </div>
     {/if}
-    <div class="map-controls" aria-label="Map controls">
-      <button aria-label="Zoom in" onclick={() => zoom(1.4)}>+</button>
-      <button aria-label="Zoom out" onclick={() => zoom(1 / 1.4)}>−</button>
-      <button aria-label="Reset map extent" onclick={reset}>Reset</button>
+    <div class="map-controls" aria-label={$i18n.messages.mapControls}>
+      <button aria-label={$i18n.messages.zoomIn} onclick={() => zoom(1.4)}
+        >+</button
+      >
+      <button aria-label={$i18n.messages.zoomOut} onclick={() => zoom(1 / 1.4)}
+        >−</button
+      >
+      <button aria-label={$i18n.messages.resetMapExtent} onclick={reset}
+        >{$i18n.messages.reset}</button
+      >
     </div>
-    <span class="north-marker" aria-hidden="true">N ↑</span>
+    <span class="north-marker" aria-hidden="true">{$i18n.messages.n}</span>
     <div class="map-readout" aria-hidden="true">
       {#if hovered}{hovered.id} · {hovered.department} · {formatValue(
           values.get(hovered.index),
           kind,
-        )}{:else}Bolivia · {grid.resolution}° grid{/if}
+          $i18n,
+        )}{:else}{$i18n.messages.bolivia}
+        {formatNumber(grid.resolution, $i18n.language, 2)}{$i18n.messages
+          .grid}{/if}
     </div>
   </div>
   <p id="map-help" class="map-help">
-    Scroll or +/− to zoom; drag to pan. Arrow keys move between cells, Enter
-    selects. Ctrl + arrows pan; Home resets.
+    {$i18n.messages.mapHelp}
   </p>
   <span id="map-cursor" class="sr-only" aria-live="polite"
     >{cursor
-      ? `${cursor.id}, ${cursor.department}, ${formatValue(values.get(cursor.index), kind)}`
-      : "Press Enter to select a central cell."}</span
+      ? `${cursor.id}, ${cursor.department}, ${formatValue(values.get(cursor.index), kind, $i18n)}`
+      : $i18n.messages.pressEnterToSelectACentral}</span
   >
 </div>
 

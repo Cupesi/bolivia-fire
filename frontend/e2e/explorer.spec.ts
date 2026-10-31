@@ -316,7 +316,7 @@ test("table alternative sorts, paginates, selects cells and downloads CSV", asyn
   await openExplorer(page);
   await page.getByRole("button", { name: "Table view", exact: true }).click();
   await expect(
-    page.getByRole("table", { name: "Current week cells" }),
+    page.getByRole("table", { name: "Selected week cells" }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Sort by department", exact: true })
@@ -325,7 +325,7 @@ test("table alternative sorts, paginates, selects cells and downloads CSV", asyn
     page.getByRole("columnheader", { name: "Sort by department" }),
   ).toHaveAttribute("aria-sort", "ascending");
   const departments = await page
-    .getByRole("table", { name: "Current week cells" })
+    .getByRole("table", { name: "Selected week cells" })
     .locator('tbody tr [data-column="department"]')
     .allTextContents();
   expect(departments).toEqual(

@@ -1,4 +1,5 @@
 import type { Cell, Layer, LayerKind, Meta, NullableNumber } from "./types";
+import { englishState, formatDistance, type LanguageState } from "./i18n";
 
 export type CellSort =
   | "id"
@@ -12,11 +13,14 @@ export type CellSort =
 const searchable = (text: string) =>
   text.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
 
-export function nearestPlaceLabel(cell: Cell): string {
+export function nearestPlaceLabel(
+  cell: Cell,
+  state: LanguageState = englishState,
+): string {
   const place = cell.nearestPlace;
-  if (!place) return "Unassigned";
+  if (!place) return state.messages.unassigned;
   const distance = place.distanceKm;
-  return `${place.name}${distance === null ? "" : ` · ${distance > 0 && distance < 1 ? "<1" : Math.round(distance)} km`}`;
+  return `${place.name}${distance === null ? "" : ` · ${formatDistance(distance, state.language)}`}`;
 }
 
 export function tableCells(

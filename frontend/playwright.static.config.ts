@@ -5,7 +5,7 @@ const base = process.env.PAGES_BASE || "/";
 const origin = "http://127.0.0.1:4174";
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: "static.spec.ts",
+  testMatch: ["static.spec.ts", "i18n-static.spec.ts"],
   outputDir: "./test-results/static",
   workers: 1,
   retries: 0,

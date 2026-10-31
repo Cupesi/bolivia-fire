@@ -12,7 +12,7 @@ export async function inspectCellTable(
     )
   ).json();
   await page.getByRole("button", { name: "Table view", exact: true }).click();
-  const table = page.getByRole("table", { name: "Current week cells" });
+  const table = page.getByRole("table", { name: "Selected week cells" });
   await page.getByLabel("Top cells").selectOption("all");
   const filter = page.getByRole("searchbox", { name: "Filter places" });
   await filter.fill("Concepción");
@@ -138,7 +138,7 @@ export async function inspectObservedTable(
   expected: Map<string, { detected: number | null; count: number | null }>,
 ) {
   await page.getByRole("button", { name: "Table view", exact: true }).click();
-  const table = page.getByRole("table", { name: "Current week cells" });
+  const table = page.getByRole("table", { name: "Selected week cells" });
   await page
     .getByRole("combobox", { name: "Sort cells by", exact: true })
     .selectOption("count");

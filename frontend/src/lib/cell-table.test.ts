@@ -86,9 +86,9 @@ describe("cell table with synthetic cells", () => {
   });
   it("formats nearest distances like the map and retains missing distances", () => {
     expect(nearestPlaceLabel(syntheticCells[0])).toBe(
-      'San José, "Centro" · 12 km',
+      'San José, "Centro" · 12\u00a0km',
     );
-    expect(nearestPlaceLabel(syntheticCells[1])).toBe("San José · <1 km");
+    expect(nearestPlaceLabel(syntheticCells[1])).toBe("San José · <1\u00a0km");
     expect(nearestPlaceLabel(syntheticCells[2])).toBe("Unassigned");
     expect(
       nearestPlaceLabel({

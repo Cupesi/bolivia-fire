@@ -1,9 +1,30 @@
 import * as api from "./api";
-import { createStaticClient } from "./static";
 import type { Cell, LiveIndex } from "./types";
 
 export const staticMode = import.meta.env.MODE === "static";
-export const liveClient = createStaticClient(import.meta.env.BASE_URL);
+type StaticClient = ReturnType<
+  (typeof import("./static"))["createStaticClient"]
+>;
+let client: Promise<StaticClient> | undefined;
+function staticClient(): Promise<StaticClient> {
+  return (client ??= import("./static").then(({ createStaticClient }) =>
+    createStaticClient(import.meta.env.BASE_URL),
+  ));
+}
+export const liveClient = {
+  async loadInitial(...args: Parameters<StaticClient["loadInitial"]>) {
+    return (await staticClient()).loadInitial(...args);
+  },
+  async loadLayer(...args: Parameters<StaticClient["loadLayer"]>) {
+    return (await staticClient()).loadLayer(...args);
+  },
+  async loadSeries(...args: Parameters<StaticClient["loadSeries"]>) {
+    return (await staticClient()).loadSeries(...args);
+  },
+  async loadTrackRecord(...args: Parameters<StaticClient["loadTrackRecord"]>) {
+    return (await staticClient()).loadTrackRecord(...args);
+  },
+};
 export type InitialData = Awaited<ReturnType<typeof api.loadInitial>> & {
   live?: LiveIndex;
 };

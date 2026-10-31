@@ -1,3 +1,4 @@
+import { en } from "./messages/en";
 import { ApiError, normalizeGrid, normalizeMeta } from "./api";
 import type {
   Boundaries,
@@ -35,7 +36,7 @@ export function parseTrackRecord(csv: string): TrackRecord[] {
       field = "";
     } else field += c;
   }
-  if (quoted) throw invalid("The track record CSV is unreadable.");
+  if (quoted) throw invalid(en.unreadableTrackCsv);
   if (field || row.length) {
     row.push(field.replace(/\r$/, ""));
     rows.push(row);
@@ -62,37 +63,33 @@ export function parseTrackRecord(csv: string): TrackRecord[] {
       "publication_lag_hours",
     ].every((key) => header.includes(key))
   )
-    throw invalid("The track record CSV is missing required columns.");
+    throw invalid(en.theTrackRecordCsvIsMissing);
   return rows
     .filter((row) => row.some(Boolean))
     .map((row) => {
-      if (row.length !== header.length)
-        throw invalid("The track record CSV has inconsistent columns.");
+      if (row.length !== header.length) throw invalid(en.invalidTrackColumns);
       const raw = Object.fromEntries(header.map((key, i) => [key, row[i]]));
       if (!datePattern.test(raw.issue_date))
-        throw invalid("The track record has an invalid issue date.");
+        throw invalid(en.theTrackRecordHasAnInvalid);
       if (
         !/^(true|false)$/i.test(raw.prospective) ||
         !Number.isFinite(Date.parse(raw.generated_utc))
       )
-        throw invalid(
-          "The track record is missing forecast timing provenance.",
-        );
+        throw invalid(en.missingTrackTiming);
       const numeric = (key: string) => {
         const value = raw[key].trim();
         if (!value || value === "null") return null;
         const number = Number(value);
-        if (!Number.isFinite(number))
-          throw invalid("The track record contains an invalid metric.");
+        if (!Number.isFinite(number)) throw invalid(en.invalidTrackMetric);
         return number;
       };
       const n_cells = numeric("n_cells"),
         positives = numeric("positives"),
         publication_lag_hours = numeric("publication_lag_hours");
       if (n_cells === null || positives === null)
-        throw invalid("The track record is missing population counts.");
+        throw invalid(en.missingTrackPopulation);
       if (publication_lag_hours === null || publication_lag_hours < 0)
-        throw invalid("The track record is missing publication lag.");
+        throw invalid(en.missingTrackLag);
       return {
         issue_date: raw.issue_date,
         n_cells,
@@ -121,14 +118,14 @@ export function createStaticClient(base: string) {
       throw new ApiError(
         "offline",
         0,
-        "Data files unavailable. Check your connection and retry.",
+        en.dataFilesUnavailableCheckYourConnection,
       );
     }
     if (!response.ok)
       throw new ApiError(
         response.status === 404 ? "missing" : "server",
         response.status,
-        `Data file unavailable: ${path}.`,
+        en.dataFileUnavailablePath.replace("{path}", path),
       );
     return response.text();
   }
@@ -137,7 +134,7 @@ export function createStaticClient(base: string) {
     try {
       return JSON.parse(body) as T;
     } catch {
-      throw invalid(`Data file is unreadable: ${path}.`);
+      throw invalid(en.dataFileIsUnreadablePath.replace("{path}", path));
     }
   }
   async function index(signal?: AbortSignal): Promise<LiveIndex> {
@@ -149,7 +146,7 @@ export function createStaticClient(base: string) {
       !Number.isFinite(Date.parse(raw.last_updated_utc)) ||
       raw.issues.some((issue) => !issue || !datePattern.test(issue.issue_date))
     )
-      throw invalid("The issue catalog is incomplete.");
+      throw invalid(en.theIssueCatalogIsIncomplete);
     catalog = {
       ...raw,
       issues: [...raw.issues].sort((a, b) =>
@@ -208,7 +205,7 @@ export function createStaticClient(base: string) {
         (id, index) => id !== (gridRaw.cell_id as unknown[])[index],
       )
     )
-      throw invalid("The place data do not align with the grid cells.");
+      throw invalid(en.thePlaceDataDoNotAlign);
     return {
       live,
       meta,
@@ -234,13 +231,13 @@ export function createStaticClient(base: string) {
     signal: AbortSignal,
   ): Promise<Layer> {
     if (!datePattern.test(date))
-      throw new ApiError("filters", 422, "Choose an available issue week.");
+      throw new ApiError("filters", 422, en.chooseAnAvailableIssueWeek);
     const raw = await json<Forecast | Observation>(
       `${kind === "estimate" ? "forecasts" : "observations"}/${date}.json`,
       signal,
     );
     if (!raw || typeof raw !== "object")
-      throw invalid("The weekly data file is incomplete.");
+      throw invalid(en.theWeeklyDataFileIsIncomplete);
     const value = "p" in raw ? raw.p : raw.y;
     if (
       raw.issue_date !== date ||
@@ -255,7 +252,7 @@ export function createStaticClient(base: string) {
           (typeof v !== "number" || !Number.isFinite(v) || v < 0 || v > 1),
       )
     )
-      throw invalid("The weekly data file has inconsistent columns or values.");
+      throw invalid(en.invalidWeeklyValues);
     if ("p" in raw) {
       if (
         typeof raw.prospective !== "boolean" ||
@@ -265,9 +262,7 @@ export function createStaticClient(base: string) {
         !Array.isArray(raw.input_window.unobserved_days) ||
         !Number.isFinite(Date.parse(raw.generated_utc))
       )
-        throw invalid(
-          "The forecast file is missing input history or timing provenance.",
-        );
+        throw invalid(en.missingForecastHistory);
       return {
         model: raw.model_id,
         variant: raw.variant,
@@ -291,9 +286,7 @@ export function createStaticClient(base: string) {
       raw.n.length !== value.length ||
       (!raw.complete && value.some((v) => v !== null))
     )
-      throw invalid(
-        "The observation file has inconsistent completeness or counts.",
-      );
+      throw invalid(en.invalidObservation);
     const live = await index(signal);
     const snapshotDay = new Date(live.last_updated_utc)
       .toISOString()

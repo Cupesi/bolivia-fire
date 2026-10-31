@@ -1,11 +1,22 @@
 <script lang="ts">
+  import {
+    i18n,
+    message,
+    countMessage,
+    formatNumber,
+    formatPercent,
+    formatUnit,
+    formatDate,
+    formatTime,
+    formatWindow,
+    localizeText,
+    errorText,
+  } from "./lib/i18n";
+  import { initialLanguage, selectLanguage, type Language } from "./lib/i18n";
+  import { en } from "./lib/messages/en";
   import { onMount } from "svelte";
   import CellMap from "./components/CellMap.svelte";
   import CellPlaces from "./components/CellPlaces.svelte";
-  import { provenanceRows } from "./lib/provenance";
-  import CellTable from "./components/CellTable.svelte";
-  import SeriesChart from "./components/SeriesChart.svelte";
-  import TrackRecord from "./components/TrackRecord.svelte";
   import {
     loadInitial,
     loadLayer,
@@ -16,7 +27,6 @@
   import { ApiError } from "./lib/api";
   import { weekCsv } from "./lib/cell-table";
   import { formatValue } from "./lib/color";
-  import { publishedTime, targetWindow } from "./lib/live-presentation";
   import type {
     Cell,
     Layer,
@@ -49,11 +59,19 @@
   let rangeEnd = $state("");
   let initialController: AbortController | null = null;
   let csvUrl = $state("");
+  let languageError = $state(false);
+  async function chooseLanguage(language: Language, persist = true) {
+    languageError = false;
+    try {
+      await selectLanguage(language, persist);
+    } catch {
+      languageError = true;
+    }
+  }
   const weekIndex = $derived(
     data?.weeks.findIndex((week) => week.date === date) ?? -1,
   );
   const currentWeek = $derived(data?.weeks[weekIndex]);
-  const provenance = $derived(data ? provenanceRows(data.meta) : []);
 
   const availableModels = $derived(data?.meta.models[variant] ?? []);
   const estimatesAvailable = $derived(
@@ -71,7 +89,10 @@
   const summary = $derived.by(() => {
     if (!layer) return "";
     const complete = layer.value.filter((value) => value !== null).length;
-    return `Showing ${layer.value.length.toLocaleString("en")} cells · ${complete.toLocaleString("en")} with data · ${(layer.value.length - complete).toLocaleString("en")} missing`;
+    return countMessage($i18n, "layerSummary", layer.value.length, {
+      complete: formatNumber(complete, $i18n.language),
+      missing: formatNumber(layer.value.length - complete, $i18n.language),
+    });
   });
   const counts = $derived(
     new Map<number, NullableNumber>(
@@ -125,9 +146,10 @@
   function asError(error: unknown): Error {
     return error instanceof Error
       ? error
-      : new Error("The request could not be completed.");
+      : new Error(en.theRequestCouldNotBeCompleted);
   }
   onMount(() => {
+    void chooseLanguage(initialLanguage(), false);
     void boot();
     return () => initialController?.abort();
   });
@@ -171,11 +193,7 @@
     ) {
       layerLoading = false;
       if (initial.weeks.length)
-        layerError = new ApiError(
-          "filters",
-          422,
-          "Incompatible filters. Choose one of the available issue weeks.",
-        );
+        layerError = new ApiError("filters", 422, en.invalidWeek);
       return;
     }
     const controller = new AbortController();
@@ -213,11 +231,7 @@
       start > end ||
       (Date.parse(end) - Date.parse(start)) / 86400000 > 4893
     ) {
-      seriesError = new ApiError(
-        "filters",
-        422,
-        "Incompatible range. Use a start before the end and a maximum of 700 weeks.",
-      );
+      seriesError = new ApiError("filters", 422, en.invalidRange);
       return;
     }
     const controller = new AbortController();
@@ -256,66 +270,86 @@
       changeWeek(event.key === "ArrowLeft" ? -1 : 1);
     }
   }
-  function safeLink(url: string): boolean {
-    return /^https:\/\//.test(url);
-  }
 </script>
 
 <svelte:window onkeydown={weekKeyboard} />
 
 {#snippet forecastModel(forecast: Forecast)}
-  {forecast.variant} / {forecast.model_name ?? "model"}
+  {forecast.variant} / {forecast.model_name ?? $i18n.messages.model}
   (<span title={forecast.model_id}>{forecast.model_id.slice(0, 8)}</span>)
 {/snippet}
 
-<a class="skip-link" href="#explorer">Skip to data explorer</a>
+<a class="skip-link" href="#explorer">{$i18n.messages.skipToDataExplorer}</a>
 <header class="page-header">
   <div class="header-inner">
-    <a class="project-name" href={import.meta.env.BASE_URL}>Bolivia Fire</a><a
-      href="#about">About & limitations</a
+    <a class="project-name" href={import.meta.env.BASE_URL}
+      >{$i18n.messages.boliviaFire}</a
+    ><a href="#about">{$i18n.messages.aboutLimitations}</a>
+    <div
+      class="language-control"
+      role="group"
+      aria-label={$i18n.messages.language}
     >
+      <button
+        lang="en"
+        aria-label={$i18n.messages.english}
+        aria-pressed={$i18n.language === "en"}
+        onclick={() => void chooseLanguage("en")}
+        >{$i18n.messages.enCode}</button
+      >
+      <span aria-hidden="true">|</span>
+      <button
+        lang="es"
+        aria-label={$i18n.messages.spanish}
+        aria-pressed={$i18n.language === "es"}
+        onclick={() => void chooseLanguage("es")}
+        >{$i18n.messages.esCode}</button
+      >
+    </div>
   </div>
 </header>
 <main>
+  {#if languageError}<p role="alert">
+      {$i18n.messages.languageLoadError}
+    </p>{/if}
   <div class="page-intro">
-    <p class="eyebrow">Satellite observations · Weekly · 0.05°</p>
-    <h1>Weekly fire detections</h1>
+    <p class="eyebrow">{$i18n.messages.eyebrow}</p>
+    <h1>{$i18n.messages.weeklyFireDetections}</h1>
     <p class="intro-copy">
-      {staticMode
-        ? "Experimental weekly estimate (near-real-time data)"
-        : "Explore observed satellite detections and prepared retrospective estimates across Bolivia."}
+      {staticMode ? $i18n.messages.liveIntro : $i18n.messages.apiIntro}
     </p>
   </div>
 
   {#if bootLoading}
     <div class="state-panel" role="status">
-      <h2>Loading the data explorer</h2>
-      <p>Reading the grid, available weeks and dataset metadata.</p>
+      <h2>{$i18n.messages.loadingTheDataExplorer}</h2>
+      <p>{$i18n.messages.bootHint}</p>
     </div>
   {:else if bootError}
     <div class="state-panel error" role="alert">
       <h2>
         {bootError instanceof ApiError && bootError.kind === "offline"
           ? staticMode
-            ? "Data files offline"
-            : "API offline"
-          : "Data service unavailable"}
+            ? $i18n.messages.dataFilesOffline
+            : $i18n.messages.apiOffline
+          : $i18n.messages.dataServiceUnavailable}
       </h2>
-      <p>{bootError.message}</p>
+      <p>{errorText($i18n, bootError)}</p>
       <button class="primary" onclick={() => void boot()}
-        >Retry connection</button
+        >{$i18n.messages.retryConnection}</button
       >
     </div>
   {:else if data}
-    <section id="explorer" aria-label="Data explorer">
+    <section id="explorer" aria-label={$i18n.messages.dataExplorer}>
       <div class="filter-bar">
         <div class="week-control">
           <label for="issue-week"
-            >Issue week <span class="muted small">Monday · UTC</span></label
+            >{$i18n.messages.issueWeek}
+            <span class="muted small">{$i18n.messages.mondayUtc}</span></label
           >
           <div class="week-input">
             <button
-              aria-label="Previous week"
+              aria-label={$i18n.messages.previousWeek}
               disabled={weekIndex <= 0}
               onclick={() => changeWeek(-1)}>←</button
             >{#if staticMode}<select
@@ -328,7 +362,7 @@
                 disabled={!data.weeks.length}
               >
                 {#each data.weeks as week}<option value={week.date}
-                    >{week.date}</option
+                    >{formatDate(week.date, $i18n.language)}</option
                   >{/each}
               </select>{:else}<input
                 id="issue-week"
@@ -339,21 +373,21 @@
                 aria-describedby="week-hint"
                 disabled={!data.weeks.length}
               />{/if}<button
-              aria-label="Next week"
+              aria-label={$i18n.messages.nextWeek}
               disabled={weekIndex < 0 || weekIndex >= data.weeks.length - 1}
               onclick={() => changeWeek(1)}>→</button
             >
           </div>
         </div>
         <fieldset class="layer-control">
-          <legend>Layer</legend>
+          <legend>{$i18n.messages.layer}</legend>
           <div class="segmented">
             <button
               aria-pressed={kind === "observed"}
               disabled={staticMode && observation?.complete !== true}
               onclick={() => {
                 kind = "observed";
-              }}>Observed detections</button
+              }}>{$i18n.messages.observedDetections}</button
             ><button
               aria-pressed={kind === "estimate"}
               disabled={!staticMode && !estimatesAvailable}
@@ -364,30 +398,30 @@
                 kind = "estimate";
               }}
               >{staticMode
-                ? "Weekly estimate"
-                : "Retrospective estimate"}</button
+                ? $i18n.messages.weeklyEstimate
+                : $i18n.messages.retrospectiveEstimate}</button
             >
           </div>
         </fieldset>
-        {#if !staticMode}<label for="model"
-            >Model<select
+        {#if !staticMode}<label for="model" class="model-control"
+            >{$i18n.messages.model}<select
               id="model"
               bind:value={model}
               disabled={!availableModels.length}
-              ><option value="" disabled>None available</option
+              ><option value="" disabled>{$i18n.messages.noneAvailable}</option
               >{#each availableModels as option}<option value={option}
                   >{option.replaceAll("_", " ")}</option
                 >{/each}</select
             ></label
           >
-          <label for="variant"
-            >Variant<select
+          <label for="variant" class="variant-control"
+            >{$i18n.messages.variant}<select
               id="variant"
               bind:value={variant}
               disabled={!data.meta.variants.length}
-              ><option value="" disabled>None available</option
+              ><option value="" disabled>{$i18n.messages.noneAvailable}</option
               >{#each data.meta.variants as option}<option value={option}
-                  >{option.replaceAll("_", " ")}</option
+                  >{localizeText($i18n, option.replaceAll("_", " "))}</option
                 >{/each}</select
             ></label
           >
@@ -395,56 +429,77 @@
       </div>
       <div class="filter-notes">
         <p id="week-hint" class="muted small">
-          Alt + ← / → changes the issue week. Targets cover the following seven
-          days.
+          {$i18n.messages.weekHint}
         </p>
         {#if !staticMode && !estimatesAvailable}<p
             id="missing-predictions"
             class="muted small"
           >
-            Missing predictions: no prepared estimates are available.
+            {$i18n.messages.noEstimatesHint}
           </p>{/if}
       </div>
       {#if !staticMode && kind === "estimate"}<p class="notice">
-          Retrospective model estimate, not an operational forecast.
+          {$i18n.messages.retrospectiveNotice}
         </p>{/if}
       {#if staticMode && layer?.forecast}
-        <div class="forecast-summary" aria-label="Forecast metadata">
+        <div
+          class="forecast-summary"
+          aria-label={$i18n.messages.forecastMetadata}
+        >
           <p class="forecast-timing">
             {layer.forecast.prospective
-              ? "Prospective estimate"
-              : "Backfill estimate · generated after issue time"}
+              ? $i18n.messages.prospectiveEstimate
+              : $i18n.messages.backfillEstimate}
           </p>
           <p>
-            Issue: <strong>{layer.forecast.issue_date} 00:00 UTC</strong> ·
-            Target:
+            {$i18n.messages.issue}
             <strong
-              >{targetWindow(
+              >{formatDate(layer.forecast.issue_date, $i18n.language)}
+              {$i18n.messages.text0000Utc}</strong
+            >
+            {$i18n.messages.target}
+            <strong
+              >{formatWindow(
                 layer.forecast.target_start,
                 layer.forecast.target_end,
+                $i18n.language,
               )}</strong
             >
           </p>
           <p class="small muted">
-            Published: {publishedTime(layer.forecast.generated_utc)} · {Math.round(
+            {$i18n.messages.published}
+            {formatTime(layer.forecast.generated_utc, $i18n.language)} · {formatUnit(
               layer.forecast.publication_lag_hours,
-            )} h after issue · Model: {@render forecastModel(layer.forecast)}
+              "h",
+              $i18n.language,
+            )}
+            {$i18n.messages.hAfterIssueModel}
+            {@render forecastModel(layer.forecast)}
           </p>
           <p class="small muted">
-            Input window: {layer.forecast.input_window.first_day} through {layer
-              .forecast.input_window.last_day} 23:59 UTC, before the issue time.
+            {$i18n.messages.inputWindow}
+            {formatDate(layer.forecast.input_window.first_day, $i18n.language)}
+            {$i18n.messages.through}
+            {formatDate(layer.forecast.input_window.last_day, $i18n.language)}
+            {$i18n.messages.text2359UtcBeforeTheIssue}
           </p>
           {#if layer.forecast.input_window.unobserved_days.length}<details
               class="input-history small muted"
               data-testid="input-history"
             >
               <summary
-                >{layer.forecast.input_window.unobserved_days.length} input days in
-                the 365-day window were unobserved (sensor outages)</summary
+                >{countMessage(
+                  $i18n,
+                  "inputDaysInThe365Day",
+                  layer.forecast.input_window.unobserved_days.length,
+                )}</summary
               >
-              <ul class="outage-dates" aria-label="Unobserved input days">
+              <ul
+                class="outage-dates"
+                aria-label={$i18n.messages.unobservedInputDays}
+              >
                 {#each layer.forecast.input_window.unobserved_days as day}<li>
-                    {day}
+                    {formatDate(day, $i18n.language)}
                   </li>{/each}
               </ul>
             </details>{/if}
@@ -452,21 +507,21 @@
             class="small muted forecast-provenance"
             data-testid="forecast-provenance"
           >
-            <summary>Forecast provenance</summary>
+            <summary>{$i18n.messages.forecastProvenance}</summary>
             <dl>
               <div>
-                <dt>Exact target interval</dt>
+                <dt>{$i18n.messages.exactTargetInterval}</dt>
                 <dd>
-                  [{layer.forecast.target_start}, {layer.forecast.target_end})
-                  UTC
+                  [{layer.forecast.target_start}, {layer.forecast
+                    .target_end}{$i18n.messages.utc}
                 </dd>
               </div>
               <div>
-                <dt>Publication timestamp</dt>
+                <dt>{$i18n.messages.publicationTimestamp}</dt>
                 <dd>{layer.forecast.generated_utc}</dd>
               </div>
               <div>
-                <dt>Model SHA-256 / identifier</dt>
+                <dt>{$i18n.messages.modelSha256Identifier}</dt>
                 <dd class="hash">{layer.forecast.model_id}</dd>
               </div>
             </dl>
@@ -474,122 +529,129 @@
         </div>
       {/if}
       {#if staticMode && observationError}<p class="notice">
-          Observation file unavailable: {observationError.message}
+          {$i18n.messages.observationFileUnavailable}
+          {errorText($i18n, observationError)}
         </p>{/if}
       {#if staticMode && currentWeek && !currentWeek.observation}<p
           class="notice"
         >
-          Observation week is not available yet. Observed detections can be
-          selected after all seven target days are observed.
+          {$i18n.messages.observationsPending}
         </p>{/if}
       {#if staticMode && observation?.coverage?.pendingDays.length}<p
           class="target-progress small muted"
           data-testid="target-progress"
         >
-          {#if observation.coverage.lastObservedDay}Target week in progress:
-            observations available through {observation.coverage
-              .lastObservedDay}{:else}Target week in progress: no target
-            observations available yet.{/if}
+          {#if observation.coverage.lastObservedDay}{$i18n.messages
+              .targetProgress}
+            {formatDate(
+              observation.coverage.lastObservedDay,
+              $i18n.language,
+            )}{:else}{$i18n.messages.targetPending}{/if}
         </p>{/if}
       {#if currentWeek?.targetComplete === false || (staticMode && observation?.coverage?.unobservedDays.length)}<p
           class="notice"
           data-testid="observation-notice"
         >
-          This week includes unobserved target days. Incomplete labels are
-          missing, never zero.
-          {#if staticMode}Unobserved target days (sensor outages): {observation?.coverage?.unobservedDays.join(
-              ", ",
-            )}.{/if}
+          {$i18n.messages.outageNotice}
+          {#if staticMode}{$i18n.messages.targetOutages}
+            {observation?.coverage?.unobservedDays
+              .map((day) => formatDate(day, $i18n.language))
+              .join(", ")}.{/if}
         </p>{/if}
       {#if currentWeek?.lowCoverage}<p
           class="notice"
           data-testid="low-coverage-notice"
         >
-          Low-coverage heuristic: at least one target day has zero detections in
-          the acquisition area. This flag does not determine label completeness.
+          {$i18n.messages.lowCoverageNotice}
         </p>{/if}
       <div class="workspace">
-        <section class="map-panel" aria-label="Weekly grid">
+        <section class="map-panel" aria-label={$i18n.messages.weeklyGrid}>
           <div class="panel-toolbar">
             <div>
               <h2>
                 {kind === "observed"
-                  ? "Observed detections"
+                  ? $i18n.messages.observedDetections
                   : staticMode
-                    ? "Weekly estimate"
-                    : "Retrospective estimate"}
+                    ? $i18n.messages.weeklyEstimate
+                    : $i18n.messages.retrospectiveEstimate}
               </h2>
               <p class="muted small">
-                {date ||
-                  "No available issue weeks"}{#if currentWeek?.completeness != null}
-                  {" · "}{(currentWeek.completeness * 100).toFixed(1)}% label
-                  completeness{/if}
+                {date
+                  ? formatDate(date, $i18n.language)
+                  : $i18n.messages
+                      .noAvailableIssueWeeks}{#if currentWeek?.completeness != null}
+                  {" · "}{formatPercent(
+                    currentWeek.completeness,
+                    $i18n.language,
+                  )}{$i18n.messages.labelCompleteness}{/if}
               </p>
               {#if kind === "estimate" && layer?.model}
                 <p class="muted small">
-                  Model: {#if staticMode && layer.forecast}{@render forecastModel(
+                  {$i18n.messages.model2}
+                  {#if staticMode && layer.forecast}{@render forecastModel(
                       layer.forecast,
-                    )}{:else}{layer.model} · Variant: {layer.variant}{/if}
+                    )}{:else}{layer.model}
+                    {$i18n.messages.variant2}
+                    {layer.variant}{/if}
                 </p>
               {/if}
             </div>
             <div class="segmented view-toggle">
               <button
-                aria-label="Map view"
+                aria-label={$i18n.messages.mapView}
                 aria-pressed={view === "map"}
                 onclick={() => {
                   view = "map";
-                }}>Map</button
+                }}>{$i18n.messages.map}</button
               ><button
-                aria-label="Table view"
+                aria-label={$i18n.messages.tableView}
                 aria-pressed={view === "table"}
                 onclick={() => {
                   view = "table";
-                }}>Table</button
+                }}>{$i18n.messages.table}</button
               >
             </div>
           </div>
           <p class="data-status" data-testid="layer-status" role="status">
             {layerLoading
-              ? "Loading weekly values…"
+              ? $i18n.messages.loadingWeeklyValues
               : layerError
                 ? layerError instanceof ApiError &&
                   layerError.kind === "missing" &&
                   kind === "estimate"
-                  ? "Missing predictions for this week, model and variant."
-                  : layerError.message
-                : summary ||
-                  "No cells or issue weeks are available in this data snapshot."}
+                  ? $i18n.messages.missingSelection
+                  : errorText($i18n, layerError)
+                : summary || $i18n.messages.emptySnapshot}
           </p>
           {#if layerLoading}<div class="map-state" aria-busy="true">
-              <p>Loading weekly values…</p>
+              <p>{$i18n.messages.loadingWeeklyValues}</p>
             </div>
           {:else if layerError}<div class="map-state error" role="alert">
               <h3>
                 {layerError instanceof ApiError &&
                 layerError.kind === "missing" &&
                 kind === "estimate"
-                  ? "Missing predictions"
+                  ? $i18n.messages.missingPredictions
                   : layerError instanceof ApiError &&
                       layerError.kind === "offline"
                     ? staticMode
-                      ? "Data files offline"
-                      : "API offline"
-                    : "Selection unavailable"}
+                      ? $i18n.messages.dataFilesOffline
+                      : $i18n.messages.apiOffline
+                    : $i18n.messages.selectionUnavailable}
               </h3>
-              <p>{layerError.message}</p>
+              <p>{errorText($i18n, layerError)}</p>
               <button
                 onclick={() => {
                   retry++;
-                }}>Retry weekly data</button
+                }}>{$i18n.messages.retryWeeklyData}</button
               >
             </div>
           {:else if !data.grid.cells.length || !layer?.cell_index.length}<div
               class="map-state"
             >
-              <h3>No weekly data</h3>
+              <h3>{$i18n.messages.noWeeklyData}</h3>
               <p>
-                No cells or issue weeks are available in this data snapshot.
+                {$i18n.messages.emptySnapshot}
               </p>
             </div>
           {:else if view === "map"}<CellMap
@@ -602,82 +664,97 @@
                 selected = cell;
               }}
             />
-          {:else}<CellTable
-              grid={data.grid}
-              {values}
-              {counts}
-              {kind}
-              {selected}
-              onselect={(cell) => {
-                selected = cell;
-              }}
-            />{/if}
-          <div class="legend" aria-label="Map legend">
+          {:else}{#await import("./components/CellTable.svelte") then module}<module.default
+                grid={data.grid}
+                {values}
+                {counts}
+                {kind}
+                {selected}
+                onselect={(cell) => {
+                  selected = cell;
+                }}
+              />{/await}{/if}
+          <div class="legend" aria-label={$i18n.messages.mapLegend}>
             {#if kind === "estimate"}<div class="probability-legend">
-                <span>Probability</span>
+                <span>{$i18n.messages.probability}</span>
                 <div class="color-scale"></div>
                 <div class="scale-labels">
-                  <span>0</span><span>0.5</span><span>1</span>
+                  <span>0</span><span
+                    >{formatNumber(0.5, $i18n.language, 1)}</span
+                  ><span>1</span>
                 </div>
               </div>
-            {:else}<span><i class="swatch detected"></i>Detected</span><span
-                ><i class="swatch negative"></i>Not detected</span
+            {:else}<span
+                ><i class="swatch detected"></i>{$i18n.messages.detected}</span
+              ><span
+                ><i class="swatch negative"></i>{$i18n.messages
+                  .notDetected}</span
               >{/if}
             <span
-              ><i class="swatch missing"></i>Missing observation{kind ===
-              "estimate"
-                ? " / estimate"
+              ><i class="swatch missing"></i>{$i18n.messages
+                .missingObservation}{kind === "estimate"
+                ? ` ${$i18n.messages.estimate}`
                 : ""}</span
             >
           </div>
           <div class="panel-footer">
             <p class="small muted">
-              Gray means unavailable data. A missing label does not establish
-              absence.
+              {$i18n.messages.missingHint}
             </p>
             {#if csvUrl && layer && !layerLoading && !layerError}<a
                 class="download-link"
                 href={csvUrl}
                 download={`bolivia-fire_${date}_${kind}.csv`}
-                >Download week CSV</a
+                >{$i18n.messages.downloadWeekCsv}</a
               >{/if}
           </div>
         </section>
-        <aside class="detail-panel" aria-label="Cell detail">
+        <aside class="detail-panel" aria-label={$i18n.messages.cellDetail}>
           <div class="detail-heading">
-            <h2>Cell detail</h2>
-            <span class="muted small">National intersection</span>
+            <h2>{$i18n.messages.cellDetail}</h2>
+            <span class="muted small"
+              >{$i18n.messages.nationalIntersection}</span
+            >
           </div>
           {#if selected}
             <h3 class="cell-id" data-testid="selected-cell">{selected.id}</h3>
             <CellPlaces cell={selected} />
             <dl class="cell-facts">
               <div>
-                <dt>National area</dt>
-                <dd>{selected.area.toFixed(2)} km²</dd>
+                <dt>{$i18n.messages.nationalArea}</dt>
+                <dd>
+                  {formatUnit(
+                    selected.area,
+                    $i18n.messages.km,
+                    $i18n.language,
+                    2,
+                  )}
+                </dd>
               </div>
               <div>
                 <dt>
-                  Current {kind === "estimate" ? "probability" : "observation"}
+                  {kind === "estimate"
+                    ? $i18n.messages.currentProbability
+                    : $i18n.messages.currentObservation}
                 </dt>
                 <dd>
                   {layerLoading
-                    ? "Loading…"
+                    ? $i18n.messages.loading
                     : layerError
-                      ? "Unavailable"
-                      : formatValue(values.get(selected.index), kind)}
+                      ? $i18n.messages.unavailable
+                      : formatValue(values.get(selected.index), kind, $i18n)}
                 </dd>
               </div>
             </dl>
             <div class="series-heading">
-              <h3>Weekly history</h3>
+              <h3>{$i18n.messages.weeklyHistory}</h3>
               <p class="small muted">
-                p = estimated probability · y = observed indicator
+                {$i18n.messages.seriesKey}
               </p>
             </div>
             <div class="range-controls">
               <label for="range-start"
-                >From<input
+                >{$i18n.messages.from}<input
                   id="range-start"
                   type="date"
                   bind:value={rangeStart}
@@ -685,7 +762,7 @@
                   max={rangeEnd || undefined}
                 /></label
               ><label for="range-end"
-                >To<input
+                >{$i18n.messages.to}<input
                   id="range-end"
                   type="date"
                   bind:value={rangeEnd}
@@ -695,137 +772,34 @@
               >
             </div>
             {#if seriesLoading}<p class="muted" role="status">
-                Loading cell history…
+                {$i18n.messages.loadingCellHistory}
               </p>{:else if seriesError}<p class="error-text" role="alert">
-                {seriesError.message}
-              </p>{:else}<SeriesChart points={series} />{/if}
+                {errorText($i18n, seriesError)}
+              </p>{:else}{#await import("./components/SeriesChart.svelte") then module}<module.default
+                  points={series}
+                />{/await}{/if}
             <p class="small muted series-note">
-              Observed y is 1 when at least one selected detection occurred, 0
-              when none occurred in a complete interval. Gaps stay missing.
+              {$i18n.messages.observedYIs1WhenAt}
             </p>
           {:else}<div class="selection-empty">
-              <h3>Select a grid cell</h3>
+              <h3>{$i18n.messages.selectAGridCell}</h3>
               <p>
-                Click the map or choose a cell in the table to inspect its area
-                and weekly history.
+                {$i18n.messages.clickTheMapOrChooseA}
               </p>
               <p class="small muted">
-                Keyboard: focus the map, move with arrow keys and press Enter.
+                {$i18n.messages.keyboardHint}
               </p>
             </div>{/if}
         </aside>
       </div>
     </section>
-    {#if staticMode}<TrackRecord />{/if}
-    <section id="about" class="about-panel" aria-label="About and limitations">
-      <details open>
-        <summary>About & limitations</summary>
-        <div class="about-grid">
-          <div>
-            <h3>What is a detection?</h3>
-            <p>
-              The target is at least one VIIRS S-NPP {staticMode
-                ? "near-real-time"
-                : "standard-processing"}
-              detection of presumed vegetation fire, with nominal or high confidence,
-              in the national part of a cell during the target week.
-            </p>
-            <p>
-              Detections are not fires, ignitions, burned area, or official
-              warnings. A zero is not proof of absence: clouds, smoke, satellite
-              overpass timing and small fires affect detection.
-            </p>
-            <h3>Observation coverage</h3>
-            <p>
-              A day must be acquired and have less than six hours of documented
-              sensor outages to be observed. Any unobserved day makes the weekly
-              label missing. Observed counts can remain available during
-              incomplete weeks.
-            </p>
-          </div>
-          <div>
-            <h3>
-              {staticMode
-                ? "Experimental weekly estimates"
-                : "Retrospective estimates"}
-            </h3>
-            {#if staticMode}<p>
-                The model was trained on standard-processing detections and is
-                applied to near-real-time detections. The track record measures
-                how well it holds up. Processing revisions and data delays can
-                change detection availability. This is an experimental estimate.
-              </p>{:else}
-              <p>
-                These are retrospective model estimates, not operational
-                forecasts. The strict simulation assumes standard-processing
-                detections approximate those available in near real time; that
-                equivalence is not validated. Revised CHIRPS rainfall covariates
-                do not recreate historical information availability.
-              </p>
-            {/if}
-            {#if data.meta.limitations.length}<details class="api-limitations">
-                <summary>Dataset-specific limitations</summary
-                >{#each data.meta.limitations as limitation}<p>
-                    {limitation}
-                  </p>{/each}
-              </details>{/if}
-            <h3>Sources</h3>
-            <p class="small">
-              Place names: <a href="https://www.geonames.org/">GeoNames</a> (<a
-                href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a
-              >)
-            </p>
-            <p class="small">
-              Province and municipality boundaries: <a
-                href="https://www.geoboundaries.org/">geoBoundaries ADM2/ADM3</a
-              >.
-            </p>
-            {#each data.meta.attributions as source}<p class="small">
-                {#if safeLink(source.url)}<a href={source.url}>{source.name}</a
-                  >{:else}{source.name}{/if}
-                {#if source.product}
-                  · {source.product}{/if}
-                {#if source.provider}
-                  · {source.provider}{/if}
-                {#if source.license}
-                  · {#if safeLink(source.licenseUrl)}<a href={source.licenseUrl}
-                      >{source.license}</a
-                    >{:else}{source.license}{/if}
-                {/if}
-                {#if source.processing}<br />{source.processing}{/if}
-                {#if source.citation}<br />{source.citation}{/if}
-              </p>{:else}<p>
-                Source credits are unavailable. See the
-                <a
-                  href="https://github.com/Cupesi/bolivia-fire/blob/main/datasets/dataset_card.md"
-                  >dataset source terms</a
-                >.
-              </p>{/each}
-          </div>
-        </div>
-        {#if provenance.length}<div class="provenance">
-            <h3>Data provenance</h3>
-            <dl>
-              {#each provenance as [name, value]}<div>
-                  <dt>{name}</dt>
-                  <dd class="hash">
-                    {#if name === "Panel snapshot" && typeof value === "string"}<details
-                      >
-                        <summary>View identifiers</summary>
-                        <pre>{value}</pre>
-                      </details>{:else}{value}{/if}
-                  </dd>
-                </div>{/each}
-            </dl>
-            <p class="small muted">
-              Grid cells use geographic coordinates and vary in area. Area
-              values measure each cell’s national intersection on WGS84.
-            </p>
-          </div>{/if}
-      </details>
-    </section>
+    {#if staticMode}{#await import("./components/TrackRecord.svelte") then module}<module.default
+        />{/await}{/if}
+    {#await import("./components/About.svelte") then module}<module.default
+        meta={data.meta}
+      />{/await}
   {/if}
   <footer class="page-footer">
-    Bolivia weekly detection benchmark · Research data explorer
+    {$i18n.messages.boliviaWeeklyDetectionBenchmarkResearchData}
   </footer>
 </main>
