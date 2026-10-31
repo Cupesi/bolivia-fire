@@ -1,5 +1,9 @@
 import type { Messages } from "./en";
 export const es = {
+  geographicHoldout: "Reserva geográfica (modelo geográfico)",
+  geographicUnavailable:
+    "Reserva geográfica (sin estimación geográfica esta semana)",
+  valueModel: "Modelo del valor",
   dateRange: "{start} – {end} (UTC)",
   enCode: "EN",
   esCode: "ES",

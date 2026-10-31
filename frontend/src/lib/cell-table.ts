@@ -115,7 +115,7 @@ export function weekCsv(
       date,
       kind,
       layer.variant,
-      layer.model,
+      layer.value_model ? layer.value_model[offset] : layer.model,
       value,
       layer.n_primary?.[offset],
       cell.municipality,

@@ -50,6 +50,30 @@ class Store(Catalog):
     def __init__(self, root: Path) -> None:
         super().__init__(root)
         self.series_dataset = prepared_dataset(self.root, self.panel_files)
+        self.holdout_cells = {
+            cell
+            for cell, held_out in zip(
+                self.cell_ids, self.grid["geo_holdout"] if self.grid else [], strict=True
+            )
+            if held_out
+        }
+
+    def geographic_model(self, variant: str, model: str) -> str | None:
+        if not model.startswith("strict/"):
+            return None
+        name = model.split("/", 1)[1]
+        family = "lightgbm_" if name.startswith("lightgbm_") else name
+        matches = [
+            candidate
+            for candidate in self.models.get(variant, [])
+            if candidate.startswith("strict_geo/")
+            and (
+                candidate.split("/", 1)[1].startswith(family)
+                if family == "lightgbm_"
+                else candidate == f"strict_geo/{name}"
+            )
+        ]
+        return matches[0] if len(matches) == 1 else None
 
     def panel_rows(
         self, start: date, end: date, cell_id: str | None = None
@@ -97,6 +121,8 @@ class Store(Catalog):
         observed = {row["cell_id"]: row for row in self.panel_rows(issue, issue)}
         values: dict[str, float | int | None]
         selected = None
+        sources: dict[str, str | None] = {}
+        geographic = None
         if kind == "estimate":
             selected = self.select_model(variant, model, required=True)
             assert selected is not None
@@ -104,7 +130,23 @@ class Store(Catalog):
             values = {row["cell_id"]: probability(row["p"]) for row in rows}
             if len(values) != len(rows):
                 raise HTTPException(503, "Prepared predictions contain duplicate cell-weeks")
-            if not values:
+            available = bool(rows)
+            sources = {
+                cell: selected if value is not None else None for cell, value in values.items()
+            }
+            if selected.startswith("strict/"):
+                geographic = self.geographic_model(variant, selected)
+                geo_rows = (
+                    self.prediction_rows(issue, issue, variant, geographic) if geographic else []
+                )
+                geo_values = {row["cell_id"]: probability(row["p"]) for row in geo_rows}
+                if len(geo_values) != len(geo_rows):
+                    raise HTTPException(503, "Prepared predictions contain duplicate cell-weeks")
+                available = available or bool(geo_values)
+                for cell in self.holdout_cells:
+                    values[cell] = geo_values.get(cell)
+                    sources[cell] = geographic if values[cell] is not None else None
+            if not available:
                 raise missing(
                     "Prepared predictions are not available for this issue date and model"
                 )
@@ -119,6 +161,8 @@ class Store(Catalog):
             "cell_index": [self.cell_index[cell] for cell in cells],
             "value": [values[cell] for cell in cells],
             "n_primary": [observed.get(cell, {}).get("n_primary") for cell in cells],
+            "value_model": [sources.get(cell) for cell in cells],
+            "geographic_model": geographic,
         }
 
     def series(
@@ -130,6 +174,8 @@ class Store(Catalog):
         if (end - start).days // 7 + 1 > 700:
             raise invalid("A series is limited to 700 weeks; narrow start and end")
         selected = self.select_model(variant, model, required=False)
+        if selected and selected.startswith("strict/") and cell_id in self.holdout_cells:
+            selected = self.geographic_model(variant, selected)
         rows = sorted(self.panel_rows(start, end, cell_id), key=lambda row: row["issue_date"])
         predictions = (
             self.prediction_rows(start, end, variant, selected, cell_id) if selected else []

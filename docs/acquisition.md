@@ -7,12 +7,12 @@ No geographic or confidence filtering is applied to raw observations.
 
 ```powershell
 uv sync --all-extras
-uv run bolivia-fire firms status
-uv run bolivia-fire acquire firms --start 2024-09-01 --end 2024-09-10 --dry-run
-uv run bolivia-fire acquire firms --start 2024-09-01 --end 2024-09-10
-uv run bolivia-fire firms status
-uv run bolivia-fire firms availability
-uv run bolivia-fire acquire boundaries
+uv run --no-sync bolivia-fire firms status
+uv run --no-sync bolivia-fire acquire firms --start 2024-09-01 --end 2024-09-10 --dry-run
+uv run --no-sync bolivia-fire acquire firms --start 2024-09-01 --end 2024-09-10
+uv run --no-sync bolivia-fire firms status
+uv run --no-sync bolivia-fire firms availability
+uv run --no-sync bolivia-fire acquire boundaries
 ```
 
 Set `UV_CACHE_DIR` to a writable directory if the default uv cache is unavailable.
@@ -178,12 +178,6 @@ files remain. The first ten-day CLI run logged
 logged `downloaded=0 skipped=2 recovered=0 data_requests=0`, with both manifest
 hashes verified before skipping. Evidence is in `datasets/.tmp/acquire_firms.log`
 and `datasets/manifests/firms_VIIRS_SNPP_SP.jsonl`.
-
-Repository-wide verification on 2026-10-31 passed both commands above: Ruff
-reported no issues, and pytest passed 388 tests with four deselected. The run
-reported Starlette/httpx and DuckDB/pandas deprecations and a denied pytest-cache
-write. Live and local-data tests were excluded; this check made no production
-requests and did not reopen the final test.
 
 Boundary acquisition stored ADM0 with one feature and 4,034,693 bytes, and ADM1
 with nine features and 9,273,745 bytes. ADM1 contains Santa Cruz. Both pins use

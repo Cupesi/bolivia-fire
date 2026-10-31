@@ -9,6 +9,7 @@ export interface Cell {
   col: number;
   department: string;
   area: number;
+  geoHoldout?: boolean;
   province?: string;
   municipality?: string;
   nearestPlace?: { name: string; distanceKm: number | null };
@@ -61,6 +62,8 @@ export interface Week {
   observation?: boolean;
 }
 export interface Layer {
+  value_model?: (string | null)[];
+  geographic_model?: string | null;
   model: string | null;
   variant: string;
   cell_index: number[];

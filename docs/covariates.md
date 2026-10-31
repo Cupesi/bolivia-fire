@@ -28,13 +28,13 @@ and salt flat 61 under non-vegetated land.
 
 ```powershell
 uv sync --all-extras
-uv run bolivia-fire covariates probe --product chirps --date 2024-01-01
-uv run bolivia-fire covariates chirps --start 2024-01-01 --end 2024-12-31
-uv run bolivia-fire covariates chirps --start 2012-01-01 --end 2026-01-04
-uv run bolivia-fire covariates chirps-annual --start-year 2012 --end-year 2026
-uv run bolivia-fire covariates chirps-annual --start-year 2018 --end-year 2026 --transport ftp
-uv run bolivia-fire covariates features
-uv run bolivia-fire covariates summary
+uv run --no-sync bolivia-fire covariates probe --product chirps --date 2024-01-01
+uv run --no-sync bolivia-fire covariates chirps --start 2024-01-01 --end 2024-12-31
+uv run --no-sync bolivia-fire covariates chirps --start 2012-01-01 --end 2026-01-04
+uv run --no-sync bolivia-fire covariates chirps-annual --start-year 2012 --end-year 2026
+uv run --no-sync bolivia-fire covariates chirps-annual --start-year 2018 --end-year 2026 --transport ftp
+uv run --no-sync bolivia-fire covariates features
+uv run --no-sync bolivia-fire covariates summary
 ```
 
 Repeat the same extraction command after an interruption. It validates cached
@@ -273,15 +273,10 @@ The consolidated acceptance record is acceptance_annual.json.
 ## Verification
 
 ```powershell
-uv run ruff check src tests
-uv run pytest -q
-uv run pytest -q tests/covariates
+uv run --no-sync ruff check src tests
+uv run --no-sync pytest -q
+uv run --no-sync pytest -q tests/covariates
 ```
-
-Verified with `uv sync --all-extras`, `uv run ruff check src tests`, and
-`uv run pytest -q -p no:cacheprovider`: **324 passed**, one live test deselected.
-Eight DuckDB/Pandas deprecation warnings arose in figure tests. The 42 covariate
-tests pass independently.
 
 Synthetic tests cover native index mapping and precision offsets, nodata,
 full-resolution COG window reads without provider HEAD requests, byte-range

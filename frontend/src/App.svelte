@@ -15,7 +15,6 @@
   import { initialLanguage, selectLanguage, type Language } from "./lib/i18n";
   import { en } from "./lib/messages/en";
   import { onMount } from "svelte";
-  import CellMap from "./components/CellMap.svelte";
   import CellPlaces from "./components/CellPlaces.svelte";
   import {
     loadInitial,
@@ -72,6 +71,12 @@
     data?.weeks.findIndex((week) => week.date === date) ?? -1,
   );
   const currentWeek = $derived(data?.weeks[weekIndex]);
+  const showHoldout = $derived(!staticMode && kind === "estimate");
+  const holdoutCells = $derived(
+    showHoldout
+      ? (data?.grid.cells.filter((cell) => cell.geoHoldout) ?? [])
+      : [],
+  );
 
   const availableModels = $derived(data?.meta.models[variant] ?? []);
   const estimatesAvailable = $derived(
@@ -85,6 +90,18 @@
       layer?.cell_index.map((index, offset) => [index, layer!.value[offset]]) ??
         [],
     ),
+  );
+  const holdoutAvailable = $derived(
+    holdoutCells.some((cell) => values.get(cell.index) != null),
+  );
+  const holdoutUnavailable = $derived(
+    holdoutCells.some((cell) => values.get(cell.index) == null),
+  );
+  const selectedValueModel = $derived(
+    selected && layer
+      ? (layer.value_model?.[layer.cell_index.indexOf(selected.index)] ??
+          (values.get(selected.index) != null ? layer.model : null))
+      : null,
   );
   const summary = $derived.by(() => {
     if (!layer) return "";
@@ -297,7 +314,6 @@
         onclick={() => void chooseLanguage("en")}
         >{$i18n.messages.enCode}</button
       >
-      <span aria-hidden="true">|</span>
       <button
         lang="es"
         aria-label={$i18n.messages.spanish}
@@ -654,16 +670,17 @@
                 {$i18n.messages.emptySnapshot}
               </p>
             </div>
-          {:else if view === "map"}<CellMap
-              grid={data.grid}
-              boundaries={data.boundaries}
-              {values}
-              {kind}
-              {selected}
-              onselect={(cell) => {
-                selected = cell;
-              }}
-            />
+          {:else if view === "map"}{#await import("./components/CellMap.svelte") then module}<module.default
+                grid={data.grid}
+                boundaries={data.boundaries}
+                {values}
+                {kind}
+                {selected}
+                {showHoldout}
+                onselect={(cell) => {
+                  selected = cell;
+                }}
+              />{/await}
           {:else}{#await import("./components/CellTable.svelte") then module}<module.default
                 grid={data.grid}
                 {values}
@@ -675,6 +692,14 @@
                 }}
               />{/await}{/if}
           <div class="legend" aria-label={$i18n.messages.mapLegend}>
+            {#if holdoutAvailable}<span
+                ><i class="swatch holdout"></i>{$i18n.messages
+                  .geographicHoldout}</span
+              >{/if}
+            {#if holdoutUnavailable}<span
+                ><i class="swatch holdout unavailable-holdout"></i>{$i18n
+                  .messages.geographicUnavailable}</span
+              >{/if}
             {#if kind === "estimate"}<div class="probability-legend">
                 <span>{$i18n.messages.probability}</span>
                 <div class="color-scale"></div>
@@ -746,6 +771,20 @@
                 </dd>
               </div>
             </dl>
+            {#if kind === "estimate" && !staticMode}
+              <p class="small" data-testid="value-model">
+                {$i18n.messages.valueModel}: {selectedValueModel ??
+                  $i18n.messages.unavailable}
+              </p>
+              {#if showHoldout && selected.geoHoldout}<p
+                  class="small muted"
+                  data-testid="holdout-detail"
+                >
+                  {values.get(selected.index) == null
+                    ? $i18n.messages.geographicUnavailable
+                    : $i18n.messages.geographicHoldout}
+                </p>{/if}
+            {/if}
             <div class="series-heading">
               <h3>{$i18n.messages.weeklyHistory}</h3>
               <p class="small muted">

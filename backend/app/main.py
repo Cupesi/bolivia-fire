@@ -314,11 +314,11 @@ def create_app(root: Path | None = None) -> FastAPI:
         )
         writer = csv.writer(buffer)
         writer.writerow(["cell_id", "issue_date", "kind", "variant", "model", "value", "n_primary"])
-        for index, value, count in zip(
-            data["cell_index"], data["value"], data["n_primary"], strict=True
+        for index, value, count, value_model in zip(
+            data["cell_index"], data["value"], data["n_primary"], data["value_model"], strict=True
         ):
             writer.writerow(
-                [store.cell_ids[index], issue_date, kind, variant, data["model"], value, count]
+                [store.cell_ids[index], issue_date, kind, variant, value_model, value, count]
             )
         filename = f"bolivia-fire_{issue_date}_{kind}.csv"
         return cached(

@@ -6,12 +6,12 @@ They make no network requests and do not require a FIRMS key.
 
 ```powershell
 uv sync --all-extras
-uv run bolivia-fire build cells
-uv run bolivia-fire build detections
-uv run bolivia-fire build panel --start-issue 2024-09-02 --end-issue 2024-09-09
-uv run bolivia-fire explain-label r1345c2314 2024-09-02
-uv run ruff check src tests
-uv run pytest -q
+uv run --no-sync bolivia-fire build cells
+uv run --no-sync bolivia-fire build detections
+uv run --no-sync bolivia-fire build panel --start-issue 2024-09-02 --end-issue 2024-09-09
+uv run --no-sync bolivia-fire explain-label r1345c2314 2024-09-02
+uv run --no-sync ruff check src tests
+uv run --no-sync pytest -q
 ```
 
 Omitting the issue bounds builds every protocol Monday. Each selected year is
@@ -84,8 +84,8 @@ the frozen cell or panel files. Its one-row-per-cell key and column definitions
 are in [cell_places.yaml](../datasets/schemas/cell_places.yaml).
 
 ```powershell
-uv run python -m bolivia_fire.places --acquire
-uv run python -m bolivia_fire.places
+uv run --no-sync python -m bolivia_fire.places --acquire
+uv run --no-sync python -m bolivia_fire.places
 ```
 
 The acquisition command pins gbOpen BOL ADM2 provinces, ADM3 municipalities and
@@ -204,8 +204,8 @@ prior observations leaves target labels unchanged.
 
 Canonical-selection tests cover longer-partition precedence, fully covered
 partition exclusion, partial-overlap date filtering with original source-line
-retention, and manifest-snapshot hashing. Measurements should be regenerated
-after acquisition finishes; appending partitions changes the build input.
+retention, and manifest-snapshot hashing. Regenerate measurements when acquisition
+manifests change; appending partitions changes the build input.
 
 ## Protocol 1.1 observation coverage and publication
 

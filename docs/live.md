@@ -104,10 +104,10 @@ frozen artifacts. Use an orphan `live-data` worktree outside the repository.
 
 ```powershell
 uv sync --all-extras --frozen
-git worktree add --orphan -b live-data C:/work/live-data-wt
-uv run bolivia-fire live bootstrap --out C:/work/live-data-wt
-uv run bolivia-fire live update --out C:/work/live-data-wt --issue 2026-10-26
-uv run bolivia-fire live update --out C:/work/live-data-wt
+git worktree add --orphan -b live-data ../live-data
+uv run --no-sync bolivia-fire live bootstrap --out ../live-data
+uv run --no-sync bolivia-fire live update --out ../live-data --issue 2026-10-26
+uv run --no-sync bolivia-fire live update --out ../live-data
 ```
 
 Bootstrap initializes the latest available issue and its preceding issue as
@@ -133,7 +133,7 @@ initialized live-data checkout without acquiring FIRMS observations or running
 inference:
 
 ```powershell
-uv run python -m bolivia_fire.live.static --out C:/work/live-data-wt
+uv run --no-sync python -m bolivia_fire.live.static --out ../live-data
 ```
 
 This static update reads existing grid order, writes `static/cell_places.json`,

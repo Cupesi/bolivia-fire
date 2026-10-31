@@ -6,10 +6,10 @@ The panel must already exist under `datasets/processed/panel/year=YYYY/part.parq
 
 ```powershell
 uv sync --all-extras
-uv run bolivia-fire train --variant strict
-uv run bolivia-fire select --variant strict
-uv run bolivia-fire evaluate --variant strict --open-final-test
-uv run bolivia-fire predict --variant strict --split test
+uv run --no-sync bolivia-fire train --variant strict
+uv run --no-sync bolivia-fire select --variant strict
+uv run --no-sync bolivia-fire evaluate --variant strict --open-final-test
+uv run --no-sync bolivia-fire predict --variant strict --split test
 ```
 
 `train` and `select` also fit and select the corresponding geographic feature set
@@ -194,9 +194,9 @@ evaluation provenance. Writes promote completed temporary files atomically.
 ## Synthetic verification
 
 ```powershell
-uv run ruff check src tests
-uv run pytest -q
-uv run python tests/models/benchmark.py --rows 2000000 --report artifacts/synthetic_2m_benchmark.json
+uv run --no-sync ruff check src tests
+uv run --no-sync pytest -q
+uv run --no-sync python tests/models/benchmark.py --rows 2000000 --report artifacts/synthetic_2m_benchmark.json
 ```
 
 The benchmark constructs explicitly synthetic data in a temporary directory,

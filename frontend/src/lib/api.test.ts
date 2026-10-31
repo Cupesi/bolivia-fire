@@ -158,6 +158,7 @@ describe("contract normalization with synthetic payloads", () => {
       col: [20, 21],
       department: ["A", "B"],
       national_area_km2: [10, 9],
+      geo_holdout: [false, true],
     });
     expect(grid.cells[1]).toMatchObject({
       id: "r11c21",
@@ -165,6 +166,7 @@ describe("contract normalization with synthetic payloads", () => {
       row: 11,
       col: 21,
       area: 9,
+      geoHoldout: true,
     });
     expect(grid.bounds).toEqual({
       rowMin: 10,

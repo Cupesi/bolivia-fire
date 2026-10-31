@@ -53,8 +53,9 @@ Three products are kept separate:
 3. **Operational forecast** — not claimed by this project.
 
 CHIRPS v3 and MapBiomas collections were released after most of the study period and revise their
-full history, so lagging them does not recreate what was known at `t`. They appear only in the
-retrospective variant.
+full history, so lagging them does not recreate what was known at `t`. The fitted retrospective
+variant includes CHIRPS rainfall. MapBiomas was omitted after verified anonymous raster access
+failed; no MapBiomas inputs occur in the fitted models.
 
 ## Partitions
 

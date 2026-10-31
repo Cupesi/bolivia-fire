@@ -28,9 +28,8 @@ ADM0/ADM1/ADM2/ADM3 boundaries, metadata,
 the latest 52 issues' declared forecasts and observations, and the verification
 CSV into `dist/data/`. It excludes model files, rolling state and Parquet files.
 Missing declared weekly files fail the build; a missing verification CSV is
-shown as an unavailable-file state. Data above 200 MB fail the build. The
-JavaScript budget is 43,922 bytes gzip: the measured 28,562-byte baseline plus
-15 KiB. No dependencies were added.
+shown as an unavailable-file state. Data above 200 MB fail the build. Initial JavaScript must remain below 39,338 bytes gzip for static builds
+and 37,661 bytes for API builds.
 When `model/model_card.json` is present, the build copies its model name into
 the published metadata after checking that the model hashes match. Model
 artifacts remain excluded from the distribution.
@@ -97,50 +96,13 @@ The build writes `frontend/dist`. Start or restart FastAPI after that directory
 exists; its static mount is configured at startup. See [the API contract](api.md).
 
 ```powershell
-uv run uvicorn backend.app.main:app --host 0.0.0.0 --port 8765
+uv run --no-sync uvicorn backend.app.main:app --host 0.0.0.0 --port 8765
 ```
 
 For development, `npm run dev` serves port 5173 and proxies `/api` to
 `http://127.0.0.1:8765`. The production page is served by FastAPI at port 8765.
 `npm run test:api` checks the real local API, including bounded CSV export and
 null labels. Set `API_BASE_URL` to change that script's origin.
-
-## Earlier static presentation verification
-
-On 2026-10-31, `npm run check` reported zero errors and warnings, `npm run test`
-passed 33 tests, and `npm run build` and `npm run build:static` passed.
-JavaScript measured **30,612 bytes gzip** in API mode and **32,310 bytes gzip**
-in static mode, below the respective 120,000-byte and 43,922-byte budgets.
-The full synthetic static browser suite passed 27 tests, nine per engine,
-without failures, skips or retries. Regressions distinguish pending days from
-past outages, retain missing labels and check keyboard expansion of input dates.
-Earlier verification sections below describe their own snapshots.
-
-The real live-data build contains 10 data files for issues 2026-10-19 and
-2026-10-26: 5,560,354 data bytes and 5,668,900 bytes for the complete distribution.
-The latest forecast displays all 37,146 cells. Real desktop/mobile smoke tests
-passed in all three engines (six tests), without failures, skips or retries.
-Desktop, mobile and expanded-input screenshots were visually inspected.
-The read-only source checkout remained clean at commit
-`d06130ee2d1370190f01f2e8ecff3379cf31b2b8`.
-The latest forecast has 23 input outage dates, observations through 2026-10-30,
-publication time `2026-10-31 18:03 UTC`, lag `138 h after issue`, target
-`26 Oct – 1 Nov 2026 (UTC)` and model `strict / lightgbm_08 (ed72987f)`.
-Its pending dates, 2026-10-31 and 2026-11-01, produce no sensor-outage warning.
-The one verified row is a backfill, displayed separately with no prospective
-performance chart. Results and screenshots are in
-`frontend/test-results/static-presentation/` and
-`frontend/test-results/static-presentation-real/`. The real run used
-`LIVE_DATA_DIR` pointing at a local checkout of the `live-data` branch
-and `npm run test:e2e:static -- --grep '@smoke'`.
-UTF-8 validation passed, including the actual en dash in the target date range.
-
-The source display renders the API registry's product, provider, licence,
-processing and citation fields. Boundary credit identifies GeoBolivia and
-geoBoundaries gbOpen BOL ADM0/ADM1 revision `9469f09` as Public Domain; CHIRPS
-credit retains version, final daily `rnl`, ERA5 disaggregation and derived
-cell-center mapping and rainfall aggregation. If source metadata is absent,
-the display links to the dataset source terms.
 
 ## Data and interaction
 
@@ -155,8 +117,13 @@ model estimates, not operational forecasts.
 The estimate panel displays the exact model identifier and API variant returned
 with the loaded layer. The `strict` export includes both temporal models such as
 `strict/lightgbm_08` and geographic models such as `strict_geo/lightgbm_04`;
-choose the model for the required population. Gray cells can be outside that
-model's population or lack complete input history.
+temporal strict selections automatically join the matching geographic model on
+held-out cells. For the selected LightGBM, these are `strict/lightgbm_08` and
+`strict_geo/lightgbm_04`. The geographic model family matches the temporal
+selection; an ambiguous or absent match stays unavailable. Thin purple outlines
+mark held-out blocks. Pale purple means a held-out cell has no geographic estimate
+for that week; gray remains ordinary missing data. Cell detail and CSV rows identify
+the model producing each probability, and held-out history uses the same geographic model.
 
 The missing-observation notice uses `/weeks.target_complete`, independently of
 the `outage` flag for any documented overlap. Short outages can coexist with
@@ -222,7 +189,7 @@ Both modes generate the week CSV from the complete loaded layer, independently
 of the place filter, Top N, sorting and pagination. Exports retain source numeric
 precision, nulls as empty fields and provenance comments, adding municipality,
 province, department, nearest-place name and distance, and national area. The
-API endpoint remains available separately with its existing schema.
+API endpoint remains available separately with its existing columns and per-cell model identity.
 
 The layout uses two columns on desktop and stacked panels on narrow screens.
 Native controls, visible focus, descriptive labels, a skip link, keyboard map
@@ -230,297 +197,46 @@ interaction and live status text provide alternatives to pointer interaction.
 The canvas uses an application region for spatial keys, alongside the table.
 There is no decorative animation.
 
+## Historical views
+
+![Historical estimates with geographic holdout](assets/screenshots/estimate-desktop.png)
+
+Issue 2024-09-02 combines temporal and geographic estimates across 37,146 cells.
+Purple outlines mark the held-out blocks. The selected Boyuibe cell identifies
+`strict_geo/lightgbm_04` beside its probability and 2024 history.
+
+![Historical observed detections](assets/screenshots/observed-desktop.png)
+
+Observed detection indicators for issue 2024-09-02, with positive and negative cells,
+label completeness and the selected Boyuibe cell's weekly history.
+
+![Live verification track record](assets/screenshots/track-record-desktop.png)
+
+The live snapshot separates backfill verification from prospective performance.
+The 2026-10-19 result is a backfill; no prospective verified weeks are present.
+
 ## Browser tests
 
-`frontend/e2e/explorer.spec.ts` contains scenarios for each of Chromium,
-Firefox and WebKit: initial render and console errors, available-week navigation,
-estimate availability, mouse/keyboard cell selection and zoom, sortable table
-and CSV download, offline recovery, a mobile viewport, observation-coverage
-consistency, project identity/source provenance, and table place filtering,
-all-column sorting, keyboard selection, numeric alignment, CSV enrichment and
-390-pixel layouts for estimates and observations. They use the real
-backend and local artifacts. Only the offline test intercepts API requests,
-aborting them rather than returning fixture data. Screenshots, downloads and
-failure traces go to `frontend/test-results`.
-`frontend/e2e/estimates.spec.ts` adds desktop and mobile scenarios that require
-the published strict predictions, check temporal and geographic population
-counts, verify model identity and the probability legend, and compare chart
-points and table values against the real cell-series response.
+The interface supports English and Spanish.
 
-Prefer the official image matching the pinned `@playwright/test` version. From
-the repository root on Windows:
+After building the API frontend and starting the backend, run:
 
 ```powershell
-docker version
-docker run --rm --ipc=host --memory=3g --cpus=2 `
-  --mount "type=bind,source=${PWD},target=/work" `
-  --mount 'type=volume,target=/work/frontend/node_modules' `
-  --workdir /work/frontend `
-  --env BASE_URL=http://host.docker.internal:8765 `
-  mcr.microsoft.com/playwright:v1.64.1-noble `
-  sh -lc 'npm ci --ignore-scripts && npm run test:e2e'
-```
-
-Reuse that image for every run. The anonymous volume separates Linux test
-dependencies from Windows `node_modules`; `--rm` removes that volume after the
-run. Browsers are supplied by the image.
-
-When Docker's engine is unavailable, the authorized host fallback uses the
-default shared `%LOCALAPPDATA%\ms-playwright` cache. From `frontend` in
-PowerShell, with the real backend already running:
-
-```powershell
-npx playwright install chromium firefox webkit
+cd frontend
 $env:BASE_URL = 'http://127.0.0.1:8765'
-$env:PLAYWRIGHT_JSON_OUTPUT_FILE = 'test-results/f2-host-fixed/results.json'
-npx playwright test --output=test-results/f2-host-fixed
+npm run test:e2e -- --grep-invert 'capture ' --output=test-results/api
 ```
 
-This fallback installs no system dependencies. The separate output directory
-preserves earlier screenshots and reports.
+Use the production build for the language-loading checks, which inspect emitted
+asset requests. The API suite covers layers, history, held-out provenance, unavailable
+geographic estimates, place filtering, exports, keyboard interaction, recovery and
+desktop/mobile layout in Chromium, Firefox and WebKit. The EN/ES buttons retain
+native keyboard activation and pressed state. Their labels have spacing without a
+text separator.
 
-## Verification on 2026-10-31
+Use the static suite above for isolated synthetic coverage and the real-data smoke
+suite for a live-data checkout. Capture commands and media sizes are in [figures](figures.md).
 
-Observed against the backend serving local artifacts at port 8765:
+## Current build verification
 
-| Check                                            | Result                                                               |
-| ------------------------------------------------ | -------------------------------------------------------------------- |
-| `npm ci`                                         | Passed                                                               |
-| `npm run check`                                  | Passed, no errors or warnings                                        |
-| `npm run test`                                   | Passed, 19 tests in three files                                      |
-| `npm run build`                                  | Passed; JavaScript 27,922 bytes gzip, below 120,000-byte target      |
-| `npm run test:api`                               | Passed on real artifacts                                             |
-| `npx playwright test --list`                     | Collected 21 tests across three engines                              |
-| `npx playwright install chromium firefox webkit` | Passed using the shared host cache                                   |
-| Host Playwright suite                            | Passed, 21 tests in 25.7 seconds; no retries, skips or flaky results |
-
-| Host engine           | Passed | Failed |
-| --------------------- | -----: | -----: |
-| Chromium 156.0.8078.4 |      7 |      0 |
-| Firefox 157.0         |      7 |      0 |
-| WebKit 27.2           |      7 |      0 |
-
-The API smoke check observed 37,146 cells and 678 issue weeks, ending
-2025-12-29. The current-week layer and CSV each contained 37,146 rows. The CSV
-was 1,643,413 bytes. The 2017-09-25 layer preserved 37,146 null labels. A selected
-cell returned 52 weekly records for the checked range. Protocol metadata was
-version 1.1. No prepared predictions were listed in the running API.
-
-The initial host run passed 19 tests and failed mouse selection in Chromium and
-WebKit. Focusing the map on pointer-down scrolled the page by 84 and 85 pixels,
-respectively, before pointer-up, selecting `r1416c2234` instead of `r1462c2234`.
-`CellMap.svelte` now focuses with `preventScroll: true`. The unchanged full suite
-then passed, and desktop pointer selection preserved scroll position zero in
-all three engines. Initial and final reports are
-`frontend/test-results/f2-host/results.json` and
-`frontend/test-results/f2-host-fixed/results.json`; the initial failure folders
-retain screenshots and traces.
-
-Twelve additional screenshots were visually inspected after cell history
-finished loading: map/detail and table/detail views at 1440 by 1000 and 390 by
-844 in each engine. Map boundaries, selected cells, chart missing-observation
-marks, controls and table rows rendered without clipping. Every mobile document
-width measured 390 pixels. The six browser/viewport reviews recorded 96
-same-origin requests, zero failed requests, zero HTTP errors, zero console
-errors and zero page errors. These normal-interaction reviews exclude the
-suite's intentional offline aborts; offline recovery passed in every engine.
-Diagnostics are in `frontend/test-results/f2-review/browser-diagnostics.json`.
-
-Screenshot paths below are relative to `frontend/test-results/f2-review`:
-
-| Engine   | Desktop map/detail     | Mobile map/detail     | Desktop table/detail         | Mobile table/detail         |
-| -------- | ---------------------- | --------------------- | ---------------------------- | --------------------------- |
-| Chromium | `chromium-desktop.png` | `chromium-mobile.png` | `chromium-desktop-table.png` | `chromium-mobile-table.png` |
-| Firefox  | `firefox-desktop.png`  | `firefox-mobile.png`  | `firefox-desktop-table.png`  | `firefox-mobile-table.png`  |
-| WebKit   | `webkit-desktop.png`   | `webkit-mobile.png`   | `webkit-desktop-table.png`   | `webkit-mobile-table.png`   |
-
-The shared browser cache measured 4,417,989,594 bytes (4.115 GiB), including
-pre-existing versions and browser profiles. The five installed engine/helper
-directories total 1,293,586,218 bytes (1.205 GiB): `chromium-1248`,
-`chromium_headless_shell-1248`, `firefox-1555`, `webkit-2370` and `ffmpeg-1013`.
-The existing backend remained running; no server was started or stopped.
-
-Docker Desktop previously returned HTTP 500 for its Linux engine API. That
-engine remains unavailable; Docker was not rerun for host acceptance. Prepared
-prediction layers were absent, so the estimate-availability scenario verified
-the disabled control and missing-prediction explanation.
-
-`Get-PSDrive -Name D` measured 102.31 GiB free at the start and at least
-101.13 GiB at subsequent checkpoints, above the required 55 GB floor.
-
-`npm audit` reported two low-severity development-dependency entries:
-`deepmerge` and its dependent `@sveltejs/vite-plugin-svelte`, with no fix offered.
-
-## Coverage and provenance verification
-
-The consistency checks on 2026-10-31 used a separate backend started with
-`uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8766 --no-access-log`.
-The existing port 8765 process was left running. Host browsers came from the
-shared cache; no browser installation or data download was needed.
-
-| Check                                                      | Result                                                        |
-| ---------------------------------------------------------- | ------------------------------------------------------------- |
-| `npm run check`                                            | Passed; no errors or warnings                                 |
-| `npm run test`                                             | 19 passed                                                     |
-| `npm run build`                                            | Passed; JavaScript 28,294 bytes gzip                          |
-| `uv run pytest -q backend/tests -p no:cacheprovider`       | 34 passed                                                     |
-| `uv run pytest -q tests backend/tests -p no:cacheprovider` | 290 passed; one live test deselected                          |
-| `uv run ruff check backend`                                | Passed                                                        |
-| Host Playwright suite                                      | 27 passed in 30.9 seconds; no retries, skips or flaky results |
-
-| Engine   | Passed | Failed |
-| -------- | -----: | -----: |
-| Chromium |      9 |      0 |
-| Firefox  |      9 |      0 |
-| WebKit   |      9 |      0 |
-
-Both the backend and E2E regressions check 2022-08-01, with 37,146 missing
-labels, and 2025-12-29, with 37,146 complete labels. The latter overlaps a
-12-minute documented outage on 2025-12-30, which does not make a target day
-unobserved. Synthetic backend coverage also checks a complete week with the
-low-coverage heuristic set independently.
-
-The initial full run passed 26 tests and failed WebKit's exact mouse-selection
-assertion. WebKit truncated the requested page Y coordinate 778.956 to 778;
-the 0.956-pixel shift exceeded half the 1.820-pixel cell height. The test now
-clicks the nearest CSS pixel to the intended cell center and retains the exact
-cell assertion. Initial and final results are in
-`frontend/test-results/f3-host/results.json` and
-`frontend/test-results/f3-host-final/results.json`.
-
-Twelve final screenshots were visually inspected: complete-week, outage-week,
-expanded provenance and mobile views in all three engines. Complete weeks have
-no missing-observation notice; the outage week has separate missing-observation
-and low-coverage notices. The curated provenance labels, source list and project
-name render without clipping. Each engine's scenario folder under
-`frontend/test-results/f3-host-final` contains the corresponding PNG files.
-
-The isolated port 8766 backend was stopped after verification.
-
-Pytest emitted the existing upstream Starlette TestClient/httpx deprecation
-warning. Playwright emitted the existing `NO_COLOR`/`FORCE_COLOR` environment
-warning. Prepared prediction layers were absent, so estimate availability was
-verified through the disabled control and its explanation.
-
-## Published estimate verification
-
-Verification on 2026-10-31 used the host browser cache and a separate backend
-started on `127.0.0.1:8767`. The three strict prediction splits and their
-geographic models were present, with model and calibrator hashes checked against
-the single final-test opening. No training, selection or evaluation command was
-run during this verification.
-
-| Check                                                                | Result                                                                    |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `npm run check`                                                      | Passed; zero errors or warnings                                           |
-| `npm run test`                                                       | 19 passed                                                                 |
-| `npm run build`                                                      | Passed; JavaScript 28,360 bytes gzip                                      |
-| `uv run --no-sync ruff check src tests backend`                      | Passed                                                                    |
-| `uv run --no-sync pytest -q tests backend/tests -p no:cacheprovider` | 385 passed; one live test deselected; 201.13 seconds                      |
-| Host Playwright suite                                                | 33 passed in 55.8 seconds; zero failures, retries, skips or flaky results |
-
-| Engine   | Passed | Failed |
-| -------- | -----: | -----: |
-| Chromium |     11 |      0 |
-| Firefox  |     11 |      0 |
-| WebKit   |     11 |      0 |
-
-The host browser command, run from `frontend`, was:
-
-```powershell
-$env:BASE_URL='http://127.0.0.1:8767'
-$env:PLAYWRIGHT_JSON_OUTPUT_FILE='test-results/p1-host-final/results.json'
-npm run test:e2e -- --output=test-results/p1-host-final
-```
-
-All six `desktop-estimate-history.png` and `mobile-estimate-history.png` images
-under `frontend/test-results/p1-host-final` were visually inspected. The
-retrospective notice, exact model ID and variant, 0–1 legend, and probability
-line alongside observed indicators were readable in all engines, with no
-horizontal overflow at 390 pixels. The tests also checked both selected model
-populations on 2024-09-02: 29,506 temporal cells and 7,640 geographic cells.
-
-The new estimate test initially demonstrated the missing exact model identity
-in the map panel, then passed after adding it. The complete final browser report
-is `frontend/test-results/p1-host-final/results.json`.
-
-Pytest reported 11 warnings: the Starlette/httpx deprecation, eight DuckDB/pandas
-deprecations, and two tkinter cleanup warnings emitted during the real-artifact
-API test. Playwright reported the `NO_COLOR`/`FORCE_COLOR` environment warning.
-The verification server on port 8767 was stopped after all checks.
-
-## Place and root-domain verification
-
-Verification on 2026-10-31 used the enriched real live-data checkout and a fresh
-API server on `127.0.0.1:8768`. The final static source was commit
-`16784a1e04b59e1941b3dc2c30068819eabc22bc`. No dependencies were added.
-
-| Check | Result |
-|---|---|
-| `npm run check` | Passed; zero errors and warnings |
-| `npm run test` | 41 passed in seven files |
-| `npm run build` | Passed; JavaScript 32,743 bytes gzip, below 120,000 bytes |
-| `npm run build:static` with real live data and default `/` | Passed; JavaScript 34,383 bytes gzip, below 43,922 bytes |
-| `npm run test:api` | Passed; 37,146 cells, 678 weeks, 37,146 CSV rows |
-| API Playwright suite | 36 passed; three existing opt-in documentation-media captures skipped |
-| Synthetic static Playwright suite | 30 passed |
-| Real static Playwright `--grep '@smoke'` | Nine passed |
-| Static smoke with `PAGES_BASE='/bolivia-fire/'`, Chromium | Three passed |
-| UTF-8 and whitespace checks | Passed; accented synthetic names checked exactly |
-
-The API, synthetic static and real static suites exercised Chromium, Firefox
-and WebKit with no failures or retries. The real static distribution contains
-13 data files totaling 13,214,724 bytes; the full distribution is 13,329,769
-bytes. SHA-256 comparisons confirmed all 23 source-checkout files were unchanged
-after the read-only build and tests. The temporary API server was stopped.
-
-Place regressions check exact municipality, province and department names,
-nearest-place text, in-cell places, progressive boundary levels, and pairwise
-town-label rectangle separation. Unit tests reject reordered place rows and
-retain zero distances, accents, annual panel hashes and recorded artifact
-provenance. Real static checks compare displayed provenance with the supplied
-protocol, experiments, cells, sources, model and calibrator hashes and final-test
-opening time, and check that unused CHIRPS attribution is absent.
-
-Zoomed municipality/label and place-tooltip screenshots were visually inspected
-in all three engines for API and real static mode. Settled cell histories,
-thin municipality outlines, town labels and accented place names rendered
-without clipping. Real static screenshots include
-`municipalities-labels.png` and `municipalities-labels-places.png` in each
-engine's scenario directory under `frontend/test-results/l4-static-real-final/`.
-Reports are under `frontend/test-results/l4-api-final/`,
-`l4-api-places-settled/`, `l4-static-synthetic-final/`, `l4-static-real-final/` and
-`l4-static-subpath/`.
-
-## Explorer table verification
-
-The table update was verified on 2026-10-31:
-
-| Check | Result |
-|---|---|
-| `npm run check` | Passed; zero errors and warnings |
-| `npm run test` | 45 passed in eight files |
-| `npm run build` | Passed; JavaScript 34,589 bytes gzip, below 120,000 bytes |
-| `npm run build:static` with the real live-data checkout | Passed; JavaScript 36,266 bytes gzip, below 43,922 bytes |
-| `npm run test:e2e -- explorer.spec.ts estimates.spec.ts --output=test-results/table-api-final` | 42 passed |
-| `npm run test:e2e:static -- --output=test-results/table-static-final` | 36 passed with synthetic data |
-| `npm run test:e2e:static -- --grep '@smoke' --output=test-results/table-static-real` | 15 passed with real live data |
-| UTF-8, mojibake, absolute local paths and whitespace | Passed for all eight edited text files |
-
-All three browser runs used Chromium, Firefox and WebKit, with no failures,
-skips or retries in these runs. The real run set `LIVE_DATA_DIR` to a local
-checkout of the `live-data` branch and `STATIC_REPORT` to
-`test-results/table-static-real/results.json`. The API run used the local
-backend started with `uv run --no-sync uvicorn backend.app.main:app`.
-The real static distribution contains 13 data files totaling 13,214,724 bytes;
-the complete distribution is 13,341,642 bytes. The source checkout remained
-clean at commit `16784a1e04b59e1941b3dc2c30068819eabc22bc`.
-
-The table regressions cover source place spelling, filtering, each sort column,
-missing values, pointer and keyboard selection, numeric alignment and precision,
-CSV place columns and source precision, and mobile overflow in both layers.
-Desktop and 390-pixel mobile table screenshots were visually inspected for
-API and real static data. Captures include `table-desktop-viewport.png`,
-`table-mobile-viewport.png`, `observed-table-desktop.png` and
-`observed-table-mobile.png` under the corresponding run's scenario directories.
-No dependencies were added. No implementation issues remain open.
+Validation commands and measured outcomes are recorded in [the refresh report](media-refresh.md).

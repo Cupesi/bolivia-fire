@@ -150,6 +150,7 @@ export function normalizeGrid(payload: unknown): Grid {
     col: Number(cols[index]),
     department: string(departments[index]),
     area: Number(areas[index]),
+    geoHoldout: array(raw.geo_holdout)[index] === true,
     province: string(array(raw.province)[index]),
     municipality: string(array(raw.municipality)[index]),
     nearestPlace: string(array(raw.nearest_place_name)[index])

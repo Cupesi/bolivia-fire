@@ -111,6 +111,7 @@ describe("cell table with synthetic cells", () => {
         n_primary: [3, null],
         variant: "strict",
         model: "synthetic/model",
+        value_model: ["strict_geo/lightgbm", null],
       },
       "2026-10-26",
       "estimate",
@@ -125,8 +126,8 @@ describe("cell table with synthetic cells", () => {
       .filter((line) => line && !line.startsWith("#"));
     expect(records).toEqual([
       "cell_id,issue_date,kind,variant,model,value,n_primary,municipality,province,department,nearest_place_name,nearest_place_distance_km,national_area_km2",
-      'a,2026-10-26,estimate,strict,synthetic/model,0.234567,3,Concepción,Ñuflo de Chávez,Santa Cruz,"San José, ""Centro""",12.4,20',
-      "c,2026-10-26,estimate,strict,synthetic/model,,,,,Beni,,,19",
+      'a,2026-10-26,estimate,strict,strict_geo/lightgbm,0.234567,3,Concepción,Ñuflo de Chávez,Santa Cruz,"San José, ""Centro""",12.4,20',
+      "c,2026-10-26,estimate,strict,,,,,,Beni,,,19",
     ]);
   });
 });

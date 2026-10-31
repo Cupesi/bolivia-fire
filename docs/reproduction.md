@@ -6,15 +6,10 @@ and [source pins](../datasets/sources.yaml) unchanged. The strict snapshot has
 37,146 cells and 678 issues; [the summary](../artifacts/figures/dataset_summary.json)
 records exact input hashes for comparison.
 
-Verification scope: the CLI interfaces and synthetic end-to-end tests have been
-verified, along with dependency setup, frontend checks/build and backend tests.
-The production build, training, selection, prediction and preparation commands
-below are reproduction instructions, not claims of a new full production run.
-The final test was not opened for this documentation check. Resource measurements
-come from the cited existing artifacts and documentation. CHIRPS acquisition
-and retrospective features are complete; [primary final-test results](results.md)
-are published. Pre-registered sensitivity results remain pending and any later
-final-test openings are separately logged with their reasons.
+Primary results, all pre-registered sensitivity analyses and the exploratory learner
+comparison are published in [results](results.md) and [model comparison](model-comparison.md).
+Later test openings are logged separately with their reasons. The commands below reproduce
+the pipeline and require the named local artifacts and credentials.
 
 ## 1. Install and configure access
 
@@ -24,7 +19,7 @@ Install Git, uv, Python 3.12 or newer and Node 22.12 or newer with npm.
 git clone https://github.com/Cupesi/bolivia-fire.git
 cd bolivia-fire
 uv sync --all-extras
-uv run bolivia-fire --help
+uv run --no-sync bolivia-fire --help
 ```
 
 Copy [.env.example](../.env.example) to `.env` and set `FIRMS_MAP_KEY` to a NASA
@@ -35,8 +30,8 @@ Builds after acquisition use local files and do not need the key.
 ## 2. Acquire observations and pinned boundaries
 
 ```powershell
-uv run bolivia-fire acquire firms --start 2012-01-20 --end 2026-01-04
-uv run bolivia-fire acquire boundaries
+uv run --no-sync bolivia-fire acquire firms --start 2012-01-20 --end 2026-01-04
+uv run --no-sync bolivia-fire acquire boundaries
 ```
 
 The FIRMS range includes antecedent history and the full final target week.
@@ -74,7 +69,7 @@ if not snapshot.exists():
         raise RuntimeError("Provider page changed; restore the original hash-pinned outage HTML")
     durable_write(snapshot, content)
 load_outages(Paths(root))
-'@ | uv run python -
+'@ | uv run --no-sync python -
 ```
 
 The provider URL is mutable. If its current bytes differ, the original dated
@@ -86,9 +81,9 @@ a new download alone cannot guarantee their availability or identity.
 ## 3. Build the strict dataset
 
 ```powershell
-uv run bolivia-fire build cells
-uv run bolivia-fire build detections
-uv run bolivia-fire build panel
+uv run --no-sync bolivia-fire build cells
+uv run --no-sync bolivia-fire build detections
+uv run --no-sync bolivia-fire build panel
 ```
 
 Cells use the pinned national and department boundaries. Detection construction
@@ -101,8 +96,8 @@ replaces each selected year's file with only the requested issues.
 ## 4. Extract CHIRPS and build retrospective features
 
 ```powershell
-uv run bolivia-fire covariates chirps-annual --start-year 2012 --end-year 2026
-uv run bolivia-fire covariates features
+uv run --no-sync bolivia-fire covariates chirps-annual --start-year 2012 --end-year 2026
+uv run --no-sync bolivia-fire covariates features
 ```
 
 Run one extraction process. Annual downloads are sequential and temporary;
@@ -120,10 +115,10 @@ remains omitted because public raster access returned HTTP 403.
 ## 5. Train, select and calibrate on validation years
 
 ```powershell
-uv run bolivia-fire train --variant strict
-uv run bolivia-fire select --variant strict
-uv run bolivia-fire train --variant retrospective
-uv run bolivia-fire select --variant retrospective
+uv run --no-sync bolivia-fire train --variant strict
+uv run --no-sync bolivia-fire select --variant strict
+uv run --no-sync bolivia-fire train --variant retrospective
+uv run --no-sync bolivia-fire select --variant retrospective
 ```
 
 The strict path can run independently of rainfall extraction;
@@ -139,9 +134,9 @@ See [evaluation](evaluation.md) for the frozen search, eligibility and artifacts
 After both intended selections are closed and their source snapshots are stable:
 
 ```powershell
-uv run bolivia-fire evaluate --variant strict --open-final-test
-uv run bolivia-fire predict --variant strict --split test
-uv run bolivia-fire predict --variant retrospective --split test
+uv run --no-sync bolivia-fire evaluate --variant strict --open-final-test
+uv run --no-sync bolivia-fire predict --variant strict --split test
+uv run --no-sync bolivia-fire predict --variant retrospective --split test
 ```
 
 The evaluation opens 2023–2025 once and records the opening before loading test
@@ -168,8 +163,8 @@ npm run check
 npm run test
 npm run build
 cd ..
-uv run python -m backend.app.prepare
-uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8765
+uv run --no-sync python -m backend.app.prepare
+uv run --no-sync uvicorn backend.app.main:app --host 127.0.0.1 --port 8765
 ```
 
 Open `http://127.0.0.1:8765/` for the explorer and
@@ -181,8 +176,8 @@ observations remain available. See [API](api.md) and [frontend](frontend.md).
 Offline verification commands, from the repository root:
 
 ```powershell
-uv run pytest -q
-uv run pytest -q backend/tests -p no:cacheprovider
+uv run --no-sync pytest -q
+uv run --no-sync pytest -q backend/tests -p no:cacheprovider
 ```
 
 The suites include synthetic build/model workflows and coverage/provenance
@@ -196,10 +191,10 @@ After restoring the local dataset, recorded evaluation JSON and static figures, 
 each notebook from the repository root with a clean kernel:
 
 ```powershell
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_exploration.ipynb --ExecutePreprocessor.timeout=240
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_features.ipynb --ExecutePreprocessor.timeout=240
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/03_modeling.ipynb --ExecutePreprocessor.timeout=240
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/04_evaluation.ipynb --ExecutePreprocessor.timeout=240
+uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/01_exploration.ipynb --ExecutePreprocessor.timeout=240
+uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/02_features.ipynb --ExecutePreprocessor.timeout=240
+uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/03_modeling.ipynb --ExecutePreprocessor.timeout=240
+uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/04_evaluation.ipynb --ExecutePreprocessor.timeout=240
 ```
 
 [Exploration](../notebooks/01_exploration.ipynb) describes observation coverage and labels.
@@ -251,7 +246,6 @@ inside the disposable containers.
 | Full-panel serving-index preparation | 8.044 s; 22,930,369 output bytes | [API measurements](api.md) |
 | API with compact index | Startup 2.332 s; RSS 184,893,440 bytes after startup and 235,769,856 after requests | [Measurement JSON](../backend/measurements.json) |
 | API compact-index workload | 50 layers and 50 series; p95 97.12 ms and 105.41 ms respectively | [Measurement JSON](../backend/measurements.json) |
-| Frontend production JavaScript, attribution update verified 2026-10-31 | 28,562 bytes gzip | [Frontend verification](frontend.md#current-build-verification) |
 
 These are local measurements on the snapshots and machines described in the
 linked records. CHIRPS values are partial-extraction measurements, not full-range

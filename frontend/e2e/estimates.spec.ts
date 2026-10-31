@@ -1,5 +1,73 @@
 import { formatDate, formatNumber } from "../src/lib/i18n";
 import { test, expect } from "@playwright/test";
+import { normalizeGrid } from "../src/lib/api";
+import { fitGrid, screenPoint } from "../src/lib/projection";
+
+test("holdout estimates retain geographic provenance and distinguish unavailable weeks", async ({
+  page,
+  request,
+}) => {
+  const raw = await (await request.get("/api/v1/grid")).json();
+  const grid = normalizeGrid(raw);
+  const cell = grid.cells.find((cell) => cell.geoHoldout)!;
+  const query =
+    "issue_date=2024-09-02&kind=estimate&variant=strict&model=strict/lightgbm_08";
+  const layer = await (await request.get(`/api/v1/layer?${query}`)).json();
+  const offset = layer.cell_index.indexOf(cell.index);
+  expect(layer.value[offset]).toBeGreaterThanOrEqual(0);
+  expect(layer.value_model[offset]).toBe("strict_geo/lightgbm_04");
+  await page.goto("/?lang=en");
+  await expect(page.getByTestId("layer-status")).toContainText("Showing");
+  await page.getByLabel("Issue week").fill("2024-09-02");
+  await page.getByLabel("Issue week").press("Tab");
+  await page
+    .getByRole("combobox", { name: /^Model/ })
+    .selectOption("strict/lightgbm_08");
+  await page
+    .getByRole("button", { name: "Retrospective estimate", exact: true })
+    .click();
+  await expect(page.getByLabel("Map legend")).toContainText(
+    "Geographic holdout (geographic model)",
+  );
+  const map = page.locator(".map-canvas");
+  await expect(map).toHaveAttribute("data-holdout", "true");
+  const box = (await map.boundingBox())!;
+  const point = screenPoint(
+    cell.col + 0.5,
+    cell.row + 0.5,
+    fitGrid(grid.bounds, box.width, box.height),
+  );
+  await map.click({ position: point });
+  await expect(page.getByTestId("selected-cell")).toHaveText(cell.id);
+  await expect(page.getByTestId("value-model")).toContainText(
+    "strict_geo/lightgbm_04",
+  );
+  await expect(page.locator(".series-chart path")).toHaveAttribute(
+    "d",
+    /M[\d.]+,[\d.]+/,
+  );
+  await page.route("**/api/v1/layer?**", async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    if (body.kind === "estimate")
+      for (let index = 0; index < body.cell_index.length; index++) {
+        if (raw.geo_holdout[body.cell_index[index]]) {
+          body.value[index] = null;
+          body.value_model[index] = null;
+        }
+      }
+    await route.fulfill({ response, json: body });
+  });
+  await page.getByRole("button", { name: "Next week" }).click();
+  await expect(page.getByLabel("Map legend")).toContainText(
+    "Geographic holdout (no geographic estimate this week)",
+  );
+  await expect(page.getByTestId("holdout-detail")).toContainText(
+    "no geographic estimate this week",
+  );
+  await expect(page.getByTestId("value-model")).toContainText("Unavailable");
+  await expect(map).toHaveAttribute("data-holdout", "true");
+});
 
 for (const [viewport, width, height] of [
   ["desktop", 1440, 1000],
@@ -24,7 +92,7 @@ for (const [viewport, width, height] of [
       .getByRole("button", { name: "Retrospective estimate", exact: true })
       .click();
     await expect(page.getByTestId("layer-status")).toHaveText(
-      "Showing 29,506 cells · 29,506 with data · 0 missing",
+      "Showing 37,146 cells · 37,146 with data · 0 missing",
     );
     await expect(
       page.getByText(
@@ -52,7 +120,7 @@ for (const [viewport, width, height] of [
     const response = await request.get(`/api/v1/layer?${query}`);
     expect(response.ok()).toBe(true);
     const layer = await response.json();
-    expect(layer.value).toHaveLength(29506);
+    expect(layer.value).toHaveLength(37146);
     expect(
       layer.value.every(
         (p: unknown) => typeof p === "number" && p >= 0 && p <= 1,

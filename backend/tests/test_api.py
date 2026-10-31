@@ -114,8 +114,8 @@ def test_predictions_join_by_cell_and_date(synthetic_predictions: Path) -> None:
         layer = client.get(
             "/api/v1/layer?issue_date=2024-09-02&kind=estimate&model=strict/lightgbm"
         ).json()
-        assert layer["cell_index"] == [0, 1]
-        assert layer["value"] == [0.8, 0.1]
+        assert layer["cell_index"] == [0, 1, 2]
+        assert layer["value"] == [0.8, 0.1, None]
         series = client.get("/api/v1/cells/r1341c2247/series?model=strict/lightgbm").json()
         assert series["p"] == [0.8, 0.4, None]
         assert series["y"] == [1, None, 0]

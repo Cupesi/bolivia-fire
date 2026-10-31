@@ -58,7 +58,7 @@ and the closed input lists described in the [model card](model_card.md):
    validation, test and held-out geographic labels never enter climatology fitting. The
    geographic model omits cell climatology. One primary final-test opening follows closed
    selection; pre-registered sensitivity runs require separately logged reopenings with reasons.
-   [Published primary results and pending sensitivities](results.md) remain distinct.
+   [Primary results and logged sensitivity analyses](results.md) remain distinct.
 5. **Probability evaluation.** Step-wise average precision is primary, with Brier score, log
    loss, ROC-AUC, equal-frequency ECE and recall at 5% and 10% area budgets. Training climatology
    and persistence provide baselines. These metrics assess detection probabilities under the

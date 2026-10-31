@@ -1,4 +1,8 @@
 export const en = {
+  geographicHoldout: "Geographic holdout (geographic model)",
+  geographicUnavailable:
+    "Geographic holdout (no geographic estimate this week)",
+  valueModel: "Value model",
   dateRange: "{start} – {end} (UTC)",
   enCode: "EN",
   esCode: "ES",

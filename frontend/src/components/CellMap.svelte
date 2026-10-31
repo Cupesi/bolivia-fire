@@ -26,6 +26,7 @@
     values,
     kind,
     selected,
+    showHoldout = false,
     onselect,
   }: {
     grid: Grid;
@@ -33,6 +34,7 @@
     values: Map<number, NullableNumber>;
     kind: LayerKind;
     selected: Cell | null;
+    showHoldout?: boolean;
     onselect: (cell: Cell) => void;
   } = $props();
   let canvas: HTMLCanvasElement;
@@ -89,7 +91,10 @@
     image.height = grid.bounds.rowMax - grid.bounds.rowMin + 1;
     const context = image.getContext("2d")!;
     for (const cell of grid.cells) {
-      context.fillStyle = colorForValue(values.get(cell.index), kind);
+      context.fillStyle =
+        showHoldout && cell.geoHoldout && values.get(cell.index) == null
+          ? "#e9d8ee"
+          : colorForValue(values.get(cell.index), kind);
       context.fillRect(
         cell.col - grid.bounds.colMin,
         grid.bounds.rowMax - cell.row,
@@ -157,6 +162,28 @@
       raster.width * view.scale,
       raster.height * view.scale,
     );
+    if (showHoldout) {
+      context.beginPath();
+      for (const cell of grid.cells) {
+        if (!cell.geoHoldout) continue;
+        for (const [dr, dc, x1, y1, x2, y2] of [
+          [0, -1, 0, 0, 0, 1],
+          [0, 1, 1, 0, 1, 1],
+          [-1, 0, 0, 0, 1, 0],
+          [1, 0, 0, 1, 1, 1],
+        ]) {
+          if (byPosition.get(`${cell.row + dr}:${cell.col + dc}`)?.geoHoldout)
+            continue;
+          const from = screenPoint(cell.col + x1, cell.row + y1, view);
+          const to = screenPoint(cell.col + x2, cell.row + y2, view);
+          context.moveTo(from.x, from.y);
+          context.lineTo(to.x, to.y);
+        }
+      }
+      context.strokeStyle = "#a23e92";
+      context.lineWidth = 1;
+      context.stroke();
+    }
     [...visibleLevels].reverse().forEach((level) => {
       const collection = boundaries[level];
       if (!collection) return;
@@ -334,6 +361,7 @@
     class="map-canvas"
     data-zoom={zoomLevel.toFixed(3)}
     data-boundary-levels={visibleLevels.join(",")}
+    data-holdout={showHoldout}
     bind:clientWidth={width}
     bind:clientHeight={height}
     role="application"

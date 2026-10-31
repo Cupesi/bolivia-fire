@@ -423,6 +423,12 @@ canvas {
   border: 1px solid #84978d;
   border-radius: 2px;
 }
+  .swatch.holdout {
+    border-color: #a23e92;
+  }
+  .unavailable-holdout {
+    background: #e9d8ee;
+  }
 .detected {
   background: #287d72;
 }
