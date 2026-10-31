@@ -23,6 +23,9 @@ boundaries:
     sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
     buildDate: Dec 12, 2023
     license: Public Domain
+    boundaryLicense: Public Domain
+    boundarySource: GeoBolivia, Derived from ADM3 layer
+    metadata_verified_date: '2026-10-31'
     licenseDetail: Public Domain; free use and access to information
     licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
     sha256: 65d3926f721a1810fb7659f4bd1b575db1a02ab5c9658a38cc83b6a13e85ba15
@@ -44,6 +47,9 @@ boundaries:
     sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
     buildDate: Dec 12, 2023
     license: Public Domain
+    boundaryLicense: Public Domain
+    boundarySource: GeoBolivia, Derived from ADM3 layer
+    metadata_verified_date: '2026-10-31'
     licenseDetail: Public Domain; free use and access to information
     licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
     sha256: 6710415c0a9a32f17ce0e6e53eaf4a719ad74a0528f4cbe8006355b08d4ca55e

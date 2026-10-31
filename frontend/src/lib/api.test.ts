@@ -125,7 +125,11 @@ describe("contract normalization with synthetic payloads", () => {
         {
           name: "geoBoundaries",
           url: "https://www.geoboundaries.org/",
-          license: "CC BY 4.0",
+          license: "Public Domain",
+          product: "gbOpen BOL ADM0/ADM1, revision 9469f09",
+          provider: "GeoBolivia (derived from ADM3 layer)",
+          citation: "Runfola et al. (2020)",
+          processing: "Simplified for display",
         },
       ],
     });
@@ -134,7 +138,16 @@ describe("contract normalization with synthetic payloads", () => {
     expect(meta.protocolVersion).toBe("1.1");
     expect(meta.snapshots).toEqual({ panel: "hash" });
     expect(meta.layers).toEqual(["observed"]);
-    expect(meta.attributions[0].license).toBe("CC BY 4.0");
+    expect(meta.attributions[0]).toEqual({
+      name: "geoBoundaries",
+      url: "https://www.geoboundaries.org/",
+      license: "Public Domain",
+      licenseUrl: "",
+      product: "gbOpen BOL ADM0/ADM1, revision 9469f09",
+      provider: "GeoBolivia (derived from ADM3 layer)",
+      citation: "Runfola et al. (2020)",
+      processing: "Simplified for display",
+    });
   });
   it("reads columnar cells without changing their array index", () => {
     const grid = normalizeGrid({

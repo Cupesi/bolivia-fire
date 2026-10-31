@@ -9,11 +9,12 @@ in the national part of the cell during `[issue, issue + 7 days)`, issued at
 00:00 UTC. It supports retrospective evaluation of weekly detection probability.
 It does not count fires, ignitions or burned area, and is not an official warning.
 
-The strict dataset and pipeline are complete; model selection uses validation
-years, and final-test results are not yet published. CHIRPS extraction is in
-progress. MapBiomas fractions are absent because verified anonymous raster
-requests returned HTTP 403. These product states are described in
-[the covariate guide](../docs/covariates.md).
+The strict dataset, CHIRPS acquisition and retrospective features are complete.
+The [primary final-test results](../docs/results.md) are published; pre-registered
+sensitivity results remain pending and require separately logged reopenings.
+Model selection and calibration use validation years only. MapBiomas fractions
+are absent because verified anonymous raster requests returned HTTP 403. See
+[the covariate guide](../docs/covariates.md) for acquisition verification.
 
 ## Coverage and splits
 
@@ -116,8 +117,8 @@ its exact inputs. The [storage guide](README.md) explains snapshot versioning.
 | Source | Terms and redistribution status |
 | --- | --- |
 | [NASA FIRMS](licenses/FIRMS.md) | NASA open-data reuse basis with source attribution; retain product, processing tier and dates; no Creative Commons licence is assigned here |
-| [geoBoundaries / GeoBolivia](licenses/geoBoundaries.md) | Pinned Bolivia boundaries are Public Domain; retain source pins and attribution with derived intersections |
-| [CHIRPS v3](licenses/CHIRPS.md) | CC BY 4.0 with the provider's copyright-waiver statement; attribute final daily `rnl`, ERA5 disaggregation and aggregation changes |
+| [geoBoundaries / GeoBolivia](licenses/geoBoundaries.md) | gbOpen BOL ADM0/ADM1 revision `9469f09`: official `boundaryLicense` is `Public Domain` for both, verified 2026-10-31; retain GeoBolivia, geoBoundaries and Runfola et al. (2020) attribution and source pins with derived intersections |
+| [CHIRPS v3](licenses/CHIRPS.md) | CC BY 4.0 with the provider's copyright-waiver statement; credit Climate Hazards Center and CHIRPS3 Data Repository (2025), final daily `rnl`, ERA5 disaggregation, native-pixel mapping to cell centers and antecedent-rainfall aggregation |
 | [MapBiomas Bolivia](licenses/MapBiomas.md) | CC BY 4.0 permits attributed derivatives, but no real fractions were acquired |
 
 There is no blanket MIT licence for these data. Code uses [MIT](../LICENSE).

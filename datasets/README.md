@@ -56,9 +56,11 @@ Git supplies metadata, not the observations. FIRMS acquisition needs a local
 `FIRMS_MAP_KEY` configured from [the example file](../.env.example). Follow the
 [reproduction sequence](../docs/reproduction.md) to acquire the source range,
 restore pinned boundaries and outage HTML, build cells/detections/panel, extract
-CHIRPS and build features. Retrospective extraction is still in progress;
-verified public MapBiomas raster access returned HTTP 403, so no real land-cover
-fractions are included. See [covariate status](../docs/covariates.md).
+CHIRPS and build features. CHIRPS acquisition and retrospective features are
+complete, and [primary final-test results](../docs/results.md) are published;
+pre-registered sensitivity results remain pending. Verified public MapBiomas
+raster access returned HTTP 403, so no real land-cover fractions are included.
+See [covariate status](../docs/covariates.md).
 
 Code is [MIT licensed](../LICENSE); data remain under the source terms listed in
 [the dataset card](dataset_card.md). Retain source attribution, pins and

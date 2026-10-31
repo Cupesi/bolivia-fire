@@ -21,7 +21,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.staticfiles import StaticFiles
 from starlette.types import Scope
 
-from backend.app.catalog import digest, invalid, json_bytes, missing
+from backend.app.catalog import ATTRIBUTIONS, digest, invalid, json_bytes, missing
 from backend.app.store import Store
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -306,7 +306,8 @@ def create_app(root: Path | None = None) -> FastAPI:
             f"model={data['model'] or ''}\n"
         )
         buffer.write(f"# dataset_snapshot_ids={json_bytes(store.snapshots).decode()}\n")
-        buffer.write("# Sources: NASA FIRMS; geoBoundaries CC BY 4.0; CHIRPS.\n")
+        for source in ATTRIBUTIONS:
+            buffer.write(f"# Source: {'; '.join(source.values())}\n")
         buffer.write(
             "# Detections are not fires; zeros are not proof of absence; "
             "retrospective estimates are not operational forecasts; missing labels are empty.\n"

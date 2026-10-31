@@ -153,9 +153,8 @@ snapshot hash mismatches abort without replacing existing data.
 ## Verification
 
 ```powershell
-uv run ruff check src tests
-uv run mypy src/bolivia_fire/firms src/bolivia_fire/cli.py --follow-imports=silent
-uv run pytest -q
+uv run --no-sync ruff check src tests backend
+uv run --no-sync pytest -q tests backend/tests -m "not live and not local_data"
 ```
 
 Tests use synthetic data and `httpx.MockTransport`. Real HTTP transports are
@@ -180,14 +179,11 @@ logged `downloaded=0 skipped=2 recovered=0 data_requests=0`, with both manifest
 hashes verified before skipping. Evidence is in `datasets/.tmp/acquire_firms.log`
 and `datasets/manifests/firms_VIIRS_SNPP_SP.jsonl`.
 
-`uv sync --all-extras`, scoped Ruff, and the mypy command above passed.
-`uv run pytest -q tests/firms tests/test_redact.py tests/test_boundaries.py`
-passed 131 tests, with one live test deselected. Pytest emitted a cache write
-permission warning. At this checkpoint, full `pytest -q` failed collection for
-the concurrently unfinished detections, features, grid, labels, and splits
-modules; full Ruff also reported import ordering and line-length issues in their
-tests. Those files are outside acquisition ownership. Scoped Ruff was
-`uv run ruff check src/bolivia_fire/firms src/bolivia_fire/cli.py tests/firms`.
+Repository-wide verification on 2026-10-31 passed both commands above: Ruff
+reported no issues, and pytest passed 388 tests with four deselected. The run
+reported Starlette/httpx and DuckDB/pandas deprecations and a denied pytest-cache
+write. Live and local-data tests were excluded; this check made no production
+requests and did not reopen the final test.
 
 Boundary acquisition stored ADM0 with one feature and 4,034,693 bytes, and ADM1
 with nine features and 9,273,745 bytes. ADM1 contains Santa Cruz. Both pins use

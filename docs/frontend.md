@@ -24,6 +24,21 @@ For development, `npm run dev` serves port 5173 and proxies `/api` to
 `npm run test:api` checks the real local API, including bounded CSV export and
 null labels. Set `API_BASE_URL` to change that script's origin.
 
+## Current build verification
+
+The attribution update was verified on 2026-10-31: `npm run check` reported
+zero errors and warnings, `npm run test` passed 19 tests, and `npm run build`
+passed. The bundle-size script measured **28,562 bytes gzip** of production
+JavaScript, below the 120,000-byte limit. Measurements in later verification
+sections describe their earlier snapshots.
+
+The source display renders the API registry's product, provider, licence,
+processing and citation fields. Boundary credit identifies GeoBolivia and
+geoBoundaries gbOpen BOL ADM0/ADM1 revision `9469f09` as Public Domain; CHIRPS
+credit retains version, final daily `rnl`, ERA5 disaggregation and derived
+cell-center mapping and rainfall aggregation. If source metadata is absent,
+the display links to the dataset source terms.
+
 ## Data and interaction
 
 The client uses the exact flat grid, paginated week catalog, model lists keyed

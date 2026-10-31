@@ -629,12 +629,21 @@
             <h3>Sources</h3>
             {#each data.meta.attributions as source}<p class="small">
                 {#if safeLink(source.url)}<a href={source.url}>{source.name}</a
-                  >{:else}{source.name}{/if}{source.license
-                  ? ` · ${source.license}`
-                  : ""}
+                  >{:else}{source.name}{/if}
+                {#if source.product} · {source.product}{/if}
+                {#if source.provider} · {source.provider}{/if}
+                {#if source.license}
+                  · {#if safeLink(source.licenseUrl)}<a href={source.licenseUrl}
+                      >{source.license}</a
+                    >{:else}{source.license}{/if}
+                {/if}
+                {#if source.processing}<br />{source.processing}{/if}
+                {#if source.citation}<br />{source.citation}{/if}
               </p>{:else}<p>
-                NASA FIRMS · detections<br />geoBoundaries · ADM0/ADM1, CC BY
-                4.0<br />CHIRPS · rainfall covariates
+                Source credits are unavailable. See the
+                <a href="https://github.com/Cupesi/bolivia-fire/blob/main/datasets/dataset_card.md"
+                  >dataset source terms</a
+                >.
               </p>{/each}
           </div>
         </div>

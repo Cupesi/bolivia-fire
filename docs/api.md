@@ -279,17 +279,27 @@ the wire contract, not scientific measurements. JSON objects have no outer
     {
       "name": "NASA FIRMS",
       "product": "VIIRS S-NPP standard processing",
+      "license": "NASA open-data reuse with source attribution",
       "url": "https://firms.modaps.eosdis.nasa.gov/"
     },
     {
       "name": "geoBoundaries",
-      "license": "CC BY 4.0",
-      "url": "https://www.geoboundaries.org/"
+      "product": "gbOpen BOL ADM0/ADM1, revision 9469f09",
+      "provider": "GeoBolivia (derived from ADM3 layer)",
+      "license": "Public Domain",
+      "url": "https://www.geoboundaries.org/",
+      "citation": "Runfola et al. (2020), doi:10.1371/journal.pone.0231866",
+      "processing": "Simplified display boundaries; derived grid intersections and area weights."
     },
     {
       "name": "CHIRPS",
-      "provider": "Climate Hazards Center",
-      "url": "https://www.chc.ucsb.edu/data/chirps"
+      "product": "CHIRPS v3.0 final daily rnl",
+      "provider": "Climate Hazards Center, University of California Santa Barbara",
+      "license": "CC BY 4.0, with provider statement of copyright waiver",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "url": "https://www.chc.ucsb.edu/data/chirps3",
+      "citation": "CHIRPS3 Data Repository (2025), doi:10.15780/G2JQ0P",
+      "processing": "ERA5 temporal disaggregation; native pixels mapped to cell centers and aggregated into antecedent rainfall features."
     }
   ],
   "limitations": [
@@ -303,6 +313,12 @@ the wire contract, not scientific measurements. JSON objects have no outer
   "boundary_simplification_tolerance_deg": 0.005
 }
 ```
+
+`source_attributions` comes from the catalog's shared source registry. CSV export
+credits use the same entries; the frontend preserves product, provider, licence,
+processing and citation fields. The pinned BOL ADM0/ADM1 official metadata both
+report `boundaryLicense: Public Domain` for revision `9469f09`, verified
+2026-10-31; see the [licence evidence](../datasets/licenses/geoBoundaries.md).
 
 `GET /api/v1/weeks?offset=1&limit=1`
 
@@ -511,7 +527,9 @@ the wire contract, not scientific measurements. JSON objects have no outer
 # project=Bolivia Fire; protocol_sha256=661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf
 # issue_date=2024-09-09; kind=observed; variant=strict; model=
 # dataset_snapshot_ids={"protocol_sha256":"661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf","panel":{"2024":{"protocol_sha256":"661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf","firms_manifest_sha256":"synthetic-manifest"}},"sources_sha256":"df72c4b8f44443252eda6464b299727f95d1983bd80b13e45408be2ae8113e1a","cells":{"protocol_sha256":"661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf","firms_manifest_sha256":"synthetic-manifest"},"cells_sha256":"e8302ec3e5cf4a4a18469a7ed6c7deaa7b7fcdfaa4bf121673dd20d3287cc141"}
-# Sources: NASA FIRMS; geoBoundaries CC BY 4.0; CHIRPS.
+# Source: NASA FIRMS; VIIRS S-NPP standard processing; NASA open-data reuse with source attribution; https://firms.modaps.eosdis.nasa.gov/
+# Source: geoBoundaries; gbOpen BOL ADM0/ADM1, revision 9469f09; GeoBolivia (derived from ADM3 layer); Public Domain; https://www.geoboundaries.org/; Runfola et al. (2020), doi:10.1371/journal.pone.0231866; Simplified display boundaries; derived grid intersections and area weights.
+# Source: CHIRPS; CHIRPS v3.0 final daily rnl; Climate Hazards Center, University of California Santa Barbara; CC BY 4.0, with provider statement of copyright waiver; https://creativecommons.org/licenses/by/4.0/; https://www.chc.ucsb.edu/data/chirps3; CHIRPS3 Data Repository (2025), doi:10.15780/G2JQ0P; ERA5 temporal disaggregation; native pixels mapped to cell centers and aggregated into antecedent rainfall features.
 # Detections are not fires; zeros are not proof of absence; retrospective estimates are not operational forecasts; missing labels are empty.
 cell_id,issue_date,kind,variant,model,value,n_primary
 r1341c2247,2024-09-09,observed,strict,,,2

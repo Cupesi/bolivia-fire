@@ -91,6 +91,11 @@ export function normalizeMeta(payload: unknown): Meta {
       name: string(source.name),
       url: string(source.url),
       license: string(source.license),
+      licenseUrl: string(source.license_url),
+      product: string(source.product),
+      provider: string(source.provider),
+      citation: string(source.citation),
+      processing: string(source.processing),
     };
   });
   return {

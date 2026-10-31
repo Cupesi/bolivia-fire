@@ -11,8 +11,10 @@ verified, along with dependency setup, frontend checks/build and backend tests.
 The production build, training, selection, prediction and preparation commands
 below are reproduction instructions, not claims of a new full production run.
 The final test was not opened for this documentation check. Resource measurements
-come from the cited existing artifacts and documentation. CHIRPS extraction is
-still in progress; retrospective fitting requires complete, verified features.
+come from the cited existing artifacts and documentation. CHIRPS acquisition
+and retrospective features are complete; [primary final-test results](results.md)
+are published. Pre-registered sensitivity results remain pending and any later
+final-test openings are separately logged with their reasons.
 
 ## 1. Install and configure access
 
@@ -124,7 +126,7 @@ uv run bolivia-fire train --variant retrospective
 uv run bolivia-fire select --variant retrospective
 ```
 
-The strict path can run independently while rainfall extraction is incomplete;
+The strict path can run independently of rainfall extraction;
 the retrospective commands require step 4 to finish. Each train/select command
 also produces its corresponding geographic model with cell climatology omitted.
 Fitting uses 2013–2020, selection and early stopping use 2021, and isotonic
@@ -198,7 +200,7 @@ model skill, full acquisition coverage or a full-scale resource bound.
 | Full-panel serving-index preparation | 8.044 s; 22,930,369 output bytes | [API measurements](api.md) |
 | API with compact index | Startup 2.332 s; RSS 184,893,440 bytes after startup and 235,769,856 after requests | [Measurement JSON](../backend/measurements.json) |
 | API compact-index workload | 50 layers and 50 series; p95 97.12 ms and 105.41 ms respectively | [Measurement JSON](../backend/measurements.json) |
-| Frontend production JavaScript | 28,294 bytes gzip | [Frontend verification](frontend.md) |
+| Frontend production JavaScript, attribution update verified 2026-10-31 | 28,562 bytes gzip | [Frontend verification](frontend.md#current-build-verification) |
 
 These are local measurements on the snapshots and machines described in the
 linked records. CHIRPS values are partial-extraction measurements, not full-range

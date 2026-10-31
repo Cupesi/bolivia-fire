@@ -154,7 +154,10 @@ Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` a
 `geographic_holdout.models`; plotted reliability-bin values are copied in
 [results_summary.json](../artifacts/figures/results_summary.json), `figures.reliability`.
 
-![Reliability curves for temporal and geographic evaluation](../artifacts/figures/results_reliability.png)
+The reliability figure uses the temporal test population only; its second panel
+zooms into low predicted probabilities.
+
+![Temporal-test reliability curves with a low-probability zoom panel](../artifacts/figures/results_reliability.png)
 
 ## Recall at area budgets
 

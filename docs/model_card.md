@@ -162,10 +162,13 @@ Code is [MIT licensed](../LICENSE). Source observations retain their own terms:
 
 - [FIRMS](../datasets/licenses/FIRMS.md): NASA open-data reuse basis with source attribution;
   no Creative Commons licence is asserted for the detections.
-- [Bolivia geoBoundaries sources](../datasets/licenses/geoBoundaries.md): the pinned country
-  boundary sources are Public Domain; retain GeoBolivia and geoBoundaries attribution.
+- [Bolivia geoBoundaries sources](../datasets/licenses/geoBoundaries.md): gbOpen BOL ADM0/ADM1,
+  revision `9469f09`; both official `boundaryLicense` fields are `Public Domain`, verified
+  2026-10-31. Retain GeoBolivia, geoBoundaries and Runfola et al. (2020) attribution.
 - [CHIRPS](../datasets/licenses/CHIRPS.md): Creative Commons Attribution 4.0 International,
-  with the provider's stated waiver; retain source and processing attribution for derived inputs.
+  with the provider's stated waiver. Credit Climate Hazards Center, CHIRPS3 Data Repository
+  (2025), final daily `rnl` and ERA5 disaggregation; identify native-pixel mapping to cell
+  centers and antecedent-rainfall aggregation when redistributing derived inputs.
 - [MapBiomas](../datasets/licenses/MapBiomas.md): Creative Commons Attribution 4.0 International;
   no MapBiomas inputs are included in these fitted models.
 

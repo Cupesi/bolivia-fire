@@ -42,13 +42,28 @@ ATTRIBUTIONS = [
     {
         "name": "NASA FIRMS",
         "product": "VIIRS S-NPP standard processing",
+        "license": "NASA open-data reuse with source attribution",
         "url": "https://firms.modaps.eosdis.nasa.gov/",
     },
-    {"name": "geoBoundaries", "license": "CC BY 4.0", "url": "https://www.geoboundaries.org/"},
+    {
+        "name": "geoBoundaries",
+        "product": "gbOpen BOL ADM0/ADM1, revision 9469f09",
+        "provider": "GeoBolivia (derived from ADM3 layer)",
+        "license": "Public Domain",
+        "url": "https://www.geoboundaries.org/",
+        "citation": "Runfola et al. (2020), doi:10.1371/journal.pone.0231866",
+        "processing": "Simplified display boundaries; derived grid intersections and area weights.",
+    },
     {
         "name": "CHIRPS",
-        "provider": "Climate Hazards Center",
-        "url": "https://www.chc.ucsb.edu/data/chirps",
+        "product": "CHIRPS v3.0 final daily rnl",
+        "provider": "Climate Hazards Center, University of California Santa Barbara",
+        "license": "CC BY 4.0, with provider statement of copyright waiver",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "url": "https://www.chc.ucsb.edu/data/chirps3",
+        "citation": "CHIRPS3 Data Repository (2025), doi:10.15780/G2JQ0P",
+        "processing": "ERA5 temporal disaggregation; native pixels mapped to cell centers "
+        "and aggregated into antecedent rainfall features.",
     },
 ]
 

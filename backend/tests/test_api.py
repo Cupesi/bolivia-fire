@@ -147,6 +147,32 @@ def test_export_is_one_week_with_provenance_and_nulls(synthetic_root: Path) -> N
         assert [row["n_primary"] for row in rows] == ["2", "0", "0"]
 
 
+def test_source_credits_survive_metadata_and_export(synthetic_root: Path) -> None:
+    with client_for(synthetic_root) as client:
+        sources = client.get("/api/v1/meta").json()["source_attributions"]
+        by_name = {source["name"]: source for source in sources}
+        boundaries = by_name["geoBoundaries"]
+        assert boundaries["license"] == "Public Domain"
+        assert boundaries["provider"] == "GeoBolivia (derived from ADM3 layer)"
+        assert boundaries["product"] == "gbOpen BOL ADM0/ADM1, revision 9469f09"
+        assert "Runfola et al. (2020)" in boundaries["citation"]
+        assert by_name["NASA FIRMS"]["product"] == "VIIRS S-NPP standard processing"
+        chirps = by_name["CHIRPS"]
+        assert chirps["product"] == "CHIRPS v3.0 final daily rnl"
+        assert (
+            chirps["provider"] == "Climate Hazards Center, University of California Santa Barbara"
+        )
+        assert chirps["license"] == "CC BY 4.0, with provider statement of copyright waiver"
+        assert "ERA5" in chirps["processing"]
+        assert "cell centers" in chirps["processing"]
+        assert "antecedent rainfall" in chirps["processing"]
+        export = client.get("/api/v1/export?issue_date=2024-09-02&kind=observed").text
+        credit_lines = [line for line in export.splitlines() if line.startswith("# Source: ")]
+        assert len(credit_lines) == len(sources)
+        for source, line in zip(sources, credit_lines, strict=True):
+            assert all(value in line for value in source.values())
+
+
 def test_meta_boundaries_and_metrics_gate(synthetic_root: Path) -> None:
     evaluation = synthetic_root / "artifacts/evaluation"
     evaluation.mkdir(parents=True)

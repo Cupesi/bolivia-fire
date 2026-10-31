@@ -132,11 +132,17 @@ test("project identity and curated provenance describe the sources used", async 
     .getByText("Dataset-specific limitations", { exact: true })
     .click();
   await expect(about).not.toContainText("MapBiomas");
-  await expect(about.getByRole("link")).toHaveText([
-    "NASA FIRMS",
-    "geoBoundaries",
-    "CHIRPS",
-  ]);
+  for (const name of ["NASA FIRMS", "geoBoundaries", "CHIRPS"]) {
+    await expect(about.getByRole("link", { name, exact: true })).toBeVisible();
+  }
+  await expect(about).toContainText("GeoBolivia (derived from ADM3 layer)");
+  await expect(about).toContainText("gbOpen BOL ADM0/ADM1, revision 9469f09");
+  await expect(about).toContainText("Public Domain");
+  await expect(about).toContainText("CHIRPS v3.0 final daily rnl");
+  await expect(about).toContainText("ERA5 temporal disaggregation");
+  await expect(about.getByRole("link", { name: /^CC BY 4.0/ })).toHaveAttribute(
+    "href", "https://creativecommons.org/licenses/by/4.0/",
+  );
   await expect(about.locator(".provenance > dl > div > dt")).toHaveText([
     "Protocol version",
     "Protocol SHA-256",

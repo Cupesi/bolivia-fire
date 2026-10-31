@@ -96,5 +96,11 @@ Code is [MIT licensed](LICENSE). Data retain their source-specific terms: see
 [FIRMS](datasets/licenses/FIRMS.md), [geoBoundaries](datasets/licenses/geoBoundaries.md),
 [CHIRPS](datasets/licenses/CHIRPS.md), [MapBiomas](datasets/licenses/MapBiomas.md) and the
 [dataset card](datasets/dataset_card.md).
+The pinned geoBoundaries gbOpen BOL ADM0/ADM1 releases at revision `9469f09` both report
+`boundaryLicense: Public Domain` in the official metadata, verified 2026-10-31. Retain
+GeoBolivia, geoBoundaries and Runfola et al. (2020) attribution. CHIRPS v3.0 final daily `rnl`
+uses CC BY 4.0 with the provider's stated waiver; credit Climate Hazards Center and the
+CHIRPS3 Data Repository (2025), ERA5 disaggregation and the derived cell-center mapping
+and antecedent-rainfall aggregation.
 Use [CITATION.cff](CITATION.cff) to cite the software and retain the source attributions when
 redistributing derived data.

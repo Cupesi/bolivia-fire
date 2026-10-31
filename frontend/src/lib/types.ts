@@ -27,7 +27,16 @@ export interface Meta {
   models: Record<string, string[]>;
   variants: string[];
   limitations: string[];
-  attributions: { name: string; url: string; license: string }[];
+  attributions: {
+    name: string;
+    url: string;
+    license: string;
+    licenseUrl: string;
+    product: string;
+    provider: string;
+    citation: string;
+    processing: string;
+  }[];
 }
 export interface Week {
   date: string;
