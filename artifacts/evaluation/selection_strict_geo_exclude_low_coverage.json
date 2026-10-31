@@ -1,0 +1,2948 @@
+{
+  "exclusions": {
+    "train": {
+      "scanned": 15564174,
+      "purged_partition": 111438,
+      "missing_label": 74292,
+      "geographic_holdout": 3162960,
+      "incomplete_28d": 236048,
+      "target_low_coverage": 0,
+      "eligible": 11979436
+    },
+    "val_select": {
+      "scanned": 2005884,
+      "purged_partition": 111438,
+      "missing_label": 37146,
+      "geographic_holdout": 382000,
+      "incomplete_28d": 118024,
+      "target_low_coverage": 0,
+      "eligible": 1357276
+    },
+    "val_calib": {
+      "scanned": 2005884,
+      "purged_partition": 111438,
+      "missing_label": 148584,
+      "geographic_holdout": 359080,
+      "incomplete_28d": 206542,
+      "target_low_coverage": 0,
+      "eligible": 1180240
+    }
+  },
+  "candidates": {
+    "train_climatology": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.08288371597914054,
+          "brier_score": 0.020986131248748558,
+          "log_loss": 0.09095407793431964,
+          "roc_auc": 0.8252814298290715,
+          "expected_calibration_error": 0.003639740033771228,
+          "recall_at_area_budget_5pct": 0.0686419654318246,
+          "recall_at_area_budget_10pct": 0.14590811511807236,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0005298366677733222,
+              "positive_rate": 0.0005820481611698725
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0015788973385191855,
+              "positive_rate": 0.001738776785266961
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.003584868521024319,
+              "positive_rate": 0.0031460071496143753
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.00503140009063313,
+              "positive_rate": 0.004560605212204444
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.006969556655467599,
+              "positive_rate": 0.006166763429103588
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.009505777173495274,
+              "positive_rate": 0.010322145237961919
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.015608726007943621,
+              "positive_rate": 0.01864027655392124
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.0286801708668658,
+              "positive_rate": 0.025072277119760445
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.04823549335754455,
+              "positive_rate": 0.056026924516457334
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.07777455157861765,
+              "positive_rate": 0.09700016798352055
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.07350478178135879,
+          "brier_score": 0.021212811329326075,
+          "log_loss": 0.09366635550349901,
+          "roc_auc": 0.8174587194258286,
+          "expected_calibration_error": 0.00772796203262137,
+          "recall_at_area_budget_5pct": 0.05233953394748748,
+          "recall_at_area_budget_10pct": 0.11637211089392872,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0007024989084518128,
+              "positive_rate": 0.0005820481611698725
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.002701942540846204,
+              "positive_rate": 0.001606158216899142
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004567527794606119,
+              "positive_rate": 0.0033154642091954775
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.007480517309763007,
+              "positive_rate": 0.004479560531535221
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.013011030623661777,
+              "positive_rate": 0.006660399211361581
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.020163216226735562,
+              "positive_rate": 0.010933664192102418
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.03628717458995609,
+              "positive_rate": 0.02009908080596725
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.05818378360817161,
+              "positive_rate": 0.026553184466534423
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.06596218049526215,
+              "positive_rate": 0.06939634974758273
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.08460740187309894,
+              "positive_rate": 0.07963008260663264
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        }
+      },
+      "calibration_status": "fitted",
+      "val_calib": {
+        "uncalibrated": {
+          "average_precision": 0.07712283811358121,
+          "brier_score": 0.02506831553623891,
+          "log_loss": 0.11062736360430979,
+          "roc_auc": 0.7858116132343946,
+          "expected_calibration_error": 0.00913745549737097,
+          "recall_at_area_budget_5pct": 0.053616021158399425,
+          "recall_at_area_budget_10pct": 0.11423979427836709,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.0004722324128530285,
+              "positive_rate": 0.000626991120450078
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.0012797844004195816,
+              "positive_rate": 0.0022198874805124382
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.0030114864539710763,
+              "positive_rate": 0.004516030637836372
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.004755070458145406,
+              "positive_rate": 0.006007252762150072
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.0060096281966581675,
+              "positive_rate": 0.009608215278248492
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.00828501697814528,
+              "positive_rate": 0.02043652138548092
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.01177054271549369,
+              "positive_rate": 0.023402019928150206
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.022233599859916305,
+              "positive_rate": 0.0500152511353623
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.044328441329846834,
+              "positive_rate": 0.07348505388734494
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.07647636672649183,
+              "positive_rate": 0.07327323256286856
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.07566324490663148,
+          "brier_score": 0.02482220779848402,
+          "log_loss": 0.10666234630794791,
+          "roc_auc": 0.7902358490047492,
+          "expected_calibration_error": 0.002439715562476406,
+          "recall_at_area_budget_5pct": 0.06097699833615576,
+          "recall_at_area_budget_10pct": 0.12847958855673416,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.0005860587522608612,
+              "positive_rate": 0.0005676811495966922
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.0021736775116349984,
+              "positive_rate": 0.002118213244763777
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.00420662143086491,
+              "positive_rate": 0.004253372195485664
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.006332666953214562,
+              "positive_rate": 0.006608825323662984
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.009422869703651375,
+              "positive_rate": 0.008913441333965972
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.01912120637783562,
+              "positive_rate": 0.01818274249305226
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.02506709299888607,
+              "positive_rate": 0.026367518470819494
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.04899342016257042,
+              "positive_rate": 0.047947875008472855
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.06590798846144542,
+              "positive_rate": 0.056276689486884024
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.08177885470660233,
+              "positive_rate": 0.09235409747170067
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        }
+      }
+    },
+    "persistence": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.14805183479559075,
+          "brier_score": 0.01958608107819466,
+          "log_loss": 0.09199035658616678,
+          "roc_auc": 0.6508734731750513,
+          "expected_calibration_error": 0.012181807781354937,
+          "recall_at_area_budget_5pct": 0.2721463772658662,
+          "recall_at_area_budget_10pct": 0.3308692495544849,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.0036985845178136205
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.0018640276553921235
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.002166103283341045
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.005606818362661682
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.008855973287673253
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.019428620265885498
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.036057515199561484
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.052625995007647974
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.019422726107291045
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.0738598147782185,
+              "positive_rate": 0.07352962846171297
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.14805183479559075,
+          "brier_score": 0.019538094621117465,
+          "log_loss": 0.09206726241698089,
+          "roc_auc": 0.6508734731750513,
+          "expected_calibration_error": 0.013418127508749982,
+          "recall_at_area_budget_5pct": 0.2721463772658662,
+          "recall_at_area_budget_10pct": 0.3308692495544849,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.0036985845178136205
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.0018640276553921235
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.018280643969774243,
+              "positive_rate": 0.002166103283341045
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.005606818362661682
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.018280643969774243,
+              "positive_rate": 0.008855973287673253
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.019428620265885498
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.036057515199561484
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.01828064396977425,
+              "positive_rate": 0.052625995007647974
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.019422726107291045
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.08408691010593423,
+              "positive_rate": 0.07352962846171297
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        }
+      },
+      "calibration_status": "fitted",
+      "val_calib": {
+        "uncalibrated": {
+          "average_precision": 0.1496147681842297,
+          "brier_score": 0.02308496388399513,
+          "log_loss": 0.10537028690741582,
+          "roc_auc": 0.653888440536806,
+          "expected_calibration_error": 0.013032517475162505,
+          "recall_at_area_budget_5pct": 0.27854937139917985,
+          "recall_at_area_budget_10pct": 0.3446480231436837,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.005414153053616214
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.003228156985019996
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.003626381075035586
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.007617094828170541
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.012861790822205654
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.014573307123974784
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.04206771504100861
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.03949196773537585
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.016144542023539543,
+              "positive_rate": 0.04082220565308751
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.08705713972135243,
+              "positive_rate": 0.09388768386090965
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.1496147681842297,
+          "brier_score": 0.023029094198539064,
+          "log_loss": 0.10512154734063776,
+          "roc_auc": 0.653888440536806,
+          "expected_calibration_error": 0.013507990216993396,
+          "recall_at_area_budget_5pct": 0.27854937139917985,
+          "recall_at_area_budget_10pct": 0.3446480231436837,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.005414153053616214
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.003228156985019996
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.003626381075035586
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.007617094828170541
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.012861790822205654
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.014573307123974784
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.04206771504100861
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.03949196773537585
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.018280643969774246,
+              "positive_rate": 0.04082220565308751
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.09906464958007166,
+              "positive_rate": 0.09388768386090965
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        }
+      }
+    },
+    "logistic_regression": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.2934913925319355,
+          "brier_score": 0.01818316303029151,
+          "log_loss": 0.07198514763629946,
+          "roc_auc": 0.9181405277516326,
+          "expected_calibration_error": 0.0018460683801531299,
+          "recall_at_area_budget_5pct": 0.34241424399197945,
+          "recall_at_area_budget_10pct": 0.5087198567488028,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.00048261126285153034,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0008943754742590673,
+              "positive_rate": 0.000383120308618144
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0017356306942956186,
+              "positive_rate": 0.000884123789118794
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.002763744061381267,
+              "positive_rate": 0.001178831718825058
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0046492407612002806,
+              "positive_rate": 0.0019450723360613467
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.006603992246860095,
+              "positive_rate": 0.003669113724842995
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.009430243898733152,
+              "positive_rate": 0.006630928418390955
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.015223931280375406,
+              "positive_rate": 0.013438681594605657
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.031900370371851255,
+              "positive_rate": 0.03536495156475179
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.15787375420467206,
+              "positive_rate": 0.15948856385878765
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.28882883869120385,
+          "brier_score": 0.018246575738642936,
+          "log_loss": 0.07239236498258601,
+          "roc_auc": 0.9180193139838303,
+          "expected_calibration_error": 0.0043318155129317484,
+          "recall_at_area_budget_5pct": 0.34163572969230416,
+          "recall_at_area_budget_10pct": 0.5092224337960507,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.00025576509279538875,
+              "positive_rate": 0.00026523713673563815
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0004994635108937918,
+              "positive_rate": 0.00033154642091954764
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0008207543882921762,
+              "positive_rate": 0.0009651684697880167
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0018112650112535817,
+              "positive_rate": 0.001274611795979594
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00323346637770672,
+              "positive_rate": 0.0018934984483627503
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005766793828610044,
+              "positive_rate": 0.0036617460266003383
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.010961773914262158,
+              "positive_rate": 0.0064835744535378225
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.021871425560854998,
+              "positive_rate": 0.0136523448436427
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.04770427392048606,
+              "positive_rate": 0.035394422357722416
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.17334139342227106,
+              "positive_rate": 0.15933384219569185
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        }
+      },
+      "calibration_status": "fitted",
+      "val_calib": {
+        "uncalibrated": {
+          "average_precision": 0.27303374107865824,
+          "brier_score": 0.02190058929033129,
+          "log_loss": 0.08536611337670856,
+          "roc_auc": 0.9087003241335206,
+          "expected_calibration_error": 0.004166152340299207,
+          "recall_at_area_budget_5pct": 0.3645359421096723,
+          "recall_at_area_budget_10pct": 0.5322404371584699,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.0004532399393367013,
+              "positive_rate": 0.00025418558937165324
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.0007784701803117683,
+              "positive_rate": 0.00043211550193181047
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.0016641320687654016,
+              "positive_rate": 0.0008133938859892903
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.00251774329468243,
+              "positive_rate": 0.0014912221243136988
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.004049718339840946,
+              "positive_rate": 0.0027113129532976344
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.005877826767737347,
+              "positive_rate": 0.004956618992747238
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.008547051589736093,
+              "positive_rate": 0.00909137124652613
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.014450964094060095,
+              "positive_rate": 0.020461939944418084
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.031814302626066354,
+              "positive_rate": 0.04754117806547821
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.16114004696092174,
+              "positive_rate": 0.17583711787433065
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.27020323946935165,
+          "brier_score": 0.021768200423371964,
+          "log_loss": 0.08430147897421429,
+          "roc_auc": 0.9089273557539902,
+          "expected_calibration_error": 0.00011144385207096589,
+          "recall_at_area_budget_5pct": 0.3653349915644206,
+          "recall_at_area_budget_10pct": 0.5337217580616627,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.0002288404752112262,
+              "positive_rate": 0.00025418558937165324
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.00040210147411913846,
+              "positive_rate": 0.0003389141191622043
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.0008167034642886876,
+              "positive_rate": 0.0008727038568426761
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.0015180081320976307,
+              "positive_rate": 0.0014912221243136988
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.002727908082148566,
+              "positive_rate": 0.0027452043652138546
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.00485549032608671,
+              "positive_rate": 0.004965091845726293
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.00911888255420379,
+              "positive_rate": 0.008972751304819358
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.02048598206164878,
+              "positive_rate": 0.020631397003999186
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.04752621344893038,
+              "positive_rate": 0.04772758083101742
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.17591471341266568,
+              "positive_rate": 0.17559140513793806
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        }
+      }
+    },
+    "lightgbm_00": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3203565471937529,
+          "brier_score": 0.017907129248699062,
+          "log_loss": 0.07212205797119711,
+          "roc_auc": 0.9232533071989792,
+          "expected_calibration_error": 0.006280679807328963,
+          "recall_at_area_budget_5pct": 0.36546268462901665,
+          "recall_at_area_budget_10pct": 0.5357217671116572,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0050796084105968475,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0050796084105968475,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005289165462443953,
+              "positive_rate": 0.0004199587998314271
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006104986621876801,
+              "positive_rate": 0.0013924949678621
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.006874673929864152,
+              "positive_rate": 0.0016798351993257085
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008087014498866583,
+              "positive_rate": 0.0033523027004087607
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011441330265661005,
+              "positive_rate": 0.005503670587264493
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017300266060318672,
+              "positive_rate": 0.012112495910927466
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03429011352353452,
+              "positive_rate": 0.03427453222483861
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.14056557274598663,
+              "positive_rate": 0.16354079789224876
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_01": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31600456705600344,
+          "brier_score": 0.01787493969910098,
+          "log_loss": 0.07041356006776185,
+          "roc_auc": 0.9236062016766262,
+          "expected_calibration_error": 0.002880088904175121,
+          "recall_at_area_budget_5pct": 0.36459367037627677,
+          "recall_at_area_budget_10pct": 0.5381434126253807,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0012306799575511466,
+              "positive_rate": 0.00024313404200766828
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0014496275445253432,
+              "positive_rate": 0.00046416498928736674
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0018718929838102635,
+              "positive_rate": 0.0006041512558978426
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0025954398457368063,
+              "positive_rate": 0.001178831718825058
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0036693934068457662,
+              "positive_rate": 0.0017535121817522747
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00539173459761851,
+              "positive_rate": 0.0029691823917906163
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008820497738151417,
+              "positive_rate": 0.0058867908958826366
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.015973411715019425,
+              "positive_rate": 0.012090392816199497
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03630373918736411,
+              "positive_rate": 0.03532074537529585
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.17475046421410909,
+              "positive_rate": 0.16274508648204186
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_02": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31740194801750066,
+          "brier_score": 0.01785552647845773,
+          "log_loss": 0.0702373046146518,
+          "roc_auc": 0.9231876112719974,
+          "expected_calibration_error": 0.0018551128229588917,
+          "recall_at_area_budget_5pct": 0.36222381801066345,
+          "recall_at_area_budget_10pct": 0.533371079137375,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0006547029838374229,
+              "positive_rate": 0.00030944332619157783
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0008513822270405536,
+              "positive_rate": 0.0003904880068608006
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0012702834577108047,
+              "positive_rate": 0.0006704605400817521
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.002084032915559244,
+              "positive_rate": 0.0011125224346411485
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0032529385811706094,
+              "positive_rate": 0.0019156015430907202
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004804723769948204,
+              "positive_rate": 0.0028365638234227972
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008304193878243183,
+              "positive_rate": 0.006107821843162335
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.015992285031102907,
+              "positive_rate": 0.012245114479295285
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.038035990126969746,
+              "positive_rate": 0.03498183125613365
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.16655658740698692,
+              "positive_rate": 0.16268614489610062
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_03": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.32397358018140415,
+          "brier_score": 0.0179377210134033,
+          "log_loss": 0.07224967070007485,
+          "roc_auc": 0.9237820886439011,
+          "expected_calibration_error": 0.00693397255997849,
+          "recall_at_area_budget_5pct": 0.36563971533250256,
+          "recall_at_area_budget_10pct": 0.5380730440630677,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.005187788046896458,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.00523862296762719,
+              "positive_rate": 0.00048626808401533656
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005617448704627658,
+              "positive_rate": 0.0006188866523831558
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006344909948019663,
+              "positive_rate": 0.0013556564766488168
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007202472780193681,
+              "positive_rate": 0.0017756152764802447
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008376372024703484,
+              "positive_rate": 0.0031018009601584354
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011551759967270446,
+              "positive_rate": 0.005820481611698727
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017442354872302415,
+              "positive_rate": 0.012053554324986214
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03437623971578478,
+              "positive_rate": 0.0337145871583967
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.1368553248171297,
+              "positive_rate": 0.16405653676923473
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_04": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.32620202085813255,
+          "brier_score": 0.018229849510790326,
+          "log_loss": 0.07438089955381268,
+          "roc_auc": 0.9234120444378147,
+          "expected_calibration_error": 0.010576624426164047,
+          "recall_at_area_budget_5pct": 0.36587103663466924,
+          "recall_at_area_budget_10pct": 0.5369690801021773,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0077566481195390224,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0077566481195390224,
+              "positive_rate": 0.0005083711787433064
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008091473265296745,
+              "positive_rate": 0.0006925636348097219
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.008742205232734382,
+              "positive_rate": 0.0013851272696194432
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.009502279078058357,
+              "positive_rate": 0.0016945705958110217
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.010317668269845112,
+              "positive_rate": 0.003249154925011568
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.013155147163064308,
+              "positive_rate": 0.0057541723275148175
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.018191548832682123,
+              "positive_rate": 0.012274585272265912
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03234485873072623,
+              "positive_rate": 0.03313990669546949
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.11699620715986489,
+              "positive_rate": 0.16428493541475708
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.3211138243255079,
+          "brier_score": 0.017768558587167582,
+          "log_loss": 0.07001416973604613,
+          "roc_auc": 0.9234091944229806,
+          "expected_calibration_error": 0.0038608708352074056,
+          "recall_at_area_budget_5pct": 0.3656414800985502,
+          "recall_at_area_budget_10pct": 0.5369260250361703,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.00033990482916124165,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.00033990482916124165,
+              "positive_rate": 0.0005083711787433064
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0006766507329679075,
+              "positive_rate": 0.0006778282383244087
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.00153655753904748,
+              "positive_rate": 0.0012451410030089676
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0025672985759460317,
+              "positive_rate": 0.002018749318487913
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00378748542013601,
+              "positive_rate": 0.0029839177882759298
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007697299017230701,
+              "positive_rate": 0.005798378516970757
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.01729036760618663,
+              "positive_rate": 0.01234826225469248
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.04433298649006488,
+              "positive_rate": 0.03313253899722683
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.18295695775127546,
+              "positive_rate": 0.16427020001827178
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        }
+      },
+      "calibration_status": "fitted",
+      "val_calib": {
+        "uncalibrated": {
+          "average_precision": 0.31354700650286993,
+          "brier_score": 0.021906103698600146,
+          "log_loss": 0.08753261118958286,
+          "roc_auc": 0.9135756550139312,
+          "expected_calibration_error": 0.012536141523824772,
+          "recall_at_area_budget_5pct": 0.38036904839773833,
+          "recall_at_area_budget_10pct": 0.5514304082288654,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.0077566481195390224,
+              "positive_rate": 0.00024571273639259814
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.007760131263916435,
+              "positive_rate": 0.0004829526198061411
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.008206234238504589,
+              "positive_rate": 0.0007201925032196842
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.008729636338196322,
+              "positive_rate": 0.001652206330915746
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.009504983995137824,
+              "positive_rate": 0.002465600216905036
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.010535135990448901,
+              "positive_rate": 0.004109333694841727
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.013679245725659607,
+              "positive_rate": 0.008566054361824714
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.01920357729495607,
+              "positive_rate": 0.019368941910119977
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.033743610018636384,
+              "positive_rate": 0.04684640412119569
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.1149697643701556,
+              "positive_rate": 0.17913305768318308
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        },
+        "calibrated": {
+          "average_precision": 0.3099130671238501,
+          "brier_score": 0.021132741344870313,
+          "log_loss": 0.08201771460270432,
+          "roc_auc": 0.9138294832822011,
+          "expected_calibration_error": 7.00385375952088e-05,
+          "recall_at_area_budget_5pct": 0.3811428911521188,
+          "recall_at_area_budget_10pct": 0.5526812021461899,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 118024.0,
+              "mean_probability": 0.00033990482916124165,
+              "positive_rate": 0.00024571273639259814
+            },
+            {
+              "bin": 1,
+              "count": 118024.0,
+              "mean_probability": 0.0003707647603863707,
+              "positive_rate": 0.00043211550193181047
+            },
+            {
+              "bin": 2,
+              "count": 118024.0,
+              "mean_probability": 0.0007104410847485335,
+              "positive_rate": 0.0006863010913034637
+            },
+            {
+              "bin": 3,
+              "count": 118024.0,
+              "mean_probability": 0.00154565098415612,
+              "positive_rate": 0.0015335863892089745
+            },
+            {
+              "bin": 4,
+              "count": 118024.0,
+              "mean_probability": 0.0025645416615109186,
+              "positive_rate": 0.0026435301294651936
+            },
+            {
+              "bin": 5,
+              "count": 118024.0,
+              "mean_probability": 0.004129493279958595,
+              "positive_rate": 0.004270317901443774
+            },
+            {
+              "bin": 6,
+              "count": 118024.0,
+              "mean_probability": 0.008478744139151104,
+              "positive_rate": 0.00831186877245306
+            },
+            {
+              "bin": 7,
+              "count": 118024.0,
+              "mean_probability": 0.019341759102515666,
+              "positive_rate": 0.019402833322036198
+            },
+            {
+              "bin": 8,
+              "count": 118024.0,
+              "mean_probability": 0.04686745536503968,
+              "positive_rate": 0.04681251270927947
+            },
+            {
+              "bin": 9,
+              "count": 118024.0,
+              "mean_probability": 0.1792457450030623,
+              "positive_rate": 0.17925167762488986
+            }
+          ],
+          "rows": 1180240,
+          "missing_probability": 0
+        }
+      }
+    },
+    "lightgbm_05": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3138381472361985,
+          "brier_score": 0.01787632215353276,
+          "log_loss": 0.07078146360354927,
+          "roc_auc": 0.9225172526996777,
+          "expected_calibration_error": 0.002906539972266,
+          "recall_at_area_budget_5pct": 0.36092295771337696,
+          "recall_at_area_budget_10pct": 0.5290260479092127,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0020061524119228125,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0020061524119228125,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.002487287330886117,
+              "positive_rate": 0.0004052234033461139
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0034899406409051544,
+              "positive_rate": 0.0013040825889502207
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0042507834953421034,
+              "positive_rate": 0.001922969241333377
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005738692416065424,
+              "positive_rate": 0.003072330167187809
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.009373896398609496,
+              "positive_rate": 0.005945732481823889
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.016501802283052994,
+              "positive_rate": 0.012399836142391076
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.037216280945316475,
+              "positive_rate": 0.03384720572676452
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.15750701352420338,
+              "positive_rate": 0.16337870853091033
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_06": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3175064647738975,
+          "brier_score": 0.017900346028947092,
+          "log_loss": 0.07154887975586527,
+          "roc_auc": 0.9228188530281973,
+          "expected_calibration_error": 0.0050813591782971216,
+          "recall_at_area_budget_5pct": 0.3651118134154209,
+          "recall_at_area_budget_10pct": 0.5338831561428697,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.003789149224758148,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.003789149224758148,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004046676000529744,
+              "positive_rate": 0.0005673127646845594
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.005018901994154061,
+              "positive_rate": 0.0012156702100383412
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0058690919014056375,
+              "positive_rate": 0.0018124537676935276
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007171682049721814,
+              "positive_rate": 0.003204948735555628
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.010823090179301768,
+              "positive_rate": 0.0056436568538749685
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.016985408361936506,
+              "positive_rate": 0.012311423763479195
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03575165733795364,
+              "positive_rate": 0.03430400301780923
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.14560846068171138,
+              "positive_rate": 0.1632166191695719
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_07": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31881567656768117,
+          "brier_score": 0.017875768280694104,
+          "log_loss": 0.07212382849064017,
+          "roc_auc": 0.9235354117637592,
+          "expected_calibration_error": 0.006170056867213855,
+          "recall_at_area_budget_5pct": 0.3652517527719262,
+          "recall_at_area_budget_10pct": 0.5351621545339337,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.005347223021090031,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.005382330291267043,
+              "positive_rate": 0.00047890038577267995
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005606979743700136,
+              "positive_rate": 0.0006851959365670653
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006283418149782219,
+              "positive_rate": 0.0013040825889502207
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0070681301815696184,
+              "positive_rate": 0.001864027655392124
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008160440763286517,
+              "positive_rate": 0.0032196841320409415
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011520667967071446,
+              "positive_rate": 0.00535631662241136
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017349594210319456,
+              "positive_rate": 0.012223011384567316
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03437918199963749,
+              "positive_rate": 0.03429663531956658
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.14325247208407293,
+              "positive_rate": 0.1635555332887341
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_08": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.323356221045195,
+          "brier_score": 0.01795056633776359,
+          "log_loss": 0.0716002274643339,
+          "roc_auc": 0.9223922114479269,
+          "expected_calibration_error": 0.0052754437086536855,
+          "recall_at_area_budget_5pct": 0.3642150671344824,
+          "recall_at_area_budget_10pct": 0.5318152644289174,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.003453068668022752,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0034530686680227514,
+              "positive_rate": 0.0005083711787433064
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0038264221389241477,
+              "positive_rate": 0.0007220344277803484
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.004839903700472545,
+              "positive_rate": 0.0012525087012516243
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005774843226067589,
+              "positive_rate": 0.0018713953536347806
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00688874038138396,
+              "positive_rate": 0.0031386394513717186
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.01053126846443076,
+              "positive_rate": 0.0059973063695224855
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.01725795739449649,
+              "positive_rate": 0.01267244097736937
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03627912848177972,
+              "positive_rate": 0.033626174779484826
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.14268300403777104,
+              "positive_rate": 0.16319451607484392
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_09": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.32034248881234306,
+          "brier_score": 0.018024369729206728,
+          "log_loss": 0.0726645388302751,
+          "roc_auc": 0.9224229221552042,
+          "expected_calibration_error": 0.007325140370587511,
+          "recall_at_area_budget_5pct": 0.36587236892442926,
+          "recall_at_area_budget_10pct": 0.5348571499579363,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.005448851268738508,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.005448851268738507,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005661994972191269,
+              "positive_rate": 0.0006115189541404992
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006406689148666336,
+              "positive_rate": 0.001620893613384455
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007486222656141032,
+              "positive_rate": 0.0015987905186564857
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008313826664100932,
+              "positive_rate": 0.0030944332619157787
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011749933825456981,
+              "positive_rate": 0.005695230741573565
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.0174597507564579,
+              "positive_rate": 0.012296688366993882
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03465803442281652,
+              "positive_rate": 0.03396508889864703
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.1329136469832435,
+              "positive_rate": 0.16339344392739563
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_10": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31505323217514164,
+          "brier_score": 0.01788236106248249,
+          "log_loss": 0.07031028307669303,
+          "roc_auc": 0.922833950690746,
+          "expected_calibration_error": 0.0014795602316991024,
+          "recall_at_area_budget_5pct": 0.36411620647981247,
+          "recall_at_area_budget_10pct": 0.5310210547158604,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0006105491836531566,
+              "positive_rate": 0.00032417872267689104
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0009194542543324335,
+              "positive_rate": 0.0003020756279489212
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.001346288563774006,
+              "positive_rate": 0.0007220344277803484
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0020927273977807167,
+              "positive_rate": 0.0012156702100383412
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0032298219595729063,
+              "positive_rate": 0.0017829829747229011
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0045303623771864015,
+              "positive_rate": 0.0030502270724598393
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0076281636739396344,
+              "positive_rate": 0.006210969618559528
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.015527984103063842,
+              "positive_rate": 0.012326159159964508
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.038089785929609585,
+              "positive_rate": 0.034348209207265175
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.1618705132320694,
+              "positive_rate": 0.1629734851275642
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_11": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3149494503039656,
+          "brier_score": 0.01785909583284083,
+          "log_loss": 0.07064132346286037,
+          "roc_auc": 0.9238143510809106,
+          "expected_calibration_error": 0.0023003796540531202,
+          "recall_at_area_budget_5pct": 0.36579738371879567,
+          "recall_at_area_budget_10pct": 0.5373709504453387,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.00206990004517138,
+              "positive_rate": 0.0002505017402503249
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.002214190923820402,
+              "positive_rate": 0.00047890038577267995
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0025625051596000967,
+              "positive_rate": 0.0006262543506258124
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.003355545573917262,
+              "positive_rate": 0.0010683162451852089
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0043982399402634886,
+              "positive_rate": 0.001864027655392124
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005991475845208125,
+              "positive_rate": 0.0029912854865185865
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.009552007060371343,
+              "positive_rate": 0.005805746215213414
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.016619393370454417,
+              "positive_rate": 0.012245114479295285
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.035907395618767414,
+              "positive_rate": 0.0347681680070966
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.16358913515193793,
+              "positive_rate": 0.16315767758363062
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_12": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3219466741913259,
+          "brier_score": 0.017970158700348432,
+          "log_loss": 0.07188381314953511,
+          "roc_auc": 0.9220913104112171,
+          "expected_calibration_error": 0.005863412538806603,
+          "recall_at_area_budget_5pct": 0.3640576412591082,
+          "recall_at_area_budget_10pct": 0.5312190614480893,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.003945025149732828,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.003945025149732828,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004243038186761527,
+              "positive_rate": 0.0005157388769859632
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.00516832714088256,
+              "positive_rate": 0.0013777595713767867
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.006208847865600614,
+              "positive_rate": 0.0019156015430907202
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007148792815639654,
+              "positive_rate": 0.0031018009601584354
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.010855128733405293,
+              "positive_rate": 0.006166763429103588
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017430918784335697,
+              "positive_rate": 0.012304056065236539
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.036197542279964294,
+              "positive_rate": 0.033474400195685414
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.1400924638511484,
+              "positive_rate": 0.1634199676410699
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_13": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31650833640353143,
+          "brier_score": 0.017932852208253067,
+          "log_loss": 0.07068961195864319,
+          "roc_auc": 0.9221134154658877,
+          "expected_calibration_error": 0.0024740314761404173,
+          "recall_at_area_budget_5pct": 0.36328331180835094,
+          "recall_at_area_budget_10pct": 0.5290585663608424,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0010860808456485847,
+              "positive_rate": 0.00033154642091954764
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0012682403108068149,
+              "positive_rate": 0.0004494295928020535
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0017632716606048732,
+              "positive_rate": 0.0006704605400817521
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0027273792373552846,
+              "positive_rate": 0.0012525087012516243
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.003799880373138787,
+              "positive_rate": 0.00195980773254666
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005022158195646781,
+              "positive_rate": 0.0031018009601584354
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008361288895262472,
+              "positive_rate": 0.006107821843162335
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.01645063409983097,
+              "positive_rate": 0.012311423763479195
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03820173112888057,
+              "positive_rate": 0.03428189992308127
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.1562629431797859,
+              "positive_rate": 0.1627892926714978
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_14": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.3255996739347802,
+          "brier_score": 0.017887060466352783,
+          "log_loss": 0.07195111228617994,
+          "roc_auc": 0.9239282166206911,
+          "expected_calibration_error": 0.006618664348990456,
+          "recall_at_area_budget_5pct": 0.3675149389861022,
+          "recall_at_area_budget_10pct": 0.539172538040857,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.004921607673168183,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.004944434854572007,
+              "positive_rate": 0.0005157388769859631
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005246661628544712,
+              "positive_rate": 0.0006115189541404992
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006097810352379115,
+              "positive_rate": 0.0012893471924649072
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0068911227468061555,
+              "positive_rate": 0.0017387767852669615
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00803435231088035,
+              "positive_rate": 0.0033375673039234472
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011444822334982308,
+              "positive_rate": 0.005584715267933716
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017325780936618716,
+              "positive_rate": 0.012024083532015587
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.034590870372440206,
+              "positive_rate": 0.0337145871583967
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.13838893205725572,
+              "positive_rate": 0.1641670522428746
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_15": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31516276591782866,
+          "brier_score": 0.01787262220034922,
+          "log_loss": 0.07029821164563578,
+          "roc_auc": 0.9228839547368226,
+          "expected_calibration_error": 0.001468164080498495,
+          "recall_at_area_budget_5pct": 0.3631386308628437,
+          "recall_at_area_budget_10pct": 0.5311187185500769,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0006594044605821172,
+              "positive_rate": 0.00032417872267689104
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0009508902016160545,
+              "positive_rate": 0.0003610172138901741
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0013912066893611162,
+              "positive_rate": 0.0006557251435964389
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0021513824297610287,
+              "positive_rate": 0.0012083025117956847
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.003278778426954209,
+              "positive_rate": 0.0018787630518774371
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0045628870827202845,
+              "positive_rate": 0.003028123977731869
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007726292115378194,
+              "positive_rate": 0.006152028032618275
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.01570087710052101,
+              "positive_rate": 0.012230379082809972
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03830486146974537,
+              "positive_rate": 0.03456187245630222
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.16321105297732624,
+              "positive_rate": 0.16285560195568172
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_16": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.32176796855442685,
+          "brier_score": 0.01805479488135576,
+          "log_loss": 0.07287545016300581,
+          "roc_auc": 0.9222875560750646,
+          "expected_calibration_error": 0.00770902628670868,
+          "recall_at_area_budget_5pct": 0.36503860844538727,
+          "recall_at_area_budget_10pct": 0.5337219659706278,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.005748512223362923,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.005748512223362923,
+              "positive_rate": 0.000707299031295035
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.005848634314909641,
+              "positive_rate": 0.000729402126023005
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.006520348833600087,
+              "positive_rate": 0.0015103781397446058
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007658585526496937,
+              "positive_rate": 0.001650364406355082
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.008582630794078328,
+              "positive_rate": 0.003212316433798285
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.01198218980783786,
+              "positive_rate": 0.005555244474963089
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.017557811864949802,
+              "positive_rate": 0.012296688366993882
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.034520209532309006,
+              "positive_rate": 0.03405350127755891
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.130357566219381,
+              "positive_rate": 0.16326819305727047
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_17": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31452941643777577,
+          "brier_score": 0.01787373506843914,
+          "log_loss": 0.07094958849780897,
+          "roc_auc": 0.9231027768807561,
+          "expected_calibration_error": 0.0032813231348643506,
+          "recall_at_area_budget_5pct": 0.36474838463693415,
+          "recall_at_area_budget_10pct": 0.5342028344995009,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0025278774555772543,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0025548163143063536,
+              "positive_rate": 0.00047890038577267995
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0029421421413068157,
+              "positive_rate": 0.0007072990312950351
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.003915228139148469,
+              "positive_rate": 0.001127257831126462
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004757710166217045,
+              "positive_rate": 0.0019524400343040034
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.006319069359474477,
+              "positive_rate": 0.003028123977731869
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.010025327655822003,
+              "positive_rate": 0.005547876776720432
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.016611422798084755,
+              "positive_rate": 0.012532454710758895
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03646828628246609,
+              "positive_rate": 0.03455450475805956
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.15616171643124596,
+              "positive_rate": 0.16305452980823343
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_18": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31868639756011985,
+          "brier_score": 0.017832601637392007,
+          "log_loss": 0.07010355689269657,
+          "roc_auc": 0.9233348178619809,
+          "expected_calibration_error": 0.0022249839260395313,
+          "recall_at_area_budget_5pct": 0.3667176105464333,
+          "recall_at_area_budget_10pct": 0.5370772594503277,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.00044274401571832905,
+              "positive_rate": 0.0003020756279489212
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0007155539232718796,
+              "positive_rate": 0.00028734023146360796
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.0011744893078810387,
+              "positive_rate": 0.0006557251435964389
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.0018259849097316178,
+              "positive_rate": 0.0012451410030089676
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.003030719428686103,
+              "positive_rate": 0.001864027655392124
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004460912645364046,
+              "positive_rate": 0.0029618146935479596
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007684997749656725,
+              "positive_rate": 0.005872055499397323
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.015709462489165223,
+              "positive_rate": 0.01253982240900155
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.038842325864921784,
+              "positive_rate": 0.0348713157824938
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.17161864107497923,
+              "positive_rate": 0.16265667410312998
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    },
+    "lightgbm_19": {
+      "val_select": {
+        "uncalibrated": {
+          "average_precision": 0.31475159247354256,
+          "brier_score": 0.017907485656051582,
+          "log_loss": 0.07198582720822104,
+          "roc_auc": 0.9223804831366356,
+          "expected_calibration_error": 0.005403336979508754,
+          "recall_at_area_budget_5pct": 0.3609518891718019,
+          "recall_at_area_budget_10pct": 0.5329572713310461,
+          "undefined_reasons": {},
+          "reliability": [
+            {
+              "bin": 0,
+              "count": 135727.6,
+              "mean_probability": 0.0045490562915802,
+              "positive_rate": 0.00027260483497829475
+            },
+            {
+              "bin": 1,
+              "count": 135727.6,
+              "mean_probability": 0.0045490562915802,
+              "positive_rate": 0.0005083711787433064
+            },
+            {
+              "bin": 2,
+              "count": 135727.59999999998,
+              "mean_probability": 0.004788922405397557,
+              "positive_rate": 0.0007220344277803484
+            },
+            {
+              "bin": 3,
+              "count": 135727.60000000003,
+              "mean_probability": 0.005584126077054607,
+              "positive_rate": 0.0014735396485313227
+            },
+            {
+              "bin": 4,
+              "count": 135727.59999999998,
+              "mean_probability": 0.00655906650951886,
+              "positive_rate": 0.001709305992296335
+            },
+            {
+              "bin": 5,
+              "count": 135727.59999999998,
+              "mean_probability": 0.007668213057593377,
+              "positive_rate": 0.003153374847857032
+            },
+            {
+              "bin": 6,
+              "count": 135727.59999999998,
+              "mean_probability": 0.011090498526428787,
+              "positive_rate": 0.005695230741573565
+            },
+            {
+              "bin": 7,
+              "count": 135727.6000000001,
+              "mean_probability": 0.0172292951624932,
+              "positive_rate": 0.012466145426574985
+            },
+            {
+              "bin": 8,
+              "count": 135727.59999999986,
+              "mean_probability": 0.03563226871585273,
+              "positive_rate": 0.034606078645758154
+            },
+            {
+              "bin": 9,
+              "count": 135727.6000000001,
+              "mean_probability": 0.14565975390320596,
+              "positive_rate": 0.1626493064048873
+            }
+          ],
+          "rows": 1357276,
+          "missing_probability": 0
+        },
+        "calibrated": null
+      },
+      "calibration_status": "not_selected"
+    }
+  },
+  "selected_lightgbm": "lightgbm_04",
+  "selected_model": "lightgbm_04",
+  "best_baseline": "persistence",
+  "final_candidates": [
+    "train_climatology",
+    "persistence",
+    "logistic_regression",
+    "lightgbm_04"
+  ],
+  "run_token": "abb518c08eec4a538a7f301114a033ce",
+  "selection_rule": "uncalibrated val_select average_precision",
+  "model_ids": {
+    "train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+    "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+    "logistic_regression": "600b6e86875324d967514fb81d7517ef2949234bd1911f113d3cc807fd0fef74",
+    "lightgbm_04": "dfe436de916d6984f317bdb64582d0f01847c15a0ec6d0cd02b19a82ff173887"
+  },
+  "calibrator_ids": {
+    "train_climatology": "dd4fd34421d7ef1809d8935363b7dfa03b910f7b1abc3f5f544a831e84c260fa",
+    "persistence": "29379f64bf25384af6dfc469c5654a4ba6a6a2a801394ddf414d8c874657343d",
+    "logistic_regression": "0b325c049933d35973b9e35711c70319157a62ec8411c135652a1e75dfa3d84a",
+    "lightgbm_04": "7594363d551b87800b543e40a7eafaec136bf7d18e56f19ab9bb1285d9a703c4"
+  },
+  "timestamp_utc": "2026-10-31T15:35:28.271296+00:00",
+  "git_commit": "f8273d67c88a04c78119b02a75866992aab19b5d",
+  "dataset_snapshot_hashes": {
+    "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+    "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+    "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+    "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+    "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+    "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+    "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+    "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+    "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+    "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+    "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+    "datasets/sources.yaml": "4bfcdb9af6a6cb1df21e9a516648519da2af6301b1b56f18153754c01ed1e7b4"
+  },
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+  "config": {
+    "version": 1,
+    "seed": 7,
+    "batch_size": 100000,
+    "bootstrap_replicates": 500,
+    "minimum_free_gb": 55,
+    "columns": {
+      "completeness_28d": "window_obs_complete_28d",
+      "completeness_365d": "window_obs_complete_365d",
+      "climatology_cell": "train_climatology_cell",
+      "climatology_department": "train_climatology_dept",
+      "low_coverage": "target_low_coverage"
+    },
+    "strict_features": [
+      "count_last_7d",
+      "count_last_14d",
+      "count_last_28d",
+      "count_last_91d",
+      "count_last_365d",
+      "any_last_7d",
+      "days_since_last",
+      "no_prior_detection",
+      "frp_sum_28d",
+      "same_week_last_year",
+      "neighborhood_3x3_last_7d",
+      "neighborhood_7x7_last_7d",
+      "neighborhood_3x3_last_28d",
+      "neighborhood_7x7_last_28d",
+      "national_last_7d",
+      "national_last_28d",
+      "week_of_year_sin",
+      "week_of_year_cos",
+      "train_climatology_cell",
+      "train_climatology_dept",
+      "window_obs_complete_365d"
+    ],
+    "retrospective_features": [
+      "rain_sum_7d",
+      "rain_sum_30d",
+      "rain_sum_90d",
+      "dry_days_30d",
+      "rain_anomaly_90d"
+    ],
+    "drop_groups": {
+      "neighborhood": [
+        "neighborhood_3x3_last_7d",
+        "neighborhood_7x7_last_7d",
+        "neighborhood_3x3_last_28d",
+        "neighborhood_7x7_last_28d"
+      ],
+      "climatology": [
+        "train_climatology_cell",
+        "train_climatology_dept"
+      ],
+      "national": [
+        "national_last_7d",
+        "national_last_28d"
+      ]
+    },
+    "lightgbm_search": {
+      "configurations": 20,
+      "boosting_rounds": 400,
+      "early_stopping_rounds": 30,
+      "max_bin": 63,
+      "num_threads": 4,
+      "space": {
+        "num_leaves": [
+          7,
+          15,
+          31,
+          63
+        ],
+        "learning_rate": [
+          0.03,
+          0.06,
+          0.1
+        ],
+        "min_data_in_leaf": [
+          50,
+          200,
+          1000
+        ],
+        "feature_fraction": [
+          0.7,
+          0.85,
+          1.0
+        ],
+        "lambda_l2": [
+          0,
+          1,
+          10
+        ]
+      }
+    }
+  },
+  "seed": 7,
+  "environment": {
+    "python": "3.13.15",
+    "packages": {
+      "numpy": "2.5.4",
+      "pyarrow": "26.0.0",
+      "pandas": "3.1.0",
+      "scikit-learn": "1.9.1",
+      "lightgbm": "4.7.0",
+      "joblib": "1.6.0"
+    }
+  },
+  "hardware": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "logical_cpus": 8,
+    "ram_bytes": 33408688128
+  },
+  "runtime_seconds": 21.061328399999184,
+  "peak_ram_mb": 1310.171875,
+  "variant": "strict_geo",
+  "selection": "primary",
+  "drop_group": null,
+  "features": [
+    "count_last_7d",
+    "count_last_14d",
+    "count_last_28d",
+    "count_last_91d",
+    "count_last_365d",
+    "any_last_7d",
+    "days_since_last",
+    "no_prior_detection",
+    "frp_sum_28d",
+    "same_week_last_year",
+    "neighborhood_3x3_last_7d",
+    "neighborhood_7x7_last_7d",
+    "neighborhood_3x3_last_28d",
+    "neighborhood_7x7_last_28d",
+    "national_last_7d",
+    "national_last_28d",
+    "week_of_year_sin",
+    "week_of_year_cos",
+    "train_climatology_dept",
+    "window_obs_complete_365d"
+  ],
+  "target": "y_primary",
+  "exclude_low_coverage": true
+}
