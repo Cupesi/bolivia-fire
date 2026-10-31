@@ -31,12 +31,12 @@ LIMITATIONS = [
     "Zeros are not proof of absence: clouds, smoke, overpass timing, "
     "and small fires reduce detection.",
     "Retrospective estimates are not operational forecasts.",
-    "Outage weeks and incomplete observation intervals have missing labels, "
+    "Weeks with unobserved target days have missing labels, "
     "never zero-filled labels.",
     "Strict estimates assume standard-processing detections approximate near-real-time "
     "availability; "
     "this equivalence has not been validated.",
-    "CHIRPS v3 and MapBiomas historical vintages were unavailable during much of the study period.",
+    "CHIRPS v3 historical vintages were unavailable during much of the study period.",
 ]
 ATTRIBUTIONS = [
     {
@@ -163,7 +163,7 @@ class Catalog:
             self.panel_files,
             """
             SELECT CAST(issue_date AS DATE), AVG(CASE WHEN y_primary IS NULL THEN 0.0 ELSE 1.0 END),
-                   BOOL_OR(target_low_coverage)
+                   BOOL_OR(target_low_coverage), BOOL_AND(target_complete)
             FROM read_parquet(?) GROUP BY issue_date ORDER BY issue_date
         """,
         )
@@ -179,13 +179,14 @@ class Catalog:
                     for row in csv.DictReader(stream)
                 ]
         result = []
-        for issue, completeness, low_coverage in rows:
+        for issue, completeness, low_coverage, target_complete in rows:
             start = datetime.combine(issue, datetime.min.time(), tzinfo=UTC)
             end = start + timedelta(days=7)
             result.append(
                 {
                     "issue_date": issue.isoformat(),
                     "label_complete_share": float(completeness),
+                    "target_complete": bool(target_complete),
                     "outage": any(left < end and right > start for left, right in outages),
                     "target_low_coverage": bool(low_coverage),
                 }

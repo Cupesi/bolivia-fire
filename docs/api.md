@@ -34,7 +34,12 @@ invalid ranges receive 422. Missing predictions and unavailable metrics receive
 maximum 700). `outage` means a documented outage interval overlaps the target
 week, including short outages. `target_low_coverage` is the separate zero-bbox
 detection heuristic. `label_complete_share` is the fraction of non-null labels;
-neither outage flag independently establishes label completeness.
+neither flag independently establishes label completeness. `target_complete`
+is true when every panel row for the issue has a complete target observation
+interval. A false value means there are unobserved target days: each target day
+must have been acquired and have strictly less than six hours of documented
+outages. The frontend uses this field for its missing-observation notice and
+shows the low-coverage heuristic in a separate notice.
 
 Prediction files are `artifacts/predictions/{variant}/{split}.parquet`, with
 `cell_id`, `issue_date`, `model`, and `p`; `y` is optional and is not used to replace
@@ -228,9 +233,9 @@ the wire contract, not scientific measurements. JSON objects have no outer
     "Satellite detections are not counts of fires, ignitions, or burned area.",
     "Zeros are not proof of absence: clouds, smoke, overpass timing, and small fires reduce detection.",
     "Retrospective estimates are not operational forecasts.",
-    "Outage weeks and incomplete observation intervals have missing labels, never zero-filled labels.",
+    "Weeks with unobserved target days have missing labels, never zero-filled labels.",
     "Strict estimates assume standard-processing detections approximate near-real-time availability; this equivalence has not been validated.",
-    "CHIRPS v3 and MapBiomas historical vintages were unavailable during much of the study period."
+    "CHIRPS v3 historical vintages were unavailable during much of the study period."
   ],
   "boundary_simplification_tolerance_deg": 0.005
 }
@@ -244,6 +249,7 @@ the wire contract, not scientific measurements. JSON objects have no outer
     {
       "issue_date": "2024-09-09",
       "label_complete_share": 0.0,
+      "target_complete": false,
       "outage": true,
       "target_low_coverage": true
     }

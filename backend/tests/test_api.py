@@ -40,10 +40,32 @@ def test_observed_nulls_grid_indices_and_week_completeness(synthetic_root: Path)
             {
                 "issue_date": "2024-09-09",
                 "label_complete_share": 0.0,
+                "target_complete": False,
                 "outage": True,
                 "target_low_coverage": True,
             }
         ]
+
+
+def test_short_outage_and_low_coverage_do_not_make_targets_incomplete(
+    synthetic_root: Path,
+) -> None:
+    with client_for(synthetic_root) as client:
+        weeks = client.get("/api/v1/weeks").json()["weeks"]
+        assert weeks[0] == {
+            "issue_date": "2024-09-02",
+            "label_complete_share": 1.0,
+            "target_complete": True,
+            "outage": True,
+            "target_low_coverage": False,
+        }
+        assert weeks[2] == {
+            "issue_date": "2024-09-16",
+            "label_complete_share": 1.0,
+            "target_complete": True,
+            "outage": False,
+            "target_low_coverage": True,
+        }
 
 
 @pytest.mark.parametrize(
@@ -247,3 +269,37 @@ def test_real_local_artifacts() -> None:
         series = client.get(f"/api/v1/cells/{grid['cell_id'][0]}/series")
         assert series.status_code == 200
         assert len(series.json()["issue_date"]) <= 700
+
+
+@pytest.mark.local_data
+@pytest.mark.parametrize(
+    ("issue_date", "complete", "low_coverage"),
+    [
+        ("2022-08-01", False, True),
+        ("2025-12-29", True, False),
+    ],
+)
+def test_real_outage_and_complete_week(
+    issue_date: str, complete: bool, low_coverage: bool
+) -> None:
+    root = Path(__file__).resolve().parents[2]
+    if not (root / f"datasets/processed/panel/year={issue_date[:4]}/part.parquet").exists():
+        pytest.skip("Prepared local artifacts are absent")
+    with client_for(root) as client:
+        response = client.get(f"/api/v1/weeks?start={issue_date}&end={issue_date}")
+        assert response.status_code == 200
+        assert response.json()["weeks"] == [
+            {
+                "issue_date": issue_date,
+                "label_complete_share": float(complete),
+                "target_complete": complete,
+                "outage": True,
+                "target_low_coverage": low_coverage,
+            }
+        ]
+        layer = client.get(f"/api/v1/layer?issue_date={issue_date}&kind=observed").json()
+        assert len(layer["value"]) == 37_146
+        if complete:
+            assert set(layer["value"]) == {0, 1}
+        else:
+            assert layer["value"] == [None] * 37_146

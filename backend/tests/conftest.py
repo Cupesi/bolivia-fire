@@ -63,7 +63,7 @@ def synthetic_root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
                     "y_primary": label,
                     "n_primary": count,
                     "target_complete": complete,
-                    "target_low_coverage": day == 9,
+                    "target_low_coverage": day in (9, 16),
                 }
             )
     pq.write_table(
@@ -96,7 +96,9 @@ def synthetic_root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     outages = root / "datasets/manifests/snpp_outages.csv"
     outages.parent.mkdir(parents=True)
     outages.write_text(
-        "start_utc,end_utc,comment\n2024-09-09 00:00:00+00:00,2024-09-10 00:00:00+00:00,synthetic\n"
+        "start_utc,end_utc,comment\n"
+        "2024-09-02 17:24:00+00:00,2024-09-02 17:36:00+00:00,synthetic short outage\n"
+        "2024-09-09 00:00:00+00:00,2024-09-10 00:00:00+00:00,synthetic long outage\n"
     )
     monkeypatch.setenv("BOLIVIA_FIRE_DATA_ROOT", str(root))
     monkeypatch.delenv("BOLIVIA_FIRE_CORS_ORIGINS", raising=False)
