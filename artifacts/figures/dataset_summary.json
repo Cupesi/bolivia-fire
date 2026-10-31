@@ -1,0 +1,431 @@
+{
+  "protocol_version": "1.1",
+  "description": "Descriptive observations and label prevalence; no performance metrics.",
+  "eligible_cells": 37146,
+  "national_area_km2": 1068783.840720231,
+  "held_out_cells": 7640,
+  "held_out_area_km2": 219395.5882114474,
+  "eligible_blocks": 124,
+  "held_out_blocks": 24,
+  "issue_weeks": 678,
+  "first_issue": "2013-01-07",
+  "last_issue": "2025-12-29",
+  "rows_per_partition": {
+    "purged": 111438,
+    "test": 5831922,
+    "train": 15452736,
+    "val_calib": 1894446,
+    "val_select": 1894446
+  },
+  "partition_statistics": {
+    "purged": {
+      "non_held_out": {
+        "rows": 88518,
+        "labelled_rows": 88518,
+        "positive_rows": 565,
+        "labelled_share": 1.0,
+        "positive_rate": 0.006382882577554848
+      },
+      "held_out": {
+        "rows": 22920,
+        "labelled_rows": 22920,
+        "positive_rows": 142,
+        "labelled_share": 1.0,
+        "positive_rate": 0.006195462478184991
+      }
+    },
+    "test": {
+      "non_held_out": {
+        "rows": 4632442,
+        "labelled_rows": 4189852,
+        "positive_rows": 102917,
+        "labelled_share": 0.9044585987261147,
+        "positive_rate": 0.024563397466068015
+      },
+      "held_out": {
+        "rows": 1199480,
+        "labelled_rows": 1084880,
+        "positive_rows": 18598,
+        "labelled_share": 0.9044585987261147,
+        "positive_rate": 0.017142909814910404
+      }
+    },
+    "train": {
+      "non_held_out": {
+        "rows": 12274496,
+        "labelled_rows": 12215484,
+        "positive_rows": 266764,
+        "labelled_share": 0.9951923076923077,
+        "positive_rate": 0.021838185044489436
+      },
+      "held_out": {
+        "rows": 3178240,
+        "labelled_rows": 3162960,
+        "positive_rows": 48319,
+        "labelled_share": 0.9951923076923077,
+        "positive_rate": 0.015276513139590763
+      }
+    },
+    "val_calib": {
+      "non_held_out": {
+        "rows": 1504806,
+        "labelled_rows": 1386782,
+        "positive_rows": 42124,
+        "labelled_share": 0.9215686274509803,
+        "positive_rate": 0.0303753582033802
+      },
+      "held_out": {
+        "rows": 389640,
+        "labelled_rows": 359080,
+        "positive_rows": 8238,
+        "labelled_share": 0.9215686274509803,
+        "positive_rate": 0.022941962793806395
+      }
+    },
+    "val_select": {
+      "non_held_out": {
+        "rows": 1504806,
+        "labelled_rows": 1475300,
+        "positive_rows": 35086,
+        "labelled_share": 0.9803921568627451,
+        "positive_rate": 0.0237822815698502
+      },
+      "held_out": {
+        "rows": 389640,
+        "labelled_rows": 382000,
+        "positive_rows": 6221,
+        "labelled_share": 0.9803921568627451,
+        "positive_rate": 0.016285340314136126
+      }
+    }
+  },
+  "observation_days_per_year": [
+    {
+      "year": 2012,
+      "days": 347,
+      "observed_days": 339,
+      "unobserved_days": 8,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 8,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "Bad RDR": 1,
+        "Petulant Mode": 1,
+        "S/C CDP Reset - Safe Mode": 2,
+        "S/C SCC": 3,
+        "SBC lockout. Confirmed with LDOPE.": 1,
+        "communications anomaly": 1
+      }
+    },
+    {
+      "year": 2013,
+      "days": 365,
+      "observed_days": 365,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2014,
+      "days": 365,
+      "observed_days": 365,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2015,
+      "days": 365,
+      "observed_days": 365,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2016,
+      "days": 366,
+      "observed_days": 366,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2017,
+      "days": 365,
+      "observed_days": 364,
+      "unobserved_days": 1,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 1,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "s/c systems outage, LDOPE confirmed": 1
+      }
+    },
+    {
+      "year": 2018,
+      "days": 365,
+      "observed_days": 365,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2019,
+      "days": 365,
+      "observed_days": 364,
+      "unobserved_days": 1,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 1,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "Outade due to Petulant Mode": 1,
+        "Outage due to Petulant Mode": 1,
+        "Petulant Mode Impact - corrupt data per LDOPE": 1,
+        "Petulant Mode Impact - corrupt geolocation": 1,
+        "Petulant Mode Impact - wrong DNB flag per LDOPE": 1,
+        "Petulant Mode Impact; corrupt or wrong DNB per LDOPE": 1
+      }
+    },
+    {
+      "year": 2020,
+      "days": 366,
+      "observed_days": 366,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    },
+    {
+      "year": 2021,
+      "days": 365,
+      "observed_days": 363,
+      "unobserved_days": 2,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 2,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "Safe-Mode outage": 2
+      }
+    },
+    {
+      "year": 2022,
+      "days": 365,
+      "observed_days": 348,
+      "unobserved_days": 17,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 17,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "L0 Outage - SNPP Lock-Up": 2,
+        "SNPP Lock-up": 15,
+        "VIIRS Lock-up": 1
+      }
+    },
+    {
+      "year": 2023,
+      "days": 365,
+      "observed_days": 361,
+      "unobserved_days": 4,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 4,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "CDP Reset L0 outage": 2,
+        "SNPP Lock-up outage": 2
+      }
+    },
+    {
+      "year": 2024,
+      "days": 366,
+      "observed_days": 341,
+      "unobserved_days": 25,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 25,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "CDP Reset Anomaly": 6,
+        "GPS Anomaly Outage": 9,
+        "GPS Anomaly Outage (C2) 5/30/24 through 6/3/24": 5,
+        "GPS Anomaly outage (11/2/24 22:12 - 11/6/24 17:30, inclusive)": 4,
+        "SMD outage 23:21 - 16:00": 1
+      }
+    },
+    {
+      "year": 2025,
+      "days": 365,
+      "observed_days": 359,
+      "unobserved_days": 6,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 6,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {
+        "L0 Data gap": 4,
+        "VIIRS Anomaly L0 outage": 2,
+        "VIIRS bad DNB Flag post anomaly issues": 1
+      }
+    },
+    {
+      "year": 2026,
+      "days": 4,
+      "observed_days": 4,
+      "unobserved_days": 0,
+      "missing_acquisition_only": 0,
+      "documented_outage_only": 0,
+      "missing_acquisition_and_outage": 0,
+      "outage_causes": {}
+    }
+  ],
+  "detections_per_year": [
+    {
+      "year": 2012,
+      "selected": 148690,
+      "all_confidence": 159564
+    },
+    {
+      "year": 2013,
+      "selected": 108320,
+      "all_confidence": 115389
+    },
+    {
+      "year": 2014,
+      "selected": 94273,
+      "all_confidence": 101421
+    },
+    {
+      "year": 2015,
+      "selected": 136293,
+      "all_confidence": 146122
+    },
+    {
+      "year": 2016,
+      "selected": 232902,
+      "all_confidence": 247815
+    },
+    {
+      "year": 2017,
+      "selected": 186020,
+      "all_confidence": 199273
+    },
+    {
+      "year": 2018,
+      "selected": 163615,
+      "all_confidence": 173590
+    },
+    {
+      "year": 2019,
+      "selected": 355701,
+      "all_confidence": 380029
+    },
+    {
+      "year": 2020,
+      "selected": 285126,
+      "all_confidence": 308495
+    },
+    {
+      "year": 2021,
+      "selected": 285926,
+      "all_confidence": 303009
+    },
+    {
+      "year": 2022,
+      "selected": 308129,
+      "all_confidence": 329048
+    },
+    {
+      "year": 2023,
+      "selected": 332558,
+      "all_confidence": 355236
+    },
+    {
+      "year": 2024,
+      "selected": 844864,
+      "all_confidence": 884419
+    },
+    {
+      "year": 2025,
+      "selected": 131484,
+      "all_confidence": 139306
+    },
+    {
+      "year": 2026,
+      "selected": 178,
+      "all_confidence": 188
+    }
+  ],
+  "fitting_exclusion_order": [
+    "purged_partition",
+    "missing_label",
+    "geographic_holdout",
+    "incomplete_28d"
+  ],
+  "fitting_exclusions": {
+    "train": {
+      "candidate_rows": 15489882,
+      "purged_partition": 37146,
+      "missing_label": 74292,
+      "geographic_holdout": 3162960,
+      "incomplete_28d": 236048,
+      "eligible": 11979436,
+      "low_coverage_sensitivity_additional": 0
+    },
+    "val_select": {
+      "candidate_rows": 1931592,
+      "purged_partition": 37146,
+      "missing_label": 37146,
+      "geographic_holdout": 382000,
+      "incomplete_28d": 118024,
+      "eligible": 1357276,
+      "low_coverage_sensitivity_additional": 0
+    },
+    "val_calib": {
+      "candidate_rows": 1931592,
+      "purged_partition": 37146,
+      "missing_label": 148584,
+      "geographic_holdout": 359080,
+      "incomplete_28d": 206542,
+      "eligible": 1180240,
+      "low_coverage_sensitivity_additional": 0
+    }
+  },
+  "definitions": {
+    "positive_rate": "Positive / nonmissing primary labels, before fitting filters.",
+    "seasonal_cycle": "Equal weight per labelled cell-week; both geographic populations.",
+    "training_map": "Complete, non-purged train weeks with n_primary > 0, per cell.",
+    "outage_causes": "Outage days overlapping source comments; causes may overlap.",
+    "fitting_exclusions": "Sequential, disjoint counts within issue-date partition bounds.",
+    "low_coverage_sensitivity": "Additional exclusions from eligible rows; not primary.",
+    "weekly_counts": "National observations, including incomplete weeks; 2012-2025 only."
+  },
+  "input_sha256": {
+    "firms_manifest_sha256": "f0c7253a600b3bfc5274af3ce5ffb17de99c62da6ebd4fbced9f4cce917af101",
+    "outage_snapshot_sha256": "f3363ada577a98e0dc2c0eef78c29ca6173790fd6469bdfd0e4c53a16dadba1a",
+    "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "cells": "332ec6bb56b96227a4229d95721f3aa900ed4827f2a65f9aca2e2fdcce65d3d4",
+    "panel": {
+      "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+      "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+      "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+      "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+      "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+      "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+      "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+      "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+      "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+      "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+      "datasets/processed/panel/year=2023/part.parquet": "245ac353e7f1e3f78c62e4e3a8a743f2c2153d6f31d56043dc0218285fd96e1d",
+      "datasets/processed/panel/year=2024/part.parquet": "cfd566e473bcc9784d043574af4ae7514c8b7d25b2f694f654f35f98659619b6",
+      "datasets/processed/panel/year=2025/part.parquet": "e8d1cecadb6a184b54d5e276d6f042bdcc546d6f080a85c51e48ccd7c0c13993"
+    }
+  }
+}
