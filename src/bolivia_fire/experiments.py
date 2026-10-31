@@ -16,6 +16,7 @@ from numpy.typing import NDArray
 from bolivia_fire.config import Paths
 from bolivia_fire.evaluation.artifacts import (
     atomic_json,
+    consumed_snapshot,
     provenance,
     record_final_opening,
     save_candidate,
@@ -97,10 +98,17 @@ class Experiment:
         self.directory = paths.root / "artifacts/models" / self.name
         self.selection_path = paths.root / "artifacts/evaluation" / f"selection_{self.name}.json"
 
-    def _metadata(self, tick: float, *, include_test: bool = False) -> dict[str, Any]:
+    def _metadata(
+        self,
+        tick: float,
+        *,
+        include_test: bool = False,
+        consumed_variants: tuple[str, ...] | None = None,
+    ) -> dict[str, Any]:
         return {
             **provenance(
                 self.paths, self.config, tick, variant=self.variant, include_test=include_test,
+                consumed_variants=consumed_variants,
             ),
             "variant": self.variant,
             "selection": self.selection,
@@ -391,15 +399,30 @@ class Experiment:
                         for name, value in selection["calibrator_ids"].items()
                     }
                 )
-        evaluation_snapshot = snapshot(
-            self.paths, variant=self.variant, include_test=split == "test",
+        consumed_variants = tuple(
+            experiment.variant
+            for experiment, selection in (
+                (self, selected), (geographic, geo_selected), (other, other_selected),
+            )
+            if selection is not None
         )
+        evaluation_snapshot = consumed_snapshot(
+            self.paths, variants=consumed_variants, include_test=split == "test",
+        )
+
+        def verify_snapshot(current: dict[str, Any]) -> None:
+            if any(current[name] != hashes for name, hashes in evaluation_snapshot.items()):
+                raise ValueError(
+                    "Inputs changed during evaluation; this run is not published"
+                )
+
         opening = None
         if split == "test":
             opening = record_final_opening(
                 self.paths, identities, calibrators, self.config, reopen_reason,
-                variant=self.variant,
+                variant=self.variant, consumed_variants=consumed_variants,
             )
+            verify_snapshot(opening)
 
         def publish(report: dict[str, Any]) -> dict[str, Any]:
             report.update(
@@ -407,13 +430,12 @@ class Experiment:
                     "model_ids": identities,
                     "calibrator_ids": calibrators,
                     "final_test_opening": opening,
-                    **self._metadata(tick, include_test=split == "test"),
+                    **self._metadata(
+                        tick, include_test=split == "test", consumed_variants=consumed_variants,
+                    ),
                 }
             )
-            if report["dataset_snapshot_hashes"] != evaluation_snapshot:
-                raise ValueError(
-                    "Panel changed during evaluation; this opening is logged but not published"
-                )
+            verify_snapshot(report)
             atomic_json(
                 self.paths.root / "artifacts/evaluation" / f"{split}_{self.name}.json", report,
             )
@@ -427,6 +449,9 @@ class Experiment:
             name: joblib.load(geographic.directory / f"{name}.joblib")
             for name in geo_selected["final_candidates"]
         }
+        verify_snapshot(consumed_snapshot(
+            self.paths, variants=consumed_variants, include_test=split == "test",
+        ))
         with PanelStore(self.paths) as store:
             try:
                 data = self._load(store, split)
@@ -587,6 +612,10 @@ class Experiment:
         _, selected = self._selected()
         geographic = self.geographic()
         _, geo_selected = geographic._selected()
+        consumed_variants = (self.variant, geographic.variant)
+        prediction_snapshot = consumed_snapshot(
+            self.paths, variants=consumed_variants, include_test=split == "test",
+        )
         output = self.paths.root / "artifacts/predictions" / self.name / f"{split}.parquet"
         output.parent.mkdir(parents=True, exist_ok=True)
         pending = output.with_suffix(".parquet.tmp")
@@ -629,6 +658,13 @@ class Experiment:
                                 )
                                 writer.write_table(batch)
                                 rows += len(batch)
+                metadata = self._metadata(
+                    tick, include_test=split == "test", consumed_variants=consumed_variants,
+                )
+                if any(metadata[name] != hashes for name, hashes in prediction_snapshot.items()):
+                    raise ValueError(
+                        "Inputs changed during prediction; predictions are not published"
+                    )
                 pending.replace(output)
             finally:
                 pending.unlink(missing_ok=True)
@@ -647,7 +683,7 @@ class Experiment:
                     for name, digest in geo_selected["model_ids"].items()
                 },
             },
-            **self._metadata(tick, include_test=split == "test"),
+            **metadata,
         }
         atomic_json(output.with_suffix(".json"), report)
         return report

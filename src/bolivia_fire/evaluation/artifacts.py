@@ -68,6 +68,23 @@ def snapshot(paths: Paths, *, variant: str, include_test: bool = False) -> dict[
     return {path.relative_to(paths.root).as_posix(): sha256_file(path) for path in sorted(files)}
 
 
+def consumed_snapshot(
+    paths: Paths, *, variants: tuple[str, ...], include_test: bool = False,
+) -> dict[str, Any]:
+    snapshots: dict[str, dict[str, str]] = {}
+    union: dict[str, str] = {}
+    for variant in dict.fromkeys(variants):
+        hashes = snapshot(paths, variant=variant, include_test=include_test)
+        if any(name in union and union[name] != digest for name, digest in hashes.items()):
+            raise ValueError("Inputs changed while snapshotting consumed variants")
+        snapshots[variant] = hashes
+        union.update(hashes)
+    return {
+        "dataset_snapshot_hashes": union,
+        "consumed_variant_snapshot_hashes": snapshots,
+    }
+
+
 def git_commit(root: Path) -> str | None:
     result = subprocess.run(
         ["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=False
@@ -118,11 +135,17 @@ def provenance(
     *,
     variant: str,
     include_test: bool = False,
+    consumed_variants: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
+    hashes = (
+        {"dataset_snapshot_hashes": snapshot(paths, variant=variant, include_test=include_test)}
+        if consumed_variants is None
+        else consumed_snapshot(paths, variants=consumed_variants, include_test=include_test)
+    )
     return {
         "timestamp_utc": datetime.now(UTC).isoformat(),
         "git_commit": git_commit(paths.root),
-        "dataset_snapshot_hashes": snapshot(paths, variant=variant, include_test=include_test),
+        **hashes,
         "protocol_sha256": sha256_file(paths.root / "configs/protocol.yaml"),
         "experiments_sha256": sha256_file(paths.root / "configs/experiments.yaml"),
         "config": config,
@@ -155,6 +178,7 @@ def record_final_opening(
     reopen_reason: str | None,
     *,
     variant: str,
+    consumed_variants: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     destination = paths.root / "artifacts/evaluation/final_test_log.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -163,7 +187,10 @@ def record_final_opening(
         reason = reopen_reason.strip() if reopen_reason else None
         if entries and not reason:
             raise ValueError("Final test already opened; a second opening requires --reopen-reason")
-        entry = provenance(paths, config, time.perf_counter(), variant=variant, include_test=True)
+        entry = provenance(
+            paths, config, time.perf_counter(), variant=variant, include_test=True,
+            consumed_variants=consumed_variants or (variant,),
+        )
         panel = {
             name: digest
             for name, digest in entry["dataset_snapshot_hashes"].items()

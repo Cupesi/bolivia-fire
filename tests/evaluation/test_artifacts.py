@@ -75,3 +75,20 @@ def test_synthetic_final_opening_records_variant_snapshot(
     opening = record_final_opening(paths, {}, {}, {"seed": 7}, None, variant=variant)
     assert opening["dataset_snapshot_hashes"] == snapshot(paths, variant=variant, include_test=True)
     assert "datasets/processed/panel/year=2023/part.parquet" in opening["dataset_snapshot_hashes"]
+
+
+def test_synthetic_final_opening_records_all_consumed_variants(
+    synthetic_snapshot_paths: Paths,
+) -> None:
+    paths = synthetic_snapshot_paths
+    variants = ("strict", "strict_geo", "retrospective")
+    opening = record_final_opening(
+        paths, {}, {}, {"seed": 7}, None, variant="strict", consumed_variants=variants,
+    )
+    snapshots = opening["consumed_variant_snapshot_hashes"]
+    assert set(snapshots) == set(variants)
+    chirps = "datasets/processed/covariates/chirps_features/year=2023/part.parquet"
+    assert chirps not in snapshots["strict"]
+    assert chirps not in snapshots["strict_geo"]
+    assert chirps in snapshots["retrospective"]
+    assert opening["dataset_snapshot_hashes"] == snapshots["retrospective"]

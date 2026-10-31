@@ -99,6 +99,166 @@ def synthetic_chirps(root: Path) -> None:
         pq.write_table(table, destination)
 
 
+@pytest.fixture(scope="module")
+def synthetic_selected_runs(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    root = tmp_path_factory.mktemp("synthetic_selected_runs")
+    synthetic_panel(root)
+    synthetic_chirps(root)
+    for variant in ("strict", "retrospective"):
+        command(root, "train", "--variant", variant)
+        command(root, "select", "--variant", variant)
+    return root
+
+
+@pytest.mark.parametrize("variant", ["strict", "retrospective"])
+def test_synthetic_evaluation_records_consumed_variant_hashes(
+    tmp_path: Path, synthetic_selected_runs: Path, variant: str,
+) -> None:
+    from bolivia_fire.experiments import Experiment
+
+    shutil.copytree(synthetic_selected_runs, tmp_path, dirs_exist_ok=True)
+    report = Experiment(Paths(tmp_path), variant=variant).evaluate(open_final_test=True)
+    comparator = "retrospective" if variant == "strict" else "strict"
+    snapshots = report["consumed_variant_snapshot_hashes"]
+    assert set(snapshots) == {variant, f"{variant}_geo", comparator}
+    chirps = "datasets/processed/covariates/chirps_features/year=2023/part.parquet"
+    assert snapshots["retrospective"][chirps] == sha256_file(tmp_path / chirps)
+    assert chirps not in snapshots["strict"]
+    union = {name: digest for hashes in snapshots.values() for name, digest in hashes.items()}
+    assert report["dataset_snapshot_hashes"] == union
+    log = json.loads((tmp_path / "artifacts/evaluation/final_test_log.json").read_text())
+    assert log[0]["dataset_snapshot_hashes"] == union
+    assert log[0]["consumed_variant_snapshot_hashes"] == snapshots
+    published = json.loads((tmp_path / f"artifacts/evaluation/test_{variant}.json").read_text())
+    assert published["consumed_variant_snapshot_hashes"] == snapshots
+
+
+@pytest.mark.parametrize("comparator", [False, True])
+@pytest.mark.parametrize(
+    ("split", "mutation_point"),
+    [("test", "opening"), ("test", "evaluation"), ("val_calib", "evaluation")],
+)
+@pytest.mark.parametrize(
+    "changed_file", ["chirps_manifest.jsonl", "chirps_features/year=2023/part.parquet"],
+)
+def test_synthetic_strict_evaluation_tracks_only_consumed_chirps(
+    tmp_path: Path,
+    synthetic_selected_runs: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    comparator: bool,
+    split: str,
+    mutation_point: str,
+    changed_file: str,
+) -> None:
+    import bolivia_fire.experiments as experiments
+
+    shutil.copytree(synthetic_selected_runs, tmp_path, dirs_exist_ok=True)
+    if not comparator:
+        (tmp_path / "artifacts/evaluation/selection_retrospective.json").unlink()
+    if split == "val_calib":
+        changed_file = changed_file.replace("year=2023", "year=2022")
+    changed_path = tmp_path / "datasets/processed/covariates" / changed_file
+    original_digest = sha256_file(changed_path)
+
+    def mutate() -> None:
+        with changed_path.open("ab") as stream:
+            stream.write(b'{"synthetic": "changed during evaluation"}\n')
+
+    if mutation_point == "opening":
+        original_opening = experiments.record_final_opening
+
+        def opening_with_mutation(*args: Any, **kwargs: Any) -> dict[str, Any]:
+            opening = original_opening(*args, **kwargs)
+            mutate()
+            return opening
+
+        monkeypatch.setattr(experiments, "record_final_opening", opening_with_mutation)
+        if comparator:
+            def refuse_changed_load(*args: Any, **kwargs: Any) -> Any:
+                pytest.fail("Changed opening inputs reached evaluation data loading")
+
+            monkeypatch.setattr(experiments.Experiment, "_load", refuse_changed_load)
+    else:
+        original_load = experiments.Experiment._load
+
+        def load_with_mutation(
+            self: experiments.Experiment, *args: Any, **kwargs: Any,
+        ) -> experiments.PanelData:
+            data = original_load(self, *args, **kwargs)
+            if self.variant == ("retrospective" if comparator else "strict"):
+                mutate()
+            return data
+
+        monkeypatch.setattr(experiments.Experiment, "_load", load_with_mutation)
+
+    experiment = experiments.Experiment(Paths(tmp_path))
+    output = tmp_path / f"artifacts/evaluation/{split}_strict.json"
+    if comparator:
+        with pytest.raises(ValueError, match="changed.*evaluation"):
+            experiment.evaluate(split=split, open_final_test=split == "test")
+        assert not output.exists()
+        if split == "test":
+            log = json.loads((tmp_path / "artifacts/evaluation/final_test_log.json").read_text())
+            relative = changed_path.relative_to(tmp_path).as_posix()
+            assert log[0]["dataset_snapshot_hashes"][relative] == original_digest
+    else:
+        report = experiment.evaluate(split=split, open_final_test=split == "test")
+        assert output.exists()
+        assert set(report["consumed_variant_snapshot_hashes"]) == {"strict", "strict_geo"}
+        assert not any("covariates" in name for name in report["dataset_snapshot_hashes"])
+    assert sha256_file(changed_path) != original_digest
+
+
+@pytest.mark.parametrize("variant", ["strict", "retrospective"])
+def test_synthetic_prediction_records_only_its_consumed_variants(
+    tmp_path: Path, synthetic_selected_runs: Path, variant: str,
+) -> None:
+    from bolivia_fire.experiments import Experiment
+
+    shutil.copytree(synthetic_selected_runs, tmp_path, dirs_exist_ok=True)
+    report = Experiment(Paths(tmp_path), variant=variant).predict()
+    snapshots = report["consumed_variant_snapshot_hashes"]
+    assert set(snapshots) == {variant, f"{variant}_geo"}
+    union = {name: digest for hashes in snapshots.values() for name, digest in hashes.items()}
+    assert report["dataset_snapshot_hashes"] == union
+    assert any("covariates" in name for name in union) is (variant == "retrospective")
+    published = json.loads((tmp_path / f"artifacts/predictions/{variant}/test.json").read_text())
+    assert published["consumed_variant_snapshot_hashes"] == snapshots
+
+
+@pytest.mark.parametrize("variant", ["strict", "retrospective"])
+def test_synthetic_prediction_refuses_changed_consumed_inputs(
+    tmp_path: Path,
+    synthetic_selected_runs: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    variant: str,
+) -> None:
+    from bolivia_fire.experiments import Experiment
+
+    shutil.copytree(synthetic_selected_runs, tmp_path, dirs_exist_ok=True)
+    changed = tmp_path / "datasets/processed/panel/year=2023/part.parquet"
+    original_load = Experiment._load
+
+    def load_with_mutation(self: Experiment, *args: Any, **kwargs: Any) -> Any:
+        data = original_load(self, *args, **kwargs)
+        if self.variant.endswith("_geo"):
+            with changed.open("ab") as stream:
+                stream.write(b"synthetic mutation after loading\n")
+        return data
+
+    monkeypatch.setattr(Experiment, "_load", load_with_mutation)
+    experiment = Experiment(Paths(tmp_path), variant=variant)
+    output = tmp_path / f"artifacts/predictions/{variant}/test.parquet"
+    output.parent.mkdir(parents=True)
+    output.write_bytes(b"synthetic previously published predictions")
+    output.with_suffix(".json").write_text('{"synthetic": "previous report"}')
+    with pytest.raises(ValueError, match="changed.*prediction"):
+        experiment.predict()
+    assert output.read_bytes() == b"synthetic previously published predictions"
+    assert json.loads(output.with_suffix(".json").read_text()) == {"synthetic": "previous report"}
+    assert not output.with_suffix(".parquet.tmp").exists()
+
+
 def test_synthetic_cli_workflow_guard_and_prediction(tmp_path: Path) -> None:
     synthetic_panel(tmp_path)
     assert command(tmp_path, "train", "--variant", "strict") == 0
