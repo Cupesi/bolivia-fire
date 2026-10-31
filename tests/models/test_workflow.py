@@ -14,6 +14,7 @@ import pytest
 import yaml
 
 from bolivia_fire.config import REPO_ROOT, Paths
+from bolivia_fire.covariates.chirps import REFERENCE_RULE
 from bolivia_fire.firms.storage import sha256_file
 
 
@@ -90,7 +91,7 @@ def synthetic_chirps(root: Path) -> None:
                 b"CHIRPS v3.0 final daily rnl (ERA5 disaggregation), native 0.05 degree COG"
             ),
             b"train_years": json.dumps(list(range(2013, 2021))).encode(),
-            b"reference_rule": b"training years only, reference window end <= issue",
+            b"reference_rule": REFERENCE_RULE.encode(),
             b"protocol_sha256": sha256_file(root / "configs/protocol.yaml").encode(),
             b"manifest_sha256": sha256_file(manifest).encode(),
         })

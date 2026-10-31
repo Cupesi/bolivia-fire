@@ -29,6 +29,7 @@ from bolivia_fire.firms.storage import sha256_file
 
 BASE_URL = "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/cogs"
 PRODUCT = "CHIRPS v3.0 final daily rnl (ERA5 disaggregation), native 0.05 degree COG"
+REFERENCE_RULE = "training years only; LOYO for train issues, all for later issues"
 
 
 def chirps_url(day: date) -> str:
@@ -265,7 +266,7 @@ def build_features(
         metadata = {
             b"product": PRODUCT.encode(),
             b"train_years": json.dumps(training).encode(),
-            b"reference_rule": b"training years only; LOYO for train issues, all for later issues",
+            b"reference_rule": REFERENCE_RULE.encode(),
         }
         if manifest.exists():
             metadata[b"manifest_sha256"] = sha256_file(manifest).encode()

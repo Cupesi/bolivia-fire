@@ -7,15 +7,20 @@ import numpy as np
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import pytest
 
 from bolivia_fire.cli import main
 from bolivia_fire.config import REPO_ROOT, Paths
-from bolivia_fire.covariates import join_retrospective
 from bolivia_fire.covariates.chirps import extract_year
 from bolivia_fire.covariates_cli import register
+from bolivia_fire.models.retrospective import RetrospectiveUnavailable, join_verified
 
 
-def test_synthetic_feature_build_and_parquet_join(tmp_path, capsys):
+@pytest.mark.parametrize("invalid_rule", [
+    b"training years only, reference window end <= issue",
+    b"unverified reference rule",
+])
+def test_synthetic_feature_build_and_verified_join(tmp_path, capsys, invalid_rule):
     root = tmp_path / "datasets" / "processed" / "covariates"
     config = tmp_path / "configs"
     config.mkdir()
@@ -44,11 +49,20 @@ def test_synthetic_feature_build_and_parquet_join(tmp_path, capsys):
     assert pq.ParquetFile(output).read().column("rain_sum_90d").to_pylist() == [90, 90]
     synthetic_panel = pa.table({"cell_id": ["b", "a"],
                                 "issue_date": [date(2024, 4, 8), date(2024, 4, 8)]})
-    joined = join_retrospective(synthetic_panel, root=root)
+    features = ["rain_sum_7d", "rain_sum_90d"]
+    joined = join_verified(synthetic_panel, Paths(tmp_path), features)
     assert joined.column("cell_id").to_pylist() == ["b", "a"]
     assert joined.column("rain_sum_7d").to_pylist() == [7, 7]
     assert joined.column("rain_complete_90d").to_pylist() == [True, True]
     assert joined.column("rain_anomaly_90d").null_count == 2
+
+    table = pq.ParquetFile(output).read()
+    metadata = dict(table.schema.metadata or {})
+    metadata[b"reference_rule"] = invalid_rule
+    pq.write_table(table.replace_schema_metadata(metadata), output)
+    with pytest.raises(RetrospectiveUnavailable) as exc_info:
+        join_verified(synthetic_panel, Paths(tmp_path), features)
+    assert exc_info.value.reason == "retrospective_provenance_invalid"
 
 
 def test_synthetic_covariate_commands_require_no_firms_key(tmp_path, monkeypatch, capsys):

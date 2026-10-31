@@ -37,7 +37,7 @@ def completeness_columns(features: list[str]) -> list[str]:
 
 
 def join_verified(table: pa.Table, paths: Paths, features: list[str]) -> pa.Table:
-    from bolivia_fire.covariates.chirps import PRODUCT
+    from bolivia_fire.covariates.chirps import PRODUCT, REFERENCE_RULE
 
     flags = completeness_columns(features)
     root = paths.datasets / "processed/covariates"
@@ -64,8 +64,7 @@ def join_verified(table: pa.Table, paths: Paths, features: list[str]) -> pa.Tabl
                 == sha256_file(paths.root / "configs/protocol.yaml").encode()
                 and json.loads(metadata.get(b"train_years", b"null"))
                 == list(range(first, last + 1))
-                and metadata.get(b"reference_rule")
-                == b"training years only, reference window end <= issue"
+                and metadata.get(b"reference_rule") == REFERENCE_RULE.encode()
                 and manifest.exists()
                 and metadata.get(b"manifest_sha256") == sha256_file(manifest).encode()
             )
