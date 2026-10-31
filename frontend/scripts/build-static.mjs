@@ -51,7 +51,11 @@ const size = (
   await Promise.all(files.map((file) => stat(join(source, file))))
 ).reduce((sum, item) => sum + item.size, 0);
 if (size > 200_000_000) throw new Error("Static data exceeds 200 MB.");
-await build({ mode: "static" });
+await build({
+  mode: "static",
+  publicDir: "public",
+  build: { copyPublicDir: true },
+});
 const out = resolve("dist/data");
 await mkdir(out, { recursive: true });
 await writeFile(join(out, "index.json"), JSON.stringify(index));
