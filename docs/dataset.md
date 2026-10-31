@@ -31,6 +31,15 @@ are excluded. Areas use WGS84 geodesics on oriented polygon intersections,
 including holes. Department assignment uses the largest national intersection
 area, with department names sorted to resolve ties deterministically.
 
+The pinned ADM0 polygon excludes large interior water and salt bodies. Its four
+interior rings cover 10,875.19 km²; subtracting 94.64 km² of retained islands gives
+a net exclusion of **10,780.55 km²**, verified from the hash-matching boundary
+using oriented WGS84 geodesic areas. This exclusion contributes to the eligible
+national area of **1,068,783.84 km²** being below the commonly cited
+**1,098,581 km²**. The boundary's exterior geometry and area convention also
+differ from that nominal figure; the interior exclusions do not explain the
+entire difference. Area budgets use the eligible national intersections.
+
 One-degree blocks use integer-degree edges and the full-cell center. Unique
 eligible blocks are ranked by SHA256 of `20261031:{block_id}`; the first
 `floor(0.2 * number_of_blocks)` are flagged `geo_holdout`. The flag persists
