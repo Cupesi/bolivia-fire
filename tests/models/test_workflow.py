@@ -4,6 +4,7 @@ import argparse
 import json
 import shutil
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -205,6 +206,35 @@ def test_changed_training_snapshot_requires_retraining(tmp_path: Path) -> None:
     frame.to_parquet(path, index=False)
     with pytest.raises(ValueError, match="changed"):
         command(tmp_path, "select")
+
+
+@pytest.mark.parametrize("variant", ["strict", "strict_geo"])
+def test_synthetic_strict_training_ignores_chirps_manifest_appends(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, variant: str,
+) -> None:
+    import bolivia_fire.experiments as experiments
+
+    synthetic_panel(tmp_path)
+    manifest = tmp_path / "datasets/processed/covariates/chirps_manifest.jsonl"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text('{"synthetic": "initial"}\n')
+    original_fit = experiments.fit_logistic
+
+    def fit_with_chirps_append(*args: Any, **kwargs: Any) -> experiments.Candidate:
+        candidate = original_fit(*args, **kwargs)
+        with manifest.open("a", encoding="utf-8") as stream:
+            stream.write('{"synthetic": "appended during training"}\n')
+        return candidate
+
+    monkeypatch.setattr(experiments, "fit_logistic", fit_with_chirps_append)
+    experiment = experiments.Experiment(Paths(tmp_path), variant=variant)
+    report = experiment.train()
+    assert len(report["candidates"]) == 23
+    assert manifest.read_text().count("\n") == 2
+    assert not any("covariates" in path for path in report["dataset_snapshot_hashes"])
+    selection = experiment.select()
+    assert selection["run_token"] == report["run_token"]
+    assert selection["dataset_snapshot_hashes"] == report["dataset_snapshot_hashes"]
 
 
 def test_synthetic_low_coverage_exclusion_is_counted(tmp_path: Path) -> None:

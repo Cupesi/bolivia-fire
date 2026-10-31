@@ -44,7 +44,7 @@ def save_candidate(path: Path, candidate: Any) -> None:
         pending.unlink(missing_ok=True)
 
 
-def snapshot(paths: Paths, *, include_test: bool = False) -> dict[str, str]:
+def snapshot(paths: Paths, *, variant: str, include_test: bool = False) -> dict[str, str]:
     protocol = load_protocol(paths.root)
     files = [paths.root / "configs/protocol.yaml", paths.root / "configs/experiments.yaml"]
     sources = paths.datasets / "sources.yaml"
@@ -57,13 +57,14 @@ def snapshot(paths: Paths, *, include_test: bool = False) -> dict[str, str]:
         for path in (paths.datasets / "processed/panel").glob("year=*/part.parquet")
         if first <= int(path.parent.name.removeprefix("year=")) <= last
     )
-    covariates = paths.datasets / "processed/covariates"
-    if (covariates / "chirps_manifest.jsonl").exists():
-        files.append(covariates / "chirps_manifest.jsonl")
-    files.extend(
-        path for path in (covariates / "chirps_features").glob("year=*/part.parquet")
-        if first <= int(path.parent.name.removeprefix("year=")) <= last
-    )
+    if variant.startswith("retrospective"):
+        covariates = paths.datasets / "processed/covariates"
+        if (covariates / "chirps_manifest.jsonl").exists():
+            files.append(covariates / "chirps_manifest.jsonl")
+        files.extend(
+            path for path in (covariates / "chirps_features").glob("year=*/part.parquet")
+            if first <= int(path.parent.name.removeprefix("year=")) <= last
+        )
     return {path.relative_to(paths.root).as_posix(): sha256_file(path) for path in sorted(files)}
 
 
@@ -115,12 +116,13 @@ def provenance(
     config: dict[str, Any],
     tick: float,
     *,
+    variant: str,
     include_test: bool = False,
 ) -> dict[str, Any]:
     return {
         "timestamp_utc": datetime.now(UTC).isoformat(),
         "git_commit": git_commit(paths.root),
-        "dataset_snapshot_hashes": snapshot(paths, include_test=include_test),
+        "dataset_snapshot_hashes": snapshot(paths, variant=variant, include_test=include_test),
         "protocol_sha256": sha256_file(paths.root / "configs/protocol.yaml"),
         "experiments_sha256": sha256_file(paths.root / "configs/experiments.yaml"),
         "config": config,
@@ -151,6 +153,8 @@ def record_final_opening(
     calibrator_ids: dict[str, str],
     config: dict[str, Any],
     reopen_reason: str | None,
+    *,
+    variant: str,
 ) -> dict[str, Any]:
     destination = paths.root / "artifacts/evaluation/final_test_log.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -159,7 +163,7 @@ def record_final_opening(
         reason = reopen_reason.strip() if reopen_reason else None
         if entries and not reason:
             raise ValueError("Final test already opened; a second opening requires --reopen-reason")
-        entry = provenance(paths, config, time.perf_counter(), include_test=True)
+        entry = provenance(paths, config, time.perf_counter(), variant=variant, include_test=True)
         panel = {
             name: digest
             for name, digest in entry["dataset_snapshot_hashes"].items()

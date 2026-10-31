@@ -99,7 +99,9 @@ class Experiment:
 
     def _metadata(self, tick: float, *, include_test: bool = False) -> dict[str, Any]:
         return {
-            **provenance(self.paths, self.config, tick, include_test=include_test),
+            **provenance(
+                self.paths, self.config, tick, variant=self.variant, include_test=include_test,
+            ),
             "variant": self.variant,
             "selection": self.selection,
             "drop_group": self.drop_group,
@@ -113,7 +115,7 @@ class Experiment:
         if not path.exists():
             raise ValueError("Train this experiment before selection or prediction")
         result = json.loads(path.read_text())
-        if result["dataset_snapshot_hashes"] != snapshot(self.paths):
+        if result["dataset_snapshot_hashes"] != snapshot(self.paths, variant=self.variant):
             raise ValueError("Training dataset or configuration changed; train and select again")
         return result
 
@@ -169,7 +171,7 @@ class Experiment:
         self._retrospective_features()
         tick = time.perf_counter()
         self.directory.mkdir(parents=True, exist_ok=True)
-        initial_snapshot = snapshot(self.paths)
+        initial_snapshot = snapshot(self.paths, variant=self.variant)
         with PanelStore(self.paths) as store:
             train = self._load(store, "train")
             validation = self._load(store, "val_select")
@@ -217,7 +219,7 @@ class Experiment:
                 "candidates": records,
                 "exclusions": {"train": train.exclusions, "val_select": validation.exclusions},
             }
-        if snapshot(self.paths) != initial_snapshot:
+        if snapshot(self.paths, variant=self.variant) != initial_snapshot:
             raise ValueError("Panel changed during training; discard this run and retry")
         report.update(self._metadata(tick))
         atomic_json(self.directory / "run.json", report)
@@ -389,11 +391,14 @@ class Experiment:
                         for name, value in selection["calibrator_ids"].items()
                     }
                 )
-        evaluation_snapshot = snapshot(self.paths, include_test=split == "test")
+        evaluation_snapshot = snapshot(
+            self.paths, variant=self.variant, include_test=split == "test",
+        )
         opening = None
         if split == "test":
             opening = record_final_opening(
-                self.paths, identities, calibrators, self.config, reopen_reason
+                self.paths, identities, calibrators, self.config, reopen_reason,
+                variant=self.variant,
             )
 
         def publish(report: dict[str, Any]) -> dict[str, Any]:
