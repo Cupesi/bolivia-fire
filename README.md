@@ -5,9 +5,9 @@ detections in Bolivia, with a local API and browser explorer. It estimates the p
 least one selected NASA FIRMS VIIRS S-NPP standard-processing detection in the national part of a
 0.05° cell during the seven days beginning Monday 00:00 UTC.
 
-Status: the dataset, pipeline, API and browser UI are complete. The primary final-test evaluation
-opened once on 2026-10-31; pre-registered sensitivity analyses are being added as logged
-reopenings in the [final-test access log](artifacts/evaluation/final_test_log.json).
+Status: the dataset, pipeline, API and browser UI are complete; all pre-registered
+[sensitivity analyses](docs/results.md#sensitivity-analyses) are published as logged reopenings
+in the [final-test access log](artifacts/evaluation/final_test_log.json).
 
 The calibrated strict LightGBM achieves temporal-test AP 0.323393
 (95% CI [0.221655, 0.382973]). H1 is supported:
@@ -162,3 +162,5 @@ CHIRPS3 Data Repository (2025), ERA5 disaggregation and the derived cell-center 
 and antecedent-rainfall aggregation.
 Use [CITATION.cff](CITATION.cff) to cite the software and retain the source attributions when
 redistributing derived data.
+
+Bolivia Fire is maintained by Victor Hugo Cuellar Flores and hosted by the Cupesí Labs open-source organization.

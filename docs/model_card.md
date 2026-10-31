@@ -130,7 +130,10 @@ intervals use 500 block-bootstrap replicates, resampling calendar
 months for the temporal population and geographic blocks for the spatial population.
 Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models`,
 `geographic_holdout` and `bootstrap`. See [results](results.md) for paired hypotheses,
-annual and Santa Cruz breakdowns, calibration, exclusion counts, figures and sensitivity status.
+annual and Santa Cruz breakdowns, calibration, exclusion counts and figures.
+All pre-registered sensitivities are published as logged reopenings: H1 remains supported in
+each run, and low-coverage exclusion reproduces the primary result because it removes no
+eligible test rows; see the [sensitivity results and source reports](results.md#sensitivity-analyses).
 
 ## Intended and unsupported uses
 

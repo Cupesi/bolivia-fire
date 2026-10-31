@@ -241,21 +241,54 @@ and validation eligibility; [test_strict.json](../artifacts/evaluation/test_stri
 
 ## Sensitivity analyses
 
-The pre-registered runs below supplement the primary evaluation. Results remain pending until
-each named evaluation file exists and contains a completed report. Closed selection artifacts
-and access-log entries alone do not establish sensitivity results. Every later final-test
-opening must appear as a reopening with its reason in
-[final_test_log.json](../artifacts/evaluation/final_test_log.json).
+All pre-registered sensitivity analyses are published below. Each was evaluated as a logged
+reopening after the frozen primary opening, with `reopening: true` and its recorded reason in
+[final_test_log.json](../artifacts/evaluation/final_test_log.json):
 
-| Run | Change | Expected evaluation file | Status |
-|---|---|---|---|
-| All confidence classes | Use all FIRMS confidence classes for the target, retaining primary-selection history features | `artifacts/evaluation/test_strict_all_confidence.json` | Pending |
-| Exclude low coverage | Exclude rows flagged `target_low_coverage` | `artifacts/evaluation/test_strict_exclude_low_coverage.json` | Pending |
-| Neighborhood ablation | Remove neighborhood history features | `artifacts/evaluation/test_strict_drop_neighborhood.json` | Pending |
-| Climatology ablation | Remove cell and department climatology features | `artifacts/evaluation/test_strict_drop_climatology.json` | Pending |
-| National ablation | Remove national history features | `artifacts/evaluation/test_strict_drop_national.json` | Pending |
+- All confidence classes: `pre-registered sensitivity analysis: all confidence classes (selection frozen; primary opening a7e198a)`.
+- Excluding low-coverage target weeks: `pre-registered sensitivity analysis: exclude low-coverage target weeks (selection frozen; primary opening a7e198a; rerun after an input-change abort)`.
+- Without neighborhood features: `pre-registered sensitivity analysis: ablation without neighborhood features (selection frozen; primary opening a7e198a)`.
+- Without climatology features: `pre-registered sensitivity analysis: ablation without climatology features (selection frozen; primary opening a7e198a)`.
+- Without national activity features: `pre-registered sensitivity analysis: ablation without national activity features (selection frozen; primary opening a7e198a)`.
 
-Each run includes its corresponding geographic feature set under the same selection and
-calibration procedure. The already recorded calibrated-baseline sensitivity is separate from
-these pending runs and remains in `test_strict.json` under `calibrated_baseline_sensitivity`.
-Primary tables and figures above continue to describe the original primary report.
+All-confidence targets retain primary-selection history features. The ablations remove
+neighborhood history, cell and department climatology, or national activity features,
+respectively. Each run includes its corresponding geographic feature set under the same
+validation selection and calibration procedure. The temporal protocol comparator is the
+validation-selected, **uncalibrated `train_climatology`** in every run; differences below subtract
+its AP from the calibrated selected model's AP on paired rows.
+
+| Run and source report | Selected temporal model | Calibrated temporal AP [95% CI] | Paired AP difference vs protocol comparator [95% CI] | H1 decision | Calibrated geographic-holdout AP [95% CI] (selected model) |
+|---|---|---|---|---|---|
+| [All confidence classes](../artifacts/evaluation/test_strict_all_confidence.json) | `lightgbm_03` | 0.332164 [0.228555, 0.390995] | 0.161794 [0.105869, 0.222490] | Supported | 0.384894 [0.251013, 0.473038] (`lightgbm_04`) |
+| [Excluding low-coverage target weeks](../artifacts/evaluation/test_strict_exclude_low_coverage.json) | `lightgbm_08` | 0.323393 [0.221655, 0.382973] | 0.156716 [0.099838, 0.217886] | Supported | 0.383912 [0.250128, 0.467940] (`lightgbm_04`) |
+| [Without neighborhood features](../artifacts/evaluation/test_strict_drop_neighborhood.json) | `lightgbm_03` | 0.310103 [0.215534, 0.364255] | 0.143427 [0.095249, 0.198396] | Supported | 0.348085 [0.213783, 0.438110] (`lightgbm_04`) |
+| [Without climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) | `lightgbm_03` | 0.315992 [0.215438, 0.375218] | 0.149316 [0.090848, 0.220613] | Supported | 0.387314 [0.252149, 0.471952] (`lightgbm_03`) |
+| [Without national activity features](../artifacts/evaluation/test_strict_drop_national.json) | `lightgbm_14` | 0.326971 [0.227608, 0.385530] | 0.160295 [0.105699, 0.220780] | Supported | 0.389078 [0.252019, 0.475680] (`lightgbm_04`) |
+
+Sources are linked by run: `selected_model`, `best_baseline`, `models`, `bootstrap`,
+`hypotheses.H1` and `geographic_holdout`. Point differences subtract the recorded APs;
+difference intervals are the recorded paired bootstrap intervals. H1 remains supported in each run
+because its paired interval lies entirely above zero. The all-confidence run changes the
+target definition, so its AP is not a performance gain on the primary target.
+
+The low-coverage run equals the primary result because the evaluated test rows contain zero
+low-coverage-flagged target weeks: `exclusions.test.target_low_coverage` and
+`exclusions.geographic_holdout.target_low_coverage` both record 0 exclusions, leaving
+3,127,636 temporal and 809,840 geographic cell-weeks. Its selected-model APs, intervals and
+paired baseline comparisons match the primary evaluation. Source:
+[test_strict_exclude_low_coverage.json](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
+`exclusions`, `models`, `geographic_holdout` and `bootstrap`.
+
+Relative to the primary AP reproduced by the low-coverage run, temporal AP changes by
+-0.013290 without neighborhood features, -0.007401 without climatology features and +0.003578
+without national activity features, calculated from the linked reports' calibrated APs.
+Their AP and comparator-gain intervals are shown above; no paired ablation-minus-primary
+intervals are recorded. These point changes measure predictive performance after feature
+removal and validation selection, not causal effects, and do not establish a reliable ordering
+of feature contributions.
+
+The calibrated-baseline sensitivity remains separate in
+[test_strict.json](../artifacts/evaluation/test_strict.json) under
+`calibrated_baseline_sensitivity`. Primary tables and figures above describe the original
+primary report.
