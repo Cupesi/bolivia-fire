@@ -5,7 +5,7 @@
       "sha256": "31242d34ef75076678dc0675ea578c96acfadf97d68c6503415c31b54b126cec"
     },
     "artifacts/evaluation/final_test_log.json": {
-      "sha256": "859694b41765a7e1d41fd4c4654801b7472b10aa455685faec0c030796a8b920"
+      "sha256": "897d332e9c25d8fb035877ccf258da849e9cadd5b0af93a6cda5f58904e9c9fe"
     },
     "artifacts/evaluation/selection_retrospective.json": {
       "sha256": "a269225593db82c5c65fee4f725f90c2d4825e591088ad66f9de3b7662e870a8"
@@ -19,11 +19,29 @@
     "artifacts/evaluation/selection_strict_all_confidence.json": {
       "sha256": "dae043afdc4b83641924b16fe1db203152a3f05f6ee41c9f87d9fae925c8e671"
     },
+    "artifacts/evaluation/selection_strict_drop_climatology.json": {
+      "sha256": "a799e7d5117f9efe5f98d6721a614451b24320f5b21e2da8db362076e635fc5b"
+    },
+    "artifacts/evaluation/selection_strict_drop_national.json": {
+      "sha256": "e95f986225287613d0b40bd75740fd8620647ca4a856aa2fc6a446e140088e59"
+    },
+    "artifacts/evaluation/selection_strict_drop_neighborhood.json": {
+      "sha256": "fa40e6265145cea0c4cf47307d61ad27fcedefb4af1cc8db60aa395a8d9e9ac6"
+    },
     "artifacts/evaluation/selection_strict_geo.json": {
       "sha256": "2f139f5227c68efce95a97b0e898b6cacf025677e52e96d2711073cca867ce0d"
     },
     "artifacts/evaluation/selection_strict_geo_all_confidence.json": {
       "sha256": "f3ece0428dbbf142a6a10b3a640170f94469761c19d983ad684e5fc02a253f00"
+    },
+    "artifacts/evaluation/selection_strict_geo_drop_climatology.json": {
+      "sha256": "a95a5e93820fc43fb524daa8deec5987ad477d317034a1ccda77b53633075ec4"
+    },
+    "artifacts/evaluation/selection_strict_geo_drop_national.json": {
+      "sha256": "ddc3a992578fdf3da5c743b155158b24556f42e64f2bb3476f840b57cdf5c421"
+    },
+    "artifacts/evaluation/selection_strict_geo_drop_neighborhood.json": {
+      "sha256": "337245fd2c11e00ef13507e918a1f15c79f480e83af3f7fd105d031f0fc089f1"
     },
     "datasets/processed/cells.parquet": {
       "sha256": "332ec6bb56b96227a4229d95721f3aa900ed4827f2a65f9aca2e2fdcce65d3d4"
@@ -38,7 +56,7 @@
       "sha256": "1da591dcede026bf36a8bc264376016878deb75e0a03c3f15684c6d8e735af8b"
     },
     "datasets/sources.yaml": {
-      "sha256": "2cc470a1199c578be5e6707319170e216904828c390397d05761c6ed1418c168"
+      "sha256": "4bfcdb9af6a6cb1df21e9a516648519da2af6301b1b56f18153754c01ed1e7b4"
     }
   },
   "selection": {
@@ -82,6 +100,36 @@
         "lightgbm_03": "a6514e2b6093b3cb7f69b1e82ede9d8781a9bbb429e9f0c71d316f952956ef9b"
       }
     },
+    "selection_strict_drop_climatology": {
+      "selected_model": "lightgbm_03",
+      "best_baseline": "train_climatology",
+      "model_ids": {
+        "train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "3a9f56ee3ff458ded944ea386c0678d48cb4e0573590499f337cadee01672030",
+        "lightgbm_03": "f6ef838c6caedca2e064f03e44dc51153999de0635e85b254691a6d125a0046a"
+      }
+    },
+    "selection_strict_drop_national": {
+      "selected_model": "lightgbm_14",
+      "best_baseline": "train_climatology",
+      "model_ids": {
+        "train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "a0e76ff214a4a2e81ad2ab8753660f9bfe58315f4e91a3d490a69cc8e31d4f7c",
+        "lightgbm_14": "be3d95b3cb1d9d4d67a696fdb4bedf7aebbd073a64e8d300480466fb2d415641"
+      }
+    },
+    "selection_strict_drop_neighborhood": {
+      "selected_model": "lightgbm_03",
+      "best_baseline": "train_climatology",
+      "model_ids": {
+        "train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "e36c4ea76ebac35bf6e8e3c43eac4191b85bcebe091f699a5663d25832c43a37",
+        "lightgbm_03": "1f542a280db6580528cd9ae930a9d80ee2e36e04651340c8efa8ce057992df67"
+      }
+    },
     "selection_strict_geo": {
       "selected_model": "lightgbm_04",
       "best_baseline": "persistence",
@@ -101,11 +149,41 @@
         "logistic_regression": "10461b7b3fe62073af4e58e6b3b13a0115282a7916e53c92030ddb8cab7da3e5",
         "lightgbm_04": "7b4c2cb2fb9acde60c6e547a5002cfc8472f6478a27e52bf24819707411dade8"
       }
+    },
+    "selection_strict_geo_drop_climatology": {
+      "selected_model": "lightgbm_03",
+      "best_baseline": "persistence",
+      "model_ids": {
+        "train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "3a9f56ee3ff458ded944ea386c0678d48cb4e0573590499f337cadee01672030",
+        "lightgbm_03": "f6ef838c6caedca2e064f03e44dc51153999de0635e85b254691a6d125a0046a"
+      }
+    },
+    "selection_strict_geo_drop_national": {
+      "selected_model": "lightgbm_04",
+      "best_baseline": "persistence",
+      "model_ids": {
+        "train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "e592a9562924b6c05e2ca4397d672b1157dd347156c308acf81696fb6db4a504",
+        "lightgbm_04": "4f46bf2a85787971104892fe75fc5397256f5a8e6e5bd9e4bc4c4f766b73d4eb"
+      }
+    },
+    "selection_strict_geo_drop_neighborhood": {
+      "selected_model": "lightgbm_04",
+      "best_baseline": "persistence",
+      "model_ids": {
+        "train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+        "persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+        "logistic_regression": "b83e1c07333667fe55539bcaf2aaa01a8cdfee36ae4f2ddbd2379ca9ab46f54a",
+        "lightgbm_04": "f5d26f3f1efa5cf9a328317b0754dacb57f6f01b5c57287322c0aaa45f7fd0fb"
+      }
     }
   },
   "final_test_access": {
     "source": "artifacts/evaluation/final_test_log.json",
-    "recorded_openings_at_read": 2,
+    "recorded_openings_at_read": 5,
     "evaluation_opening": "2026-10-31T10:30:00.578581+00:00"
   },
   "figures": {
@@ -230,10 +308,7 @@
       "caption": "Temporal test, strict; 2023\u20132025. Original baseline probabilities; fitted candidates are calibrated. Points are recorded APs; differences subtract recorded APs on identical support. 95% paired calendar-month-block bootstrap intervals use 500 recorded replicates. Comparator: Climatology (chosen on val_select).",
       "output": {
         "png": "artifacts/figures/results_temporal.png",
-        "png_bytes": 178907,
-        "pdf": "data/figures/results_temporal.pdf",
-        "pdf_bytes": 20928,
-        "publication_png": "data/figures/results_temporal.png",
+        "png_bytes": 194214,
         "dpi": 300
       }
     },
@@ -358,10 +433,7 @@
       "caption": "Geographic holdout, strict_geo; 2023\u20132025. Original baseline probabilities; fitted candidates are calibrated. Points are recorded APs; differences subtract recorded APs on identical support. 95% paired one-degree spatial-block bootstrap intervals use 500 recorded replicates. Comparator: Persistence (chosen on val_select).",
       "output": {
         "png": "artifacts/figures/results_geographic.png",
-        "png_bytes": 183582,
-        "pdf": "data/figures/results_geographic.pdf",
-        "pdf_bytes": 20934,
-        "publication_png": "data/figures/results_geographic.png",
+        "png_bytes": 195926,
         "dpi": 300
       }
     },
@@ -508,10 +580,7 @@
       "caption": "Temporal test, 2023\u20132025. Recorded equal-frequency reliability bins; each point retains its recorded bin mass. The second panel expands the low-probability range; the dashed line is perfect reliability.",
       "output": {
         "png": "artifacts/figures/results_reliability.png",
-        "png_bytes": 272336,
-        "pdf": "data/figures/results_reliability.pdf",
-        "pdf_bytes": 21694,
-        "publication_png": "data/figures/results_reliability.png",
+        "png_bytes": 193176,
         "dpi": 300
       }
     },
@@ -618,10 +687,7 @@
       "caption": "Temporal-test AP by issue year. Original baselines and calibrated fitted candidates; all values are recorded, with no annual intervals.",
       "output": {
         "png": "artifacts/figures/results_per_year.png",
-        "png_bytes": 183214,
-        "pdf": "data/figures/results_per_year.pdf",
-        "pdf_bytes": 18946,
-        "publication_png": "data/figures/results_per_year.png",
+        "png_bytes": 175366,
         "dpi": 300
       }
     },
@@ -754,10 +820,7 @@
       "caption": "Recorded recall at 5% and 10% of eligible cell area per issue week. Crossing cells contribute fractionally; positive contributions are pooled over weeks. Original baselines; calibrated fitted candidates.",
       "output": {
         "png": "artifacts/figures/results_area_budget.png",
-        "png_bytes": 192222,
-        "pdf": "data/figures/results_area_budget.pdf",
-        "pdf_bytes": 21026,
-        "publication_png": "data/figures/results_area_budget.png",
+        "png_bytes": 201008,
         "dpi": 300
       }
     },
@@ -786,10 +849,7 @@
       "caption": "H2: retrospective minus strict AP, calibrated selected candidates. The recorded 95% paired month-block interval is shown without a point: the artifact does not record the paired point estimate. The frozen H2 rule tests whether this interval contains zero; it is not an equivalence test.",
       "output": {
         "png": "artifacts/figures/results_h2.png",
-        "png_bytes": 97256,
-        "pdf": "data/figures/results_h2.pdf",
-        "pdf_bytes": 17842,
-        "publication_png": "data/figures/results_h2.png",
+        "png_bytes": 107341,
         "dpi": 300
       }
     },
@@ -260851,10 +260911,7 @@
       },
       "output": {
         "png": "artifacts/figures/results_map.png",
-        "png_bytes": 565683,
-        "pdf": "data/figures/results_map.pdf",
-        "pdf_bytes": 526210,
-        "publication_png": "data/figures/results_map.png",
+        "png_bytes": 430179,
         "dpi": 300
       }
     }

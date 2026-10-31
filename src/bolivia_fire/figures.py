@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import shutil
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -39,6 +38,9 @@ STYLE = {
     "legend.fontsize": 8,
     "savefig.facecolor": "white",
     "pdf.fonttype": 42,
+    "axes.titlepad": 12,
+    "figure.constrained_layout.w_pad": 0.2,
+    "figure.constrained_layout.h_pad": 0.2,
 }
 
 
@@ -330,7 +332,8 @@ def plot_training_map(
         handles=[
             Patch(facecolor="none", edgecolor="#D58A00", label="Geographic holdout (1° blocks)")
         ],
-        loc="lower left",
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.22),
         framealpha=0.95,
     )
     return figure
@@ -338,18 +341,33 @@ def plot_training_map(
 
 def _shade_missing(ax: Axes, days: pd.DataFrame) -> None:
     missing = pd.DatetimeIndex(days.loc[~days.acquired, "date"])
-    for group in np.split(missing, np.flatnonzero(np.diff(missing.asi8) > 86_400_000_000_000) + 1):
+    gaps = np.flatnonzero((missing[1:] - missing[:-1]) > pd.Timedelta(days=1)) + 1
+    for group in np.split(missing, gaps):
         if len(group):
             ax.axvspan(group[0], group[-1] + pd.Timedelta(days=1), color="#777777", alpha=0.18)
+
+
+def unobserved_spans(days: pd.DataFrame) -> pd.DataFrame:
+    dates = pd.DatetimeIndex(pd.to_datetime(days.loc[days.outage_hours.ge(6), "date"], utc=True))
+    dates = dates.tz_localize(None).sort_values().unique()
+    groups = np.split(dates, np.flatnonzero((dates[1:] - dates[:-1]) > pd.Timedelta(days=1)) + 1)
+    return pd.DataFrame(
+        [
+            {"start_utc": group[0], "end_utc": group[-1] + pd.Timedelta(days=1)}
+            for group in groups
+            if len(group)
+        ],
+        columns=["start_utc", "end_utc"],
+    )
 
 
 def plot_weekly_detections(data: DatasetFigures) -> Figure:
     figure, ax = plt.subplots(figsize=(9.0, 3.4), layout="constrained")
     weeks = data.weekly_detections
-    ax.plot(weeks.issue_date, weeks.all_confidence, color="#8DA0AB", linewidth=0.6)
+    ax.plot(weeks.issue_date, weeks.all_confidence, color="#9AB4C0", linewidth=1.8)
     ax.plot(weeks.issue_date, weeks.selected, color=COLORS[0], linewidth=0.8)
     _shade_missing(ax, data.acquisition_days)
-    for outage in data.outages.itertuples():
+    for outage in unobserved_spans(data.acquisition_days).itertuples():
         ax.axvspan(
             pd.Timestamp(outage.start_utc).tz_localize(None),
             pd.Timestamp(outage.end_utc).tz_localize(None),
@@ -369,11 +387,12 @@ def plot_weekly_detections(data: DatasetFigures) -> Figure:
     ax.legend(
         handles=[
             Line2D([], [], color=COLORS[0], label="Nominal + high"),
-            Line2D([], [], color="#8DA0AB", label="All confidence"),
-            Patch(facecolor=COLORS[1], alpha=0.25, label="Documented outage"),
+            Line2D([], [], color="#9AB4C0", label="All confidence"),
+            Patch(facecolor=COLORS[1], alpha=0.25, label="Unobserved (sensor outage >= 6 h)"),
             Patch(facecolor="#777777", alpha=0.18, label="Not acquired"),
         ],
-        loc="upper left",
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.25),
         ncols=2,
     )
     return figure
@@ -457,7 +476,7 @@ def plot_partition_timeline(data: DatasetFigures, country: BaseGeometry) -> Figu
     inset.tick_params(labelsize=7)
     inset.text(
         0.02,
-        -0.17,
+        -0.28,
         "Excluded from fitting,\nselection and calibration",
         transform=inset.transAxes,
         fontsize=8,
@@ -472,10 +491,8 @@ def write_dataset_figures(
     departments: Mapping[str, BaseGeometry],
     *,
     artifact_directory: Path,
-    pdf_directory: Path,
 ) -> dict[str, Path]:
     artifact_directory.mkdir(parents=True, exist_ok=True)
-    pdf_directory.mkdir(parents=True, exist_ok=True)
     outputs = {}
     with plt.rc_context(STYLE):
         for name, make in (
@@ -487,8 +504,13 @@ def write_dataset_figures(
             figure = make()
             try:
                 output = artifact_directory / f"dataset_{name}.png"
-                figure.savefig(output, dpi=300, pil_kwargs={"optimize": True})
-                figure.savefig(pdf_directory / f"dataset_{name}.pdf", dpi=300)
+                figure.savefig(
+                    output,
+                    dpi=300,
+                    bbox_inches="tight",
+                    pad_inches=0.25,
+                    pil_kwargs={"optimize": True},
+                )
                 outputs[name] = output
             finally:
                 plt.close(figure)
@@ -513,7 +535,6 @@ def build_dataset_artifacts(root: Path = REPO_ROOT) -> dict[str, Any]:
         data,
         *load_boundary_geometries(paths),
         artifact_directory=root / "artifacts" / "figures",
-        pdf_directory=root / "data" / "figures",
     )
     return write_dataset_summary(data, root / "artifacts" / "figures" / "dataset_summary.json")
 
@@ -841,7 +862,7 @@ def collect_results_map(
 def _result_caption(figure: Figure, text: str) -> None:
     import textwrap
 
-    figure.supxlabel(textwrap.fill(text, width=140), fontsize=7, ha="center")
+    figure.supxlabel(textwrap.fill(text, width=110), fontsize=9, ha="center")
 
 
 def _result_interval(ax: Axes, y: int, interval: dict[str, Any] | None, color: str) -> None:
@@ -902,9 +923,14 @@ def plot_results_reliability(data: ResultsFigures) -> Figure:
         for row, color, marker in zip(
             values["models"], (COLORS[3], COLORS[0]), ("o", "s"), strict=True
         ):
+            bins = [
+                bin_
+                for bin_ in row["bins"]
+                if bin_["mean_probability"] <= limit and bin_["positive_rate"] <= limit
+            ]
             ax.plot(
-                [bin_["mean_probability"] for bin_ in row["bins"]],
-                [bin_["positive_rate"] for bin_ in row["bins"]],
+                [bin_["mean_probability"] for bin_ in bins],
+                [bin_["positive_rate"] for bin_ in bins],
                 marker=marker,
                 color=color,
                 label=row["label"],
@@ -912,15 +938,23 @@ def plot_results_reliability(data: ResultsFigures) -> Figure:
                 markersize=4,
             )
         ax.set(
-            xlim=(0, limit),
-            ylim=(0, limit),
+            xlim=(-limit * 0.04, limit * 1.04),
+            ylim=(-limit * 0.04, limit * 1.04),
             xlabel="Mean predicted probability",
             ylabel="Observed positive fraction",
             title=title,
         )
         ax.set_aspect("equal")
         ax.grid(alpha=0.15)
-    axes[0].legend(loc="upper left", frameon=False)
+    axes[0].legend(loc="upper center", bbox_to_anchor=(0.5, -0.28), frameon=False)
+    axes[1].text(
+        0.03,
+        0.96,
+        "Remaining bins outside this view",
+        transform=axes[1].transAxes,
+        va="top",
+        fontsize=8,
+    )
     _result_caption(figure, values["caption"])
     return figure
 
@@ -1082,10 +1116,8 @@ def write_results_figures(
     departments: Mapping[str, BaseGeometry],
     *,
     artifact_directory: Path,
-    pdf_directory: Path,
 ) -> dict[str, Path]:
     artifact_directory.mkdir(parents=True, exist_ok=True)
-    pdf_directory.mkdir(parents=True, exist_ok=True)
     makers = {
         "temporal": lambda: plot_results_ap(data, "temporal"),
         "reliability": lambda: plot_results_reliability(data),
@@ -1101,9 +1133,13 @@ def write_results_figures(
             figure = make()
             try:
                 output = artifact_directory / f"results_{name}.png"
-                figure.savefig(output, dpi=300, pil_kwargs={"optimize": True})
-                figure.savefig(pdf_directory / f"results_{name}.pdf", dpi=300)
-                shutil.copyfile(output, pdf_directory / output.name)
+                figure.savefig(
+                    output,
+                    dpi=300,
+                    bbox_inches="tight",
+                    pad_inches=0.25,
+                    pil_kwargs={"optimize": True},
+                )
                 outputs[name] = output
             finally:
                 plt.close(figure)
@@ -1147,16 +1183,11 @@ def build_results_artifacts(root: Path = REPO_ROOT) -> dict[str, Any]:
         example,
         *load_boundary_geometries(Paths(root)),
         artifact_directory=root / "artifacts" / "figures",
-        pdf_directory=root / "data" / "figures",
     )
     for name, path in outputs.items():
-        pdf = root / "data" / "figures" / path.with_suffix(".pdf").name
         data.summary["figures"][name]["output"] = {
             "png": path.relative_to(root).as_posix(),
             "png_bytes": path.stat().st_size,
-            "pdf": pdf.relative_to(root).as_posix(),
-            "pdf_bytes": pdf.stat().st_size,
-            "publication_png": f"data/figures/{path.name}",
             "dpi": 300,
         }
     destination = root / "artifacts" / "figures" / "results_summary.json"

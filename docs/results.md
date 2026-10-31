@@ -51,7 +51,9 @@ Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` a
 `candidate_bootstrap.temporal`; the AP values and intervals are also copied in
 [results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal`.
 
-![Temporal test AP and paired differences](../artifacts/figures/results_temporal.png)
+![Temporal test AP and paired differences](assets/charts/temporal_ap.gif)
+
+Temporal-test AP and paired intervals reveal the recorded models from `artifacts/evaluation/test_strict.json`; the best baseline remains validation-selected.
 
 ## H1 and H2
 
@@ -73,7 +75,9 @@ Sources: [test_strict.json](../artifacts/evaluation/test_strict.json), `hypothes
 [selection_retrospective.json](../artifacts/evaluation/selection_retrospective.json), `features`;
 [results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal` and `figures.h2`.
 
-![H2 retrospective-minus-strict paired AP interval](../artifacts/figures/results_h2.png)
+![H2 retrospective-minus-strict paired AP interval](assets/charts/h2_interval.gif)
+
+The H2 animation shows the recorded paired interval from `strict_retrospective_bootstrap`; it supplies no unrecorded point estimate.
 
 ## Geographic holdout
 
@@ -98,7 +102,9 @@ Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `geographi
 `candidate_bootstrap.geographic`; [results_summary.json](../artifacts/figures/results_summary.json),
 `figures.geographic`.
 
-![Geographic holdout AP and paired differences](../artifacts/figures/results_geographic.png)
+![Geographic holdout AP and paired differences](assets/charts/geographic_ap.gif)
+
+Geographic AP and paired intervals use the recorded strict_geo population and spatial-block intervals in `artifacts/evaluation/test_strict.json`.
 
 ## Per-year results and Santa Cruz
 
@@ -127,7 +133,9 @@ Annual differences reflect the evaluated populations, including observation excl
 artifact supplies no annual or Santa Cruz bootstrap intervals. The temporal comparator remains
 the validation-selected climatology even where another baseline scores higher in a subset.
 
-![Temporal AP by issue year](../artifacts/figures/results_per_year.png)
+![Temporal AP by issue year](assets/charts/per_year_ap.gif)
+
+Annual AP uses the three recorded issue-year subsets in `artifacts/evaluation/test_strict.json`, with no annual model reselection.
 
 ## Calibration
 
@@ -157,7 +165,9 @@ Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` a
 The reliability figure uses the temporal test population only; its second panel
 zooms into low predicted probabilities.
 
-![Temporal-test reliability curves with a low-probability zoom panel](../artifacts/figures/results_reliability.png)
+![Temporal-test reliability curves with a low-probability zoom panel](assets/charts/reliability.gif)
+
+Recorded temporal reliability bins accumulate from `artifacts/evaluation/test_strict.json`; the detail panel omits bins outside its stated range.
 
 ## Recall at area budgets
 
@@ -181,7 +191,9 @@ Source: [test_strict.json](../artifacts/evaluation/test_strict.json),
 `recall_at_area_budget_5pct` and `recall_at_area_budget_10pct` in each population;
 [results_summary.json](../artifacts/figures/results_summary.json), `figures.area_budget`.
 
-![Recall at eligible area budgets](../artifacts/figures/results_area_budget.png)
+![Recall at eligible area budgets](assets/charts/area_budget.gif)
+
+Area-budget recall uses the recorded temporal and geographic summaries in `artifacts/evaluation/test_strict.json` at 5% and 10% of eligible area.
 
 ## Example spatial distribution
 
@@ -195,7 +207,9 @@ not fire-event counts. This selected example is not an additional performance te
 Source: [results_summary.json](../artifacts/figures/results_summary.json), `figures.map`, including
 the recorded selection rule, input provenance and figure caption.
 
-![Example weekly predictions and observed satellite detections](../artifacts/figures/results_map.png)
+![Example weekly predictions and observed satellite detections](assets/charts/fire_season_2024.gif)
+
+The July?October 2024 map sequence joins the strict test prediction export to panel observations, retaining partial counts, null labels and unavailable estimates.
 
 ## Exclusions
 

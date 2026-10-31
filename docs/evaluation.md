@@ -203,3 +203,20 @@ The benchmark constructs explicitly synthetic data in a temporary directory,
 runs all four stages with the frozen search and bootstrap counts, records peak
 RAM and phase runtimes, and removes its temporary dataset. It is a resource check,
 not an estimate of real-world model skill or full-panel runtime.
+
+## Information availability products
+
+![Retrospective, availability-constrained and operational products](assets/diagrams/information_products.gif)
+
+The three product definitions follow `configs/protocol.yaml` and the [information-availability contract](protocol.md#information-availability), including the unvalidated SP-to-NRT assumption and absence of an operational forecast claim.
+
+```mermaid
+flowchart LR
+    A["Retrospective benchmark<br/><br/>Final or revised products<br/>CHIRPS may postdate issue"]
+    B["Availability-constrained<br/>simulation<br/><br/>Acquisition before issue
+    <br/>SP ≈ NRT unvalidated"]
+    C["Operational forecast<br/><br/>Not claimed<br/>Live delivery not validated"]
+    A ~~~ B ~~~ C
+    classDef product fill:#F3F6F8,stroke:#59717E,color:#172C35
+    class A,B,C product
+```

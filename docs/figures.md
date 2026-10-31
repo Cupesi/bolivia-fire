@@ -1,163 +1,141 @@
-# Dataset figures
+# Figures and browser media
 
-`notebooks/01_dataset.ipynb` calls `bolivia_fire.figures` to rebuild four
-300 dpi PNGs in `artifacts/figures/`, PDF copies in the ignored `data/figures/`,
-and `artifacts/figures/dataset_summary.json`. Reproduction is local and offline:
+Documentation uses tracked GIFs and optimized browser PNGs in `docs/assets/`.
+Notebooks retain 300 dpi static PNGs in `artifacts/figures/`. Publication copies
+are byte-identical GIFs in the ignored publication directory; current exporters
+write no PDFs or publication PNGs.
+
+## Reproduction
+
+These commands use local recorded artifacts without fitting or evaluating models:
 
 ```powershell
 uv sync --all-extras
-uv run jupyter nbconvert --to notebook --execute notebooks/01_dataset.ipynb --output 01_dataset.ipynb
-uv run ruff check src tests
-uv run pytest -q -p no:cacheprovider
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_dataset.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_results.ipynb --ExecutePreprocessor.timeout=240
+uv run python -m bolivia_fire.animations
 ```
 
-The JSON records input hashes, annual observations and outage causes, label
-prevalence, and sequential fitting exclusions. Aggregation uses UTC and a
-512 MB DuckDB memory limit with two query threads. No model is fitted or
-evaluated. Test-year counts describe observations and label prevalence.
+UTC DuckDB aggregation uses 512 MB and two threads. Weekly totals must match the
+recorded annual summary. Metrics, reliability bins and intervals come from JSON.
+Mermaid **11.17.2** is pinned in frontend development dependencies. The
+[local Chromium renderer](assets/diagrams/render.mjs) reads the installed bundle,
+with no CDN; [diagram sources](assets/diagrams/src/) are also embedded in Markdown.
 
-## Local snapshot
-
-The panel contains 37,146 eligible cells, 678 issue weeks, and 25,184,988 rows.
-National cell intersections sum to 1,068,783.8407 km². The geographic holdout
-contains 24 of 124 blocks, 7,640 cells, and 219,395.5882 km² (20.5276% of area).
-There are 24,367,776 nonmissing primary labels, including purged rows.
-
-| Partition | Rows | Labelled (%) | Positive, non-held-out (%) | Positive, held-out (%) |
-|---|---:|---:|---:|---:|
-| train | 15,452,736 | 99.5192 | 2.1838 | 1.5277 |
-| val_select | 1,894,446 | 98.0392 | 2.3782 | 1.6285 |
-| val_calib | 1,894,446 | 92.1569 | 3.0375 | 2.2942 |
-| test | 5,831,922 | 90.4459 | 2.4563 | 1.7143 |
-| purged | 111,438 | 100.0000 | 0.6383 | 0.6195 |
-
-Rates use nonmissing labels before fitting filters. Geographic populations
-have the same labelled share because observation completeness is national.
-The map uses the share of complete, non-purged train weeks with `n_primary > 0`
-per cell; held-out observations enter this descriptive map. The seasonal cycle
-weights each labelled cell-week equally and uses the frozen 0–51 week index.
-
-| Acquisition year | Selected detections | All-confidence detections | Unobserved days |
-|---|---:|---:|---:|
-| 2012 | 148,690 | 159,564 | 8 |
-| 2013 | 108,320 | 115,389 | 0 |
-| 2014 | 94,273 | 101,421 | 0 |
-| 2015 | 136,293 | 146,122 | 0 |
-| 2016 | 232,902 | 247,815 | 0 |
-| 2017 | 186,020 | 199,273 | 1 |
-| 2018 | 163,615 | 173,590 | 0 |
-| 2019 | 355,701 | 380,029 | 1 |
-| 2020 | 285,126 | 308,495 | 0 |
-| 2021 | 285,926 | 303,009 | 2 |
-| 2022 | 308,129 | 329,048 | 17 |
-| 2023 | 332,558 | 355,236 | 4 |
-| 2024 | 844,864 | 884,419 | 25 |
-| 2025 | 131,484 | 139,306 | 6 |
-| 2026 | 178 | 188 | 0 |
-
-The acquisition span is January 20, 2012–January 4, 2026, so its endpoint years
-are partial. Totals are 3,614,079 selected and 3,842,904 all-confidence national
-detections. All 64 unobserved days are acquired dates with at least six hours
-of documented outages. Per-cause day counts can overlap; the JSON retains the
-source comments. Weekly counts shade documented outage intervals and retain
-partial observations; the weekly figure stops at December 31, 2025.
-
-Fitting exclusions are disjoint in the listed order within each partition's
-issue-date bounds; candidate counts include the boundary week subsequently purged.
-
-| Partition | Candidates | Purged | Missing label | Held out | Incomplete 28-day history | Eligible |
-|---|---:|---:|---:|---:|---:|---:|
-| train | 15,489,882 | 37,146 | 74,292 | 3,162,960 | 236,048 | 11,979,436 |
-| val_select | 1,931,592 | 37,146 | 37,146 | 382,000 | 118,024 | 1,357,276 |
-| val_calib | 1,931,592 | 37,146 | 148,584 | 359,080 | 206,542 | 1,180,240 |
-
-The low-coverage sensitivity excludes zero additional otherwise eligible rows
-in each of these partitions. Test rows are not treated as fitting candidates.
-
-| Figure | PNG bytes |
-|---|---:|
-| `dataset_map.png` | 288,382 |
-| `dataset_weekly.png` | 195,906 |
-| `dataset_seasonal.png` | 253,674 |
-| `dataset_partitions.png` | 182,959 |
-
-All figures were visually inspected. The executed notebook contains six code
-cells and is 1,240,771 bytes, with no errors or absolute paths in cell outputs.
-All 13 panel files match the bundle, protocol, outage, and cell provenance.
-
-Verification: dependency sync, repository Ruff checks, and clean-kernel notebook
-execution passed. Pytest passed 319 tests with one live test deselected; all six
-figure tests passed. The eight warnings are DuckDB's pandas deprecation warnings.
-
-## Recorded results figures
-
-`notebooks/02_results.ipynb` rebuilds seven result figures from the recorded
-`artifacts/evaluation/test_strict.json`, closed `selection_*.json` files, and
-`final_test_log.json`. It does not invoke any fitting, selection, evaluation,
-or prediction stage. The notebook uses no network requests.
+Build the frontend, then start the isolated capture server from the repository root:
 
 ```powershell
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_results.ipynb --ExecutePreprocessor.timeout=180
-uv run ruff check src tests
-uv run pytest tests -m "not live and not local_data" -q -p no:cacheprovider
+cd frontend
+npm ci
+npm run build
+cd ..
+uv run --no-sync uvicorn backend.app.main:app --host 127.0.0.1 --port 8768 --no-access-log
 ```
 
-Performance values, reliability bins, annual AP, and confidence endpoints are
-copied from evaluation JSON. Baselines retain original probabilities; logistic
-regression and the selected LightGBM use calibrated probabilities. The temporal
-and geographic best baselines are selected on validation AP independently.
-Paired point differences subtract the two recorded APs only when the recorded
-row counts prove identical support; paired intervals are copied directly.
-No bootstrap or performance metric is recomputed.
+In another shell:
 
-The example map reads only the existing strict test prediction export, the
-2024 panel, cells, and pinned ADM0/ADM1 boundaries. The prediction checksum and
-model identities must agree with the export sidecar and closed selections.
-The temporal model is used outside held-out blocks and the geographic model
-inside them. Complete 2024 weeks with national prediction coverage are ranked
-by observed primary detection count, breaking ties by the earliest issue date.
-The derived week, per-cell probabilities, observed counts and labels are saved
-in the summary JSON and identified as derived in the map caption. The right
-map uses a log1p color scale in detection counts per cell.
+```powershell
+cd frontend
+$env:BASE_URL = 'http://127.0.0.1:8768'
+$env:CAPTURE_DOCS_MEDIA = '1'
+npx playwright test e2e/screenshots.spec.ts --project=chromium --output=test-results/m1-media
+cd ..
+uv run python -m bolivia_fire.animations --screenshot-frames frontend/test-results/m1-media
+```
 
-The selected issue week is 2024-09-02, with target interval
-`[2024-09-02, 2024-09-09)` UTC: 131,310 detections, 3,352 positive cells,
-and predictions for all 37,146 cells. This descriptive example combines
-`strict/lightgbm_08` and `strict_geo/lightgbm_04`.
+Stop the isolated server afterwards. Capture is opt-in to preserve published media
+during ordinary E2E runs. Desktop PNGs are 1440 × 900; mobile is 390 × 844.
 
-| Population | Selected model | Recorded AP | 95% AP CI | Best baseline | Baseline AP |
-|---|---|---:|---|---|---:|
-| temporal | `lightgbm_08` | 0.323393 | [0.221655, 0.382973] | `train_climatology` | 0.166677 |
-| geographic | `lightgbm_04` | 0.383912 | [0.250128, 0.467940] | `persistence` | 0.180757 |
+## Sources
 
-H2 has a recorded 95% paired AP-difference interval of
-`[-0.004107230965515116, 0.0018890130209346604]` for retrospective minus strict.
-The artifact has no paired point estimate, so the H2 figure shows the interval
-alone. Its inclusion of zero satisfies the frozen H2 rule; it is not evidence
-from an equivalence test.
+| Media | Recorded source and quantity |
+|---|---|
+| `national_weekly.gif`, `seasonal_cycle.gif` | Canonical detection bundle resolved by `datasets/interim/detection_bundle.json`: national weekly counts and annual cycles, 2012–2025 |
+| `dataset_map.gif` | Processed cells and panel: complete training-label frequency and held-out blocks |
+| `fire_season_2024.gif` | `artifacts/predictions/strict/test.parquet`, 2024 panel and pinned boundaries: Mondays July 1–October 28 |
+| `temporal_ap.gif`, `geographic_ap.gif`, `reliability.gif` | `artifacts/evaluation/test_strict.json`, copied in `artifacts/figures/results_summary.json`: APs, intervals and reliability bins |
+| `per_year_ap.gif`, `area_budget.gif`, `h2_interval.gif` | Recorded result-summary keys `figures.per_year`, `figures.area_budget`, `figures.h2` |
+| `pipeline.gif`, `information_products.gif` | Frozen `configs/protocol.yaml` and documented information-availability definitions |
+| `partitions.gif` | Frozen partition dates, purged panel issue calendar, cell holdout flags and pinned boundary |
+| Browser captures | Real API over prepared panel and strict predictions: issue 2024-09-02 and August 5–October 28 navigation |
 
-All PNGs use 300 dpi. PNG and PDF copies are also written to the ignored
-`data/figures/` directory. `artifacts/figures/results_summary.json` records the
-plotted values, relative source paths and JSON keys, source SHA-256 checksums,
-probability versions, captions, and output sizes. Map values use column arrays
-with a common cell order.
+Outage shading merges only UTC days with at least six documented outage hours:
+64 acquisition days, including 56 in issue years 2013–2025. Short overlaps are
+not shaded. Counts retain partial observations; null labels and unavailable
+estimates remain distinct from zero. Map counts use log1p and probabilities use
+a fixed 0–1 scale. Strict covers non-held-out cells; strict_geo covers held-out
+cells. Crossfade colors are transitions between recorded weeks, not additional
+estimates. H2 retains the interval without inventing a point estimate. Numeric
+result tables remain Markdown in [results](results.md).
 
-| Figure in `artifacts/figures/` | PNG bytes | PDF bytes in `data/figures/` |
-|---|---:|---:|
-| `results_temporal.png` | 178,907 | 20,928 |
-| `results_reliability.png` | 272,336 | 21,694 |
-| `results_per_year.png` | 183,214 | 18,946 |
-| `results_geographic.png` | 183,582 | 20,934 |
-| `results_area_budget.png` | 192,222 | 21,026 |
-| `results_map.png` | 565,683 | 526,210 |
-| `results_h2.png` | 97,256 | 17,842 |
+Animations use eased transitions at 20 fps, loop forever, and hold the complete
+final figure for 2.5 seconds. A shared palette and changed-region encoding keep
+each GIF below 4 MB. Headings and footers remain stable during transitions.
+A white border provides at least 12 clear pixels on every side. Static PNGs
+use tight bounding boxes, explicit padding and 300 dpi metadata.
 
-All seven figures were visually inspected. The notebook executes nine code
-cells from a clean kernel, contains no error outputs, and has no absolute local
-paths in its text outputs. Ruff passed across `src` and `tests`. The non-live,
-non-local-data suite passed 356 tests with one deselected; the eight warnings
-are DuckDB pandas deprecation warnings. Notebook execution also emits the
-existing Windows Jupyter transport and event-loop notices.
+[media.json](assets/media.json) records sizes, frames, timing, dimensions, border
+checks and source hashes. The inventory below reports visual inspection of
+first, middle and final frames, plus each notebook PNG and browser screenshot.
 
-The executed notebook is 2,248,653 bytes. The plotted-value summary is
-5,254,569 bytes; the seven artifact PNGs total 1,673,200 bytes.
+## Media inventory and visual review
+
+| File in docs/assets | Bytes | Frames | FPS | Duration (s) | Border | Visual checks |
+|---|---:|---:|---:|---:|---|---|
+| [charts/area_budget.gif](assets/charts/area_budget.gif) | 391,961 | 73 | 20 | 6.10 | Pass | Both populations, area units, recall scale and four model labels. |
+| [charts/dataset_map.gif](assets/charts/dataset_map.gif) | 1,611,219 | 73 | 20 | 6.10 | Pass | National extent, block outlines, colorbar units and outside legend. |
+| [charts/fire_season_2024.gif](assets/charts/fire_season_2024.gif) | 2,037,452 | 73 | 20 | 6.10 | Pass | Week labels, fixed scales, partial counts and gray missing estimates. |
+| [charts/geographic_ap.gif](assets/charts/geographic_ap.gif) | 76,184 | 73 | 20 | 6.10 | Pass | Spatial comparison, baseline identity, CIs and unclipped points. |
+| [charts/h2_interval.gif](assets/charts/h2_interval.gif) | 119,106 | 73 | 20 | 6.10 | Pass | Both endpoints, zero reference, caption and no invented point. |
+| [charts/national_weekly.gif](assets/charts/national_weekly.gif) | 59,623 | 73 | 20 | 6.10 | Pass | UTC totals, merged qualifying days, visible lighter all-confidence series and stable title. |
+| [charts/per_year_ap.gif](assets/charts/per_year_ap.gif) | 394,647 | 73 | 20 | 6.10 | Pass | All years, four model series, legend and full caption. |
+| [charts/reliability.gif](assets/charts/reliability.gif) | 245,224 | 73 | 20 | 6.10 | Pass | Origin markers, both scales, outside legend, omitted-bin notice and stable bin-count title. |
+| [charts/seasonal_cycle.gif](assets/charts/seasonal_cycle.gif) | 554,123 | 73 | 20 | 6.10 | Pass | All 14 year labels, line patterns, units and full final cycle. |
+| [charts/temporal_ap.gif](assets/charts/temporal_ap.gif) | 70,968 | 73 | 20 | 6.10 | Pass | Model labels, AP intervals, paired differences and final panel titles. |
+| [diagrams/information_products.gif](assets/diagrams/information_products.gif) | 227,133 | 73 | 20 | 6.10 | Pass | Complete card labels, stable dark text and unclaimed operational product. |
+| [diagrams/partitions.gif](assets/diagrams/partitions.gif) | 107,918 | 73 | 20 | 6.10 | Pass | Year labels, purge dates, full timeline and held-out block map. |
+| [diagrams/pipeline.gif](assets/diagrams/pipeline.gif) | 93,709 | 73 | 20 | 6.10 | Pass | Centered content, 24 px margins, fixed nodes, clear arrows and no progress text. |
+| [screenshots/estimate-desktop.png](assets/screenshots/estimate-desktop.png) | 68,468 | 1 | — | — | Viewport capture | Exact model ID, selected cell, full history chart and missing-value legend. |
+| [screenshots/estimate-mobile.png](assets/screenshots/estimate-mobile.png) | 41,227 | 1 | — | — | Viewport capture | 390 px width, complete map, model notice and readable legend. |
+| [screenshots/observed-desktop.png](assets/screenshots/observed-desktop.png) | 37,892 | 1 | — | — | Viewport capture | Complete national map, issue date, positive/negative legend and real cell count. |
+| [screenshots/table-desktop.png](assets/screenshots/table-desktop.png) | 31,386 | 1 | — | — | Viewport capture | Readable headers, sorted values, selected cell and history chart. |
+| [screenshots/week_navigation.gif](assets/screenshots/week_navigation.gif) | 2,143,835 | 73 | 20 | 6.10 | Pass | Missing-prediction state, week changes, selected history and final layer. |
+
+Each GIF's frames 0, 36 and 72 were visually inspected. Its final frame holds
+for 2.5 seconds. All static figures below passed the 12-pixel white-border check
+and were inspected for complete labels, legends, markers and captions.
+
+| Static notebook PNG | Bytes | Frames | Visual checks |
+|---|---:|---:|---|
+| [dataset_map.png](../artifacts/figures/dataset_map.png) | 261,850 | 1 | Country extent, block outlines and legend below the axes. |
+| [dataset_partitions.png](../artifacts/figures/dataset_partitions.png) | 182,281 | 1 | Partition labels, purged dates and geographic inset caption. |
+| [dataset_seasonal.png](../artifacts/figures/dataset_seasonal.png) | 235,032 | 1 | Four partition curves, calendar units and readable legend. |
+| [dataset_weekly.png](../artifacts/figures/dataset_weekly.png) | 188,706 | 1 | Narrow merged outage spans, UTC axis and legend below the data. |
+| [results_area_budget.png](../artifacts/figures/results_area_budget.png) | 201,008 | 1 | Both populations, budget units and recall axis. |
+| [results_geographic.png](../artifacts/figures/results_geographic.png) | 195,926 | 1 | AP and paired intervals, baseline identity and wrapped caption. |
+| [results_h2.png](../artifacts/figures/results_h2.png) | 107,341 | 1 | Endpoint annotations, zero line and complete explanatory caption. |
+| [results_map.png](../artifacts/figures/results_map.png) | 430,179 | 1 | Both national maps, full colorbars, labels and wrapped caption. |
+| [results_per_year.png](../artifacts/figures/results_per_year.png) | 175,366 | 1 | Annual ticks, all series, legend and full caption. |
+| [results_reliability.png](../artifacts/figures/results_reliability.png) | 193,176 | 1 | Complete markers at zero, finite zoom segment, notice and outside legend. |
+| [results_temporal.png](../artifacts/figures/results_temporal.png) | 194,214 | 1 | Both CI panels, zero reference and wrapped caption. |
+
+## Verification
+
+Verified on 2026-10-31 against existing local artifacts:
+
+| Command or check | Result |
+|---|---|
+| uv sync --all-extras | Passed |
+| uv run --no-sync ruff check src tests backend | Passed |
+| uv run --no-sync pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider | 401 passed, 4 deselected; 106.29 seconds |
+| Both notebook execution commands above | Passed from clean kernels; six and nine code cells, no error outputs |
+| npm run check | No errors or warnings |
+| npm run test | 19 passed |
+| npm run build | Passed; 28,562 bytes gzip JavaScript |
+| Host Chromium documentation capture | 1 passed; no page errors |
+| Local Markdown links and embedded Mermaid sources | 167 links passed across 14 pages; all three source blocks match |
+| GIF source/copy comparison and border checks | Passed for all 13 chart/diagram copies and all 14 tracked GIFs |
+
+The Python suite emitted the existing Starlette/httpx and DuckDB/pandas warnings.
+Notebook execution emitted the existing Windows Jupyter transport and event-loop
+notices. The isolated port 8768 capture server was stopped; other servers were preserved.

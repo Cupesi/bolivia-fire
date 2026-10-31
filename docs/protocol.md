@@ -58,6 +58,33 @@ retrospective variant.
 
 ## Partitions
 
+![Temporal partitions, purged targets and geographic holdout](assets/diagrams/partitions.gif)
+
+The timeline uses `configs/protocol.yaml` and the panel issue calendar; the inset uses the recorded cell holdout flags and pinned national boundary.
+
+<details>
+<summary>Timeline source</summary>
+
+```mermaid
+gantt
+    dateFormat YYYY-MM-DD
+    axisFormat %Y
+    tickInterval 2year
+    todayMarker off
+    section Temporal roles
+    Train :train, 2013-01-07, 2021-01-01
+    Select :val_select, 2021-01-01, 2022-01-01
+    Calibrate :val_calib, 2022-01-01, 2023-01-01
+    Final test :test, 2023-01-01, 2026-01-01
+    section Purged targets
+    Boundary 2020-12-28 :purge0, 2020-12-28, 7d
+    Boundary 2021-12-27 :purge1, 2021-12-27, 7d
+    Boundary 2022-12-26 :purge2, 2022-12-26, 7d
+```
+
+</details>
+
+
 | Partition | Issue dates | Use |
 |---|---|---|
 | train | 2013-01-07 – 2020-12-31 | fitting |

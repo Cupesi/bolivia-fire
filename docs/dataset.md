@@ -202,3 +202,19 @@ While acquisition appends to the manifest, copy it and use
 with that same directory. These commands read local raw files and write no
 acquisition data. Availability refers to the exact frozen manifest, not later
 appends. Default output paths remain those documented above.
+
+## Observed record
+
+![Weekly national detections](assets/charts/national_weekly.gif)
+
+National weekly selected and all-confidence detections use the canonical detection bundle; shaded spans merge UTC days with at least six outage hours from its observation-day table.
+
+![Annual seasonal cycles](assets/charts/seasonal_cycle.gif)
+
+Annual selected-detection cycles accumulate from the same canonical bundle using the protocol's 0?51 calendar index; endpoint-year coverage follows the acquisition window.
+
+![Training-period spatial detection frequency](assets/charts/dataset_map.gif)
+
+Training-period complete-label frequency and held-out blocks come from the prepared cell-week panel and pinned national boundary, as recorded in `artifacts/figures/dataset_summary.json`.
+
+The [media specification](figures.md) lists sources, sizes, timing and verification.

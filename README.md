@@ -21,6 +21,64 @@ The target describes satellite detections, not numbers of fires, ignitions, burn
 official warning. A complete negative label means no selected detection was observed; incomplete
 target weeks have null labels. See the [dataset card](datasets/dataset_card.md).
 
+## Screenshots
+
+These captures use the local API and recorded artifacts for issue **2024-09-02**.
+
+![Observed detections in the browser](docs/assets/screenshots/observed-desktop.png)
+
+Observed positive and negative cells for the complete seven-day target, from the prepared panel.
+
+![Retrospective estimate and selected cell history](docs/assets/screenshots/estimate-desktop.png)
+
+The calibrated `strict/lightgbm_08` estimate and selected Santa Cruz cell history come from the strict prediction export and panel observations.
+
+<details>
+<summary>Table and mobile views</summary>
+
+![Current-week table](docs/assets/screenshots/table-desktop.png)
+
+The table exposes the same API layer values as the map, with selected-cell history alongside.
+
+![Mobile estimate view](docs/assets/screenshots/estimate-mobile.png)
+
+The 390 ? 844 mobile capture shows the same issue, model, missing-value legend and national grid.
+
+</details>
+
+## How it works
+
+![Acquisition, benchmark and delivery pipeline](docs/assets/diagrams/pipeline.gif)
+
+The highlighted stages follow the frozen [protocol](configs/protocol.yaml), from FIRMS standard-processing acquisition to the local API and explorer.
+
+<details>
+<summary>Workflow source</summary>
+
+```mermaid
+flowchart LR
+    subgraph archive[Observation archive]
+        direction TB
+        A["FIRMS SP<br/>acquisition"] --> B["Manifest checks<br/>and quarantine"]
+        B --> C["Canonical<br/>detections"]
+    end
+    subgraph benchmark[Weekly benchmark]
+        direction TB
+        D["Cell-week labels<br/>outage → null"] --> E["Strict / CHIRPS<br/>features"]
+        E --> F["Train, select<br/>and calibrate"]
+    end
+    subgraph delivery[Recorded outputs]
+        direction TB
+        G["Single primary<br/>test opening"] --> H[Predictions]
+        H --> I["Local API<br/>and explorer"]
+    end
+    archive --> benchmark --> delivery
+    classDef stage fill:#F3F6F8,stroke:#0072B2,color:#172C35
+    class A,B,C,D,E,F,G,H,I stage
+```
+
+</details>
+
 ## Installation
 
 Use Python 3.12 or newer and [uv](https://docs.astral.sh/uv/). From the repository root:

@@ -160,7 +160,6 @@ def test_synthetic_artifacts_are_readable_and_small(
         country,
         {"Synthetic department": country},
         artifact_directory=tmp_path / "artifacts",
-        pdf_directory=tmp_path / "pdf",
     )
     assert set(outputs) == {"map", "weekly", "seasonal", "partitions"}
     for name, output in outputs.items():
@@ -169,7 +168,10 @@ def test_synthetic_artifacts_are_readable_and_small(
         with Image.open(output) as image:
             assert image.width >= 1200
             assert image.info["dpi"][0] == pytest.approx(300, abs=1)
-        assert (tmp_path / "pdf" / f"dataset_{name}.pdf").read_bytes().startswith(b"%PDF")
+            from bolivia_fire.animations import clear_border
+
+            assert clear_border(image)
+    assert not list(tmp_path.rglob("*.pdf"))
 
 
 def test_synthetic_parquet_inputs_match_frames(synthetic_dataset: tuple, tmp_path: Path) -> None:
@@ -374,7 +376,7 @@ def test_synthetic_example_selects_complete_peak_week_with_earliest_tie(
     assert example.cells.p.tolist() == pytest.approx([0.1, 0.8])
 
 
-def test_synthetic_results_render_seven_png_and_pdf_pairs(
+def test_synthetic_results_render_seven_png_only(
     synthetic_results_root: Path,
     synthetic_example_week: tuple,
     tmp_path: Path,
@@ -388,7 +390,6 @@ def test_synthetic_results_render_seven_png_and_pdf_pairs(
         country,
         {"Synthetic department": country},
         artifact_directory=tmp_path / "figures",
-        pdf_directory=tmp_path / "publication",
     )
     assert set(outputs) == {
         "temporal",
@@ -400,8 +401,11 @@ def test_synthetic_results_render_seven_png_and_pdf_pairs(
         "h2",
     }
     for name, output in outputs.items():
+        assert output.name == f"results_{name}.png"
         with Image.open(output) as image:
             assert image.width >= 1200
             assert image.info["dpi"][0] == pytest.approx(300, abs=1)
-        assert (tmp_path / "publication" / f"results_{name}.pdf").read_bytes().startswith(b"%PDF")
-        assert (tmp_path / "publication" / output.name).read_bytes() == output.read_bytes()
+            from bolivia_fire.animations import clear_border
+
+            assert clear_border(image)
+    assert not list(tmp_path.rglob("*.pdf"))

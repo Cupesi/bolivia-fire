@@ -1,0 +1,19 @@
+flowchart LR
+    subgraph archive[Observation archive]
+        direction TB
+        A["FIRMS SP<br/>acquisition"] --> B["Manifest checks<br/>and quarantine"]
+        B --> C["Canonical<br/>detections"]
+    end
+    subgraph benchmark[Weekly benchmark]
+        direction TB
+        D["Cell-week labels<br/>outage → null"] --> E["Strict / CHIRPS<br/>features"]
+        E --> F["Train, select<br/>and calibrate"]
+    end
+    subgraph delivery[Recorded outputs]
+        direction TB
+        G["Single primary<br/>test opening"] --> H[Predictions]
+        H --> I["Local API<br/>and explorer"]
+    end
+    archive --> benchmark --> delivery
+    classDef stage fill:#F3F6F8,stroke:#0072B2,color:#172C35
+    class A,B,C,D,E,F,G,H,I stage

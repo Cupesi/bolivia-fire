@@ -1,0 +1,207 @@
+{
+  "media": {
+    "charts/national_weekly.gif": {
+      "bytes": 59623,
+      "frames": 73,
+      "width": 1026,
+      "height": 443,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/seasonal_cycle.gif": {
+      "bytes": 554123,
+      "frames": 73,
+      "width": 960,
+      "height": 476,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/fire_season_2024.gif": {
+      "bytes": 2037452,
+      "frames": 73,
+      "width": 982,
+      "height": 608,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/temporal_ap.gif": {
+      "bytes": 70968,
+      "frames": 73,
+      "width": 1092,
+      "height": 487,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/reliability.gif": {
+      "bytes": 245224,
+      "frames": 73,
+      "width": 982,
+      "height": 476,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/geographic_ap.gif": {
+      "bytes": 76184,
+      "frames": 73,
+      "width": 1092,
+      "height": 487,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "diagrams/pipeline.gif": {
+      "bytes": 93709,
+      "frames": 73,
+      "width": 1156,
+      "height": 596,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "diagrams/partitions.gif": {
+      "bytes": 107918,
+      "frames": 73,
+      "width": 1356,
+      "height": 586,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "diagrams/information_products.gif": {
+      "bytes": 227133,
+      "frames": 73,
+      "width": 1356,
+      "height": 376,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "screenshots/week_navigation.gif": {
+      "bytes": 2143835,
+      "frames": 73,
+      "width": 1476,
+      "height": 936,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "screenshots/observed-desktop.png": {
+      "bytes": 37892,
+      "frames": 1,
+      "width": 1440,
+      "height": 900,
+      "duration_ms": 0,
+      "final_hold_ms": 0,
+      "fps": 0,
+      "border_clear": false
+    },
+    "screenshots/estimate-desktop.png": {
+      "bytes": 68468,
+      "frames": 1,
+      "width": 1440,
+      "height": 900,
+      "duration_ms": 0,
+      "final_hold_ms": 0,
+      "fps": 0,
+      "border_clear": false
+    },
+    "screenshots/table-desktop.png": {
+      "bytes": 31386,
+      "frames": 1,
+      "width": 1440,
+      "height": 900,
+      "duration_ms": 0,
+      "final_hold_ms": 0,
+      "fps": 0,
+      "border_clear": false
+    },
+    "screenshots/estimate-mobile.png": {
+      "bytes": 41227,
+      "frames": 1,
+      "width": 390,
+      "height": 844,
+      "duration_ms": 0,
+      "final_hold_ms": 0,
+      "fps": 0,
+      "border_clear": false
+    },
+    "charts/area_budget.gif": {
+      "bytes": 391961,
+      "frames": 73,
+      "width": 1136,
+      "height": 564,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/dataset_map.gif": {
+      "bytes": 1611219,
+      "frames": 73,
+      "width": 575,
+      "height": 575,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/h2_interval.gif": {
+      "bytes": 119106,
+      "frames": 73,
+      "width": 982,
+      "height": 377,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    },
+    "charts/per_year_ap.gif": {
+      "bytes": 394647,
+      "frames": 73,
+      "width": 850,
+      "height": 531,
+      "duration_ms": 6100,
+      "final_hold_ms": 2500,
+      "fps": 20,
+      "border_clear": true
+    }
+  },
+  "sources": {
+    "artifacts/figures/results_summary.json": {
+      "sha256": "d1fc0166d37ae18504ac7306c21f78fa3dc0c10aeb8021639f16a29baffb6b5d"
+    },
+    "artifacts/evaluation/test_strict.json": {
+      "sha256": "31242d34ef75076678dc0675ea578c96acfadf97d68c6503415c31b54b126cec"
+    },
+    "configs/protocol.yaml": {
+      "sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf"
+    },
+    "artifacts/predictions/strict/test.parquet": {
+      "sha256": "6c66aa10654228e96ab5d4f84abfeb612f8ae6f245d3166734b6325567f04371"
+    },
+    "artifacts/figures/dataset_summary.json": {
+      "sha256": "75c774326a8b3dcdd094b20f79936ddd903d916f64e397b7e8c9d39d4f953346"
+    },
+    "datasets/processed/cells.parquet": {
+      "sha256": "332ec6bb56b96227a4229d95721f3aa900ed4827f2a65f9aca2e2fdcce65d3d4"
+    },
+    "datasets/manifests/snpp_outages.csv": {
+      "sha256": "248bf9eaaf3a7daebb5c855a927233518e7dd00949f690983e57a5bbb0b39633"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+flowchart LR
+    A["Retrospective benchmark<br/><br/>Final or revised products<br/>CHIRPS may postdate issue"]
+    B["Availability-constrained<br/>simulation<br/><br/>Acquisition before issue
+    <br/>SP ≈ NRT unvalidated"]
+    C["Operational forecast<br/><br/>Not claimed<br/>Live delivery not validated"]
+    A ~~~ B ~~~ C
+    classDef product fill:#F3F6F8,stroke:#59717E,color:#172C35
+    class A,B,C product

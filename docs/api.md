@@ -531,8 +531,19 @@ report `boundaryLicense: Public Domain` for revision `9469f09`, verified
 # Source: geoBoundaries; gbOpen BOL ADM0/ADM1, revision 9469f09; GeoBolivia (derived from ADM3 layer); Public Domain; https://www.geoboundaries.org/; Runfola et al. (2020), doi:10.1371/journal.pone.0231866; Simplified display boundaries; derived grid intersections and area weights.
 # Source: CHIRPS; CHIRPS v3.0 final daily rnl; Climate Hazards Center, University of California Santa Barbara; CC BY 4.0, with provider statement of copyright waiver; https://creativecommons.org/licenses/by/4.0/; https://www.chc.ucsb.edu/data/chirps3; CHIRPS3 Data Repository (2025), doi:10.15780/G2JQ0P; ERA5 temporal disaggregation; native pixels mapped to cell centers and aggregated into antecedent rainfall features.
 # Detections are not fires; zeros are not proof of absence; retrospective estimates are not operational forecasts; missing labels are empty.
-cell_id,issue_date,kind,variant,model,value,n_primary
-r1341c2247,2024-09-09,observed,strict,,,2
-r1341c2248,2024-09-09,observed,strict,,,0
+cell_id,issue_date,kind,variant,model,value,n_primary
+
+r1341c2247,2024-09-09,observed,strict,,,2
+
+r1341c2248,2024-09-09,observed,strict,,,0
+
 r1342c2247,2024-09-09,observed,strict,,,0
 ```
+
+## Browser use of the artifact API
+
+![Week navigation through August?October 2024](assets/screenshots/week_navigation.gif)
+
+The real local API serves consecutive estimate-layer weeks from August 5 through October 28, 2024, retaining unavailable predictions and observed-history gaps from the prepared artifacts.
+
+The [README captures](../README.md#screenshots) show observed, estimate, table and mobile views; [media reproduction](figures.md) documents the isolated capture server and opt-in browser spec.
