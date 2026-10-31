@@ -129,7 +129,7 @@ The one verified row is a backfill, displayed separately with no prospective
 performance chart. Results and screenshots are in
 `frontend/test-results/static-presentation/` and
 `frontend/test-results/static-presentation-real/`. The real run used
-`LIVE_DATA_DIR=C:/Users/PC Gamer/AppData/Local/bolivia-fire-ops/live-data-wt`
+`LIVE_DATA_DIR` pointing at a local checkout of the `live-data` branch
 and `npm run test:e2e:static -- --grep '@smoke'`.
 UTF-8 validation passed, including the actual en dash in the target date range.
 
