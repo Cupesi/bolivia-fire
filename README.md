@@ -5,9 +5,17 @@ detections in Bolivia, with a local API and browser explorer. It estimates the p
 least one selected NASA FIRMS VIIRS S-NPP standard-processing detection in the national part of a
 0.05° cell during the seven days beginning Monday 00:00 UTC.
 
-Status: the strict dataset and pipeline are complete; model selection uses validation years;
-final-test results are not yet published. Retrospective CHIRPS acquisition is in progress;
-MapBiomas is omitted because verified public raster access returned HTTP 403.
+Status: the dataset, pipeline, API and browser UI are complete. The primary final-test evaluation
+opened once on 2026-10-31; pre-registered sensitivity analyses are being added as logged
+reopenings in the [final-test access log](artifacts/evaluation/final_test_log.json).
+
+The calibrated strict LightGBM achieves temporal-test AP 0.323393
+(95% CI [0.221655, 0.382973]). H1 is supported:
+the paired AP gain over the validation-selected, uncalibrated climatology baseline has 95% CI
+[0.099838, 0.217886]. H2 meets the frozen rule because the retrospective-minus-strict AP interval
+[-0.004107, 0.001889] contains zero; this is not an equivalence test. Geographic-holdout AP is
+0.383912 (95% CI [0.250128, 0.467940]);
+see [results](docs/results.md) and the source [evaluation](artifacts/evaluation/test_strict.json).
 
 The target describes satellite detections, not numbers of fires, ignitions, burned area or an
 official warning. A complete negative label means no selected detection was observed; incomplete
