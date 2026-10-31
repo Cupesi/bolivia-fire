@@ -190,6 +190,32 @@ checks. Live FIRMS tests are deselected by default; backend tests also exercise
 local artifacts when present. Passing synthetic tests does not establish real
 model skill, full acquisition coverage or a full-scale resource bound.
 
+## Containerized tests
+
+With Docker running and `python:3.13-slim` and `node:22-bookworm-slim` already
+available locally, run from the repository root in a POSIX shell or Git Bash:
+
+```sh
+sh scripts/docker-test.sh
+```
+
+The script mounts a sanitized source snapshot read-only at `/src`, copies it to
+container-local `/work`, lists that workdir and checks that neither path contains
+`.env`. Secrets, local datasets, models, predictions, host dependency directories
+and generated caches are excluded before mounting. The Python stage installs
+Git, `libexpat1`, `libgomp1` and uv, runs `uv sync --all-extras --frozen`, Ruff and
+the offline pytest suites, including backend tests; `live` and `local_data`
+tests are deselected.
+The frontend stage runs `npm ci`, `npm run check`, `npm run test` and `npm run build`.
+
+Stages run sequentially with two CPUs and a 3 GiB memory limit each. Images are
+never pulled; package dependencies require network access. Named volumes
+`bolivia-fire-uv-cache` and `bolivia-fire-npm-cache` retain download caches.
+Containers and the temporary source snapshot are removed after use. The script
+reports stage wall times and exit codes and checks a 55 GiB free-space floor on
+the repository drive before and between stages. All test and build outputs stay
+inside the disposable containers.
+
 ## Recorded resource measurements
 
 | Scope | Recorded result | Evidence |
