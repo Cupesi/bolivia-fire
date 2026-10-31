@@ -28,7 +28,7 @@ from bolivia_fire.live.pipeline import (
 )
 from bolivia_fire.live.source import NRT, PROXY, SP, LiveClient, StaticSourceMask
 from bolivia_fire.live.state import LiveState, aggregate_detections
-from bolivia_fire.live.static import export_static
+from bolivia_fire.live.static import export_static, refresh_static
 from bolivia_fire.outages import observation_days
 
 
@@ -189,6 +189,7 @@ def bootstrap(
         "frozen_sp_bundle_sha256": sha256_file(source),
     }
     write_json(out / "static/meta.json", meta)
+    refresh_static(paths, out)
     update_metadata(out, state, now, outage_hash)
     result = publish_cycle(out, state, default_issue(state, now), now, initialize=True)
     result.update(

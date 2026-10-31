@@ -12,7 +12,11 @@ import duckdb
 import pyarrow.parquet as pq
 import yaml
 from fastapi import HTTPException
-from shapely.geometry import mapping, shape
+
+from bolivia_fire.boundaries import display_boundary
+from bolivia_fire.config import Paths
+from bolivia_fire.live.static import frozen_provenance, source_attributions
+from bolivia_fire.places import places_columnar
 
 IDENTIFIER = re.compile(r"[a-z][a-z0-9_]{0,79}\Z")
 SPLITS = ("train", "val_select", "val_calib", "test")
@@ -31,8 +35,7 @@ LIMITATIONS = [
     "Zeros are not proof of absence: clouds, smoke, overpass timing, "
     "and small fires reduce detection.",
     "Retrospective estimates are not operational forecasts.",
-    "Weeks with unobserved target days have missing labels, "
-    "never zero-filled labels.",
+    "Weeks with unobserved target days have missing labels, never zero-filled labels.",
     "Strict estimates assume standard-processing detections approximate near-real-time "
     "availability; "
     "this equivalence has not been validated.",
@@ -98,6 +101,19 @@ class Catalog:
         self.protocol_hash = digest(protocol_bytes)
         sources_path = self.root / "datasets/sources.yaml"
         self.sources = yaml.safe_load(sources_path.read_bytes()) if sources_path.exists() else {}
+        self.attributions = [
+            *ATTRIBUTIONS,
+            *[
+                source
+                for source in source_attributions(self.sources)
+                if source["name"] == "GeoNames"
+                or source.get("product")
+                in {
+                    "gbOpen BOL ADM2",
+                    "gbOpen BOL ADM3",
+                }
+            ],
+        ]
         self.snapshots: dict[str, Any] = {"protocol_sha256": self.protocol_hash, "panel": {}}
         if sources_path.exists():
             self.snapshots["sources_sha256"] = digest(sources_path.read_bytes())
@@ -170,6 +186,10 @@ class Catalog:
         }
         self.snapshots["cells"] = self._metadata(self.cells_path)
         self.snapshots["cells_sha256"] = digest(self.cells_path.read_bytes())
+        places = self.root / "datasets/processed/cell_places.parquet"
+        if places.exists():
+            self.grid.update(places_columnar(pq.read_table(places).to_pandas(), self.cell_ids))
+            self.snapshots["cell_places_sha256"] = digest(places.read_bytes())
 
     def _load_weeks(self) -> list[dict[str, Any]]:
         if not self.panel_files:
@@ -211,24 +231,14 @@ class Catalog:
     def _load_boundaries(self) -> dict[int, dict[str, Any]]:
         boundaries = {}
         raw = (self.root / "datasets/raw/boundaries").resolve()
-        for level in (0, 1):
+        for level in (0, 1, 2, 3):
             pin = self.sources.get("boundaries", {}).get(f"ADM{level}")
             if not pin:
                 continue
             path = (self.root / pin["path"]).resolve()
             if not path.is_relative_to(raw) or not path.is_file():
                 continue
-            content = path.read_bytes()
-            if digest(content) != pin["sha256"]:
-                raise ValueError("Boundary pin mismatch")
-            data = json.loads(content)
-            for feature in data["features"]:
-                feature["geometry"] = mapping(
-                    shape(feature["geometry"]).simplify(
-                        BOUNDARY_TOLERANCE_DEG, preserve_topology=True
-                    )
-                )
-            boundaries[level] = data
+            boundaries[level] = display_boundary(path, pin["sha256"])
         return boundaries
 
     def _load_evaluation(self) -> dict[tuple[str, str], Any]:
@@ -301,13 +311,18 @@ class Catalog:
 
     def meta(self) -> dict[str, Any]:
         variants = sorted(set(self.models) | {variant for variant, _ in self.evaluation})
+        provenance = frozen_provenance(Paths(self.root)) if self.cells_path.exists() else {}
         return {
+            **provenance,
             "project_name": "Bolivia Fire",
             "protocol": {
                 "version": self.protocol["protocol_version"],
                 "sha256": self.protocol_hash,
             },
-            "dataset_snapshot_ids": self.snapshots,
+            "dataset_snapshot_ids": {
+                **provenance.get("dataset_snapshot_ids", {}),
+                **self.snapshots,
+            },
             "issue_date_range": {
                 "start": self.first.isoformat() if self.first else None,
                 "end": self.last.isoformat() if self.last else None,
@@ -320,7 +335,7 @@ class Catalog:
                 variant: sorted(split for run, split in self.evaluation if run == variant)
                 for variant in variants
             },
-            "source_attributions": ATTRIBUTIONS,
+            "source_attributions": self.attributions,
             "limitations": LIMITATIONS,
             "boundary_simplification_tolerance_deg": BOUNDARY_TOLERANCE_DEG,
         }

@@ -21,7 +21,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.staticfiles import StaticFiles
 from starlette.types import Scope
 
-from backend.app.catalog import ATTRIBUTIONS, digest, invalid, json_bytes, missing
+from backend.app.catalog import digest, invalid, json_bytes, missing
 from backend.app.store import Store
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -235,7 +235,7 @@ def create_app(root: Path | None = None) -> FastAPI:
         return cached(request, request.app.state.grid_bytes)
 
     @application.get("/api/v1/boundaries", dependencies=[Depends(query_guard("level"))])
-    def boundaries(request: Request, level: Literal["0", "1"] = "0") -> Response:
+    def boundaries(request: Request, level: Literal["0", "1", "2", "3"] = "0") -> Response:
         data = request.app.state.boundary_bytes.get(int(level))
         if data is None:
             raise missing("Pinned boundary is not available")
@@ -306,7 +306,7 @@ def create_app(root: Path | None = None) -> FastAPI:
             f"model={data['model'] or ''}\n"
         )
         buffer.write(f"# dataset_snapshot_ids={json_bytes(store.snapshots).decode()}\n")
-        for source in ATTRIBUTIONS:
+        for source in store.attributions:
             buffer.write(f"# Source: {'; '.join(source.values())}\n")
         buffer.write(
             "# Detections are not fires; zeros are not proof of absence; "

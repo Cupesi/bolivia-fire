@@ -77,6 +77,45 @@ duplicate count. Panel metadata carries forward the detection manifest hash.
 Panel metadata adds hashes of the exact cell, detection, and acquisition-day
 inputs. Column definitions are in `datasets/schemas/{cells,detections,panel}.yaml`.
 
+## Place metadata
+
+`datasets/processed/cell_places.parquet` adds display labels without changing
+the frozen cell or panel files. Its one-row-per-cell key and column definitions
+are in [cell_places.yaml](../datasets/schemas/cell_places.yaml).
+
+```powershell
+uv run python -m bolivia_fire.places --acquire
+uv run python -m bolivia_fire.places
+```
+
+The acquisition command pins gbOpen BOL ADM2 provinces, ADM3 municipalities and
+the GeoNames Bolivia dump. Subsequent builds verify local source hashes and
+make no network requests. Source URLs, retrieval times, licences and SHA-256
+hashes are in `datasets/sources.yaml`; build outputs and input hashes are in
+`datasets/manifests/cell_places.jsonl`.
+
+Province and municipality names use the largest WGS84 geodesic intersection
+with the national part of each cell. The corresponding `*_national_share`
+is the winning intersection area divided by national cell area. Ties use
+ascending original names and shape IDs. Names with no positive intersection
+are null with zero share. These are the pinned 2015 administrative boundaries,
+not a claim about current administrative divisions.
+
+Nearest places use all 25,804 populated-place records (feature class P) in the
+pinned GeoNames BO dump and a haversine distance from the full cell centre,
+with mean Earth radius 6,371.0088 km. Up to three places inside the national
+cell are ranked by population, then GeoNames ID; inclusion follows the grid's
+snapped half-open bounds and ADM0 coverage. Source names retain their exact
+UTF-8 spelling. Credits: **Place names: GeoNames, CC BY 4.0**; GeoBolivia and
+geoBoundaries, Public Domain, with the citations in
+[the licence notes](../datasets/licenses/geoBoundaries.md).
+
+The 2026-10-31 build contains 37,146 cells, all with province and municipality
+assignments; median nearest-place distance is 4.7200047695 km. Spot checks
+preserved `San José de Chiquitos` and `Concepción` in the GeoNames and derived
+Parquet records. These place fields are display metadata and do not enter
+model training or prediction.
+
 ## Labels and missing data
 
 `acquisition_days.parquet` in the same versioned bundle has one row for every date from

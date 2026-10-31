@@ -1,0 +1,37 @@
+name: cell_places
+path: datasets/processed/cell_places.parquet
+primary_key: [cell_id]
+encoding: UTF-8
+population: exactly the eligible cells in cells.parquet
+columns:
+  cell_id: {type: string, nullable: false}
+  department: {type: string, nullable: false, source: cells.parquet}
+  province: {type: string, nullable: true, source: geoBoundaries gbOpen BOL ADM2}
+  province_national_share: {type: float64, range: [0, 1]}
+  municipality: {type: string, nullable: true, source: geoBoundaries gbOpen BOL ADM3}
+  municipality_national_share: {type: float64, range: [0, 1]}
+  nearest_place_name: {type: string, nullable: false}
+  nearest_place_geonames_id: {type: int64, nullable: false}
+  nearest_place_feature_code: {type: string, nullable: false}
+  nearest_place_population: {type: int64, nullable: false}
+  nearest_place_distance_km: {type: float64, minimum: 0}
+  populated_places:
+    type: list_of_struct
+    maximum_length: 3
+    fields: {name: string, geonames_id: int64, feature_code: string, population: int64}
+rules:
+  administrative_assignment: largest WGS84 geodesic area of the national cell intersection
+  administrative_ties: ascending original name then shapeID
+  missing_administrative_intersection: null name and zero share
+  nearest_place: GeoNames BO feature class P; haversine distance from the full cell centre
+  distance_radius_km: 6371.0088
+  inside_places: ADM0 covers the point; half-open snapped grid bounds
+  inside_order: descending population then ascending GeoNames id
+  names: original source names, without transliteration or normalization
+metadata:
+  - cells_sha256
+  - sources_sha256
+  - geonames_sha256
+  - adm2_sha256
+  - adm3_sha256
+manifest: datasets/manifests/cell_places.jsonl

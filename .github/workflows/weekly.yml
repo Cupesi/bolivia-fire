@@ -111,7 +111,7 @@ jobs:
         working-directory: source/frontend
         env:
           LIVE_DATA_DIR: ${{ github.workspace }}/live-data
-          PAGES_BASE: /bolivia-fire/
+          PAGES_BASE: /
         run: |
           npm ci
           npm run build:static

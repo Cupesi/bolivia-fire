@@ -4,12 +4,14 @@ import hashlib
 import json
 import os
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
 
 import httpx
 import yaml
 from filelock import FileLock
+from shapely.geometry import mapping, shape
 
 from bolivia_fire.config import Paths
 from bolivia_fire.firms.storage import append_manifest, durable_write, read_manifest, sha256_file
@@ -77,8 +79,11 @@ def acquire_boundaries(
     paths: Paths | None = None,
     *,
     transport: httpx.BaseTransport | None = None,
+    levels: tuple[str, ...] = ("ADM0", "ADM1"),
 ) -> list[dict[str, Any]]:
     paths = paths or Paths()
+    if not levels or set(levels) - {"ADM0", "ADM1", "ADM2", "ADM3"}:
+        raise ValueError("Supported boundary levels are ADM0 through ADM3")
     paths.temporary.mkdir(parents=True, exist_ok=True)
     sources_path = paths.datasets / "sources.yaml"
     manifest = paths.manifests / "boundaries.jsonl"
@@ -100,7 +105,7 @@ def acquire_boundaries(
         sources = sources or {}
         pins = sources.setdefault("boundaries", {})
         existing = read_manifest(manifest)
-        for level in ("ADM0", "ADM1"):
+        for level in levels:
             pinned = pins.get(level)
             metadata_url = f"https://www.geoboundaries.org/api/current/gbOpen/BOL/{level}/"
             if pinned:
@@ -132,6 +137,12 @@ def acquire_boundaries(
                     raise RuntimeError("Boundary metadata has no GeoJSON download URL")
                 if not metadata.get("boundaryLicense") or not metadata.get("boundaryID"):
                     raise RuntimeError("Boundary metadata has no license or boundaryID")
+                if metadata["boundaryLicense"] not in {
+                    "Public Domain",
+                    "CC BY 4.0",
+                    "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+                }:
+                    raise RuntimeError("Boundary license needs review before acquisition")
                 body = _public_download(client, url)
                 digest = hashlib.sha256(body).hexdigest()
                 path = (
@@ -153,6 +164,9 @@ def acquire_boundaries(
                     "sourceDataUpdateDate": metadata.get("sourceDataUpdateDate"),
                     "buildDate": metadata.get("buildDate"),
                     "license": metadata["boundaryLicense"],
+                    "boundaryLicense": metadata["boundaryLicense"],
+                    "boundarySource": metadata.get("boundarySource"),
+                    "metadata_verified_date": datetime.now(UTC).date().isoformat(),
                     "licenseDetail": metadata.get("licenseDetail"),
                     "licenseSource": metadata.get("licenseSource"),
                     "sha256": digest,
@@ -179,3 +193,35 @@ def acquire_boundaries(
             os.replace(pending, sources_path)
             records.append(record)
     return records
+
+
+def display_boundary(
+    path: Path, expected_sha256: str, *, max_bytes: int = 1_500_000
+) -> dict[str, Any]:
+    if sha256_file(path) != expected_sha256:
+        raise ValueError("Boundary hash mismatch")
+    original = json.loads(path.read_text(encoding="utf-8"))
+    tolerance = 0.005
+    for _ in range(8):
+        features = [
+            {
+                **feature,
+                "geometry": mapping(
+                    shape(feature["geometry"]).simplify(tolerance, preserve_topology=True)
+                ),
+            }
+            for feature in original["features"]
+        ]
+        result = {
+            **original,
+            "features": features,
+            "simplification": {
+                "tolerance_deg": tolerance,
+                "preserve_topology": True,
+                "source_sha256": expected_sha256,
+            },
+        }
+        if len(json.dumps(result, separators=(",", ":"), ensure_ascii=True).encode()) <= max_bytes:
+            return result
+        tolerance *= 2
+    raise ValueError("Display boundary exceeds size limit after simplification")

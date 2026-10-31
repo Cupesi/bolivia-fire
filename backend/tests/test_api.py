@@ -83,7 +83,7 @@ def test_short_outage_and_low_coverage_do_not_make_targets_incomplete(
         "/api/v1/cells/r1341c2247/series?start=2024-09-16&end=2024-09-02",
         "/api/v1/weeks?limit=701",
         "/api/v1/weeks?offset=-1",
-        "/api/v1/boundaries?level=2",
+        "/api/v1/boundaries?level=4",
         "/api/v1/export?issue_date=2024-09-02&kind=observed&format=json",
         "/api/v1/export?issue_date=2024-09-02&kind=observed&start=2013-01-07",
         "/api/v1/metrics?variant=../../configs&split=test",

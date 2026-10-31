@@ -121,9 +121,50 @@ Repository maintainers must publish the initialized data branch, configure the
 `FIRMS_MAP_KEY` repository secret, enable GitHub Pages with Actions, and permit
 the `github-pages` deployment environment. The workflow fails when its secret
 or initialized state is missing. It uses `npm run build:static` with
-`LIVE_DATA_DIR` and `PAGES_BASE=/bolivia-fire/`. No remote publication is performed
+`LIVE_DATA_DIR` and `PAGES_BASE=/` for `https://bolivia-fire.cupesi.org/`.
+No remote publication is performed
 by the local commands. Publication rejects outputs at or above 200 MB; older
 archives then need an explicit retention decision.
+
+## Static geography and provenance refresh
+
+After building the [place metadata](dataset.md#place-metadata), refresh an
+initialized live-data checkout without acquiring FIRMS observations or running
+inference:
+
+```powershell
+uv run python -m bolivia_fire.live.static --out C:/work/live-data-wt
+```
+
+This static update reads existing grid order, writes `static/cell_places.json`,
+exports `static/boundaries_adm0.json` through `static/boundaries_adm3.json`, and
+completes `static/meta.json`. It does not write forecast, observation, state,
+model or verification files. Each display boundary is bounded to 1,500,000 JSON
+bytes, simplified with topology preservation, and includes a `simplification`
+object containing `tolerance_deg`, `preserve_topology` and `source_sha256`.
+Unmodified source geometry is used for cell assignments.
+
+The place JSON is columnar, aligned exactly to `static/grid.json` cell IDs;
+its keys match [the schema](../datasets/schemas/cell_places.yaml).
+`populated_places[i]` is an array of up to three objects with `name`,
+`geonames_id`, `feature_code` and `population`.
+
+Metadata retains live acquisition provenance and supplies `protocol`
+(`version`, `sha256`), `experiments_sha256`, `cells_sha256`, `sources_sha256`,
+`cell_places_sha256`, `model_id`, `model_name`, `source_model_sha256`,
+`source_calibrator_sha256` and `primary_opening_utc`. Its `dataset_snapshot_ids`
+contains the hashes plus `panel`, mapping evaluation panel years to the hashes
+recorded at the primary opening, and `evaluation_sources_sha256` for the
+original evaluation source registry. `sources_sha256` identifies the expanded
+display source registry; it is intentionally distinct from that frozen hash.
+The model and calibrator hashes are checked against the primary opening.
+
+`source_attributions` and `attribution` include FIRMS, all four pinned
+geoBoundaries levels and GeoNames. CHIRPS is absent from strict live metadata
+because the strict model does not use rainfall covariates. The API also credits
+CHIRPS for its retrospective layers. No placeholder provenance values are
+exported. `boundary_simplification_tolerance_deg` maps each ADM level to the
+actual display tolerance in degrees.
 
 ## Observed initialization
 

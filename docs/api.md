@@ -540,6 +540,33 @@ r1341c2248,2024-09-09,observed,strict,,,0
 r1342c2247,2024-09-09,observed,strict,,,0
 ```
 
+## Place metadata and administrative display boundaries
+
+When `datasets/processed/cell_places.parquet` is available, `/api/v1/grid`
+includes columnar `province`, `province_national_share`, `municipality`,
+`municipality_national_share`, `nearest_place_name`,
+`nearest_place_geonames_id`, `nearest_place_feature_code`,
+`nearest_place_population`, `nearest_place_distance_km` and `populated_places`,
+aligned to its existing sorted `cell_id` column. The table must contain exactly
+the grid cells once; it never rewrites the frozen cells file.
+`populated_places[i]` contains up to three objects with `name`, `geonames_id`,
+`feature_code` and `population`. See the
+[schema and assignment rules](dataset.md#place-metadata).
+
+`GET /api/v1/boundaries?level=2` returns provinces; `level=3` returns
+municipalities. Levels 0 through 3 are accepted. A supported level with no local
+pin returns 404; other levels return 422. Display geometries are simplified
+with topology preservation and bounded to 1,500,000 JSON bytes per level.
+Each response includes `simplification.tolerance_deg`,
+`simplification.preserve_topology` and `simplification.source_sha256`.
+Cell labels use the original unsimplified geometries.
+
+Metadata and CSV credits also include GeoNames and the new geoBoundaries
+levels. `/api/v1/meta` adds available experiments and place-table hashes and
+the primary opening time; the static site exports the same protocol, cell,
+source and frozen panel identifiers plus its selected model and calibrator
+hashes in `static/meta.json`, described in [live.md](live.md).
+
 ## Browser use of the artifact API
 
 ![Week navigation through August–October 2024](assets/screenshots/week_navigation.gif)

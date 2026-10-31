@@ -58,6 +58,54 @@ boundaries:
     retrieval_utc: '2026-10-31T04:56:36.355959+00:00'
     features: 9
     contains_santa_cruz: true
+  ADM2:
+    provider: geoBoundaries
+    release: gbOpen
+    country: BOL
+    level: ADM2
+    metadata_url: https://www.geoboundaries.org/api/current/gbOpen/BOL/ADM2/
+    url: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/BOL/ADM2/geoBoundaries-BOL-ADM2.geojson
+    boundaryID: BOL-ADM2-80513517
+    version: 9469f09
+    boundaryYearRepresented: '2015'
+    sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
+    buildDate: Dec 12, 2023
+    license: Public Domain
+    boundaryLicense: Public Domain
+    boundarySource: GeoBolivia, Derived from ADM3 layer
+    metadata_verified_date: '2026-10-31'
+    licenseDetail: Public Domain; free use and access to information
+    licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
+    sha256: 33a11ff32d935ad24f2e412a09ff383cbab2c63daff6b21de905dd3953ccac8c
+    bytes: 22473600
+    path: datasets/raw/boundaries/geoBoundaries-BOL-ADM2_33a11ff32d935ad24f2e412a09ff383cbab2c63daff6b21de905dd3953ccac8c.geojson
+    retrieval_utc: '2026-10-31T18:30:06.804607+00:00'
+    features: 110
+    contains_santa_cruz: false
+  ADM3:
+    provider: geoBoundaries
+    release: gbOpen
+    country: BOL
+    level: ADM3
+    metadata_url: https://www.geoboundaries.org/api/current/gbOpen/BOL/ADM3/
+    url: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/BOL/ADM3/geoBoundaries-BOL-ADM3.geojson
+    boundaryID: BOL-ADM3-33444609
+    version: 9469f09
+    boundaryYearRepresented: '2015'
+    sourceDataUpdateDate: Thu Jan 19 07:31:04 2023
+    buildDate: Dec 12, 2023
+    license: Public Domain
+    boundaryLicense: Public Domain
+    boundarySource: GeoBolivia
+    metadata_verified_date: '2026-10-31'
+    licenseDetail: Public Domain; free use and access to information
+    licenseSource: geo.gob.bo/geonetwork/srv/spa/catalog.search#/metadata/aeeb85a9-23df-48d4-a4e5-dd19e8b206db
+    sha256: 35bf9e07686f94dddb7d9c592aed36c8d981bafa91df12ddd7295142cbdc6aa2
+    bytes: 33234141
+    path: datasets/raw/boundaries/geoBoundaries-BOL-ADM3_35bf9e07686f94dddb7d9c592aed36c8d981bafa91df12ddd7295142cbdc6aa2.geojson
+    retrieval_utc: '2026-10-31T18:30:09.281854+00:00'
+    features: 339
+    contains_santa_cruz: false
 snpp_outages:
   provider: NASA MODAPS
   product: VIIRS/Suomi-NPP
@@ -127,3 +175,19 @@ covariates:
     ftp_directory: ftp://ftp.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/netcdf/byYear/
     ftp_identity: binary SIZE and MDTM; matching modification time required for resume
     ftp_selection: HTTP 429 fallback or explicit --transport ftp
+geonames:
+  provider: GeoNames
+  country: BO
+  url: https://download.geonames.org/export/dump/BO.zip
+  license: CC BY 4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  attribution: 'Place names: GeoNames, CC BY 4.0'
+  license_evidence_url: https://download.geonames.org/export/dump/readme.txt
+  license_evidence_path: datasets/raw/geonames/BO_c78195cf34d32f5b5becba9015f7b0d0e34cf8e56efeb291d3f25ce44f311e47.readme.txt
+  license_evidence_sha256: b1957379b6c1242c700c98ac9a8aa0a09f56c3c0a50ee72175527005f48ef2c5
+  retrieval_utc: '2026-10-31T18:30:12.109508+00:00'
+  last_modified: Sat, 31 Oct 2026 02:50:32 GMT
+  sha256: c78195cf34d32f5b5becba9015f7b0d0e34cf8e56efeb291d3f25ce44f311e47
+  bytes: 1073582
+  path: datasets/raw/geonames/BO_c78195cf34d32f5b5becba9015f7b0d0e34cf8e56efeb291d3f25ce44f311e47.zip
+  feature_class: P
