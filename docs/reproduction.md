@@ -190,6 +190,31 @@ checks. Live FIRMS tests are deselected by default; backend tests also exercise
 local artifacts when present. Passing synthetic tests does not establish real
 model skill, full acquisition coverage or a full-scale resource bound.
 
+## Recorded-artifact notebooks
+
+After restoring the local dataset, recorded evaluation JSON and static figures, execute
+each notebook from the repository root with a clean kernel:
+
+```powershell
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_exploration.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_features.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/03_modeling.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/04_evaluation.ipynb --ExecutePreprocessor.timeout=240
+```
+
+[Exploration](../notebooks/01_exploration.ipynb) describes observation coverage and labels.
+[Features](../notebooks/02_features.ipynb) reconstructs one real 2024 cell-week and checks
+history against the saved panel, future-detection invariance and LOYO climatology.
+[Modeling](../notebooks/03_modeling.ipynb) reads validation records and saved-model gain
+importance. [Evaluation](../notebooks/04_evaluation.ipynb) displays recorded final-test
+and sensitivity results, with a final post-hoc comparison section that remains executable
+when alternative-learner artifacts are absent.
+
+These commands fit no models, create no new predictions and make no final-test openings.
+They read the local canonical detection bundle, panel, CHIRPS features, selected strict
+model objects, evaluation records and existing PNGs. Only notebook outputs are updated.
+See [figures](figures.md) for the notebook inventory, figure sources and visual checks.
+
 ## Containerized tests
 
 With Docker running and `python:3.13-slim` and `node:22-bookworm-slim` already

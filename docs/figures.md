@@ -11,10 +11,29 @@ These commands use local recorded artifacts without fitting or evaluating models
 
 ```powershell
 uv sync --all-extras
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_dataset.ipynb --ExecutePreprocessor.timeout=240
-uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_results.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_exploration.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_features.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/03_modeling.ipynb --ExecutePreprocessor.timeout=240
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/04_evaluation.ipynb --ExecutePreprocessor.timeout=240
 uv run python -m bolivia_fire.animations --charts-only
 ```
+
+The four notebooks follow the analysis stages:
+
+| Notebook | Contents and inputs |
+|---|---|
+| [01_exploration](../notebooks/01_exploration.ipynb) | Observation days, outages, seasonal cycle, training frequency map, partitions and label prevalence from the recorded dataset summary and existing figures. |
+| [02_features](../notebooks/02_features.ipynb) | Real Santa Cruz cell `r1445c2432` at issue 2024-09-02; pipeline reconstruction, strict definitions, exact no-look-ahead check, LOYO climatology, sampled training distributions and recorded CHIRPS completeness. |
+| [03_modeling](../notebooks/03_modeling.ipynb) | Recorded 2021/2022 scores, 20 LightGBM configurations, calibration reliability and saved-model gain importance; strict and strict_geo feature definitions. |
+| [04_evaluation](../notebooks/04_evaluation.ipynb) | Recorded temporal/geographic results, H1/H2, Santa Cruz, calibration, area budgets, sensitivity reopenings and optional post-hoc alternative-learner artifacts. |
+
+Notebook execution reads local artifacts and does not regenerate figures, fit models,
+produce predictions or open the final test. Exploration and evaluation display existing
+300 dpi PNGs. Feature and modeling plots use `figures.chart_style()` and embed small
+inline figures; no additional figure files are written. DuckDB sampling uses a 512 MB
+query limit and two threads. Each notebook starts independently from a clean kernel.
+The comparison section inventories available `comparison_*.json` records and displays
+scalar metrics with their source keys; absent comparison records are reported as pending.
 
 UTC DuckDB aggregation uses 512 MB and two threads. Weekly totals must match the
 recorded annual summary. Metrics, reliability bins and intervals come from JSON.
@@ -138,17 +157,37 @@ Verified on 2026-10-31 against existing local artifacts:
 | Command or check | Result |
 |---|---|
 | uv sync --all-extras | Passed |
-| uv run --no-sync ruff check src tests backend | Passed |
-| uv run --no-sync pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider | 405 passed, 4 deselected; 106.01 seconds |
-| Both notebook execution commands above | Passed from clean kernels; six and nine code cells, no error outputs |
+| uv run --no-sync ruff check . | Passed, including all four notebooks |
+| uv run --no-sync pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider | 453 passed, 6 deselected; 114.45 seconds |
+| All four notebook execution commands above | Passed from clean kernels; 6, 7, 6 and 10 code cells, no error outputs |
+| Notebook UTF-8 and local-path checks | Passed for decoded source, prose and text outputs; no absolute local paths |
+| Evaluation access-log integrity | Final execution left `final_test_log.json` SHA256 unchanged |
+| Optional comparison handling | Empty directory and synthetic null baseline-difference checks passed |
+| Notebook visual inspection | 15 figure outputs and rendered tables inspected; complete definitions, readable labels and no clipping |
 | Earlier frontend: npm run check | No errors or warnings |
 | Earlier frontend: npm run test | 19 passed |
 | Earlier frontend: npm run build | Passed; 28,562 bytes gzip JavaScript |
 | Earlier host Chromium documentation capture | 1 passed; no page errors |
-| Local file links in this page | 35 passed |
+| Local file links in this page | 39 passed |
 | GIF source/copy comparison and border checks | Passed for all 13 chart/diagram copies and all 14 tracked GIFs |
+
+Measured clean-kernel notebook wall times, in seconds:
+
+| Notebook | Seconds |
+|---|---:|
+| `01_exploration.ipynb` | 3.403 |
+| `02_features.ipynb` | 9.207 |
+| `03_modeling.ipynb` | 4.512 |
+| `04_evaluation.ipynb` | 5.220 |
 
 The Python suite emitted the existing Starlette/httpx and DuckDB/pandas warnings.
 Notebook execution emitted the existing Windows Jupyter transport and event-loop
-notices. Frontend and capture entries retain the earlier verification; these
-assets were unchanged by chart-font regeneration.
+notices. Feature checks matched 37,146 cells and 22 history columns against the
+saved panel. Adding 100 synthetic future detections with the original FRP dtype
+left every history value exactly unchanged. The training sample contains 48,860
+negative and 1,140 positive cell-weeks. A direct scan found zero incomplete
+CHIRPS feature rows across all 25,184,988 recorded cell-weeks. All five CHIRPS
+feature completeness shares were 1.0 in every recorded issue year, 2013-2025. New inline plots resolved to
+Times New Roman. Complete feature definitions and compact result tables were
+inspected in locally rendered notebook HTML. Frontend and capture entries retain
+the earlier verification; those assets were unchanged by notebook restructuring.
