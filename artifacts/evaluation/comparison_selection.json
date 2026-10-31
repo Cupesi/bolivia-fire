@@ -1,0 +1,644 @@
+{
+  "status": "POST-HOC EXPLORATORY",
+  "decision": "Retain the published LightGBM model; no alternative has a validation AP gain with a paired interval excluding zero.",
+  "future_evaluation": "CatBoost is a candidate for a future pre-registered comparison on a new untouched holdout.",
+  "decision_basis": "val_select chooses configurations; val_calib supplies calibration and paired validation diagnostics only",
+  "paired_calibrated_ap_difference": {
+    "xgboost": {
+      "point": -0.005697028572872076,
+      "lower": -0.009950987419892783,
+      "upper": 0.00017799952212982394,
+      "valid_replicates": 500,
+      "reason": null
+    },
+    "catboost": {
+      "point": 0.0031453307900209393,
+      "lower": -0.0019007896763089684,
+      "upper": 0.009631715785753744,
+      "valid_replicates": 500,
+      "reason": null
+    },
+    "spatial_cnn": {
+      "point": -0.002580980925937837,
+      "lower": -0.007025895391611002,
+      "upper": 0.0035327280304004336,
+      "valid_replicates": 500,
+      "reason": null
+    }
+  },
+  "selected_models": {
+    "xgboost": {
+      "family": "xgboost",
+      "selected_utc": "2026-10-31T19:03:10.449158+00:00",
+      "selected_trial": {
+        "index": 9,
+        "parameters": {
+          "tree_method": "hist",
+          "device": "cuda",
+          "max_bin": 63,
+          "objective": "binary:logistic",
+          "seed": 7,
+          "nthread": 4,
+          "disable_default_eval_metric": 1,
+          "subsample": 1.0,
+          "max_depth": 5,
+          "eta": 0.03,
+          "min_child_weight": 10,
+          "colsample_bytree": 0.85,
+          "lambda": 1
+        },
+        "best_round": 65,
+        "val_select_ap": 0.34540434659637953,
+        "runtime_seconds": 9.969098700006725
+      },
+      "completed_configurations": 20,
+      "planned_configurations": 20,
+      "selection_source": "val_select exact AP only",
+      "resources": {
+        "stage": "xgboost",
+        "runtime_seconds": 189.475703899996,
+        "peak_process_tree_rss_gib": 3.379375457763672,
+        "minimum_free_disk_gib": 94.099853515625
+      },
+      "val_select_metrics": {
+        "average_precision": 0.34540434659637953,
+        "brier_score": 0.017621014118379668,
+        "log_loss": 0.06955823164580818,
+        "roc_auc": 0.9289369099819019,
+        "expected_calibration_error": 0.005613172673167969,
+        "recall_at_area_budget_5pct": 0.38510643255562177,
+        "recall_at_area_budget_10pct": 0.5696743876929244,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 135727.6,
+            "mean_probability": 0.0033988661790607076,
+            "positive_rate": 0.00024313404200766828
+          },
+          {
+            "bin": 1,
+            "count": 135727.6,
+            "mean_probability": 0.0035895024328122032,
+            "positive_rate": 0.00048626808401533656
+          },
+          {
+            "bin": 2,
+            "count": 135727.59999999998,
+            "mean_probability": 0.003998504783176429,
+            "positive_rate": 0.0006999313330523785
+          },
+          {
+            "bin": 3,
+            "count": 135727.60000000003,
+            "mean_probability": 0.004684334585588256,
+            "positive_rate": 0.0010683162451852089
+          },
+          {
+            "bin": 4,
+            "count": 135727.59999999998,
+            "mean_probability": 0.005205054799338124,
+            "positive_rate": 0.0017535121817522747
+          },
+          {
+            "bin": 5,
+            "count": 135727.59999999998,
+            "mean_probability": 0.00622331373666066,
+            "positive_rate": 0.0027407837462682613
+          },
+          {
+            "bin": 6,
+            "count": 135727.59999999998,
+            "mean_probability": 0.00857869737873811,
+            "positive_rate": 0.005245801148771511
+          },
+          {
+            "bin": 7,
+            "count": 135727.6000000001,
+            "mean_probability": 0.014019749577139147,
+            "positive_rate": 0.011344781754042991
+          },
+          {
+            "bin": 8,
+            "count": 135727.59999999986,
+            "mean_probability": 0.03062563644958404,
+            "positive_rate": 0.031048953934203198
+          },
+          {
+            "bin": 9,
+            "count": 135727.6000000001,
+            "mean_probability": 0.13903159537003934,
+            "positive_rate": 0.16862450967968184
+          }
+        ]
+      }
+    },
+    "catboost": {
+      "family": "catboost",
+      "selected_utc": "2026-10-31T19:16:02.603764+00:00",
+      "selected_trial": {
+        "index": 19,
+        "parameters": {
+          "task_type": "GPU",
+          "devices": "0",
+          "iterations": 400,
+          "loss_function": "Logloss",
+          "border_count": 63,
+          "random_seed": 7,
+          "thread_count": 4,
+          "bootstrap_type": "Bayesian",
+          "allow_writing_files": false,
+          "verbose": false,
+          "use_best_model": false,
+          "depth": 6,
+          "learning_rate": 0.06,
+          "l2_leaf_reg": 10,
+          "random_strength": 1.0,
+          "bagging_temperature": 0.0
+        },
+        "best_round": 200,
+        "val_select_ap": 0.34861407929572413,
+        "runtime_seconds": 38.65773030000855,
+        "checkpoints": [
+          {
+            "trees": 10,
+            "average_precision": 0.3273306650259354
+          },
+          {
+            "trees": 20,
+            "average_precision": 0.3390530250247555
+          },
+          {
+            "trees": 30,
+            "average_precision": 0.34342472767442084
+          },
+          {
+            "trees": 40,
+            "average_precision": 0.34561328376376305
+          },
+          {
+            "trees": 50,
+            "average_precision": 0.34464425019650735
+          },
+          {
+            "trees": 60,
+            "average_precision": 0.3466404242128555
+          },
+          {
+            "trees": 70,
+            "average_precision": 0.34747747422270064
+          },
+          {
+            "trees": 80,
+            "average_precision": 0.3468692931729949
+          },
+          {
+            "trees": 90,
+            "average_precision": 0.3479027394493773
+          },
+          {
+            "trees": 100,
+            "average_precision": 0.3485128089649779
+          },
+          {
+            "trees": 110,
+            "average_precision": 0.3471075914579903
+          },
+          {
+            "trees": 120,
+            "average_precision": 0.3477485469268733
+          },
+          {
+            "trees": 130,
+            "average_precision": 0.3480931914503823
+          },
+          {
+            "trees": 140,
+            "average_precision": 0.34754871905703616
+          },
+          {
+            "trees": 150,
+            "average_precision": 0.34777601399784996
+          },
+          {
+            "trees": 160,
+            "average_precision": 0.34771869537505945
+          },
+          {
+            "trees": 170,
+            "average_precision": 0.34811202828602533
+          },
+          {
+            "trees": 180,
+            "average_precision": 0.3482487880918342
+          },
+          {
+            "trees": 190,
+            "average_precision": 0.34852644888476225
+          },
+          {
+            "trees": 200,
+            "average_precision": 0.34861407929572413
+          },
+          {
+            "trees": 210,
+            "average_precision": 0.3483158753058469
+          },
+          {
+            "trees": 220,
+            "average_precision": 0.34823129897497285
+          },
+          {
+            "trees": 230,
+            "average_precision": 0.3479054806297026
+          },
+          {
+            "trees": 240,
+            "average_precision": 0.3477879187290608
+          },
+          {
+            "trees": 250,
+            "average_precision": 0.3480430413653747
+          },
+          {
+            "trees": 260,
+            "average_precision": 0.34794648089179336
+          },
+          {
+            "trees": 270,
+            "average_precision": 0.3481772738592589
+          },
+          {
+            "trees": 280,
+            "average_precision": 0.34793328722676575
+          },
+          {
+            "trees": 290,
+            "average_precision": 0.34811594266147494
+          },
+          {
+            "trees": 300,
+            "average_precision": 0.3482145229956919
+          },
+          {
+            "trees": 310,
+            "average_precision": 0.34814550501239555
+          },
+          {
+            "trees": 320,
+            "average_precision": 0.3480790373649015
+          },
+          {
+            "trees": 330,
+            "average_precision": 0.3481325456392517
+          },
+          {
+            "trees": 340,
+            "average_precision": 0.3478369678169524
+          },
+          {
+            "trees": 350,
+            "average_precision": 0.34789913114411275
+          },
+          {
+            "trees": 360,
+            "average_precision": 0.34771371891873315
+          },
+          {
+            "trees": 370,
+            "average_precision": 0.3474552180961866
+          },
+          {
+            "trees": 380,
+            "average_precision": 0.3475670729740555
+          },
+          {
+            "trees": 390,
+            "average_precision": 0.34759926468912195
+          },
+          {
+            "trees": 400,
+            "average_precision": 0.3473782928678143
+          }
+        ]
+      },
+      "completed_configurations": 20,
+      "planned_configurations": 20,
+      "selection_source": "val_select exact AP only",
+      "resources": {
+        "stage": "catboost",
+        "runtime_seconds": 771.6664318999974,
+        "peak_process_tree_rss_gib": 4.435768127441406,
+        "minimum_free_disk_gib": 94.02917861938477
+      },
+      "val_select_metrics": {
+        "average_precision": 0.34861407929572413,
+        "brier_score": 0.01737994596853079,
+        "log_loss": 0.06786384247338578,
+        "roc_auc": 0.9297841046518655,
+        "expected_calibration_error": 0.0020199566501374793,
+        "recall_at_area_budget_5pct": 0.3901532741831893,
+        "recall_at_area_budget_10pct": 0.5714463693244848,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 135727.6,
+            "mean_probability": 0.00045706417035738605,
+            "positive_rate": 0.00022839864552235507
+          },
+          {
+            "bin": 1,
+            "count": 135727.6,
+            "mean_probability": 0.0008594087387805848,
+            "positive_rate": 0.0003610172138901741
+          },
+          {
+            "bin": 2,
+            "count": 135727.59999999998,
+            "mean_probability": 0.0014084776592736517,
+            "positive_rate": 0.0006999313330523785
+          },
+          {
+            "bin": 3,
+            "count": 135727.60000000003,
+            "mean_probability": 0.002071793417477833,
+            "positive_rate": 0.0010241100557292692
+          },
+          {
+            "bin": 4,
+            "count": 135727.59999999998,
+            "mean_probability": 0.0029599155692770327,
+            "positive_rate": 0.0015251135362299197
+          },
+          {
+            "bin": 5,
+            "count": 135727.59999999998,
+            "mean_probability": 0.004237052999951197,
+            "positive_rate": 0.0024976497042605928
+          },
+          {
+            "bin": 6,
+            "count": 135727.59999999998,
+            "mean_probability": 0.0066378821079331575,
+            "positive_rate": 0.005024770201491812
+          },
+          {
+            "bin": 7,
+            "count": 135727.6000000001,
+            "mean_probability": 0.012577672217876045,
+            "positive_rate": 0.01155991854272822
+          },
+          {
+            "bin": 8,
+            "count": 135727.59999999986,
+            "mean_probability": 0.034158166296365394,
+            "positive_rate": 0.03225578290635069
+          },
+          {
+            "bin": 9,
+            "count": 135727.6000000001,
+            "mean_probability": 0.17808812547306316,
+            "positive_rate": 0.16807930000972524
+          }
+        ]
+      }
+    },
+    "spatial_cnn": {
+      "family": "spatial_cnn",
+      "selected_utc": "2026-10-31T19:22:41.502585+00:00",
+      "selected_trial": {
+        "index": 3,
+        "parameters": {
+          "width": 24,
+          "depth": 2,
+          "learning_rate": 0.003,
+          "weight_decay": 0.0001,
+          "dropout": 0.0
+        },
+        "best_epoch": 12,
+        "epochs_run": 12,
+        "val_select_ap": 0.35046206575914907,
+        "runtime_seconds": 22.766944799994235,
+        "history": [
+          {
+            "epoch": 1,
+            "train_logloss": 0.07401804440641051,
+            "val_select_ap": 0.31922852894398795
+          },
+          {
+            "epoch": 2,
+            "train_logloss": 0.0695664599501147,
+            "val_select_ap": 0.33130299770046584
+          },
+          {
+            "epoch": 3,
+            "train_logloss": 0.06906869317510445,
+            "val_select_ap": 0.3339533380308792
+          },
+          {
+            "epoch": 4,
+            "train_logloss": 0.06898407316927252,
+            "val_select_ap": 0.33579038427126107
+          },
+          {
+            "epoch": 5,
+            "train_logloss": 0.06876560425376657,
+            "val_select_ap": 0.33504441038206156
+          },
+          {
+            "epoch": 6,
+            "train_logloss": 0.06878327878348052,
+            "val_select_ap": 0.34120418222589655
+          },
+          {
+            "epoch": 7,
+            "train_logloss": 0.06861767773814682,
+            "val_select_ap": 0.33132481945963166
+          },
+          {
+            "epoch": 8,
+            "train_logloss": 0.06867466136592949,
+            "val_select_ap": 0.34040718752620985
+          },
+          {
+            "epoch": 9,
+            "train_logloss": 0.06858174570748958,
+            "val_select_ap": 0.3433553770179526
+          },
+          {
+            "epoch": 10,
+            "train_logloss": 0.06871010986124647,
+            "val_select_ap": 0.34653003717917896
+          },
+          {
+            "epoch": 11,
+            "train_logloss": 0.06840995890019562,
+            "val_select_ap": 0.34841248754915516
+          },
+          {
+            "epoch": 12,
+            "train_logloss": 0.06832516660427519,
+            "val_select_ap": 0.35046206575914907
+          }
+        ],
+        "parameter_count": 10990
+      },
+      "completed_configurations": 20,
+      "planned_configurations": 20,
+      "selection_source": "val_select exact AP only",
+      "resources": {
+        "stage": "spatial_cnn",
+        "runtime_seconds": 396.16468980000354,
+        "peak_process_tree_rss_gib": 5.459407806396484,
+        "minimum_free_disk_gib": 91.50231170654297
+      },
+      "cuda_peak_allocated_gib": 0.2575812339782715,
+      "deterministic_algorithms": true,
+      "device": "cuda",
+      "torch_version": "2.11.0+cu128",
+      "cuda_version": "12.8",
+      "cudnn_version": 91900,
+      "val_select_metrics": {
+        "average_precision": 0.35046206575914907,
+        "brier_score": 0.01743369319524248,
+        "log_loss": 0.0674176154587968,
+        "roc_auc": 0.9324440056601462,
+        "expected_calibration_error": 0.003658616811248048,
+        "recall_at_area_budget_5pct": 0.38997535054457283,
+        "recall_at_area_budget_10pct": 0.576956994815013,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 135727.6,
+            "mean_probability": 0.0002626008255526441,
+            "positive_rate": 0.00023576634376501167
+          },
+          {
+            "bin": 1,
+            "count": 135727.6,
+            "mean_probability": 0.00045029118464827114,
+            "positive_rate": 0.0005083711787433064
+          },
+          {
+            "bin": 2,
+            "count": 135727.59999999998,
+            "mean_probability": 0.00071527965026599,
+            "positive_rate": 0.0005894158594125293
+          },
+          {
+            "bin": 3,
+            "count": 135727.60000000003,
+            "mean_probability": 0.001104614452716464,
+            "positive_rate": 0.0007367698242656613
+          },
+          {
+            "bin": 4,
+            "count": 135727.59999999998,
+            "mean_probability": 0.0017129382102401799,
+            "positive_rate": 0.0012819794942222512
+          },
+          {
+            "bin": 5,
+            "count": 135727.59999999998,
+            "mean_probability": 0.0027121913179958502,
+            "positive_rate": 0.002151367886855732
+          },
+          {
+            "bin": 6,
+            "count": 135727.59999999998,
+            "mean_probability": 0.004676663420200054,
+            "positive_rate": 0.004744797668270861
+          },
+          {
+            "bin": 7,
+            "count": 135727.6000000001,
+            "mean_probability": 0.009768877494429166,
+            "positive_rate": 0.011464138465573686
+          },
+          {
+            "bin": 8,
+            "count": 135727.59999999986,
+            "mean_probability": 0.026484899776523033,
+            "positive_rate": 0.031445336099658466
+          },
+          {
+            "bin": 9,
+            "count": 135727.6000000001,
+            "mean_probability": 0.14180611780042843,
+            "positive_rate": 0.17009804932821315
+          }
+        ]
+      }
+    }
+  },
+  "artifact_hashes": {
+    "artifacts/models/comparison/xgboost.ubj": "cd71a4f19e53c5ed386830602784105d6757fef13fae5a5c56c458cf0b49fd24",
+    "artifacts/models/comparison/catboost.cbm": "c9e6c5bcec5cce2022ff2288a32a4f58f8124c13f9ae050823e34a21fe278cab",
+    "artifacts/models/comparison/spatial_cnn.pt": "08f7e2623ead5f95d3580a393c5b58860f55254c9b1db9125d85344a2a4ab4d3",
+    "artifacts/models/comparison/train_transform.joblib": "a031d47dde3dd3b2b28f6a4590b5e975cb97823580574e2d4a0e5087143f9ab0",
+    "artifacts/models/comparison/xgboost_calibrator.joblib": "d4d8c00eb9e0595f6608c14f5526daf975c4d3f0e19ddd7150e2ba3ceaef7b01",
+    "artifacts/models/comparison/catboost_calibrator.joblib": "20d84428ee865abef3d782b58ad44cedfd30762beb556b8986328d082c47edea",
+    "artifacts/models/comparison/spatial_cnn_calibrator.joblib": "c62fe0fdbd3cba3db9be2feaed38fbee89801c57e6cbf5d27f729f4f5bed0c58",
+    "artifacts/models/strict/lightgbm_08.joblib": "ed72987f3dcbb1407601ee262b0e416d06a31f047a20e2386c1c4f4e7021b65b",
+    "artifacts/models/strict/logistic_regression.joblib": "b8fcab4022416052eb9eeb420463bc5ad23e9f7d4099cc3a2db2b0cb6035404f",
+    "artifacts/evaluation/comparison_validation.json": "2a341650192a9cde31e1256063c320154c9c54fd93ad36f49e01a03925a319d7",
+    "artifacts/evaluation/comparison_bootstrap.json": "2ba448de083cf38057acb1b9072ca2c6e4b0b36fe4c710ac8574f2812869f1b2",
+    "artifacts/evaluation/comparison_family_freeze.json": "ebb1ce13a742d7de65bb4bca5090c9e00880ef3c52799be07ee796277955e73b",
+    "artifacts/evaluation/comparison_inputs.json": "718aa8cea996a79d3acd3a197923fe9614ab1e648ff2bc4c33508d28635ec33f",
+    "artifacts/evaluation/comparison_cpu_check.json": "bd51cf5cd971fe3b3ca0359deb12f755542d2b44f17b33e9528a5ad63ed6582f",
+    "artifacts/evaluation/comparison_reference.json": "21cd23ab1768079b109a7c2a2f26f4888bd99884e0935f16e13ca3cef41cfc59",
+    "artifacts/evaluation/comparison_provenance.json": "b5e6b3dcfac1955eb52308f2e7d1ecfa3d7def510068ac741f67462c25e91502",
+    "artifacts/evaluation/comparison_determinism_audit.json": "b207a4eb422ad188a592bf66d5facbf3ce4f12e2d55eec6dbbb3c08ea7df1df3"
+  },
+  "input_hashes": {
+    "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+    "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+    "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+    "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+    "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+    "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+    "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+    "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+    "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+    "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+    "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+    "datasets/sources.yaml": "0bbd3dee07c51f3b7bf0a627be41130e44009ba2f7135301396e8a7bedafbb22",
+    "configs/comparison.yaml": "04d9ee6c38092f02ac4f7967a22ea23d3706ef2a83d11d8ae86452c536f19892",
+    "datasets/processed/cells.parquet": "332ec6bb56b96227a4229d95721f3aa900ed4827f2a65f9aca2e2fdcce65d3d4",
+    "artifacts/evaluation/selection_strict.json": "d03d6cb00cd184730cb2e66a471f95f9b57255e6a1d1cc45881b069dabec20ad",
+    "artifacts/models/strict/lightgbm_08.joblib": "ed72987f3dcbb1407601ee262b0e416d06a31f047a20e2386c1c4f4e7021b65b",
+    "artifacts/models/strict/logistic_regression.joblib": "b8fcab4022416052eb9eeb420463bc5ad23e9f7d4099cc3a2db2b0cb6035404f"
+  },
+  "source_hashes": {
+    "src/bolivia_fire/comparison/__init__.py": "fa94e9f7c36d48b02fffe70e8b164f388fbdd1b60113e5164d7b0030f57ba984",
+    "src/bolivia_fire/comparison/audit.py": "2a95c1db6b15ac615800d975de93c3694f46f83c428caa5686b4b5b1bd3bada8",
+    "src/bolivia_fire/comparison/data.py": "33425a910d59a94f4b1c62492e3999574ec51d32b1d170f1573ea8f0d81a2bea",
+    "src/bolivia_fire/comparison/guard.py": "651c2be11354e360ac2eb36f2fabbe48951bb8b053d926ad7394bf281546e73a",
+    "src/bolivia_fire/comparison/runtime.py": "7f2cf4959e2c36a05b6224f9a4d377b0ebdf8864afbd583c92731c3038f2ad08",
+    "src/bolivia_fire/comparison/spatial.py": "440b715404e14b1cfbee80bcc4663440f75ba19240e6341d3f5a493966020f2e",
+    "src/bolivia_fire/comparison/trees.py": "fbcfdc6052c581c3909fadfb0b141791ffa0a16cd351f260e3202a7a6697ff54",
+    "src/bolivia_fire/comparison/workflow.py": "b4fcbe3739c81e92fba639a7ee6a3416101ecae5c330613e45dbaca74408f1b9",
+    "src/bolivia_fire/comparison_cli.py": "f12e7c7aa5b88eead0c9ff7dd0327d3fd4211f36c882cebcbd7cd0008500a9d0",
+    "src/bolivia_fire/models/data.py": "ac8f86f575274c5fb1cd41f7a1c1e90ab9b8506a0485d7356f59be53b4ce36ce",
+    "src/bolivia_fire/models/estimators.py": "7c4feb8f3823d678f4c61250c0e15a42d6cab33306234d29ba4ee003a3edcd46",
+    "src/bolivia_fire/evaluation/metrics.py": "7327f0675098fc7f0aef52a129e2d421f5245829cffb57827c4613a4abf525cb",
+    "src/bolivia_fire/evaluation/bootstrap.py": "aaa49a56aa6fdb599bd91ffdc60a30d73e0117d4c6315b39c62d02575e5dcdbb"
+  },
+  "primary_opening_utc": "2026-10-31T10:30:00.578581+00:00",
+  "validation_artifact": "artifacts/evaluation/comparison_validation.json",
+  "bootstrap_artifact": "artifacts/evaluation/comparison_bootstrap.json",
+  "limitations": [
+    "Calibration-year metrics reuse isotonic fitting labels",
+    "Bootstrap fixes fitted learners and calibrators; it excludes search and initialization uncertainty",
+    "The primary test had already been opened before the private study and this repository rerun"
+  ],
+  "frozen_utc": "2026-10-31T19:35:50.785313+00:00",
+  "config_hashes": {
+    "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+    "configs/comparison.yaml": "04d9ee6c38092f02ac4f7967a22ea23d3706ef2a83d11d8ae86452c536f19892"
+  }
+}

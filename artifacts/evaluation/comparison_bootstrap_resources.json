@@ -1,0 +1,6 @@
+{
+  "stage": "validation_bootstrap",
+  "runtime_seconds": 747.999558800002,
+  "peak_process_tree_rss_gib": 1.60589599609375,
+  "minimum_free_disk_gib": 91.24940872192383
+}

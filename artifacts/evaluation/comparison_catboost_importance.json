@@ -1,0 +1,23 @@
+{
+  "count_last_7d": 0.21694935233323856,
+  "count_last_14d": 0.5448791129055371,
+  "count_last_28d": 0.06765439734862572,
+  "count_last_91d": 0.5104279433618557,
+  "count_last_365d": 2.6790634962492406,
+  "any_last_7d": 0.3907206223289495,
+  "days_since_last": 14.289038083790073,
+  "no_prior_detection": 16.468620145886298,
+  "frp_sum_28d": 0.6312363490213072,
+  "same_week_last_year": 0.16726858048146617,
+  "neighborhood_3x3_last_7d": 2.2452533051146375,
+  "neighborhood_7x7_last_7d": 3.082009243064564,
+  "neighborhood_3x3_last_28d": 10.116215834926765,
+  "neighborhood_7x7_last_28d": 11.846109927827134,
+  "national_last_7d": 2.8761266413543574,
+  "national_last_28d": 2.8952311265352675,
+  "week_of_year_sin": 1.5856192681777894,
+  "week_of_year_cos": 7.045313775539971,
+  "train_climatology_cell": 21.655784707594,
+  "train_climatology_dept": 0.6449233265749456,
+  "window_obs_complete_365d": 0.041554759583971874
+}

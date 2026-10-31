@@ -1,0 +1,271 @@
+{
+  "family": "catboost",
+  "selected_utc": "2026-10-31T19:16:02.603764+00:00",
+  "selected_trial": {
+    "index": 19,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 10,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 200,
+    "val_select_ap": 0.34861407929572413,
+    "runtime_seconds": 38.65773030000855,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3273306650259354
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3390530250247555
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.34342472767442084
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34561328376376305
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34464425019650735
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3466404242128555
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34747747422270064
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3468692931729949
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3479027394493773
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3485128089649779
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3471075914579903
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3477485469268733
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3480931914503823
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34754871905703616
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34777601399784996
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34771869537505945
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34811202828602533
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3482487880918342
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34852644888476225
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34861407929572413
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3483158753058469
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34823129897497285
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3479054806297026
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3477879187290608
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3480430413653747
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34794648089179336
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3481772738592589
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34793328722676575
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34811594266147494
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3482145229956919
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34814550501239555
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3480790373649015
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3481325456392517
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3478369678169524
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34789913114411275
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34771371891873315
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3474552180961866
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3475670729740555
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34759926468912195
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3473782928678143
+      }
+    ]
+  },
+  "completed_configurations": 20,
+  "planned_configurations": 20,
+  "selection_source": "val_select exact AP only",
+  "resources": {
+    "stage": "catboost",
+    "runtime_seconds": 771.6664318999974,
+    "peak_process_tree_rss_gib": 4.435768127441406,
+    "minimum_free_disk_gib": 94.02917861938477
+  },
+  "val_select_metrics": {
+    "average_precision": 0.34861407929572413,
+    "brier_score": 0.01737994596853079,
+    "log_loss": 0.06786384247338578,
+    "roc_auc": 0.9297841046518655,
+    "expected_calibration_error": 0.0020199566501374793,
+    "recall_at_area_budget_5pct": 0.3901532741831893,
+    "recall_at_area_budget_10pct": 0.5714463693244848,
+    "undefined_reasons": {},
+    "reliability": [
+      {
+        "bin": 0,
+        "count": 135727.6,
+        "mean_probability": 0.00045706417035738605,
+        "positive_rate": 0.00022839864552235507
+      },
+      {
+        "bin": 1,
+        "count": 135727.6,
+        "mean_probability": 0.0008594087387805848,
+        "positive_rate": 0.0003610172138901741
+      },
+      {
+        "bin": 2,
+        "count": 135727.59999999998,
+        "mean_probability": 0.0014084776592736517,
+        "positive_rate": 0.0006999313330523785
+      },
+      {
+        "bin": 3,
+        "count": 135727.60000000003,
+        "mean_probability": 0.002071793417477833,
+        "positive_rate": 0.0010241100557292692
+      },
+      {
+        "bin": 4,
+        "count": 135727.59999999998,
+        "mean_probability": 0.0029599155692770327,
+        "positive_rate": 0.0015251135362299197
+      },
+      {
+        "bin": 5,
+        "count": 135727.59999999998,
+        "mean_probability": 0.004237052999951197,
+        "positive_rate": 0.0024976497042605928
+      },
+      {
+        "bin": 6,
+        "count": 135727.59999999998,
+        "mean_probability": 0.0066378821079331575,
+        "positive_rate": 0.005024770201491812
+      },
+      {
+        "bin": 7,
+        "count": 135727.6000000001,
+        "mean_probability": 0.012577672217876045,
+        "positive_rate": 0.01155991854272822
+      },
+      {
+        "bin": 8,
+        "count": 135727.59999999986,
+        "mean_probability": 0.034158166296365394,
+        "positive_rate": 0.03225578290635069
+      },
+      {
+        "bin": 9,
+        "count": 135727.6000000001,
+        "mean_probability": 0.17808812547306316,
+        "positive_rate": 0.16807930000972524
+      }
+    ]
+  }
+}

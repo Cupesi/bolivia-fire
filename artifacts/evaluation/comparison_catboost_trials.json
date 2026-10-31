@@ -1,0 +1,3722 @@
+[
+  {
+    "index": 0,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 50,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 160,
+    "val_select_ap": 0.3475187601478858,
+    "runtime_seconds": 43.08484729999327,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.33387971999399
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.34026014445751523
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.34122585026155206
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34255421005616493
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34378035439313936
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34372760182376694
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34483229131255827
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34653635395769533
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34726078985762665
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3473848007872554
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3474732369092012
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34686839567075345
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.34732721783471043
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3475178343487791
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34693899475457546
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3475187601478858
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34677038521703996
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3465167576598113
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34662739130890935
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34648603756581287
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34641026733086744
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34583518434516636
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3453737870049101
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34538592473246144
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3449677312797698
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3451042313809033
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34532003456314814
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3452129538171801
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34552417673823194
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34569942498232203
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3455079934033291
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3457407546158211
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.346026027774791
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34569677199895105
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34493991345214137
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34488647146178447
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3442577822332153
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34414073435477127
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3439987586913174
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3437470150866832
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 1,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 40,
+    "val_select_ap": 0.34738218599744086,
+    "runtime_seconds": 41.35395549998793,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3397226821089127
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.34439909416289993
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3452406523878273
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34738218599744086
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3472547710039184
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34650024192247664
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3461840429419009
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34675531387744457
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3467137567624165
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.34554748262333307
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34584447716764427
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34648377192144003
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3450813373919683
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.344450145822091
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3448482124227483
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3445254567563596
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34416236947170803
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3435267823210202
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34300026033339787
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3431107647955726
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34298881834347056
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.342958969864072
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3425916262628057
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34238555654998093
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34182824338702683
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3418808149066236
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34179935277763446
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3417463699232896
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34181368628760905
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3415460246661258
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34153993637916336
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34173504348283246
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34171480448268976
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3412201638249307
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3411250925094143
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34114677328316434
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3411878055581817
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34105058983997655
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3408958245796089
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34094658418675244
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 5,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 50,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 120,
+    "val_select_ap": 0.3451450440181263,
+    "runtime_seconds": 34.74947539999266,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.33122738562732273
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.34014909076147815
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3424476958946579
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3448942403205998
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3430528290461941
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34402703703369253
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3441892791475309
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3443470700684702
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3440550787633105
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.344709173361384
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34505987720247205
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3451450440181263
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3437211282740163
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3444963869615259
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34352122068730623
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34318235503298505
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34343712628946954
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3433636155066004
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34314870271585457
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34267630130167065
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34295489744525354
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34327941464066064
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34332085855762823
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3434060740932027
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3432068920365233
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34323055193666135
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34341934872744667
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34345012338486786
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.343037940821875
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34280531040001433
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34272782205303304
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34238123494012823
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3425065422073706
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34259057266115345
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34254419296627975
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3423938435527736
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3421039345762486
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3421149299657151
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34204082304569733
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3416762148971628
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 50,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 340,
+    "val_select_ap": 0.34653263174707444,
+    "runtime_seconds": 41.15043009999499,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3356263007631551
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.33718463278371946
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.33857203483554377
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34160428112976476
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.342830927975324
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34228436971768783
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3427703439886372
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34352644718613357
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34317321493547986
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3443344990810344
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34371192380458443
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3438281772340591
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.34386988307487715
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34398932297542945
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34459381745555173
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3447345768140431
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.345257803838301
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34525999921545897
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34526191111979204
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3452583566438608
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34542374392599867
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34559684065605517
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3459545147269254
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34617830374639663
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34591297623987055
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34614918519555077
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3461230129355763
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3460953963206968
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34631562399369126
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.346521070114144
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3465261562382787
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.346474511245382
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.346353334270588
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34653263174707444
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34603118235643776
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3458988693266856
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34610054268326584
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34603040210770947
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34621093132972675
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34616867797209927
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 270,
+    "val_select_ap": 0.3451864397935369,
+    "runtime_seconds": 41.38049260000116,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.33141961966494765
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.33361993138099383
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.33827975015617223
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.340883180794645
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3417837525441164
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3429835526725859
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3423453433202795
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3425088137158274
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34300550242606653
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3440515368562904
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3444534814895703
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34400576294240254
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3437270500797864
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3442238478745619
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3448340896031064
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34433027251515846
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34422430921888664
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3442969972772853
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3441764585406506
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34384426058985634
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3443222832271872
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3442841189795682
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3445784292695329
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34447090716037826
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34513106683791817
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34492981961542574
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3451864397935369
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3449744616882346
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34471322787785486
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3447247922149614
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34472991626085164
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34391626050223334
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34380956439541027
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34380350998148135
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.343208802226915
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34330163473635045
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34325507709789366
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3433682873141022
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34307120013587533
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3432267688795246
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 5,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 110,
+    "val_select_ap": 0.3458631694971206,
+    "runtime_seconds": 36.016216999996686,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3312309525684858
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3401528013649869
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3424502133525645
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.344904390270956
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3430470989103778
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3440248891561656
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34418394693350385
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3454606930049048
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3442174631965446
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3451496917281125
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3458631694971206
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3451992553257103
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.344828204000729
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3447283979517262
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34507464479520655
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34526739838435155
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3450986463668876
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3454779742192569
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3456167443929761
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34520043840504033
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3451171638817574
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34539371958272747
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3453001557732971
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.345344941380996
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34533454651539824
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34576383051453485
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3456700844477255
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3449678451889414
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34487946123476754
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3447826381432512
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3446171312574512
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3447588883149865
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3444987746713328
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3443856736712427
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3442803458394293
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3444844175312742
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3444983791320672
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34456679948506413
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3447951014147599
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3450644807214585
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 10,
+      "random_strength": 1.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 160,
+    "val_select_ap": 0.3474565108469843,
+    "runtime_seconds": 39.410516199990525,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3333016122543774
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.340305247549501
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.34359055643653963
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34346546953743234
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34396738995252957
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.344301798318225
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3437044826067468
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3444837527228117
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3454972471497956
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3457921560614904
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34611688431758514
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3459094292673425
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3466168606831206
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34734066511053835
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34741812541531775
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3474565108469843
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34721836989912197
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3473678897772612
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3469673260777955
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3465233226240935
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34624254849927594
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3454806863495069
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3453052672266886
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34507992053526093
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3451591402423542
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3443783392703215
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34453099810420296
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34436090165417405
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3439513650981218
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.343763658489871
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34362191731540537
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3435356562043979
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3438807656349331
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3438706828027149
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3434999654843267
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34376405544271554
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34389202879275155
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34383525274080107
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3440084158970902
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34348761011143847
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 130,
+    "val_select_ap": 0.3436577163935412,
+    "runtime_seconds": 40.720910200005164,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.33437486761455076
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3394389101431492
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3401817326867578
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34087001447796406
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3408120282297972
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34095673408029337
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3404988588755071
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3418012755621063
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.341716174195085
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3422843428975419
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34264160862308
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34284445630669863
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3436577163935412
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3428227532078531
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34176763362057894
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34136685436071684
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3415403312998895
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34168301401668033
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3410723952790778
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3410422414310097
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3410665667708775
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34119860263651186
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34125794580380814
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3414251944130622
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34089874402515885
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3407744529032007
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3405953634000294
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34049136939428887
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34016207537608345
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34020147804287854
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3400553353204586
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3398564247456379
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3398991498833287
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3398657287121105
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.338663363460428
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.33847233900117735
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.33860982465754264
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.33860287789542887
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3385339553930901
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.33864948873579476
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 5,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 50,
+      "random_strength": 0.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 320,
+    "val_select_ap": 0.34573167600080085,
+    "runtime_seconds": 36.876281100005144,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.32360729448636844
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.32738185313456586
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.33369597283106234
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3373325779774088
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3404862717886696
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.342578303043012
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34355770776137373
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3429499385816071
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34128517650194234
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.34135040984836895
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34193318388770455
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34238504086499183
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.343087063113987
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34358651334094475
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3434704263387578
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.343365094361707
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3430552756512896
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34348042661626393
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3431374718976199
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34338790723391444
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3433762414150261
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3442257179788634
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34458572701287005
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34449811283953563
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34489738625897387
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.345115569587236
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3455055367430715
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3451665813254241
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34537070761035643
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3456104970756259
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3456804990093628
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34573167600080085
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3454392131849165
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34564970827741665
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3454760862295176
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3455070243598208
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34533922619187113
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3455632045039603
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3455643598700904
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3455937254299943
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 1,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 340,
+    "val_select_ap": 0.34660630679075466,
+    "runtime_seconds": 38.23731820000103,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.32230146119356323
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3234813772960867
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3302026576860014
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.33586662176192905
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.33835985425110604
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3394834106509996
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3419949638052887
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34235743720152567
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34332435263841715
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3435712732429085
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34298381012746976
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3433508370230915
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3433251900562975
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3442551367846032
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34459583052392834
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3446541778600519
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34448153072198223
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34441392980493446
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3448448660912974
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3448424634959462
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34491528454592224
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34504238622657873
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3453555341927396
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3457191390337814
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34589564295156183
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34613288995973274
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3460928951505148
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3460910752870876
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34631630665289936
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3463271322508163
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3464408138604909
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3463431375561837
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34655680932826416
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34660630679075466
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3461385042104097
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3464517400585546
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34653194503336304
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34644728615707154
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.346391803558692
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3461024468820433
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 4,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 50,
+      "random_strength": 0.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 230,
+    "val_select_ap": 0.34437086044008397,
+    "runtime_seconds": 32.87359009998909,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.32507326673247877
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3364649882811295
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.33652284954952777
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3387374791478631
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3409373823105754
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.33950153707665376
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.33972935655963654
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3390854593442314
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3398496654028257
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3412553785122126
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3416098423709144
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34148779622178665
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.34194333843954083
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3423686335505857
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34247525879275614
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3430989606291522
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34375503879313885
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34363095160391366
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3439082210795523
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3441064230059241
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34395578316806447
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3441855433833605
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34437086044008397
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34343965275052396
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3435775865955111
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3428586910152967
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34344560206184077
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3430172917109942
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34213308939992626
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3421717854787998
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3422787518345252
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34232968594417224
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34222059665613874
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34236821686309227
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34190084035586127
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3422632613498376
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3419506917111268
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34211159731169527
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3419485749146712
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34212785676495394
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 7,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 100,
+    "val_select_ap": 0.3468130683666904,
+    "runtime_seconds": 42.01797250000527,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3348544244415964
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3401421983535709
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3442551393479273
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34404653315252204
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3435939286529604
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34451041243319147
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3457314306177131
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34625175095724303
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34635888011717847
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3468130683666904
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.346490488469687
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34562451450431214
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3457155097768927
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34481358349253716
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3449454487976604
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3446935042184822
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3444612938701263
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34380844593229587
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3432917230602779
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34255332539098093
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3418592054112347
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3414567330254775
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34138075642416704
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3415100113921643
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3409699320535095
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.341203080055723
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34107146308871344
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34120386138443076
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3411267038434077
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.341081828941854
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34074611130408705
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3407874683773441
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34056988283005
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34022766027328677
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3398258997216452
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3397036078386893
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.33963639762678727
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3396670474242373
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3397217612190351
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3396685868338873
+      }
+    ]
+  },
+  {
+    "index": 12,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 5,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 270,
+    "val_select_ap": 0.34351470268266315,
+    "runtime_seconds": 36.13432589999866,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.32273908124453654
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3378233894804129
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3415954892259948
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3420597168707779
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34242314095607557
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34031040409206054
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3409381473948889
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34148581982394555
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34226501477371873
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.34312917334255794
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3431442125663721
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34348993622062374
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3434317228430206
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34315096372923304
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3434240117402994
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34305700236721626
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3435082562123688
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34331009703575427
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3433752134829327
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34272099119834726
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34246634694764655
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34257510972009797
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34227594019036434
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34255340188402583
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3429264477223848
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3434848896402006
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34351470268266315
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3427743154876699
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34225339607284494
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3421479496586807
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3420982586113225
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34233286854554806
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3422776805747049
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3425241930691868
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3422651274399521
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34226355814283593
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3421486749731402
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3420789648575413
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3421048210782055
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3421445846752359
+      }
+    ]
+  },
+  {
+    "index": 13,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 4,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 1,
+      "random_strength": 1.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 400,
+    "val_select_ap": 0.34470378038698224,
+    "runtime_seconds": 33.49159320000035,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3216362642165655
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3252217149812894
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.32988199221205755
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3337861113911415
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.336722876386213
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3397972085302214
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34190999691913143
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3411517577773792
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.34042664313263926
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.34125819384053063
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3409719906310394
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34132586859378694
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.34105217679903316
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3412075844802227
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3421892134607654
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3417025257784878
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3414080369675615
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3417417840199338
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3419588810739766
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.3421524949321392
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3424063553780452
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3424002763997635
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34228252111166463
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3424270409528362
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.342965544698369
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3432754209745347
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34317932430865
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34345806760424963
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3433444877865978
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34317469937413647
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34334175876637524
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3431746656236977
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34300173752162416
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34344380730295765
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34377594311169835
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34388468369317854
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34400794029095255
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3442424024685123
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34444840097842605
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34470378038698224
+      }
+    ]
+  },
+  {
+    "index": 14,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 4,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 50,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 210,
+    "val_select_ap": 0.3430154023426944,
+    "runtime_seconds": 33.42590609999024,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3281438694031788
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3380391164924598
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.33919536271593337
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3412735815390743
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34100483486562494
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3393699289438526
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3399217545954113
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34109444111250853
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3415243850768591
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.34169994274643806
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3425609715288022
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34241237627165594
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3422724415130687
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3422330424549897
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3422189077346027
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3418233305228443
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34237780015673713
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3423743435767601
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34255821474845843
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34274571079272026
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3430154023426944
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34284283709884444
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34214932102209716
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34235239039371873
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34242204093464845
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.342616011102687
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34242793286685
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34174540473416
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34197777959503883
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34177423236810117
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3415595336207883
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34145185636544334
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3413485350051377
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3413492634098506
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34130890975519995
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3412616394564897
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34139288667812007
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.341508986996476
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34177439674805415
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34174452962676627
+      }
+    ]
+  },
+  {
+    "index": 15,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 50,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 310,
+    "val_select_ap": 0.3456658785358862,
+    "runtime_seconds": 39.17276529999799,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.329947804996386
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3354896470300375
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3396093651243103
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3418419533179144
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3436995264116705
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34496572918140095
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34467549355571103
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34516321815618284
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3448237167480837
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3453903900541672
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.34480983560814243
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3447815939432502
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3449681569768314
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34545161209659137
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3453118391483214
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34495246008548713
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3448681352825436
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34474319678370324
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34522749398763947
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34507347310339265
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34490758012560885
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3450256943542028
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34507917830405643
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34513911430104277
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3450306109713743
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.345066891804034
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3454321840358507
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3451825369232651
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3452111273093936
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34531519398493793
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.3456658785358862
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34553974652472974
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.345374147848927
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3450304437255497
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3448768408648545
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34503639672125214
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34495876029076034
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3450936414854828
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3449826331891761
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.34485050687821744
+      }
+    ]
+  },
+  {
+    "index": 16,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 50,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.5
+    },
+    "best_round": 250,
+    "val_select_ap": 0.3464507918535209,
+    "runtime_seconds": 38.70564240000385,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.338258165427802
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3437231338404697
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3421339927457459
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3431308902069345
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.343658184653057
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34389692136647104
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.345899272133431
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34589531935174195
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3456258837040632
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3458565763367879
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3458120446610394
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3460899169512875
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.34618591855623865
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3462383662488462
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3462601745735018
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3462664395292266
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.3460118742100435
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34608530957697003
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34606315719823366
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34603337249660526
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34635661165936654
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3461400958076005
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3461784067891249
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34621548396275453
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3464507918535209
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.345502732618777
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3456206438596888
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3453265962963251
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3449972922661094
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34469447956941685
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34491142470306424
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34479088615557685
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34451536052510334
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34427889973969816
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.3441837296655999
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.3441160030558654
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3439934815033092
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34383521556709934
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34388168131044433
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3432448644251493
+      }
+    ]
+  },
+  {
+    "index": 17,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 4,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 10,
+      "random_strength": 0.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 30,
+    "val_select_ap": 0.34172015277847423,
+    "runtime_seconds": 32.53221209999174,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.333104572831771
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3390016440058165
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.34172015277847423
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34066044258045813
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.3409788442237563
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3413351954711895
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3414375252330296
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34150748989723767
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3399543349926065
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3407016793659641
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3394765403804724
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34041862524726957
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.33902111019635595
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3395514337798841
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.3399473238815309
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34062539405979386
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34087214963469636
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34125659071137704
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.3413135893618766
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34091435658020247
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.34072984801368494
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34112217119703236
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34134938232395173
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.34093340258325566
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3411901763030131
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.3412227220639755
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.34119204898247335
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34106667432764054
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34130318728768255
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34059072120755
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34022024993280015
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.34024929211959815
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34018447145135927
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.340410841469225
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34008157475381395
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34025312144247827
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.34075828157910654
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3406276513317971
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.3404516831816115
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.340536178342388
+      }
+    ]
+  },
+  {
+    "index": 18,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.1,
+      "l2_leaf_reg": 10,
+      "random_strength": 1.0,
+      "bagging_temperature": 1.0
+    },
+    "best_round": 100,
+    "val_select_ap": 0.3452749570289401,
+    "runtime_seconds": 38.855800300007104,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.33587762805021376
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3424676246817842
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.3418205756602301
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.3448431794877689
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34466963030285946
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.34255236267345557
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.3438148266301056
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.34397269339099246
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3444617915140766
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3452749570289401
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3451328743563368
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.34498828502514645
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3448858849087564
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.3450465278311378
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34508836172758894
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.3443779082566469
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34446368546656686
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.34460323136481197
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34384024884576103
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34317140498316345
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3436079855040107
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.3433945306462016
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.34227016872224814
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3416887906609713
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.34132039532677444
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34128097177371775
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.341446682488598
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.3416286680714898
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.3415719859363883
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.34176633003746676
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34200084254273194
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3421709739462331
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.34238015883247125
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.34254104083869846
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34220860400411945
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34217540583437656
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3420191758482524
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.34204695507707183
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.341919829988462
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3416040084341875
+      }
+    ]
+  },
+  {
+    "index": 19,
+    "parameters": {
+      "task_type": "GPU",
+      "devices": "0",
+      "iterations": 400,
+      "loss_function": "Logloss",
+      "border_count": 63,
+      "random_seed": 7,
+      "thread_count": 4,
+      "bootstrap_type": "Bayesian",
+      "allow_writing_files": false,
+      "verbose": false,
+      "use_best_model": false,
+      "depth": 6,
+      "learning_rate": 0.06,
+      "l2_leaf_reg": 10,
+      "random_strength": 1.0,
+      "bagging_temperature": 0.0
+    },
+    "best_round": 200,
+    "val_select_ap": 0.34861407929572413,
+    "runtime_seconds": 38.65773030000855,
+    "checkpoints": [
+      {
+        "trees": 10,
+        "average_precision": 0.3273306650259354
+      },
+      {
+        "trees": 20,
+        "average_precision": 0.3390530250247555
+      },
+      {
+        "trees": 30,
+        "average_precision": 0.34342472767442084
+      },
+      {
+        "trees": 40,
+        "average_precision": 0.34561328376376305
+      },
+      {
+        "trees": 50,
+        "average_precision": 0.34464425019650735
+      },
+      {
+        "trees": 60,
+        "average_precision": 0.3466404242128555
+      },
+      {
+        "trees": 70,
+        "average_precision": 0.34747747422270064
+      },
+      {
+        "trees": 80,
+        "average_precision": 0.3468692931729949
+      },
+      {
+        "trees": 90,
+        "average_precision": 0.3479027394493773
+      },
+      {
+        "trees": 100,
+        "average_precision": 0.3485128089649779
+      },
+      {
+        "trees": 110,
+        "average_precision": 0.3471075914579903
+      },
+      {
+        "trees": 120,
+        "average_precision": 0.3477485469268733
+      },
+      {
+        "trees": 130,
+        "average_precision": 0.3480931914503823
+      },
+      {
+        "trees": 140,
+        "average_precision": 0.34754871905703616
+      },
+      {
+        "trees": 150,
+        "average_precision": 0.34777601399784996
+      },
+      {
+        "trees": 160,
+        "average_precision": 0.34771869537505945
+      },
+      {
+        "trees": 170,
+        "average_precision": 0.34811202828602533
+      },
+      {
+        "trees": 180,
+        "average_precision": 0.3482487880918342
+      },
+      {
+        "trees": 190,
+        "average_precision": 0.34852644888476225
+      },
+      {
+        "trees": 200,
+        "average_precision": 0.34861407929572413
+      },
+      {
+        "trees": 210,
+        "average_precision": 0.3483158753058469
+      },
+      {
+        "trees": 220,
+        "average_precision": 0.34823129897497285
+      },
+      {
+        "trees": 230,
+        "average_precision": 0.3479054806297026
+      },
+      {
+        "trees": 240,
+        "average_precision": 0.3477879187290608
+      },
+      {
+        "trees": 250,
+        "average_precision": 0.3480430413653747
+      },
+      {
+        "trees": 260,
+        "average_precision": 0.34794648089179336
+      },
+      {
+        "trees": 270,
+        "average_precision": 0.3481772738592589
+      },
+      {
+        "trees": 280,
+        "average_precision": 0.34793328722676575
+      },
+      {
+        "trees": 290,
+        "average_precision": 0.34811594266147494
+      },
+      {
+        "trees": 300,
+        "average_precision": 0.3482145229956919
+      },
+      {
+        "trees": 310,
+        "average_precision": 0.34814550501239555
+      },
+      {
+        "trees": 320,
+        "average_precision": 0.3480790373649015
+      },
+      {
+        "trees": 330,
+        "average_precision": 0.3481325456392517
+      },
+      {
+        "trees": 340,
+        "average_precision": 0.3478369678169524
+      },
+      {
+        "trees": 350,
+        "average_precision": 0.34789913114411275
+      },
+      {
+        "trees": 360,
+        "average_precision": 0.34771371891873315
+      },
+      {
+        "trees": 370,
+        "average_precision": 0.3474552180961866
+      },
+      {
+        "trees": 380,
+        "average_precision": 0.3475670729740555
+      },
+      {
+        "trees": 390,
+        "average_precision": 0.34759926468912195
+      },
+      {
+        "trees": 400,
+        "average_precision": 0.3473782928678143
+      }
+    ]
+  }
+]

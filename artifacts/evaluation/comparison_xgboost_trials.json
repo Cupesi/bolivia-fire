@@ -1,0 +1,422 @@
+[
+  {
+    "index": 0,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.06,
+      "min_child_weight": 200,
+      "colsample_bytree": 1.0,
+      "lambda": 10
+    },
+    "best_round": 23,
+    "val_select_ap": 0.3408524011149903,
+    "runtime_seconds": 5.597650099996827
+  },
+  {
+    "index": 1,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.1,
+      "min_child_weight": 10,
+      "colsample_bytree": 0.7,
+      "lambda": 1
+    },
+    "best_round": 21,
+    "val_select_ap": 0.33708070414303876,
+    "runtime_seconds": 5.601634499995271
+  },
+  {
+    "index": 2,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 4,
+      "eta": 0.1,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.7,
+      "lambda": 10
+    },
+    "best_round": 40,
+    "val_select_ap": 0.3364884063043241,
+    "runtime_seconds": 6.823514999996405
+  },
+  {
+    "index": 3,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.03,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.7,
+      "lambda": 10
+    },
+    "best_round": 41,
+    "val_select_ap": 0.3426436225261365,
+    "runtime_seconds": 7.5151944999961415
+  },
+  {
+    "index": 4,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.03,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.7,
+      "lambda": 100
+    },
+    "best_round": 75,
+    "val_select_ap": 0.34317997213833523,
+    "runtime_seconds": 11.206286599990563
+  },
+  {
+    "index": 5,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 4,
+      "eta": 0.1,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.85,
+      "lambda": 10
+    },
+    "best_round": 44,
+    "val_select_ap": 0.3335967124178818,
+    "runtime_seconds": 7.076463499994134
+  },
+  {
+    "index": 6,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 5,
+      "eta": 0.06,
+      "min_child_weight": 50,
+      "colsample_bytree": 1.0,
+      "lambda": 100
+    },
+    "best_round": 54,
+    "val_select_ap": 0.3427281259436208,
+    "runtime_seconds": 8.480182799990871
+  },
+  {
+    "index": 7,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.1,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.85,
+      "lambda": 100
+    },
+    "best_round": 35,
+    "val_select_ap": 0.33634653849750373,
+    "runtime_seconds": 7.782333499999368
+  },
+  {
+    "index": 8,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 4,
+      "eta": 0.03,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.7,
+      "lambda": 100
+    },
+    "best_round": 95,
+    "val_select_ap": 0.34194705762167826,
+    "runtime_seconds": 12.589042100007646
+  },
+  {
+    "index": 9,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 5,
+      "eta": 0.03,
+      "min_child_weight": 10,
+      "colsample_bytree": 0.85,
+      "lambda": 1
+    },
+    "best_round": 65,
+    "val_select_ap": 0.34540434659637953,
+    "runtime_seconds": 9.969098700006725
+  },
+  {
+    "index": 10,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 3,
+      "eta": 0.06,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.85,
+      "lambda": 100
+    },
+    "best_round": 59,
+    "val_select_ap": 0.3334764192082677,
+    "runtime_seconds": 7.872425199995632
+  },
+  {
+    "index": 11,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.1,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.85,
+      "lambda": 10
+    },
+    "best_round": 25,
+    "val_select_ap": 0.3353768314682514,
+    "runtime_seconds": 5.97628679999616
+  },
+  {
+    "index": 12,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 4,
+      "eta": 0.06,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.7,
+      "lambda": 100
+    },
+    "best_round": 65,
+    "val_select_ap": 0.3388585606003822,
+    "runtime_seconds": 9.38388280000072
+  },
+  {
+    "index": 13,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 3,
+      "eta": 0.03,
+      "min_child_weight": 10,
+      "colsample_bytree": 1.0,
+      "lambda": 100
+    },
+    "best_round": 159,
+    "val_select_ap": 0.3366408587334347,
+    "runtime_seconds": 17.16802739999548
+  },
+  {
+    "index": 14,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 6,
+      "eta": 0.03,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.85,
+      "lambda": 10
+    },
+    "best_round": 51,
+    "val_select_ap": 0.3448603628556864,
+    "runtime_seconds": 8.899009100001422
+  },
+  {
+    "index": 15,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 3,
+      "eta": 0.06,
+      "min_child_weight": 200,
+      "colsample_bytree": 0.85,
+      "lambda": 1
+    },
+    "best_round": 60,
+    "val_select_ap": 0.33293900925152414,
+    "runtime_seconds": 8.098654899993562
+  },
+  {
+    "index": 16,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 5,
+      "eta": 0.03,
+      "min_child_weight": 200,
+      "colsample_bytree": 1.0,
+      "lambda": 1
+    },
+    "best_round": 78,
+    "val_select_ap": 0.34351856279247145,
+    "runtime_seconds": 10.93101430000388
+  },
+  {
+    "index": 17,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 5,
+      "eta": 0.1,
+      "min_child_weight": 200,
+      "colsample_bytree": 1.0,
+      "lambda": 10
+    },
+    "best_round": 25,
+    "val_select_ap": 0.33274186491734903,
+    "runtime_seconds": 5.517204400006449
+  },
+  {
+    "index": 18,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 3,
+      "eta": 0.1,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.7,
+      "lambda": 1
+    },
+    "best_round": 110,
+    "val_select_ap": 0.32984828768670943,
+    "runtime_seconds": 12.905104399993434
+  },
+  {
+    "index": 19,
+    "parameters": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "max_bin": 63,
+      "objective": "binary:logistic",
+      "seed": 7,
+      "nthread": 4,
+      "disable_default_eval_metric": 1,
+      "subsample": 1.0,
+      "max_depth": 5,
+      "eta": 0.1,
+      "min_child_weight": 50,
+      "colsample_bytree": 0.85,
+      "lambda": 100
+    },
+    "best_round": 119,
+    "val_select_ap": 0.33843686146631335,
+    "runtime_seconds": 15.641990200005239
+  }
+]

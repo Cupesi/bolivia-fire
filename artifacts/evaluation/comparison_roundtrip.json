@@ -1,0 +1,14 @@
+{
+  "xgboost": {
+    "max_probability_difference": 0.0,
+    "ap_difference": 0.0
+  },
+  "catboost": {
+    "max_probability_difference": 0.0,
+    "ap_difference": 0.0
+  },
+  "spatial_cnn": {
+    "max_probability_difference": 0.0,
+    "ap_difference": 0.0
+  }
+}

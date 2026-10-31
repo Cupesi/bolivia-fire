@@ -8,6 +8,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from bolivia_fire.boundaries import acquire_boundaries
+from bolivia_fire.comparison_cli import register as register_comparison
 from bolivia_fire.config import Paths, load_key, load_protocol
 from bolivia_fire.covariates_cli import register as register_covariates
 from bolivia_fire.experiments_cli import register as register_experiments
@@ -69,6 +70,7 @@ def _parser() -> argparse.ArgumentParser:
     register_covariates(commands)
     register_experiments(commands)
     register_live(commands)
+    register_comparison(commands)
     return parser
 
 

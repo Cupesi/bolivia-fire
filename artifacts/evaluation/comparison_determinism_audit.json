@@ -1,0 +1,151 @@
+{
+  "array_identity": {
+    "train_y.npy": {
+      "source_sha256": "6220113f43a05f9354c4eb62d878ed7f47301812d61ad1c2c581e7d6cdf9d21c",
+      "rerun_sha256": "6220113f43a05f9354c4eb62d878ed7f47301812d61ad1c2c581e7d6cdf9d21c",
+      "identical": true
+    },
+    "train_x.npy": {
+      "source_sha256": "7380dc8413037e612171444932641cef5060fc11be92c253ade1a4197bf2b61b",
+      "rerun_sha256": "7380dc8413037e612171444932641cef5060fc11be92c253ade1a4197bf2b61b",
+      "identical": true
+    },
+    "val_select_y.npy": {
+      "source_sha256": "964c0168e539cad27b453f0060be6a823f797b716badfabc991797fa4737a4df",
+      "rerun_sha256": "964c0168e539cad27b453f0060be6a823f797b716badfabc991797fa4737a4df",
+      "identical": true
+    },
+    "val_select_x.npy": {
+      "source_sha256": "c44141fffe2ea4d094236643bdbbb36729bbe5fed00fa302ae722e12db4b84d1",
+      "rerun_sha256": "c44141fffe2ea4d094236643bdbbb36729bbe5fed00fa302ae722e12db4b84d1",
+      "identical": true
+    }
+  },
+  "trial_parameters": {
+    "0": {
+      "identical": true,
+      "source_ap": 0.3476616561174505,
+      "rerun_ap": 0.3475187601478858,
+      "ap_difference": -0.00014289596956468253
+    },
+    "1": {
+      "identical": true,
+      "source_ap": 0.34883581064436237,
+      "rerun_ap": 0.34738218599744086,
+      "ap_difference": -0.001453624646921503
+    },
+    "2": {
+      "identical": true,
+      "source_ap": 0.3451479044499377,
+      "rerun_ap": 0.3451450440181263,
+      "ap_difference": -2.8604318114133775e-06
+    },
+    "3": {
+      "identical": true,
+      "source_ap": 0.3461716090926897,
+      "rerun_ap": 0.34653263174707444,
+      "ap_difference": 0.0003610226543847572
+    },
+    "4": {
+      "identical": true,
+      "source_ap": 0.34481174449096497,
+      "rerun_ap": 0.3451864397935369,
+      "ap_difference": 0.00037469530257194794
+    },
+    "5": {
+      "identical": true,
+      "source_ap": 0.34599723963283396,
+      "rerun_ap": 0.3458631694971206,
+      "ap_difference": -0.00013407013571337112
+    },
+    "6": {
+      "identical": true,
+      "source_ap": 0.34745390833469897,
+      "rerun_ap": 0.3474565108469843,
+      "ap_difference": 2.6025122853434723e-06
+    },
+    "7": {
+      "identical": true,
+      "source_ap": 0.3439020068421679,
+      "rerun_ap": 0.3436577163935412,
+      "ap_difference": -0.0002442904486266717
+    },
+    "8": {
+      "identical": true,
+      "source_ap": 0.34569419067355334,
+      "rerun_ap": 0.34573167600080085,
+      "ap_difference": 3.7485327247510636e-05
+    },
+    "9": {
+      "identical": true,
+      "source_ap": 0.34707273807293076,
+      "rerun_ap": 0.34660630679075466,
+      "ap_difference": -0.0004664312821761052
+    },
+    "10": {
+      "identical": true,
+      "source_ap": 0.34402015967132243,
+      "rerun_ap": 0.34437086044008397,
+      "ap_difference": 0.000350700768761536
+    },
+    "11": {
+      "identical": true,
+      "source_ap": 0.34681379394843,
+      "rerun_ap": 0.3468130683666904,
+      "ap_difference": -7.2558173958015e-07
+    },
+    "12": {
+      "identical": true,
+      "source_ap": 0.3445631098099545,
+      "rerun_ap": 0.34351470268266315,
+      "ap_difference": -0.001048407127291373
+    },
+    "13": {
+      "identical": true,
+      "source_ap": 0.34470877916819115,
+      "rerun_ap": 0.34470378038698224,
+      "ap_difference": -4.9987812089091754e-06
+    },
+    "14": {
+      "identical": true,
+      "source_ap": 0.3431398703648771,
+      "rerun_ap": 0.3430154023426944,
+      "ap_difference": -0.00012446802218268882
+    },
+    "15": {
+      "identical": true,
+      "source_ap": 0.34610789656995383,
+      "rerun_ap": 0.3456658785358862,
+      "ap_difference": -0.0004420180340676261
+    },
+    "16": {
+      "identical": true,
+      "source_ap": 0.3468888042586186,
+      "rerun_ap": 0.3464507918535209,
+      "ap_difference": -0.00043801240509772077
+    },
+    "17": {
+      "identical": true,
+      "source_ap": 0.3421349797547941,
+      "rerun_ap": 0.34172015277847423,
+      "ap_difference": -0.00041482697631989307
+    },
+    "18": {
+      "identical": true,
+      "source_ap": 0.3465325786523794,
+      "rerun_ap": 0.3452749570289401,
+      "ap_difference": -0.0012576216234392867
+    },
+    "19": {
+      "identical": true,
+      "source_ap": 0.34851380488253586,
+      "rerun_ap": 0.34861407929572413,
+      "ap_difference": 0.00010027441318827268
+    }
+  },
+  "source_binary_sha256": "b3fb3dab53250e0850acf4aa0b529fcc71f055133e811b46cc7a807b1022d6eb",
+  "rerun_binary_sha256": "b3fb3dab53250e0850acf4aa0b529fcc71f055133e811b46cc7a807b1022d6eb",
+  "catboost_binary_identical": true,
+  "interpretation": "Different GPU scores with identical data, parameters and binary are consistent with documented reduction nondeterminism; the frozen search is unchanged. Any observed data or binary differences are reported separately.",
+  "reference": "https://catboost.ai/docs/en/features/training-on-gpu"
+}

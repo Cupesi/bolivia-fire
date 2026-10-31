@@ -1,0 +1,103 @@
+{
+  "commands": [
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare prepare",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare train",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare audit",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare select",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare evaluate --post-hoc-test --reason \"post-hoc exploratory comparison of alternative learners; does not change the reported model\"",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m bolivia_fire.cli compare report",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync ruff check .",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync pytest -m \"not live and not local_data\" -q -p no:cacheprovider",
+      "outcome": "passed",
+      "passed": 419,
+      "deselected": 3,
+      "warnings": 9,
+      "runtime_seconds": 110.94
+    },
+    {
+      "command": "uv lock --check",
+      "outcome": "passed"
+    },
+    {
+      "command": "git diff --check -- pyproject.toml uv.lock src/bolivia_fire/cli.py docs/index.md artifacts/evaluation/final_test_log.json",
+      "outcome": "passed"
+    }
+  ],
+  "comparison_unit_tests": 19,
+  "selection_sha256": "338e530a9eea33b4f7bd559c258c572ec1892905a6d92a58079b6ea89e5a0e00",
+  "primary_log_entries_preserved": 6,
+  "post_hoc_test_openings": 1,
+  "selection_before_test": true,
+  "unchanged_private_source_inputs": 30,
+  "test_rows": 3127636,
+  "maximum_peak_process_tree_rss_gib": 5.459407806396484,
+  "minimum_free_disk_gib": 90.31571960449219,
+  "catboost_selected_trial_changed": true,
+  "catboost_paired_conclusion_changed": false,
+  "remaining_limitations": [
+    "CatBoost GPU reductions prevent 1e-6 reproduction; all per-trial differences are retained and the validation conclusion is unchanged.",
+    "The test comparison is exploratory on a previously opened holdout; any superiority claim requires a new pre-registered holdout."
+  ],
+  "warnings": [
+    "Nine DuckDB Pandas4Warning messages in existing figure tests."
+  ],
+  "utf8_and_local_path_files_checked": 50,
+  "text_violations": [],
+  "markdown_question_marks": 0,
+  "real_guard_refusals": [
+    {
+      "arguments": [
+        "compare",
+        "evaluate"
+      ],
+      "exit_code": 1,
+      "error": "Exploratory test scoring requires --post-hoc-test",
+      "expected_refusal": true
+    },
+    {
+      "arguments": [
+        "compare",
+        "evaluate",
+        "--post-hoc-test"
+      ],
+      "exit_code": 1,
+      "error": "Exploratory test scoring requires a nonempty --reason",
+      "expected_refusal": true
+    },
+    {
+      "arguments": [
+        "compare",
+        "evaluate",
+        "--post-hoc-test",
+        "--reason",
+        "post-hoc exploratory comparison of alternative learners; does not change the reported model"
+      ],
+      "exit_code": 1,
+      "error": "Comparison test already opened; a second run requires --reopen-reason",
+      "expected_refusal": true
+    }
+  ],
+  "refused_commands_preserved_log": true
+}

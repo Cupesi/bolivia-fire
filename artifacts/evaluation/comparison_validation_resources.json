@@ -1,0 +1,6 @@
+{
+  "stage": "validation_metrics_and_calibration",
+  "runtime_seconds": 18.769144799996866,
+  "peak_process_tree_rss_gib": 3.3640060424804688,
+  "minimum_free_disk_gib": 91.31806945800781
+}

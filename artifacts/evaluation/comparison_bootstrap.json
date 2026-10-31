@@ -1,0 +1,1814 @@
+{
+  "val_calib": {
+    "lightgbm": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.2277380078636858,
+            "upper": 0.37471792008407856,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010368500620501906,
+            "upper": 0.03417947967928854,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.045559759309652725,
+            "upper": 0.12525302456277973,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8963477944392915,
+            "upper": 0.9307441738899432,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.003546967507764258,
+            "upper": 0.012318058092706242,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": null,
+        "runtime_seconds": 20.431912599990028,
+        "paired_rows": 1180240,
+        "reference": null,
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.22476000547318448,
+            "upper": 0.37113036235284463,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.01032293585110605,
+            "upper": 0.03362781592739623,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0439398325287572,
+            "upper": 0.12260227741689156,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8965133137269921,
+            "upper": 0.9309144551943447,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.00041957101253479117,
+            "upper": 0.005525818266335261,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": null,
+        "runtime_seconds": 19.496385400008876,
+        "paired_rows": 1180240,
+        "reference": null,
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "logistic_regression": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.19560963646764679,
+            "upper": 0.34441857305049145,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010677960998372486,
+            "upper": 0.03481000400651105,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.04673067361282681,
+            "upper": 0.12791921279026192,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8900027611264336,
+            "upper": 0.9268762191255802,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0024940784911807747,
+            "upper": 0.011437755364897299,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.03717294630888621,
+            "upper": -0.0109621473537033,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.0002111219456155352,
+            "upper": 0.0007373683802509863,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0009832102560925992,
+            "upper": 0.002831947783199401,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.007141463168217957,
+            "upper": -0.0036464359263116562,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0036455196523273972,
+            "upper": 0.0019742778373901203,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 45.52318649999506,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.19339189108325977,
+            "upper": 0.34089995767811443,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010591057950253759,
+            "upper": 0.034457705807625034,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.045357884864747705,
+            "upper": 0.12562002718138734,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8901767665142556,
+            "upper": 0.927159905720065,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.00048659993652474983,
+            "upper": 0.006416043609364883,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.03719005170847028,
+            "upper": -0.011713215463506886,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.0002754603145274906,
+            "upper": 0.0008753151678740347,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0013686596350724956,
+            "upper": 0.0030198048556851114,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.00704783082088781,
+            "upper": -0.003613365372413996,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0005841078084580368,
+            "upper": 0.0017019320767871864,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 33.25097459999961,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "xgboost": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.22511044599723534,
+            "upper": 0.3682556257665359,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.0103992240011834,
+            "upper": 0.03440534515948104,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.04619552202991292,
+            "upper": 0.1266886555659284,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.895530094160754,
+            "upper": 0.9297519549014823,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.004580218210708724,
+            "upper": 0.014466889315191484,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.009515615449460226,
+            "upper": -7.771752536525361e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 4.1277198248307335e-05,
+            "upper": 0.00025756261406591744,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0005852416158473695,
+            "upper": 0.0015888955339983062,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.0019942716923567194,
+            "upper": -0.0003872499852637936,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0008574667695205415,
+            "upper": 0.002554756996875377,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 36.93149030000495,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.2218926260963242,
+            "upper": 0.3645305132689851,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.01034013098552291,
+            "upper": 0.03369442763157182,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.044114808660159946,
+            "upper": 0.12290734870213242,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8957803802691852,
+            "upper": 0.9299894338626948,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0003989770479010854,
+            "upper": 0.005783573738552213,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.009950987419892783,
+            "upper": 0.00017799952212982394,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 2.314965375778237e-06,
+            "upper": 0.00013300792912460135,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0001276145983972455,
+            "upper": 0.0005183087078900612,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.0018880874508585832,
+            "upper": -0.00035826438436378295,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.00020277666809461394,
+            "upper": 0.00037477976111504983,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 32.64893630000006,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "catboost": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.23411508276152757,
+            "upper": 0.3823378961071518,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010293939047167544,
+            "upper": 0.03381948848250278,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.04420811185238956,
+            "upper": 0.1248180014709724,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8944118769085709,
+            "upper": 0.9317582998327082,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0015090936011848055,
+            "upper": 0.009883175819216139,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.001047466104916829,
+            "upper": 0.011020537904331386,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.0005437256615025016,
+            "upper": 2.2423667685745927e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.0016321144381927053,
+            "upper": 0.0001113061283898075,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.002142274609674666,
+            "upper": 0.002418250788542021,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0036031229977137895,
+            "upper": -0.00029197927503382367,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 38.71069889998762,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.23037629660579084,
+            "upper": 0.3776241809487789,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010285206471341724,
+            "upper": 0.03365151887762168,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.04386181260047149,
+            "upper": 0.12332271937625558,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8946482493447795,
+            "upper": 0.931979172731123,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0003778578311525995,
+            "upper": 0.00567425042524374,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.0019007896763089684,
+            "upper": 0.009631715785753744,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.00015313395278254677,
+            "upper": 9.838219515589536e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.0005190393271529255,
+            "upper": 0.0006828998708608094,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.002061922348844919,
+            "upper": 0.002360049969361732,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0004083775789531187,
+            "upper": 0.0005077525284007805,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 32.945844300003955,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "spatial_cnn": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.23104017897587298,
+            "upper": 0.37116701656575646,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.010332438509781517,
+            "upper": 0.03415098580572337,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.044458799638939915,
+            "upper": 0.12664810806203444,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8973410352989232,
+            "upper": 0.9328768535581095,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0029965152748911796,
+            "upper": 0.014480471483585363,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.00620512061153662,
+            "upper": 0.003869600041829776,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -9.208219165104575e-05,
+            "upper": 5.227602444531735e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.0012552072670716154,
+            "upper": 0.0017065422485366135,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.00032731642829886276,
+            "upper": 0.005791837660868893,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0009997928578395117,
+            "upper": 0.0028518896415257156,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 45.39655750000384,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 10,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.2279537716544504,
+            "upper": 0.36715260090847834,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.0103050863575359,
+            "upper": 0.0336308975169609,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.04350154965461138,
+            "upper": 0.1226829735139119,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.8975724102432532,
+            "upper": 0.9330750966570139,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0004120206525919157,
+            "upper": 0.0064923163306329496,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.007025895391611002,
+            "upper": 0.0035327280304004336,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.00012175322623959256,
+            "upper": 0.00016586988283137543,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.0008261338561678085,
+            "upper": 0.0003104064762074989,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.0002469772584769575,
+            "upper": 0.005845982256859927,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0006934401748136861,
+            "upper": 0.0013733061863177721,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 33.31165200000396,
+        "paired_rows": 1180240,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    }
+  },
+  "val_select": {
+    "lightgbm": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.2068296588870929,
+            "upper": 0.3990722321336027,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008581983675523881,
+            "upper": 0.028922605361673567,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.03903008046835024,
+            "upper": 0.10643581049006376,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9085418202144205,
+            "upper": 0.9402494444103848,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0031891037995452134,
+            "upper": 0.006566352568432849,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": null,
+        "runtime_seconds": 24.33666479999374,
+        "paired_rows": 1357276,
+        "reference": null,
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.20304380489443938,
+            "upper": 0.3938619612893868,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.00861126396368436,
+            "upper": 0.028772092758651894,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.037624271904967185,
+            "upper": 0.10580824968993348,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9084718893167174,
+            "upper": 0.9402504512882622,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0018056390378658129,
+            "upper": 0.007460117529414977,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": null,
+        "runtime_seconds": 20.64659419999225,
+        "paired_rows": 1357276,
+        "reference": null,
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "logistic_regression": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.18256707576672,
+            "upper": 0.3818610675944241,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008719388174234979,
+            "upper": 0.029230133139925358,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.038948497458646855,
+            "upper": 0.10807720600482557,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.901799709972371,
+            "upper": 0.9362996653333349,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.001870385164127272,
+            "upper": 0.004551154536880353,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.03104368905486868,
+            "upper": -0.014742450507212637,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 1.4014101550860773e-06,
+            "upper": 0.0003318671250961587,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 7.822794169495259e-05,
+            "upper": 0.0017181399272508083,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.006634680105463003,
+            "upper": -0.003558898497138724,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0036281409944929808,
+            "upper": -0.00022739485644395093,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 50.49520819999452,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.17904703753022733,
+            "upper": 0.37622566901884225,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.00878122437432905,
+            "upper": 0.02938590098949465,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0384637007867019,
+            "upper": 0.10839013115597096,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9017320125263271,
+            "upper": 0.9362278781310182,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0013227031754375984,
+            "upper": 0.008035877529280701,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.03099727927341043,
+            "upper": -0.014963675461432237,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.00014725031234046022,
+            "upper": 0.0006001810279848178,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.0009457987417994441,
+            "upper": 0.002626641294054265,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.006681850568278035,
+            "upper": -0.003593586449885591,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0015793119277617345,
+            "upper": 0.0010137983068811566,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 41.344094999993104,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "xgboost": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.20681335322481878,
+            "upper": 0.39974514103550496,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.00859523620724518,
+            "upper": 0.029098665548058792,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.03943987973249884,
+            "upper": 0.10719636572712606,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9080990906589417,
+            "upper": 0.940144731470457,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0035932438849926958,
+            "upper": 0.008764465100308537,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.0031036784671319194,
+            "upper": 0.001200919650476715,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 2.0564686206344626e-06,
+            "upper": 0.0001897262919485778,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.00012421093239101642,
+            "upper": 0.000796632960351264,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.001305760483898713,
+            "upper": 0.0003971837971347175,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.00038120877729265907,
+            "upper": 0.002557959051974818,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 46.34021389999543,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.20263198345444308,
+            "upper": 0.39261516911787114,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008627681215970753,
+            "upper": 0.028743683992624256,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.037615604570521564,
+            "upper": 0.10558075997622354,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.908002017927161,
+            "upper": 0.9401470085958866,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0014939887196096903,
+            "upper": 0.007068524809824648,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.003591447359137144,
+            "upper": -0.0004643396526475506,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -3.0568417677145734e-05,
+            "upper": 1.4144094843289e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.00031950791112318744,
+            "upper": 8.895033327256366e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.0012504179200112015,
+            "upper": 0.0004186053710272307,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0011708952265251451,
+            "upper": -1.8432290291587174e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 40.46163879999949,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "catboost": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.21154541981878922,
+            "upper": 0.40417594840066523,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008545877982419448,
+            "upper": 0.028700925748539673,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.03744206339171231,
+            "upper": 0.10519440152280483,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9101346299188249,
+            "upper": 0.9408234184201767,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0008769289676261728,
+            "upper": 0.004664946708588163,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.00030493199130087877,
+            "upper": 0.0057055240283355,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.0004092604193931445,
+            "upper": 2.5791983306572523e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.0016933023136978648,
+            "upper": -0.00076181345401819,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.0004037937853680645,
+            "upper": 0.002198120499729283,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.00512492327067363,
+            "upper": 0.0002216353152777831,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 46.70438730000751,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.2065674364252584,
+            "upper": 0.3975535317974113,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008614119522410193,
+            "upper": 0.028847676113433224,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.03774384564369211,
+            "upper": 0.10611932720916807,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9100721174671091,
+            "upper": 0.9407815221563649,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.00219346790872121,
+            "upper": 0.008976548238772501,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": -0.0012746870581306386,
+            "upper": 0.004324190785297959,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -1.3711409389052534e-05,
+            "upper": 0.00012050810568040536,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -7.855692368336384e-05,
+            "upper": 0.0010246663333087697,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": -0.00038674562548338397,
+            "upper": 0.002134813045164602,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 2.79547280559973e-05,
+            "upper": 0.0028244814239683103,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 41.29662219999591,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    },
+    "spatial_cnn": {
+      "uncalibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.21148281908421346,
+            "upper": 0.40473344955365137,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008502500710943056,
+            "upper": 0.02886400981272419,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.037136136757000074,
+            "upper": 0.10548018016345627,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9142747511167812,
+            "upper": 0.9433304458141684,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0005736808293854867,
+            "upper": 0.007840475499882819,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": 0.00027035235896636105,
+            "upper": 0.006221527158564312,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.00021504067047717858,
+            "upper": -1.5774896505832784e-06,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.002352748695529287,
+            "upper": -0.000874892391777301,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.0019285530120518256,
+            "upper": 0.007367138887148548,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.0035239689800928556,
+            "upper": 0.0016840281720914266,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 56.10403519999818,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm uncalibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      },
+      "calibrated": {
+        "replicates": 500,
+        "seed": 7,
+        "blocks": 11,
+        "confidence_level": 0.95,
+        "metrics": {
+          "average_precision": {
+            "lower": 0.20737524783725508,
+            "upper": 0.398724184060465,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": 0.008584024275997037,
+            "upper": 0.02864821536750416,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": 0.03742996081862517,
+            "upper": 0.10465433539741567,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.9141687563242957,
+            "upper": 0.9432855705496516,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": 0.0022434084405462515,
+            "upper": 0.006931445310820248,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "paired_difference": {
+          "average_precision": {
+            "lower": 0.000158920498638475,
+            "upper": 0.005502498229870317,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "brier_score": {
+            "lower": -0.00012992277069792893,
+            "upper": -2.2979640836643938e-05,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "log_loss": {
+            "lower": -0.00107170395305359,
+            "upper": -0.00022024364486006027,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "roc_auc": {
+            "lower": 0.0019021408673187302,
+            "upper": 0.007347040975373206,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "expected_calibration_error": {
+            "lower": -0.002448408016682361,
+            "upper": 0.0013497232639079098,
+            "valid_replicates": 500,
+            "reason": null
+          },
+          "recall_at_area_budget_5pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          },
+          "recall_at_area_budget_10pct": {
+            "lower": null,
+            "upper": null,
+            "valid_replicates": 0,
+            "reason": "undefined_in_all_replicates"
+          }
+        },
+        "runtime_seconds": 41.038243000002694,
+        "paired_rows": 1357276,
+        "reference": "recorded lightgbm calibrated",
+        "note": "Area omitted from bootstrap, as in the private study; weekly area point metrics use all eligible national areas"
+      }
+    }
+  }
+}

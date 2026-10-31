@@ -6,6 +6,7 @@
 - [Cell-week dataset](dataset.md): grid, detection bundles, labels, features and publication checks.
 - [Covariates](covariates.md): retrospective CHIRPS extraction, rainfall features and land-cover access.
 - [Evaluation](evaluation.md): model fitting, calibration, metrics, uncertainty and experiment artifacts.
+- [Model comparison](model-comparison.md): post-hoc learner robustness and guarded exploratory scoring.
 - [Results](results.md): primary test metrics, paired hypotheses, geographic and regional results, and sensitivity status.
 - [Model card](model_card.md): selected models, hyperparameters, inputs, calibration, intended uses and limitations.
 - [Dataset figures](figures.md): descriptive summaries, coverage, partition counts and figure rebuilding.

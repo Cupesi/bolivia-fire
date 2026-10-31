@@ -1,0 +1,107 @@
+{
+  "recorded_utc": "2026-10-31T19:19:04.086587+00:00",
+  "parameters": {
+    "task_type": "CPU",
+    "iterations": 200,
+    "loss_function": "Logloss",
+    "border_count": 63,
+    "random_seed": 7,
+    "thread_count": 4,
+    "bootstrap_type": "Bayesian",
+    "allow_writing_files": false,
+    "verbose": false,
+    "use_best_model": false,
+    "depth": 6,
+    "learning_rate": 0.06,
+    "l2_leaf_reg": 10,
+    "random_strength": 1.0,
+    "bagging_temperature": 0.0
+  },
+  "source_gpu_trial": 19,
+  "fixed_gpu_tree_count": 200,
+  "fitted_trees": 200,
+  "completed": true,
+  "budget_seconds": 600,
+  "val_select": {
+    "average_precision": 0.34726638879131067,
+    "brier_score": 0.01739137571043932,
+    "log_loss": 0.06800601074243795,
+    "roc_auc": 0.9287890998102115,
+    "expected_calibration_error": 0.0012111177178410523,
+    "recall_at_area_budget_5pct": 0.3892755434736167,
+    "recall_at_area_budget_10pct": 0.5697743181260639,
+    "undefined_reasons": {},
+    "reliability": [
+      {
+        "bin": 0,
+        "count": 135727.6,
+        "mean_probability": 0.00045529329249434716,
+        "positive_rate": 0.00022839864552235507
+      },
+      {
+        "bin": 1,
+        "count": 135727.6,
+        "mean_probability": 0.0008656940228984506,
+        "positive_rate": 0.0003757526103754874
+      },
+      {
+        "bin": 2,
+        "count": 135727.59999999998,
+        "mean_probability": 0.0013752371140261913,
+        "positive_rate": 0.0007367698242656617
+      },
+      {
+        "bin": 3,
+        "count": 135727.60000000003,
+        "mean_probability": 0.002012102306629919,
+        "positive_rate": 0.0009209622803320767
+      },
+      {
+        "bin": 4,
+        "count": 135727.59999999998,
+        "mean_probability": 0.002823647089206904,
+        "positive_rate": 0.0015914228204138292
+      },
+      {
+        "bin": 5,
+        "count": 135727.59999999998,
+        "mean_probability": 0.004056014193185883,
+        "positive_rate": 0.002902873107606707
+      },
+      {
+        "bin": 6,
+        "count": 135727.59999999998,
+        "mean_probability": 0.00620994517523178,
+        "positive_rate": 0.005186859562830258
+      },
+      {
+        "bin": 7,
+        "count": 135727.6000000001,
+        "mean_probability": 0.011746161836167996,
+        "positive_rate": 0.01141256457787509
+      },
+      {
+        "bin": 8,
+        "count": 135727.59999999986,
+        "mean_probability": 0.03245713366206509,
+        "positive_rate": 0.03235893068174789
+      },
+      {
+        "bin": 9,
+        "count": 135727.6000000001,
+        "mean_probability": 0.17336594063548463,
+        "positive_rate": 0.16754145803801132
+      }
+    ]
+  },
+  "model_sha256": "b3543b277f8c3eff276484dbee65103131e5d5b7f93e2fb92911ed09f240227f",
+  "prediction_roundtrip_exact": true,
+  "reference": "Frozen GPU search; CPU audit is not a selection candidate",
+  "scope": "One CPU refit at the GPU-selected tree count; no retuning or test scoring",
+  "resources": {
+    "stage": "catboost_cpu_reproducibility_check",
+    "runtime_seconds": 130.96845380000013,
+    "peak_process_tree_rss_gib": 5.2914276123046875,
+    "minimum_free_disk_gib": 91.65053939819336
+  }
+}
