@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import shutil
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -530,3 +532,643 @@ def show_dataset_figure(name: str, root: Path = REPO_ROOT) -> None:
     if name not in {"map", "weekly", "seasonal", "partitions"}:
         raise ValueError("Unknown dataset figure")
     display(Image(filename=str(root / "artifacts" / "figures" / f"dataset_{name}.png"), width=800))
+
+
+RESULT_NAMES = ("temporal", "reliability", "per_year", "geographic", "area_budget", "map", "h2")
+RESULT_LABELS = {
+    "train_climatology": "Climatology",
+    "persistence": "Persistence",
+    "logistic_regression": "Logistic regression",
+}
+
+
+@dataclass
+class ResultsFigures:
+    summary: dict[str, Any]
+
+
+@dataclass
+class ResultsMap:
+    cells: pd.DataFrame
+    summary: dict[str, Any]
+
+
+def _result_label(model: str, version: str) -> str:
+    label = RESULT_LABELS.get(model, "LightGBM")
+    return f"{label} (calibrated)" if version == "calibrated" else label
+
+
+def _result_models(population: dict[str, Any]) -> list[tuple[str, str]]:
+    lightgbm = [name for name in population["models"] if name.startswith("lightgbm_")]
+    if len(lightgbm) != 1:
+        raise ValueError("Expected exactly one selected LightGBM in recorded evaluation")
+    return [
+        ("train_climatology", "uncalibrated"),
+        ("persistence", "uncalibrated"),
+        ("logistic_regression", "calibrated"),
+        (lightgbm[0], "calibrated"),
+    ]
+
+
+def _result_population(report: dict[str, Any], name: str, source: str) -> dict[str, Any]:
+    population = report if name == "temporal" else report["geographic_holdout"]
+    prefix = "models" if name == "temporal" else "geographic_holdout.models"
+    baseline = population["models"][population["best_baseline"]]["uncalibrated"]
+    rows = []
+    for model, version in _result_models(population):
+        metrics = population["models"][model][version]
+        bootstrap = report["candidate_bootstrap"][name][model][version]
+        ap, baseline_ap = metrics["average_precision"], baseline["average_precision"]
+        common_support = metrics["rows"] == baseline["rows"] == bootstrap["paired_rows"]
+        difference = (
+            ap - baseline_ap
+            if common_support and ap is not None and baseline_ap is not None
+            else None
+        )
+        rows.append(
+            {
+                "model": model,
+                "label": _result_label(model, version),
+                "probability_version": version,
+                "average_precision": ap,
+                "ap_interval": bootstrap["metrics"]["average_precision"],
+                "paired_difference": difference,
+                "paired_difference_derived": difference is not None,
+                "paired_difference_method": "Subtract recorded APs only on identical support.",
+                "paired_interval": bootstrap["paired_difference"]["average_precision"],
+                "paired_rows": bootstrap["paired_rows"],
+                "rows": metrics["rows"],
+                "replicates": bootstrap["replicates"],
+                "blocks": bootstrap["blocks"],
+                "confidence_level": bootstrap["confidence_level"],
+                "metric_key": f"{prefix}.{model}.{version}.average_precision",
+                "interval_key": f"candidate_bootstrap.{name}.{model}.{version}",
+            }
+        )
+    return {
+        "source": source,
+        "selected_model": population["selected_model"],
+        "best_baseline": population["best_baseline"],
+        "models": rows,
+        "caption": (
+            (
+                "Temporal test, strict; "
+                if name == "temporal"
+                else "Geographic holdout, strict_geo; "
+            )
+            + "2023–2025. Original baseline probabilities; fitted candidates are calibrated. "
+            "Points are recorded APs; differences subtract recorded APs on identical support. "
+            f"95% paired {'calendar-month' if name == 'temporal' else 'one-degree spatial'}-block "
+            "bootstrap intervals use 500 recorded replicates. "
+            f"Comparator: {RESULT_LABELS[population['best_baseline']]} (chosen on val_select)."
+        ),
+    }
+
+
+def collect_results(root: Path = REPO_ROOT) -> ResultsFigures:
+    directory = root / "artifacts" / "evaluation"
+    paths = [directory / "test_strict.json", directory / "final_test_log.json"]
+    paths += sorted(directory.glob("selection_*.json"))
+    raw = {path: path.read_bytes() for path in paths}
+    documents = {path.name: json.loads(content) for path, content in raw.items()}
+    report = documents["test_strict.json"]
+    if report["split"] != "test" or report["variant"] != "strict":
+        raise ValueError("Results require the recorded strict final-test evaluation")
+    for name, population in (("strict", report), ("strict_geo", report["geographic_holdout"])):
+        selection = documents[f"selection_{name}.json"]
+        for key in ("selected_model", "best_baseline"):
+            if selection[key] != population[key]:
+                raise ValueError(f"Recorded selection disagrees with evaluation: {name}.{key}")
+        for key in ("protocol_sha256", "experiments_sha256"):
+            if selection[key] != report[key]:
+                raise ValueError(f"Recorded selection provenance disagrees: {name}.{key}")
+        for model, _ in _result_models(population):
+            identifier = f"{name}/{model}"
+            for key in ("model_ids", "calibrator_ids"):
+                if key in report and selection[key][model] != report[key][identifier]:
+                    raise ValueError(f"Recorded selection model hash disagrees: {identifier}")
+    log = documents["final_test_log.json"]
+    if report["final_test_opening"] not in log:
+        raise ValueError("Recorded final-test opening is absent from the access log")
+    source = "artifacts/evaluation/test_strict.json"
+    temporal = _result_population(report, "temporal", source)
+    geographic = _result_population(report, "geographic", source)
+    reliability = []
+    for model, version in (
+        (report["selected_model"], "calibrated"),
+        (report["best_baseline"], "uncalibrated"),
+    ):
+        reliability.append(
+            {
+                "model": model,
+                "label": _result_label(model, version),
+                "probability_version": version,
+                "bins": report["models"][model][version]["reliability"],
+                "source_key": f"models.{model}.{version}.reliability",
+            }
+        )
+    annual = []
+    for year in (2023, 2024, 2025):
+        for model, version in _result_models(report):
+            annual.append(
+                {
+                    "year": year,
+                    "model": model,
+                    "label": _result_label(model, version),
+                    "probability_version": version,
+                    "average_precision": report["per_year"][str(year)][model][version][
+                        "average_precision"
+                    ],
+                    "source_key": f"per_year.{year}.{model}.{version}.average_precision",
+                }
+            )
+    budgets = []
+    for name, population in (("temporal", report), ("geographic", report["geographic_holdout"])):
+        prefix = "models" if name == "temporal" else "geographic_holdout.models"
+        values = []
+        for model, version in _result_models(population):
+            for budget in (5, 10):
+                key = f"recall_at_area_budget_{budget}pct"
+                values.append(
+                    {
+                        "model": model,
+                        "label": _result_label(model, version),
+                        "area_budget_pct": budget,
+                        "recall": population["models"][model][version][key],
+                        "source_key": f"{prefix}.{model}.{version}.{key}",
+                    }
+                )
+        budgets.append({"population": name, "values": values})
+    h2_bootstrap = report.get("strict_retrospective_bootstrap", {})
+    h2_interval = h2_bootstrap.get("paired_difference", {}).get("average_precision")
+    figures = {
+        "temporal": temporal,
+        "geographic": geographic,
+        "reliability": {
+            "source": source,
+            "models": reliability,
+            "caption": "Temporal test, 2023–2025. Recorded equal-frequency reliability bins; "
+            "each point retains its recorded bin mass. The second panel expands "
+            "the low-probability range; the dashed line is perfect reliability.",
+        },
+        "per_year": {
+            "source": source,
+            "values": annual,
+            "caption": "Temporal-test AP by issue year. Original baselines and calibrated "
+            "fitted candidates; all values are recorded, with no annual intervals.",
+        },
+        "area_budget": {
+            "source": source,
+            "populations": budgets,
+            "caption": "Recorded recall at 5% and 10% of eligible cell area per issue week. "
+            "Crossing cells contribute fractionally; positive contributions are "
+            "pooled over weeks. Original baselines; calibrated fitted candidates.",
+        },
+        "h2": {
+            "source": source,
+            "source_key": "strict_retrospective_bootstrap.paired_difference.average_precision",
+            "estimate": None,
+            "interval": h2_interval,
+            "replicates": h2_bootstrap.get("replicates"),
+            "paired_rows": h2_bootstrap.get("paired_rows"),
+            "decision": report["hypotheses"]["H2"],
+            "caption": "H2: retrospective minus strict AP, calibrated selected candidates. "
+            "The recorded 95% paired month-block interval is shown without a point: "
+            "the artifact does not record the paired point estimate. The frozen "
+            "H2 rule tests whether this interval contains zero; it is not an "
+            "equivalence test.",
+        },
+    }
+    return ResultsFigures(
+        {
+            "description": "Results copied from closed artifacts; no metrics recomputed.",
+            "sources": {
+                path.relative_to(root).as_posix(): {"sha256": hashlib.sha256(content).hexdigest()}
+                for path, content in raw.items()
+            },
+            "selection": {
+                name.removesuffix(".json"): {
+                    "selected_model": value["selected_model"],
+                    "best_baseline": value["best_baseline"],
+                    "model_ids": value.get("model_ids", {}),
+                }
+                for name, value in documents.items()
+                if name.startswith("selection_")
+            },
+            "final_test_access": {
+                "source": "artifacts/evaluation/final_test_log.json",
+                "recorded_openings_at_read": len(log),
+                "evaluation_opening": report["final_test_opening"]["timestamp_utc"],
+            },
+            "figures": figures,
+        }
+    )
+
+
+def collect_results_map(
+    cells: TableSource,
+    panel: TableSource,
+    predictions: TableSource,
+    selected_model: str,
+    geographic_model: str,
+) -> ResultsMap:
+    with duckdb.connect(config={"memory_limit": "512MB", "threads": "2"}) as connection:
+        for name, table in (
+            ("map_cells", cells),
+            ("map_labels", panel),
+            ("map_predictions", predictions),
+        ):
+            _register(connection, name, table)
+        connection.execute("SET VARIABLE selected_model = ?", [f"strict/{selected_model}"])
+        connection.execute("SET VARIABLE geographic_model = ?", [f"strict_geo/{geographic_model}"])
+        connection.execute(
+            """
+            CREATE TEMP VIEW map_rows AS
+            SELECT c.*, l.issue_date, l.n_primary, l.y_primary, l.target_complete,
+                   p.p, p.y AS exported_y
+            FROM map_labels l JOIN map_cells c USING (cell_id)
+            JOIN map_predictions p ON p.cell_id = l.cell_id AND p.issue_date = l.issue_date
+              AND p.model = CASE WHEN c.geo_holdout THEN getvariable('geographic_model')
+                                 ELSE getvariable('selected_model') END
+            WHERE year(l.issue_date) = 2024 AND l.partition = 'test'
+            """
+        )
+        weeks = connection.sql(
+            """
+            SELECT issue_date, sum(n_primary) AS detections
+            FROM map_rows GROUP BY issue_date
+            HAVING bool_and(target_complete) AND count(y_primary) = count(*)
+              AND count(DISTINCT cell_id) = (SELECT count(*) FROM map_cells)
+              AND count(*) = count(DISTINCT cell_id) AND bool_and(isfinite(p))
+            ORDER BY detections DESC, issue_date ASC LIMIT 1
+            """
+        ).fetchall()
+        if not weeks:
+            raise ValueError("No complete 2024 week with national prediction coverage")
+        week = weeks[0]
+        frame = connection.execute(
+            "SELECT * FROM map_rows WHERE issue_date = ? ORDER BY cell_id", [week[0]]
+        ).df()
+    if not frame.y_primary.eq(frame.exported_y).all() or not frame.p.between(0, 1).all():
+        raise ValueError("Map predictions and panel labels disagree or probabilities are invalid")
+    issue = pd.Timestamp(week[0])
+    summary = {
+        "derived": True,
+        "selection_rule": "Largest n_primary sum among complete 2024 target weeks with national "
+        "prediction coverage; ties choose the earliest issue date.",
+        "issue_date": issue.date().isoformat(),
+        "target_end_exclusive": (issue + pd.Timedelta(days=7)).date().isoformat(),
+        "detections": int(week[1]),
+        "positive_cells": int(frame.y_primary.sum()),
+        "cells": len(frame),
+        "temporal_model": f"strict/{selected_model}",
+        "geographic_model": f"strict_geo/{geographic_model}",
+        "values": {
+            column: frame[column].tolist()
+            for column in ("cell_id", "west", "south", "p", "y_primary", "n_primary", "geo_holdout")
+        },
+        "caption": f"Issue {issue.date().isoformat()}, target ["
+        f"{issue.date().isoformat()}, {(issue + pd.Timedelta(days=7)).date().isoformat()}) "
+        "UTC. Derived example: largest observed detection total among complete 2024 "
+        "weeks with national prediction coverage; earliest tie. Calibrated strict "
+        "predictions outside held-out blocks, strict_geo predictions inside them. "
+        "Right: observed primary detection count per cell (log1p color scale). "
+        "ADM1 outlines are pinned boundaries. Week selection and counts are descriptive.",
+    }
+    return ResultsMap(frame, summary)
+
+
+def _result_caption(figure: Figure, text: str) -> None:
+    import textwrap
+
+    figure.supxlabel(textwrap.fill(text, width=140), fontsize=7, ha="center")
+
+
+def _result_interval(ax: Axes, y: int, interval: dict[str, Any] | None, color: str) -> None:
+    if interval is not None and interval.get("lower") is not None:
+        lower, upper = interval["lower"], interval["upper"]
+        ax.plot([lower, upper], [y, y], color=color, linewidth=1.5)
+        ax.plot([lower, upper], [y, y], "|", color=color, markersize=7)
+
+
+def plot_results_ap(data: ResultsFigures, population: str) -> Figure:
+    values = data.summary["figures"][population]
+    figure, axes = plt.subplots(1, 2, figsize=(10, 4.4), sharey=True, layout="constrained")
+    for y, (row, color) in enumerate(zip(values["models"], COLORS, strict=True)):
+        for ax, metric, interval in (
+            (axes[0], "average_precision", "ap_interval"),
+            (axes[1], "paired_difference", "paired_interval"),
+        ):
+            _result_interval(ax, y, row[interval], color)
+            if row[metric] is not None:
+                ax.plot(row[metric], y, "o", color=color, markersize=5)
+            ax.grid(axis="x", alpha=0.15)
+    axes[0].set(
+        yticks=range(4),
+        yticklabels=[row["label"] for row in values["models"]],
+        ylim=(3.6, -0.6),
+        xlabel="Average precision (AP)",
+        title="Recorded AP and 95% CI",
+    )
+    axes[0].set_xlim(left=0)
+    axes[1].axvline(0, color="#777777", linewidth=0.8, linestyle="--")
+    axes[1].set(
+        xlabel="AP difference (model − best baseline)", title="Paired difference and 95% CI"
+    )
+    axes[1].tick_params(axis="y", left=False)
+    figure.suptitle(
+        "Temporal test · strict" if population == "temporal" else "Geographic holdout · strict_geo"
+    )
+    _result_caption(figure, values["caption"])
+    return figure
+
+
+def plot_results_reliability(data: ResultsFigures) -> Figure:
+    values = data.summary["figures"]["reliability"]
+    figure, axes = plt.subplots(1, 2, figsize=(9.4, 4.6), layout="constrained")
+    maximum = max(
+        bin_[key]
+        for row in values["models"]
+        for bin_ in row["bins"]
+        for key in ("mean_probability", "positive_rate")
+    )
+    for ax, limit, title in zip(
+        axes,
+        (max(0.02, maximum * 1.12), 0.01),
+        ("All recorded bins", "Low-probability detail"),
+        strict=True,
+    ):
+        ax.plot([0, limit], [0, limit], "--", color="#777777", linewidth=0.9)
+        for row, color, marker in zip(
+            values["models"], (COLORS[3], COLORS[0]), ("o", "s"), strict=True
+        ):
+            ax.plot(
+                [bin_["mean_probability"] for bin_ in row["bins"]],
+                [bin_["positive_rate"] for bin_ in row["bins"]],
+                marker=marker,
+                color=color,
+                label=row["label"],
+                linewidth=1.2,
+                markersize=4,
+            )
+        ax.set(
+            xlim=(0, limit),
+            ylim=(0, limit),
+            xlabel="Mean predicted probability",
+            ylabel="Observed positive fraction",
+            title=title,
+        )
+        ax.set_aspect("equal")
+        ax.grid(alpha=0.15)
+    axes[0].legend(loc="upper left", frameon=False)
+    _result_caption(figure, values["caption"])
+    return figure
+
+
+def plot_results_per_year(data: ResultsFigures) -> Figure:
+    values = data.summary["figures"]["per_year"]
+    figure, ax = plt.subplots(figsize=(7.4, 4.5), layout="constrained")
+    for model, color, marker in zip(
+        dict.fromkeys(row["model"] for row in values["values"]),
+        COLORS,
+        ("o", "s", "^", "D"),
+        strict=True,
+    ):
+        rows = [row for row in values["values"] if row["model"] == model]
+        ax.plot(
+            [row["year"] for row in rows],
+            [row["average_precision"] for row in rows],
+            color=color,
+            marker=marker,
+            label=rows[0]["label"],
+            linewidth=1.3,
+        )
+    ax.set(
+        xticks=[2023, 2024, 2025],
+        xlabel="Issue year (UTC)",
+        ylabel="Average precision (AP)",
+        ylim=(0, None),
+        title="Temporal test by year",
+    )
+    ax.grid(axis="y", alpha=0.15)
+    ax.legend(loc="best", frameon=False)
+    _result_caption(figure, values["caption"])
+    return figure
+
+
+def plot_results_area_budget(data: ResultsFigures) -> Figure:
+    values = data.summary["figures"]["area_budget"]
+    figure, axes = plt.subplots(1, 2, figsize=(10, 4.8), sharey=True, layout="constrained")
+    for ax, population in zip(axes, values["populations"], strict=True):
+        rows = population["values"]
+        for index, model in enumerate(dict.fromkeys(row["model"] for row in rows)):
+            group = [row for row in rows if row["model"] == model]
+            ax.plot(
+                [row["area_budget_pct"] for row in group],
+                [None if row["recall"] is None else row["recall"] * 100 for row in group],
+                marker=("o", "s", "^", "D")[index],
+                color=COLORS[index],
+                label=group[0]["label"],
+                linewidth=1.3,
+            )
+        ax.set(
+            xticks=[5, 10],
+            xlim=(4.5, 10.5),
+            ylim=(0, 100),
+            xlabel="Weekly area budget (%)",
+            title="Temporal · strict"
+            if population["population"] == "temporal"
+            else "Geographic · strict_geo",
+        )
+        ax.grid(axis="y", alpha=0.15)
+    axes[0].set_ylabel("Recall of positive cell-weeks (%)")
+    axes[0].legend(loc="upper left", frameon=False)
+    _result_caption(figure, values["caption"])
+    return figure
+
+
+def plot_results_map(
+    example: ResultsMap,
+    country: BaseGeometry,
+    departments: Mapping[str, BaseGeometry],
+) -> Figure:
+    from matplotlib.colors import FuncNorm
+
+    figure, axes = plt.subplots(1, 2, figsize=(10, 6.0), layout="constrained")
+    cells = example.cells
+    west, south = cells.west.min(), cells.south.min()
+    resolution = float((cells.east - cells.west).median())
+    cols = np.rint((cells.west - west) / resolution).astype(int)
+    rows = np.rint((cells.south - south) / resolution).astype(int)
+    for ax, column, label, title in zip(
+        axes,
+        ("p", "n_primary"),
+        ("Predicted probability", "Observed detections / cell"),
+        ("Calibrated predicted probability", "Observed detections in target week"),
+        strict=True,
+    ):
+        matrix = np.full((rows.max() + 1, cols.max() + 1), np.nan)
+        matrix[rows, cols] = cells[column]
+        maximum = max(1.0, float(cells[column].max()))
+        norm = (
+            plt.Normalize(0, 1)
+            if column == "p"
+            else FuncNorm((np.log1p, np.expm1), vmin=0, vmax=maximum)
+        )
+        mesh = ax.pcolormesh(
+            west + np.arange(matrix.shape[1] + 1) * resolution,
+            south + np.arange(matrix.shape[0] + 1) * resolution,
+            matrix,
+            cmap="cividis",
+            norm=norm,
+            rasterized=True,
+        )
+        mesh.set_clip_path(PathPatch(_country_path(country), transform=ax.transData))
+        for geometry in departments.values():
+            _outline(ax, geometry, color="#FFFFFF", linewidth=0.5)
+        _outline(ax, country, color="#333333", linewidth=0.7)
+        _map_axes(ax, country)
+        ax.set_title(title, fontsize=10)
+        colorbar = figure.colorbar(
+            mesh, ax=ax, orientation="horizontal", shrink=0.9, pad=0.06, label=label
+        )
+        if column == "n_primary":
+            ticks = [value for value in (0, 1, 5, 20, 100, 500, 2000) if value <= maximum]
+            colorbar.set_ticks(ticks)
+    figure.suptitle(f"Example target week · issue {example.summary['issue_date']} (UTC)")
+    _result_caption(figure, example.summary["caption"])
+    return figure
+
+
+def plot_results_h2(data: ResultsFigures) -> Figure:
+    values = data.summary["figures"]["h2"]
+    figure, ax = plt.subplots(figsize=(8.6, 3.1), layout="constrained")
+    ax.axvline(0, color="#777777", linewidth=0.9, linestyle="--")
+    interval = values["interval"]
+    _result_interval(ax, 0, interval, COLORS[0])
+    if interval and interval.get("lower") is not None:
+        for key in ("lower", "upper"):
+            ax.annotate(
+                f"{interval[key]:.4f}",
+                (interval[key], 0),
+                xytext=(0, 12),
+                textcoords="offset points",
+                ha="center",
+                fontsize=9,
+            )
+    else:
+        ax.text(
+            0.5,
+            0.5,
+            values["decision"].get("reason") or "Interval unavailable",
+            transform=ax.transAxes,
+            ha="center",
+        )
+    ax.set(
+        yticks=[],
+        ylim=(-0.7, 0.7),
+        xlabel="AP difference (retrospective − strict)",
+        title="H2 · recorded 95% paired interval",
+    )
+    ax.grid(axis="x", alpha=0.15)
+    _result_caption(figure, values["caption"])
+    return figure
+
+
+def write_results_figures(
+    data: ResultsFigures,
+    example: ResultsMap,
+    country: BaseGeometry,
+    departments: Mapping[str, BaseGeometry],
+    *,
+    artifact_directory: Path,
+    pdf_directory: Path,
+) -> dict[str, Path]:
+    artifact_directory.mkdir(parents=True, exist_ok=True)
+    pdf_directory.mkdir(parents=True, exist_ok=True)
+    makers = {
+        "temporal": lambda: plot_results_ap(data, "temporal"),
+        "reliability": lambda: plot_results_reliability(data),
+        "per_year": lambda: plot_results_per_year(data),
+        "geographic": lambda: plot_results_ap(data, "geographic"),
+        "area_budget": lambda: plot_results_area_budget(data),
+        "map": lambda: plot_results_map(example, country, departments),
+        "h2": lambda: plot_results_h2(data),
+    }
+    outputs = {}
+    with plt.rc_context(STYLE):
+        for name, make in makers.items():
+            figure = make()
+            try:
+                output = artifact_directory / f"results_{name}.png"
+                figure.savefig(output, dpi=300, pil_kwargs={"optimize": True})
+                figure.savefig(pdf_directory / f"results_{name}.pdf", dpi=300)
+                shutil.copyfile(output, pdf_directory / output.name)
+                outputs[name] = output
+            finally:
+                plt.close(figure)
+    return outputs
+
+
+def build_results_artifacts(root: Path = REPO_ROOT) -> dict[str, Any]:
+    data = collect_results(root)
+    cells = root / "datasets" / "processed" / "cells.parquet"
+    panel = root / "datasets" / "processed" / "panel" / "year=2024" / "part.parquet"
+    predictions = root / "artifacts" / "predictions" / "strict" / "test.parquet"
+    sidecar = predictions.with_suffix(".json")
+    prediction_record = json.loads(sidecar.read_text(encoding="utf-8"))
+    prediction_hash = sha256_file(predictions)
+    if prediction_hash != prediction_record["prediction_sha256"]:
+        raise ValueError("Map prediction checksum disagrees with its recorded provenance")
+    for variant in ("strict", "strict_geo"):
+        selection = data.summary["selection"][f"selection_{variant}"]
+        model = selection["selected_model"]
+        if prediction_record["model_ids"][f"{variant}/{model}"] != selection["model_ids"][model]:
+            raise ValueError(f"Map prediction model disagrees with recorded selection: {variant}")
+    example = collect_results_map(
+        cells,
+        panel,
+        predictions,
+        data.summary["figures"]["temporal"]["selected_model"],
+        data.summary["figures"]["geographic"]["selected_model"],
+    )
+    example.summary["sources"] = {
+        "cells": cells.relative_to(root).as_posix(),
+        "labels": panel.relative_to(root).as_posix(),
+        "predictions": predictions.relative_to(root).as_posix(),
+        "prediction_provenance": sidecar.relative_to(root).as_posix(),
+        "boundaries": "datasets/sources.yaml#boundaries",
+    }
+    for path in (cells, panel, predictions, sidecar, root / "datasets" / "sources.yaml"):
+        data.summary["sources"][path.relative_to(root).as_posix()] = {"sha256": sha256_file(path)}
+    data.summary["figures"]["map"] = example.summary
+    outputs = write_results_figures(
+        data,
+        example,
+        *load_boundary_geometries(Paths(root)),
+        artifact_directory=root / "artifacts" / "figures",
+        pdf_directory=root / "data" / "figures",
+    )
+    for name, path in outputs.items():
+        pdf = root / "data" / "figures" / path.with_suffix(".pdf").name
+        data.summary["figures"][name]["output"] = {
+            "png": path.relative_to(root).as_posix(),
+            "png_bytes": path.stat().st_size,
+            "pdf": pdf.relative_to(root).as_posix(),
+            "pdf_bytes": pdf.stat().st_size,
+            "publication_png": f"data/figures/{path.name}",
+            "dpi": 300,
+        }
+    destination = root / "artifacts" / "figures" / "results_summary.json"
+    destination.write_text(
+        json.dumps(data.summary, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+    )
+    return data.summary
+
+
+def show_results_figure(name: str, root: Path = REPO_ROOT) -> None:
+    from IPython.display import Image, display
+
+    if name not in RESULT_NAMES:
+        raise ValueError("Unknown results figure")
+    display(Image(filename=str(root / "artifacts" / "figures" / f"results_{name}.png"), width=900))

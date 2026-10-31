@@ -88,3 +88,76 @@ All 13 panel files match the bundle, protocol, outage, and cell provenance.
 Verification: dependency sync, repository Ruff checks, and clean-kernel notebook
 execution passed. Pytest passed 319 tests with one live test deselected; all six
 figure tests passed. The eight warnings are DuckDB's pandas deprecation warnings.
+
+## Recorded results figures
+
+`notebooks/02_results.ipynb` rebuilds seven result figures from the recorded
+`artifacts/evaluation/test_strict.json`, closed `selection_*.json` files, and
+`final_test_log.json`. It does not invoke any fitting, selection, evaluation,
+or prediction stage. The notebook uses no network requests.
+
+```powershell
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/02_results.ipynb --ExecutePreprocessor.timeout=180
+uv run ruff check src tests
+uv run pytest tests -m "not live and not local_data" -q -p no:cacheprovider
+```
+
+Performance values, reliability bins, annual AP, and confidence endpoints are
+copied from evaluation JSON. Baselines retain original probabilities; logistic
+regression and the selected LightGBM use calibrated probabilities. The temporal
+and geographic best baselines are selected on validation AP independently.
+Paired point differences subtract the two recorded APs only when the recorded
+row counts prove identical support; paired intervals are copied directly.
+No bootstrap or performance metric is recomputed.
+
+The example map reads only the existing strict test prediction export, the
+2024 panel, cells, and pinned ADM0/ADM1 boundaries. The prediction checksum and
+model identities must agree with the export sidecar and closed selections.
+The temporal model is used outside held-out blocks and the geographic model
+inside them. Complete 2024 weeks with national prediction coverage are ranked
+by observed primary detection count, breaking ties by the earliest issue date.
+The derived week, per-cell probabilities, observed counts and labels are saved
+in the summary JSON and identified as derived in the map caption. The right
+map uses a log1p color scale in detection counts per cell.
+
+The selected issue week is 2024-09-02, with target interval
+`[2024-09-02, 2024-09-09)` UTC: 131,310 detections, 3,352 positive cells,
+and predictions for all 37,146 cells. This descriptive example combines
+`strict/lightgbm_08` and `strict_geo/lightgbm_04`.
+
+| Population | Selected model | Recorded AP | 95% AP CI | Best baseline | Baseline AP |
+|---|---|---:|---|---|---:|
+| temporal | `lightgbm_08` | 0.323393 | [0.221655, 0.382973] | `train_climatology` | 0.166677 |
+| geographic | `lightgbm_04` | 0.383912 | [0.250128, 0.467940] | `persistence` | 0.180757 |
+
+H2 has a recorded 95% paired AP-difference interval of
+`[-0.004107230965515116, 0.0018890130209346604]` for retrospective minus strict.
+The artifact has no paired point estimate, so the H2 figure shows the interval
+alone. Its inclusion of zero satisfies the frozen H2 rule; it is not evidence
+from an equivalence test.
+
+All PNGs use 300 dpi. PNG and PDF copies are also written to the ignored
+`data/figures/` directory. `artifacts/figures/results_summary.json` records the
+plotted values, relative source paths and JSON keys, source SHA-256 checksums,
+probability versions, captions, and output sizes. Map values use column arrays
+with a common cell order.
+
+| Figure in `artifacts/figures/` | PNG bytes | PDF bytes in `data/figures/` |
+|---|---:|---:|
+| `results_temporal.png` | 178,907 | 20,928 |
+| `results_reliability.png` | 272,336 | 21,694 |
+| `results_per_year.png` | 183,214 | 18,946 |
+| `results_geographic.png` | 183,582 | 20,934 |
+| `results_area_budget.png` | 192,222 | 21,026 |
+| `results_map.png` | 565,683 | 526,210 |
+| `results_h2.png` | 97,256 | 17,842 |
+
+All seven figures were visually inspected. The notebook executes nine code
+cells from a clean kernel, contains no error outputs, and has no absolute local
+paths in its text outputs. Ruff passed across `src` and `tests`. The non-live,
+non-local-data suite passed 356 tests with one deselected; the eight warnings
+are DuckDB pandas deprecation warnings. Notebook execution also emits the
+existing Windows Jupyter transport and event-loop notices.
+
+The executed notebook is 2,248,653 bytes. The plotted-value summary is
+5,254,569 bytes; the seven artifact PNGs total 1,673,200 bytes.
