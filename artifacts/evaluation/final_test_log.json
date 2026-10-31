@@ -1,0 +1,255 @@
+[
+  {
+    "timestamp_utc": "2026-10-31T10:30:00.578581+00:00",
+    "git_commit": "69cc00136811fefc7bbf37c8c3513a3341dc96ae",
+    "dataset_snapshot_hashes": {
+      "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+      "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+      "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+      "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+      "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+      "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+      "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+      "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+      "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+      "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+      "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+      "datasets/processed/panel/year=2023/part.parquet": "245ac353e7f1e3f78c62e4e3a8a743f2c2153d6f31d56043dc0218285fd96e1d",
+      "datasets/processed/panel/year=2024/part.parquet": "cfd566e473bcc9784d043574af4ae7514c8b7d25b2f694f654f35f98659619b6",
+      "datasets/processed/panel/year=2025/part.parquet": "e8d1cecadb6a184b54d5e276d6f042bdcc546d6f080a85c51e48ccd7c0c13993",
+      "datasets/sources.yaml": "2cc470a1199c578be5e6707319170e216904828c390397d05761c6ed1418c168",
+      "datasets/processed/covariates/chirps_features/year=2013/part.parquet": "8eafda40fb17e2b8a4ff5544cfc409feecfbfaaa43a7b34149a7c8cd63821d42",
+      "datasets/processed/covariates/chirps_features/year=2014/part.parquet": "87df229aa99b4f568055cb54ab6164794717beb1ba975da4f6a32d27e305be30",
+      "datasets/processed/covariates/chirps_features/year=2015/part.parquet": "e8fd647bbe51f3ddfdb897f2ecc649a9f2fe3495505d9bc4efcee90ed0303b91",
+      "datasets/processed/covariates/chirps_features/year=2016/part.parquet": "d94e186a03fe7d9be20e2d0e7820fa29347d03b97d4eae757fd74c15d3a12c15",
+      "datasets/processed/covariates/chirps_features/year=2017/part.parquet": "803dc4f8646a4248a7a9acf2c4ae914fff58496944638a958c35296b97676b63",
+      "datasets/processed/covariates/chirps_features/year=2018/part.parquet": "0f7efb2c35f542f8335c8b4428720db3ad3bda3643b7325746d9552ef662e655",
+      "datasets/processed/covariates/chirps_features/year=2019/part.parquet": "1d21af12b720d57ab6989d0d24d2825dba586c41c2f3fc2bc01fe14a121cb472",
+      "datasets/processed/covariates/chirps_features/year=2020/part.parquet": "afa4f5ab073427162959023b6114ae4a3b3dfb70ee019472d010a5b234fb2318",
+      "datasets/processed/covariates/chirps_features/year=2021/part.parquet": "4dc032f6cf09a3750b6d32d8e2ab695a54d5186ced4d5687123427650555df45",
+      "datasets/processed/covariates/chirps_features/year=2022/part.parquet": "0872d859cc69df01ca5ac3529c8032675ca3d0fe0c9cc24779f625062fb61990",
+      "datasets/processed/covariates/chirps_features/year=2023/part.parquet": "de7445f57ca16d13ad7cd58c4ec24e80dfe915b0094753c0efb89fc1e14ac005",
+      "datasets/processed/covariates/chirps_features/year=2024/part.parquet": "ebcc24712aa2b73b4adbdc61cc78a17df52a8c98020a09c0cb07273548016c9a",
+      "datasets/processed/covariates/chirps_features/year=2025/part.parquet": "58f9cd3d29217c975e78521a0285c0938c11d7ba594b0534c4f1001051f68570",
+      "datasets/processed/covariates/chirps_manifest.jsonl": "b49240e5b5703bbd384b642d0dde25822377bc76703106924a6fca69af49696c"
+    },
+    "consumed_variant_snapshot_hashes": {
+      "strict": {
+        "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+        "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+        "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+        "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+        "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+        "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+        "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+        "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+        "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+        "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+        "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+        "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+        "datasets/processed/panel/year=2023/part.parquet": "245ac353e7f1e3f78c62e4e3a8a743f2c2153d6f31d56043dc0218285fd96e1d",
+        "datasets/processed/panel/year=2024/part.parquet": "cfd566e473bcc9784d043574af4ae7514c8b7d25b2f694f654f35f98659619b6",
+        "datasets/processed/panel/year=2025/part.parquet": "e8d1cecadb6a184b54d5e276d6f042bdcc546d6f080a85c51e48ccd7c0c13993",
+        "datasets/sources.yaml": "2cc470a1199c578be5e6707319170e216904828c390397d05761c6ed1418c168"
+      },
+      "strict_geo": {
+        "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+        "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+        "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+        "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+        "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+        "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+        "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+        "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+        "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+        "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+        "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+        "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+        "datasets/processed/panel/year=2023/part.parquet": "245ac353e7f1e3f78c62e4e3a8a743f2c2153d6f31d56043dc0218285fd96e1d",
+        "datasets/processed/panel/year=2024/part.parquet": "cfd566e473bcc9784d043574af4ae7514c8b7d25b2f694f654f35f98659619b6",
+        "datasets/processed/panel/year=2025/part.parquet": "e8d1cecadb6a184b54d5e276d6f042bdcc546d6f080a85c51e48ccd7c0c13993",
+        "datasets/sources.yaml": "2cc470a1199c578be5e6707319170e216904828c390397d05761c6ed1418c168"
+      },
+      "retrospective": {
+        "configs/experiments.yaml": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+        "configs/protocol.yaml": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+        "datasets/processed/covariates/chirps_features/year=2013/part.parquet": "8eafda40fb17e2b8a4ff5544cfc409feecfbfaaa43a7b34149a7c8cd63821d42",
+        "datasets/processed/covariates/chirps_features/year=2014/part.parquet": "87df229aa99b4f568055cb54ab6164794717beb1ba975da4f6a32d27e305be30",
+        "datasets/processed/covariates/chirps_features/year=2015/part.parquet": "e8fd647bbe51f3ddfdb897f2ecc649a9f2fe3495505d9bc4efcee90ed0303b91",
+        "datasets/processed/covariates/chirps_features/year=2016/part.parquet": "d94e186a03fe7d9be20e2d0e7820fa29347d03b97d4eae757fd74c15d3a12c15",
+        "datasets/processed/covariates/chirps_features/year=2017/part.parquet": "803dc4f8646a4248a7a9acf2c4ae914fff58496944638a958c35296b97676b63",
+        "datasets/processed/covariates/chirps_features/year=2018/part.parquet": "0f7efb2c35f542f8335c8b4428720db3ad3bda3643b7325746d9552ef662e655",
+        "datasets/processed/covariates/chirps_features/year=2019/part.parquet": "1d21af12b720d57ab6989d0d24d2825dba586c41c2f3fc2bc01fe14a121cb472",
+        "datasets/processed/covariates/chirps_features/year=2020/part.parquet": "afa4f5ab073427162959023b6114ae4a3b3dfb70ee019472d010a5b234fb2318",
+        "datasets/processed/covariates/chirps_features/year=2021/part.parquet": "4dc032f6cf09a3750b6d32d8e2ab695a54d5186ced4d5687123427650555df45",
+        "datasets/processed/covariates/chirps_features/year=2022/part.parquet": "0872d859cc69df01ca5ac3529c8032675ca3d0fe0c9cc24779f625062fb61990",
+        "datasets/processed/covariates/chirps_features/year=2023/part.parquet": "de7445f57ca16d13ad7cd58c4ec24e80dfe915b0094753c0efb89fc1e14ac005",
+        "datasets/processed/covariates/chirps_features/year=2024/part.parquet": "ebcc24712aa2b73b4adbdc61cc78a17df52a8c98020a09c0cb07273548016c9a",
+        "datasets/processed/covariates/chirps_features/year=2025/part.parquet": "58f9cd3d29217c975e78521a0285c0938c11d7ba594b0534c4f1001051f68570",
+        "datasets/processed/covariates/chirps_manifest.jsonl": "b49240e5b5703bbd384b642d0dde25822377bc76703106924a6fca69af49696c",
+        "datasets/processed/panel/year=2013/part.parquet": "bca8a94535b6e44d68187aa286966e30df390cf0150ff435f08f79f156732119",
+        "datasets/processed/panel/year=2014/part.parquet": "78f77fb1175a8ddbd0d5e14d083e52a8bbd2ca052843723d2d7ecdc0a21d31c8",
+        "datasets/processed/panel/year=2015/part.parquet": "26a0571bc8ffe32046e67a62792af22358b45a34896aa0f16a4b3d5e71c2890d",
+        "datasets/processed/panel/year=2016/part.parquet": "099fdd9a4df83a150a109952cb5db45859e7d7fab9f1e731619b36660666dcbd",
+        "datasets/processed/panel/year=2017/part.parquet": "a420fde76bee4576d8e851052adab0bd7e06122f31d1dde3c51c0d9a4302eb29",
+        "datasets/processed/panel/year=2018/part.parquet": "61f009e82f5a349a395e1b814afeea33c826e2d3f8c46aea3b6af832a95ae36d",
+        "datasets/processed/panel/year=2019/part.parquet": "06ba6371c7f735b9b4de771cc722d82217c5905b54078163f5c71ff742fa7e68",
+        "datasets/processed/panel/year=2020/part.parquet": "997678f6acc27fc9fdd391e1088bd1bf5816803c7e451b0046224ac96df8fca8",
+        "datasets/processed/panel/year=2021/part.parquet": "87cd755c34e36325731b3a83aa4c66f68c66175101f324fc7457709113482cae",
+        "datasets/processed/panel/year=2022/part.parquet": "6ce56714df43af25db30d3d2bd109136dbec7826dee06733e2958e3e04c2e942",
+        "datasets/processed/panel/year=2023/part.parquet": "245ac353e7f1e3f78c62e4e3a8a743f2c2153d6f31d56043dc0218285fd96e1d",
+        "datasets/processed/panel/year=2024/part.parquet": "cfd566e473bcc9784d043574af4ae7514c8b7d25b2f694f654f35f98659619b6",
+        "datasets/processed/panel/year=2025/part.parquet": "e8d1cecadb6a184b54d5e276d6f042bdcc546d6f080a85c51e48ccd7c0c13993",
+        "datasets/sources.yaml": "2cc470a1199c578be5e6707319170e216904828c390397d05761c6ed1418c168"
+      }
+    },
+    "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+    "config": {
+      "version": 1,
+      "seed": 7,
+      "batch_size": 100000,
+      "bootstrap_replicates": 500,
+      "minimum_free_gb": 55,
+      "columns": {
+        "completeness_28d": "window_obs_complete_28d",
+        "completeness_365d": "window_obs_complete_365d",
+        "climatology_cell": "train_climatology_cell",
+        "climatology_department": "train_climatology_dept",
+        "low_coverage": "target_low_coverage"
+      },
+      "strict_features": [
+        "count_last_7d",
+        "count_last_14d",
+        "count_last_28d",
+        "count_last_91d",
+        "count_last_365d",
+        "any_last_7d",
+        "days_since_last",
+        "no_prior_detection",
+        "frp_sum_28d",
+        "same_week_last_year",
+        "neighborhood_3x3_last_7d",
+        "neighborhood_7x7_last_7d",
+        "neighborhood_3x3_last_28d",
+        "neighborhood_7x7_last_28d",
+        "national_last_7d",
+        "national_last_28d",
+        "week_of_year_sin",
+        "week_of_year_cos",
+        "train_climatology_cell",
+        "train_climatology_dept",
+        "window_obs_complete_365d"
+      ],
+      "retrospective_features": [
+        "rain_sum_7d",
+        "rain_sum_30d",
+        "rain_sum_90d",
+        "dry_days_30d",
+        "rain_anomaly_90d"
+      ],
+      "drop_groups": {
+        "neighborhood": [
+          "neighborhood_3x3_last_7d",
+          "neighborhood_7x7_last_7d",
+          "neighborhood_3x3_last_28d",
+          "neighborhood_7x7_last_28d"
+        ],
+        "climatology": [
+          "train_climatology_cell",
+          "train_climatology_dept"
+        ],
+        "national": [
+          "national_last_7d",
+          "national_last_28d"
+        ]
+      },
+      "lightgbm_search": {
+        "configurations": 20,
+        "boosting_rounds": 400,
+        "early_stopping_rounds": 30,
+        "max_bin": 63,
+        "num_threads": 4,
+        "space": {
+          "num_leaves": [
+            7,
+            15,
+            31,
+            63
+          ],
+          "learning_rate": [
+            0.03,
+            0.06,
+            0.1
+          ],
+          "min_data_in_leaf": [
+            50,
+            200,
+            1000
+          ],
+          "feature_fraction": [
+            0.7,
+            0.85,
+            1.0
+          ],
+          "lambda_l2": [
+            0,
+            1,
+            10
+          ]
+        }
+      }
+    },
+    "seed": 7,
+    "environment": {
+      "python": "3.13.15",
+      "packages": {
+        "numpy": "2.5.4",
+        "pyarrow": "26.0.0",
+        "pandas": "3.1.0",
+        "scikit-learn": "1.9.1",
+        "lightgbm": "4.7.0",
+        "joblib": "1.6.0"
+      }
+    },
+    "hardware": {
+      "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+      "logical_cpus": 8,
+      "ram_bytes": 33408688128
+    },
+    "runtime_seconds": 0.8297109999984968,
+    "peak_ram_mb": 183.26953125,
+    "model_ids": {
+      "strict/train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+      "strict/persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+      "strict/logistic_regression": "b8fcab4022416052eb9eeb420463bc5ad23e9f7d4099cc3a2db2b0cb6035404f",
+      "strict/lightgbm_08": "ed72987f3dcbb1407601ee262b0e416d06a31f047a20e2386c1c4f4e7021b65b",
+      "strict_geo/train_climatology": "d1d006d94d557854c245b2a3ea11677bedc9398624209168581262f401a153a1",
+      "strict_geo/persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+      "strict_geo/logistic_regression": "600b6e86875324d967514fb81d7517ef2949234bd1911f113d3cc807fd0fef74",
+      "strict_geo/lightgbm_04": "dfe436de916d6984f317bdb64582d0f01847c15a0ec6d0cd02b19a82ff173887",
+      "retrospective/train_climatology": "bd98d00de311a5df5cf9457e903c0eef87cb89ef0548b6a400174143cf25fb8c",
+      "retrospective/persistence": "f9942673b0d6d74fd89019c8bccb93799ed5c4000fe2b4b8dc6c956a163e027f",
+      "retrospective/logistic_regression": "369d4f0bf718eacdcba02c1a507c0940aa2d9e1302ff51e6bdafb839c93327ea",
+      "retrospective/lightgbm_16": "f86873e90d7fd471af56a1a72eae9827ee65981626f93d6c8d24a52f001511fb"
+    },
+    "calibrator_ids": {
+      "strict/train_climatology": "ca7d73c24f84b8f323bee9cf42fe3319570e796c63be927bfbed599883c2fc51",
+      "strict/persistence": "29379f64bf25384af6dfc469c5654a4ba6a6a2a801394ddf414d8c874657343d",
+      "strict/logistic_regression": "2c49e692e49efef6c6e7b402f3cc2ff8d79807355264f2b61c90f42ad63128fe",
+      "strict/lightgbm_08": "fb3886126c1910dd28f92b49f57eff3017fad9ae385471736caf3a906262bf8e",
+      "strict_geo/train_climatology": "dd4fd34421d7ef1809d8935363b7dfa03b910f7b1abc3f5f544a831e84c260fa",
+      "strict_geo/persistence": "29379f64bf25384af6dfc469c5654a4ba6a6a2a801394ddf414d8c874657343d",
+      "strict_geo/logistic_regression": "0b325c049933d35973b9e35711c70319157a62ec8411c135652a1e75dfa3d84a",
+      "strict_geo/lightgbm_04": "7594363d551b87800b543e40a7eafaec136bf7d18e56f19ab9bb1285d9a703c4",
+      "retrospective/train_climatology": "ca7d73c24f84b8f323bee9cf42fe3319570e796c63be927bfbed599883c2fc51",
+      "retrospective/persistence": "29379f64bf25384af6dfc469c5654a4ba6a6a2a801394ddf414d8c874657343d",
+      "retrospective/logistic_regression": "88f4168acf9108a423216ff6bde6a7089bda43112b4cce7f593846e96668694f",
+      "retrospective/lightgbm_16": "ac42724c630a8ffe61836c5b1f3a925f3aeaaa5272cc61f0764e083eab2b9538"
+    },
+    "panel_snapshot_sha256": "9b1dec2d73aca44eb447e7b1743d97aa850f121987d15a1812a1425ce1860092",
+    "reopening": false,
+    "reopen_reason": null
+  }
+]
