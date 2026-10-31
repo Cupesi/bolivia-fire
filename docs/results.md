@@ -209,7 +209,7 @@ the recorded selection rule, input provenance and figure caption.
 
 ![Example weekly predictions and observed satellite detections](assets/charts/fire_season_2024.gif)
 
-The July?October 2024 map sequence joins the strict test prediction export to panel observations, retaining partial counts, null labels and unavailable estimates.
+The July–October 2024 map sequence joins the strict test prediction export to panel observations, retaining partial counts, null labels and unavailable estimates.
 
 ## Exclusions
 

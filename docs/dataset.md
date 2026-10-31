@@ -211,7 +211,7 @@ National weekly selected and all-confidence detections use the canonical detecti
 
 ![Annual seasonal cycles](assets/charts/seasonal_cycle.gif)
 
-Annual selected-detection cycles accumulate from the same canonical bundle using the protocol's 0?51 calendar index; endpoint-year coverage follows the acquisition window.
+Annual selected-detection cycles accumulate from the same canonical bundle using the protocol's 0–51 calendar index; endpoint-year coverage follows the acquisition window.
 
 ![Training-period spatial detection frequency](assets/charts/dataset_map.gif)
 

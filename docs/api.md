@@ -542,7 +542,7 @@ r1342c2247,2024-09-09,observed,strict,,,0
 
 ## Browser use of the artifact API
 
-![Week navigation through August?October 2024](assets/screenshots/week_navigation.gif)
+![Week navigation through August–October 2024](assets/screenshots/week_navigation.gif)
 
 The real local API serves consecutive estimate-layer weeks from August 5 through October 28, 2024, retaining unavailable predictions and observed-history gaps from the prepared artifacts.
 

@@ -42,7 +42,7 @@ The table exposes the same API layer values as the map, with selected-cell histo
 
 ![Mobile estimate view](docs/assets/screenshots/estimate-mobile.png)
 
-The 390 ? 844 mobile capture shows the same issue, model, missing-value legend and national grid.
+The 390 × 844 mobile capture shows the same issue, model, missing-value legend and national grid.
 
 </details>
 
