@@ -29,15 +29,28 @@ Missing declared weekly files fail the build; a missing verification CSV is
 shown as an unavailable-file state. Data above 200 MB fail the build. The
 JavaScript budget is 43,922 bytes gzip: the measured 28,562-byte baseline plus
 15 KiB. No dependencies were added.
+When `model/model_card.json` is present, the build copies its model name into
+the published metadata after checking that the model hashes match. Model
+artifacts remain excluded from the distribution.
 
 The initial layer is the latest issue's **Experimental weekly estimate
-(near-real-time data)**. The page shows the issue and half-open target dates,
-publication timestamp and lag after issue, model identity, and pre-issue input
-window. The week selector lists published forecast issues. Observations are
+(near-real-time data)**. The page shows the issue, an inclusive target date
+range in UTC, publication time to the minute, rounded publication lag in hours,
+model variant/name with an eight-character hash, and the pre-issue input window.
+The full hash is available in a tooltip and expandable forecast provenance,
+alongside the exact half-open interval and original publication timestamp.
+The week selector lists published forecast issues. Observations are
 enabled only for complete target weeks; incomplete weeks retain missing labels.
 Cell details show recent weekly probabilities, detection indicators and counts.
 History requests are bounded to four issues at a time and cancel on selection
 changes. Data files require a connection; offline failures have retry controls.
+
+Target coverage uses the observation file and the catalog's `last_updated_utc`,
+not the browser clock. Target dates on or after that UTC date are pending;
+earlier dates listed as unobserved retain the protocol outage warning. An
+informational progress note gives the last observed target day. This preserves
+the snapshot's meaning when a page is viewed after publication. Input outages
+have one neutral summary line and an expandable list of dates.
 
 The model was trained on standard-processing detections and is applied to
 near-real-time detections. The track record measures how well it holds up.
@@ -92,23 +105,33 @@ null labels. Set `API_BASE_URL` to change that script's origin.
 
 ## Current build verification
 
-On 2026-10-31, `npm run check` reported zero errors and warnings, all 29 unit
-tests passed, and both builds passed. JavaScript measured **30,409 bytes gzip**
-in API mode and **31,411 bytes gzip** in static mode. Static JavaScript grew
-2,849 bytes over the pre-change baseline, below the 15 KiB allowance.
-The synthetic static distribution measured 108,483 bytes, including 2,990 bytes
-of data in 12 files. The static browser suite passed 24 tests, eight per engine.
-The API smoke passed against 37,146 cells and 678 weeks; the existing API browser
-suite passed 33 tests, with three optional media captures skipped. Earlier
-verification sections below describe their own snapshots.
+On 2026-10-31, `npm run check` reported zero errors and warnings, `npm run test`
+passed 33 tests, and `npm run build` and `npm run build:static` passed.
+JavaScript measured **30,612 bytes gzip** in API mode and **32,310 bytes gzip**
+in static mode, below the respective 120,000-byte and 43,922-byte budgets.
+The full synthetic static browser suite passed 27 tests, nine per engine,
+without failures, skips or retries. Regressions distinguish pending days from
+past outages, retain missing labels and check keyboard expansion of input dates.
+Earlier verification sections below describe their own snapshots.
 
 The real live-data build contains 10 data files for issues 2026-10-19 and
-2026-10-26: 5,556,617 data bytes and 5,662,110 bytes for the complete distribution.
+2026-10-26: 5,560,354 data bytes and 5,668,900 bytes for the complete distribution.
 The latest forecast displays all 37,146 cells. Real desktop/mobile smoke tests
-passed in all three engines (six tests); screenshots were visually inspected.
+passed in all three engines (six tests), without failures, skips or retries.
+Desktop, mobile and expanded-input screenshots were visually inspected.
+The read-only source checkout remained clean at commit
+`d06130ee2d1370190f01f2e8ecff3379cf31b2b8`.
+The latest forecast has 23 input outage dates, observations through 2026-10-30,
+publication time `2026-10-31 18:03 UTC`, lag `138 h after issue`, target
+`26 Oct – 1 Nov 2026 (UTC)` and model `strict / lightgbm_08 (ed72987f)`.
+Its pending dates, 2026-10-31 and 2026-11-01, produce no sensor-outage warning.
 The one verified row is a backfill, displayed separately with no prospective
 performance chart. Results and screenshots are in
-`frontend/test-results/static-real-fixed/`.
+`frontend/test-results/static-presentation/` and
+`frontend/test-results/static-presentation-real/`. The real run used
+`LIVE_DATA_DIR=C:/Users/PC Gamer/AppData/Local/bolivia-fire-ops/live-data-wt`
+and `npm run test:e2e:static -- --grep '@smoke'`.
+UTF-8 validation passed, including the actual en dash in the target date range.
 
 The source display renders the API registry's product, provider, licence,
 processing and citation fields. Boundary credit identifies GeoBolivia and

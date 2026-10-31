@@ -96,6 +96,57 @@ describe("static client with synthetic data", () => {
     expect(layer.value).toEqual([null, null, null, null]);
     expect(layer.n_primary).toEqual([1, 0, 2, 0]);
     expect(layer.observation?.complete).toBe(false);
+    expect(layer.observation?.coverage).toEqual({
+      lastObservedDay: "2026-10-30",
+      pendingDays: ["2026-10-31", "2026-11-01"],
+      unobservedDays: [],
+    });
+  });
+  it("separates past protocol gaps from pending target days using the snapshot, not the browser clock", async () => {
+    syntheticFetch();
+    const original = fetch;
+    vi.stubGlobal("fetch", async (url: string) => {
+      const response = await original(url);
+      if (!url.includes("observations/2026-10-26.json")) return response;
+      const raw = await response.json();
+      raw.unobserved_days.unshift("2026-10-28");
+      return new Response(JSON.stringify(raw));
+    });
+    const layer = await client().loadLayer(
+      "2026-10-26",
+      "observed",
+      "",
+      "",
+      signal(),
+    );
+    expect(layer.observation?.coverage).toEqual({
+      lastObservedDay: "2026-10-30",
+      pendingDays: ["2026-10-31", "2026-11-01"],
+      unobservedDays: ["2026-10-28"],
+    });
+  });
+  it("retains a past outage at the end of a completed target week", async () => {
+    syntheticFetch();
+    const original = fetch;
+    vi.stubGlobal("fetch", async (url: string) => {
+      const response = await original(url);
+      if (!url.endsWith("index.json")) return response;
+      const raw = await response.json();
+      raw.last_updated_utc = "2026-11-03T06:00:00Z";
+      return new Response(JSON.stringify(raw));
+    });
+    const layer = await client().loadLayer(
+      "2026-10-26",
+      "observed",
+      "",
+      "",
+      signal(),
+    );
+    expect(layer.observation?.coverage).toEqual({
+      lastObservedDay: "2026-10-30",
+      pendingDays: [],
+      unobservedDays: ["2026-10-31", "2026-11-01"],
+    });
   });
   it("joins recent history by cell index and preserves missing observations", async () => {
     syntheticFetch();

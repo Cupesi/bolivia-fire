@@ -204,6 +204,26 @@ main {
 .forecast-summary p + p {
   margin-top: 5px;
 }
+.input-history,
+.forecast-provenance {
+  margin-top: 7px;
+}
+.outage-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  padding-left: 18px;
+  margin-block: 8px;
+}
+.forecast-provenance dl {
+  margin-block: 8px;
+}
+.forecast-provenance dd {
+  margin: 0 0 6px;
+}
+.target-progress {
+  margin-bottom: 14px;
+}
 .track-panel {
   margin-top: 26px;
   padding: 22px;

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { liveClient } from "../lib/data-client";
+  import { publishedTime } from "../lib/live-presentation";
   import type { TrackRecord } from "../lib/types";
   let records = $state<TrackRecord[]>([]);
   let loading = $state(true);
@@ -159,8 +160,8 @@
             <tbody
               >{#each group.rows as record}<tr
                   ><th scope="row">{record.issue_date}</th><td
-                    >{record.generated_utc}</td
-                  ><td>{record.publication_lag_hours.toFixed(1)}</td><td
+                    >{publishedTime(record.generated_utc)}</td
+                  ><td>{Math.round(record.publication_lag_hours)}</td><td
                     >{record.n_cells.toLocaleString("en")}</td
                   ><td>{record.positives.toLocaleString("en")}</td><td
                     >{metric(record.ap)}</td

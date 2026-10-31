@@ -73,6 +73,7 @@ export interface Forecast {
   target_start: string;
   target_end: string;
   model_id: string;
+  model_name?: string;
   variant: string;
   generated_utc: string;
   prospective: boolean;
@@ -92,6 +93,11 @@ export interface Observation {
   cell_index: number[];
   y: NullableNumber[];
   n: NullableNumber[];
+  coverage?: {
+    lastObservedDay: string | null;
+    pendingDays: string[];
+    unobservedDays: string[];
+  };
 }
 export interface TrackRecord {
   issue_date: string;

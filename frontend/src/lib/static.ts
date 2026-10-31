@@ -110,6 +110,7 @@ export function parseTrackRecord(csv: string): TrackRecord[] {
 export function createStaticClient(base: string) {
   const root = `${base.replace(/\/$/, "")}/data/`;
   let catalog: LiveIndex | null = null;
+  let metadata: Record<string, unknown> | null = null;
 
   async function text(path: string, signal?: AbortSignal): Promise<string> {
     let response: Response;
@@ -145,6 +146,7 @@ export function createStaticClient(base: string) {
     if (
       !raw ||
       !Array.isArray(raw.issues) ||
+      !Number.isFinite(Date.parse(raw.last_updated_utc)) ||
       raw.issues.some((issue) => !issue || !datePattern.test(issue.issue_date))
     )
       throw invalid("The issue catalog is incomplete.");
@@ -156,10 +158,17 @@ export function createStaticClient(base: string) {
     };
     return catalog;
   }
+  async function loadMetadata(signal?: AbortSignal) {
+    metadata ??= await json<Record<string, unknown>>(
+      "static/meta.json",
+      signal,
+    );
+    return metadata;
+  }
   async function loadInitial(signal?: AbortSignal) {
     const [live, metaRaw, gridRaw, adm0, adm1] = await Promise.all([
       index(signal),
-      json<Record<string, unknown>>("static/meta.json", signal),
+      loadMetadata(signal),
       json("static/grid.json", signal),
       json<Boundaries>("static/boundaries_adm0.json", signal),
       json<Boundaries>("static/boundaries_adm1.json", signal),
@@ -248,11 +257,20 @@ export function createStaticClient(base: string) {
         variant: raw.variant,
         cell_index: raw.cell_index,
         value,
-        forecast: raw,
+        forecast: {
+          ...raw,
+          model_name:
+            (await loadMetadata(signal)).model_id === raw.model_id &&
+            typeof metadata?.model_name === "string"
+              ? metadata.model_name
+              : undefined,
+        },
       };
     }
     if (
       typeof raw.complete !== "boolean" ||
+      !Array.isArray(raw.unobserved_days) ||
+      raw.unobserved_days.some((day) => !datePattern.test(day)) ||
       !Array.isArray(raw.n) ||
       raw.n.length !== value.length ||
       (!raw.complete && value.some((v) => v !== null))
@@ -260,13 +278,34 @@ export function createStaticClient(base: string) {
       throw invalid(
         "The observation file has inconsistent completeness or counts.",
       );
+    const live = await index(signal);
+    const snapshotDay = new Date(live.last_updated_utc)
+      .toISOString()
+      .slice(0, 10);
+    const days = Array.from({ length: 7 }, (_, offset) =>
+      new Date(Date.parse(date + "T00:00:00Z") + offset * 86400000)
+        .toISOString()
+        .slice(0, 10),
+    );
+    const observedDays = days.filter(
+      (day) => day < snapshotDay && !raw.unobserved_days.includes(day),
+    );
     return {
       model: null,
       variant: "strict",
       cell_index: raw.cell_index,
       value,
       n_primary: raw.n,
-      observation: raw,
+      observation: {
+        ...raw,
+        coverage: {
+          lastObservedDay: observedDays.at(-1) ?? null,
+          pendingDays: days.filter((day) => day >= snapshotDay),
+          unobservedDays: raw.unobserved_days.filter(
+            (day) => day < snapshotDay,
+          ),
+        },
+      },
     };
   }
   async function loadSeries(

@@ -57,6 +57,21 @@ for (const file of files) {
   await mkdir(resolve(target, ".."), { recursive: true });
   await copyFile(join(source, file), target);
 }
+try {
+  const card = JSON.parse(
+    await readFile(join(source, "model/model_card.json"), "utf8"),
+  );
+  const metaPath = join(out, "static/meta.json");
+  const meta = JSON.parse(await readFile(metaPath, "utf8"));
+  if (card.model_id !== meta.model_id || typeof card.model_name !== "string")
+    throw new Error("Model card does not match static metadata.");
+  await writeFile(
+    metaPath,
+    JSON.stringify({ ...meta, model_name: card.model_name }),
+  );
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
 async function treeSize(path) {
   let bytes = 0;
   for (const item of await readdir(path, { withFileTypes: true }))

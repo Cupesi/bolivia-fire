@@ -13,6 +13,7 @@
   } from "./lib/data-client";
   import { ApiError, exportUrl } from "./lib/api";
   import { formatValue } from "./lib/color";
+  import { publishedTime, targetWindow } from "./lib/live-presentation";
   import type {
     Cell,
     Layer,
@@ -20,6 +21,7 @@
     NullableNumber,
     SeriesPoint,
     Observation,
+    Forecast,
   } from "./lib/types";
 
   let data = $state<Awaited<ReturnType<typeof loadInitial>> | null>(null);
@@ -287,6 +289,11 @@
 
 <svelte:window onkeydown={weekKeyboard} />
 
+{#snippet forecastModel(forecast: Forecast)}
+  {forecast.variant} / {forecast.model_name ?? "model"}
+  (<span title={forecast.model_id}>{forecast.model_id.slice(0, 8)}</span>)
+{/snippet}
+
 <a class="skip-link" href="#explorer">Skip to data explorer</a>
 <header class="page-header">
   <div class="header-inner">
@@ -438,26 +445,58 @@
             Issue: <strong>{layer.forecast.issue_date} 00:00 UTC</strong> ·
             Target:
             <strong
-              >[{layer.forecast.target_start}, {layer.forecast.target_end}) UTC</strong
+              >{targetWindow(
+                layer.forecast.target_start,
+                layer.forecast.target_end,
+              )}</strong
             >
           </p>
           <p class="small muted">
-            Published: {layer.forecast.generated_utc} · {layer.forecast.publication_lag_hours.toFixed(
-              1,
-            )} h after issue · Model: {layer.forecast.model_id} · Variant: {layer
-              .forecast.variant}
+            Published: {publishedTime(layer.forecast.generated_utc)} · {Math.round(
+              layer.forecast.publication_lag_hours,
+            )} h after issue · Model: {@render forecastModel(layer.forecast)}
           </p>
           <p class="small muted">
             Input window: {layer.forecast.input_window.first_day} through {layer
               .forecast.input_window.last_day} 23:59 UTC, before the issue time.
           </p>
-          {#if layer.forecast.input_window.unobserved_days.length}<p
-              class="notice"
+          {#if layer.forecast.input_window.unobserved_days.length}<details
+              class="input-history small muted"
+              data-testid="input-history"
             >
-              Unobserved input days: {layer.forecast.input_window.unobserved_days.join(
-                ", ",
-              )}. Input history is incomplete.
-            </p>{/if}
+              <summary
+                >{layer.forecast.input_window.unobserved_days.length} input days in
+                the 365-day window were unobserved (sensor outages)</summary
+              >
+              <ul class="outage-dates" aria-label="Unobserved input days">
+                {#each layer.forecast.input_window.unobserved_days as day}<li>
+                    {day}
+                  </li>{/each}
+              </ul>
+            </details>{/if}
+          <details
+            class="small muted forecast-provenance"
+            data-testid="forecast-provenance"
+          >
+            <summary>Forecast provenance</summary>
+            <dl>
+              <div>
+                <dt>Exact target interval</dt>
+                <dd>
+                  [{layer.forecast.target_start}, {layer.forecast.target_end})
+                  UTC
+                </dd>
+              </div>
+              <div>
+                <dt>Publication timestamp</dt>
+                <dd>{layer.forecast.generated_utc}</dd>
+              </div>
+              <div>
+                <dt>Model SHA-256 / identifier</dt>
+                <dd class="hash">{layer.forecast.model_id}</dd>
+              </div>
+            </dl>
+          </details>
         </div>
       {/if}
       {#if staticMode && observationError}<p class="notice">
@@ -469,13 +508,22 @@
           Observation week is not available yet. Observed detections can be
           selected after all seven target days are observed.
         </p>{/if}
-      {#if currentWeek?.targetComplete === false || (staticMode && observation?.complete === false)}<p
+      {#if staticMode && observation?.coverage?.pendingDays.length}<p
+          class="target-progress small muted"
+          data-testid="target-progress"
+        >
+          {#if observation.coverage.lastObservedDay}Target week in progress:
+            observations available through {observation.coverage
+              .lastObservedDay}{:else}Target week in progress: no target
+            observations available yet.{/if}
+        </p>{/if}
+      {#if currentWeek?.targetComplete === false || (staticMode && observation?.coverage?.unobservedDays.length)}<p
           class="notice"
           data-testid="observation-notice"
         >
           This week includes unobserved target days. Incomplete labels are
           missing, never zero.
-          {#if staticMode}Incomplete observation week. Unobserved days: {observation?.unobserved_days.join(
+          {#if staticMode}Unobserved target days (sensor outages): {observation?.coverage?.unobservedDays.join(
               ", ",
             )}.{/if}
         </p>{/if}
@@ -505,7 +553,9 @@
               </p>
               {#if kind === "estimate" && layer?.model}
                 <p class="muted small">
-                  Model: {layer.model} · Variant: {layer.variant}
+                  Model: {#if staticMode && layer.forecast}{@render forecastModel(
+                      layer.forecast,
+                    )}{:else}{layer.model} · Variant: {layer.variant}{/if}
                 </p>
               {/if}
             </div>
