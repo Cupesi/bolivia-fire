@@ -9,6 +9,8 @@ from pathlib import Path
 
 from bolivia_fire.boundaries import acquire_boundaries
 from bolivia_fire.config import Paths, load_key, load_protocol
+from bolivia_fire.covariates_cli import register as register_covariates
+from bolivia_fire.experiments_cli import register as register_experiments
 from bolivia_fire.firms.acquire import Acquisition, partition_plan
 from bolivia_fire.firms.client import FirmsClient
 from bolivia_fire.firms.quota import Quota
@@ -63,6 +65,8 @@ def _parser() -> argparse.ArgumentParser:
     )
     acquire.add_parser("boundaries")
     register(commands)
+    register_covariates(commands)
+    register_experiments(commands)
     return parser
 
 

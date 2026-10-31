@@ -52,3 +52,57 @@ boundaries:
     retrieval_utc: '2026-10-31T04:56:36.355959+00:00'
     features: 9
     contains_santa_cruz: true
+snpp_outages:
+  provider: NASA MODAPS
+  product: VIIRS/Suomi-NPP
+  url: https://modaps.modaps.eosdis.nasa.gov/services/production/outages_suomi_npp.html
+  retrieval_utc: '2026-10-31T05:48:24.042875+00:00'
+  path: datasets/raw/outages/snpp_modaps_2026-10-31.html
+  sha256: f3363ada577a98e0dc2c0eef78c29ca6173790fd6469bdfd0e4c53a16dadba1a
+  bytes: 49539
+  table_path: datasets/manifests/snpp_outages.csv
+  table_sha256: 248bf9eaaf3a7daebb5c855a927233518e7dd00949f690983e57a5bbb0b39633
+  table_rows: 290
+  interval_closure: '[start, end)'
+  time_source: Year-Day and UTC start/end table columns; single-day 00:00 end is next
+    midnight
+covariates:
+  chirps:
+    provider: Climate Hazards Center, University of California Santa Barbara
+    product: CHIRPS v3.0 final daily rnl
+    disaggregation: ECMWF ERA5
+    version_release_date: '2025-01-01'
+    version_history_url: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/README-CHIRPSv3.0.txt
+    product_url: https://www.chc.ucsb.edu/data/chirps3
+    daily_documentation_url: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/readme.txt
+    url_template: https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/final/rnl/cogs/{year}/chirps-v3.0.rnl.{date:%Y.%m.%d}.cog
+    citation_doi: https://doi.org/10.15780/G2JQ0P
+    license: CC BY 4.0, with provider statement of copyright waiver
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    nominal_resolution_deg: 0.05
+    observed_pixel_size_deg: 0.05000000074505806
+    nodata: -9999
+    variant: retrospective
+    manifest: datasets/processed/covariates/chirps_manifest.jsonl
+    schema: datasets/schemas/covariates.yaml
+    verified_date: '2026-10-31'
+  mapbiomas:
+    provider: MapBiomas Bolivia
+    product: Annual land cover and land use
+    collection: 4
+    version_release_date: '2026-10-01'
+    release_url: https://bolivia.mapbiomas.org/2026/09/29/lanzamiento-de-la-coleccion-4-de-mapbiomas-bolivia/
+    product_url: https://bolivia.mapbiomas.org/iniciativas-y-productos/cobertura-y-uso-del-suelo/cobertura/
+    download_page: https://bolivia.mapbiomas.org/downloads/mapas-para-descargar-geotiff/
+    url_template: https://storage.googleapis.com/mapbiomas-public/initiatives/bolivia/lulc/collection_04/coverage/coverage-bolivia_classification_{year}.tif
+    legend_url: https://bolivia.mapbiomas.org/wp-content/uploads/sites/5/2026/09/Leyenda_Code_Bolivia_Col4.pdf
+    license: CC BY 4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    resolution_m: 30
+    collection_years: [1985, 2025]
+    required_years: [2012, 2024]
+    variant: retrospective
+    access_status: anonymous_head_and_ranged_get_http_403
+    selected_for_acquisition: false
+    access_evidence: datasets/processed/covariates/probe_mapbiomas.json
+    verified_date: '2026-10-31'

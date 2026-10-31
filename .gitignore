@@ -20,7 +20,7 @@ dist/
 data/
 datasets/raw/
 datasets/interim/
-datasets/processed/**/*.parquet
+datasets/processed/
 datasets/.tmp/
 datasets/.quarantine/
 artifacts/**/*.parquet
