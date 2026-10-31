@@ -1,16 +1,19 @@
 import { expect, type Page, type TestInfo } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+import { decodePlaces } from "../src/lib/static";
 
 export async function inspectCellTable(
   page: Page,
   info: TestInfo,
   staticMode = false,
 ) {
-  const source = await (
-    await page.request.get(
-      staticMode ? "data/static/cell_places.json" : "/api/v1/grid",
-    )
-  ).json();
+  const source = decodePlaces(
+    await (
+      await page.request.get(
+        staticMode ? "data/static/cell_places.json" : "/api/v1/grid",
+      )
+    ).json(),
+  );
   await page.getByRole("button", { name: "Table view", exact: true }).click();
   const table = page.getByRole("table", { name: "Selected week cells" });
   await page.getByLabel("Top cells").selectOption("all");
@@ -85,11 +88,11 @@ export async function inspectCellTable(
   expect(csv).toContain(
     "municipality,province,department,nearest_place_name,nearest_place_distance_km,national_area_km2",
   );
-  const sourceIndex = source.cell_id.indexOf(
+  const sourceIndex = (source.cell_id as unknown[]).indexOf(
     await first.getAttribute("data-cell-id"),
   );
   expect(sourceIndex).toBeGreaterThanOrEqual(0);
-  const province = source.province[sourceIndex];
+  const province = (source.province as string[])[sourceIndex];
   expect(csv.includes("Concepción")).toBe(true);
   expect(csv.includes(province)).toBe(true);
   await expect(first.locator('[data-column="province"]')).toHaveText(province);

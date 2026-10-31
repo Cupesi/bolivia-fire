@@ -1,10 +1,28 @@
 import { readFile } from "node:fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createStaticClient, parseTrackRecord } from "./static";
+import { createStaticClient, decodePlaces, parseTrackRecord } from "./static";
 
 const fixture = new URL("../../e2e/fixtures/live-data/", import.meta.url);
 const client = () => createStaticClient("/bolivia-fire/");
 const signal = () => new AbortController().signal;
+
+it.skipIf(!process.env.LIVE_DATA_DIR || !process.env.PLACES_REFERENCE_PATH)(
+  "decodes every published cell identically to the original full-grid place export",
+  async () => {
+    const { resolve } = await import("node:path");
+    const original = JSON.parse(
+      await readFile(process.env.PLACES_REFERENCE_PATH!, "utf8"),
+    );
+    const encoded = JSON.parse(
+      await readFile(
+        resolve(process.env.LIVE_DATA_DIR!, "static/cell_places.json"),
+        "utf8",
+      ),
+    );
+    expect(original.cell_id).toHaveLength(37_146);
+    expect(decodePlaces(encoded)).toEqual(original);
+  },
+);
 
 function syntheticFetch() {
   vi.stubGlobal("fetch", async (url: string) => {
@@ -21,6 +39,42 @@ function syntheticFetch() {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("static client with synthetic data", () => {
+  it("decodes dictionary columns without changing nulls, accents or numbers", () => {
+    const synthetic = {
+      format: "dictionary-v1",
+      strings: ["Concepción", "PPL", "Santa Cruz", "Ñuflo de Chávez", ""],
+      cell_id: ["a", "b"],
+      department: [2, null],
+      province: [3, 4],
+      municipality: [0, null],
+      nearest_place_name: [0, 4],
+      nearest_place_feature_code: [1, null],
+      nearest_place_distance_km: [1.2345678901, null],
+      populated_places: [[{ name: "Concepción", population: 3 }], []],
+    };
+    expect(decodePlaces(synthetic)).toEqual({
+      cell_id: ["a", "b"],
+      department: ["Santa Cruz", null],
+      province: ["Ñuflo de Chávez", ""],
+      municipality: ["Concepción", null],
+      nearest_place_name: ["Concepción", ""],
+      nearest_place_feature_code: ["PPL", null],
+      nearest_place_distance_km: synthetic.nearest_place_distance_km,
+      populated_places: synthetic.populated_places,
+    });
+    expect(decodePlaces({ cell_id: ["a"] })).toEqual({ cell_id: ["a"] });
+    for (const change of [
+      { format: "unknown" },
+      { strings: [12] },
+      { municipality: [-1, null] },
+      { municipality: [5, null] },
+      { municipality: [0.5, null] },
+      { municipality: [false, null] },
+      { municipality: [0] },
+    ]) {
+      expect(() => decodePlaces({ ...synthetic, ...change })).toThrow();
+    }
+  });
   it("loads the catalog and aligned grid under the Pages base path", async () => {
     syntheticFetch();
     const result = await client().loadInitial(signal());

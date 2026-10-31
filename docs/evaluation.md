@@ -3,6 +3,10 @@
 `configs/protocol.yaml` is the frozen contract. `configs/experiments.yaml` lists
 the feature columns, ablation groups, seeds and bounded LightGBM search space.
 The panel must already exist under `datasets/processed/panel/year=YYYY/part.parquet`.
+The bare first-opening command below applies only to a new, unopened study.
+A clone of this published repository already includes access records in
+`artifacts/evaluation/final_test_log.json`; preserve them and use the explicit
+logged reopening in [the reproduction guide](reproduction.md#6-log-an-independent-reproduction-and-export-predictions).
 
 ```powershell
 uv sync --all-extras

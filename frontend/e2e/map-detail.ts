@@ -1,5 +1,6 @@
 import { expect, type Page, type TestInfo } from "@playwright/test";
 import { normalizeGrid } from "../src/lib/api";
+import { decodePlaces } from "../src/lib/static";
 import { fitGrid, screenPoint, zoomAt } from "../src/lib/projection";
 
 export async function inspectMapDetail(
@@ -15,7 +16,7 @@ export async function inspectMapDetail(
   const placesRaw = staticMode
     ? await (await page.request.get("data/static/cell_places.json")).json()
     : gridRaw;
-  const grid = normalizeGrid({ ...gridRaw, ...placesRaw });
+  const grid = normalizeGrid({ ...gridRaw, ...decodePlaces(placesRaw) });
   const map = page.getByRole("application", { name: "Bolivia cell map" });
   const canvas = map.locator("canvas");
   await expect(canvas).toBeVisible();

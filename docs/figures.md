@@ -23,7 +23,9 @@ uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/0
 
 Notebook execution reads local artifacts, without fitting models, creating new
 predictions or opening the final test. The evaluation notebook displays the
-published post-hoc learner comparison. Each notebook can run from a clean kernel.
+published post-hoc learner comparison when all seven required comparison JSON
+files are present; otherwise it skips that entire section and lists the missing
+files. Each notebook can run from a clean kernel.
 Feature and modeling plots use the shared serif chart style.
 
 ## Scientific media

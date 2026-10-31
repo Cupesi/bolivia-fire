@@ -144,10 +144,21 @@ bytes, simplified with topology preservation, and includes a `simplification`
 object containing `tolerance_deg`, `preserve_topology` and `source_sha256`.
 Unmodified source geometry is used for cell assignments.
 
-The place JSON is columnar, aligned exactly to `static/grid.json` cell IDs;
-its keys match [the schema](../datasets/schemas/cell_places.yaml).
+The place JSON is columnar, aligned exactly to `static/grid.json` cell IDs.
+Its `format` is `dictionary-v1`: `strings` contains unique strings shared by
+`department`, `province`, `municipality`, `nearest_place_name` and
+`nearest_place_feature_code`. Those five columns contain zero-based dictionary
+indices or null; an empty string remains distinct from null. All other columns
+retain their original values. Decoding restores [the schema](../datasets/schemas/cell_places.yaml)
+without rounding numbers or changing accents. The static client also accepts
+earlier flat exports; the API continues to read the original Parquet columns.
 `populated_places[i]` is an array of up to three objects with `name`,
 `geonames_id`, `feature_code` and `population`.
+
+One earlier `live-data` commit retains the previous 5,853,252-byte (5.85 MB)
+`static/cell_places.json`. History is not rewritten. The normalized export
+reduces the current file below 5 MB going forward; it does not remove that
+historical blob.
 
 Metadata retains live acquisition provenance and supplies `protocol`
 (`version`, `sha256`), `experiments_sha256`, `cells_sha256`, `sources_sha256`,

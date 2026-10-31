@@ -1,6 +1,35 @@
 import { languageTests } from "./languages";
 import { test, expect } from "@playwright/test";
+import { en } from "../src/lib/messages/en";
+import { es } from "../src/lib/messages/es";
 languageTests(true);
+
+test("@smoke translates the combined backfill and climatology track-record note", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.route("**/data/verification/track_record.csv", async (route) => {
+    const response = await route.fetch();
+    const body = await response.text();
+    if (body.includes(en.backfillNote)) {
+      await route.fulfill({ response, body });
+    } else {
+      // The synthetic fixture has no combined note; supply the real note text.
+      const header = body.split(/\r?\n/)[0];
+      const row = `2026-10-19,4,2,1,0.0625,1,0.5,0.5,0.225,0.5,${en.backfillNote}; ${en.departmentFallback},false,2026-10-31T06:00:00Z,294`;
+      await route.fulfill({ response, body: `${header}\n${row}\n` });
+    }
+  });
+  await page.goto("./?lang=en");
+  const track = page.locator(".track-panel");
+  await expect(track).toContainText(`${en.backfillNote}; ${en.departmentFallback}`);
+  await page.locator('.language-control button[lang="es"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(track).toContainText(`${es.backfillNote}; ${es.departmentFallback}`);
+  await expect(track).not.toContainText(en.backfillNote);
+  expect(errors).toEqual([]);
+});
 
 test("@smoke localizes synthetic undefined-score verification notes", async ({
   page,
@@ -65,7 +94,12 @@ for (const width of [1440, 390]) {
     await page.route("**/data/static/cell_places.json", async (route) => {
       const response = await route.fetch();
       const places = await response.json();
-      places.municipality[0] = "Unique synthetic municipality";
+      if (places.format === "dictionary-v1") {
+        places.municipality[0] = places.strings.length;
+        places.strings.push("Unique synthetic municipality");
+      } else {
+        places.municipality[0] = "Unique synthetic municipality";
+      }
       await route.fulfill({ response, json: places });
     });
     for (count of [0, 1, 2]) {

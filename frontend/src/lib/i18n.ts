@@ -206,7 +206,9 @@ export function localizeText(state: LanguageState, value: string): string {
   const key = englishKeys.get(value.replaceAll("\u00a0", " "));
   if (key) return state.messages[key];
   if (state.language === "en") return value;
-  const parts = value.split(/(; |: )/);
+  const parts = value.includes("; ")
+    ? value.split(/(; )/)
+    : value.split(/(: )/);
   return parts.length > 1
     ? parts
         .map((part, index) => (index % 2 ? part : localizeText(state, part)))

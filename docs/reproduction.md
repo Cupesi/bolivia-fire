@@ -134,17 +134,21 @@ calibration uses 2022. Held-out geographic labels never enter these stages.
 Preserve all closed selection records and matching input hashes before evaluation.
 See [evaluation](evaluation.md) for the frozen search, eligibility and artifacts.
 
-## 6. Open the final test once and export predictions
+## 6. Log an independent reproduction and export predictions
 
 After both intended selections are closed and their source snapshots are stable:
 
 ```powershell
-uv run --no-sync bolivia-fire evaluate --variant strict --open-final-test
+uv run --no-sync bolivia-fire evaluate --variant strict --open-final-test --reopen-reason "independent reproduction of the published primary evaluation"
 uv run --no-sync bolivia-fire predict --variant strict --split test
 uv run --no-sync bolivia-fire predict --variant retrospective --split test
 ```
 
-The evaluation opens 2023–2025 once and records the opening before loading test
+Even a clean clone includes the published access records in
+`artifacts/evaluation/final_test_log.json`. Preserve this log: the command above
+is an explicit, logged reopening for independent reproduction. A bare
+`--open-final-test` applies only to a new study with no previous access records.
+The evaluation records access to 2023–2025 before loading test
 labels, including attempts that subsequently fail. A strict report includes the
 paired retrospective comparison when the matching closed selection and complete
 inputs are available. Do not run a second final-test evaluation as a routine
@@ -208,7 +212,9 @@ history against the saved panel, future-detection invariance and LOYO climatolog
 [Modeling](../notebooks/03_modeling.ipynb) reads validation records and saved-model gain
 importance. [Evaluation](../notebooks/04_evaluation.ipynb) displays recorded final-test
 and sensitivity results, with a final post-hoc comparison section that remains executable
-when alternative-learner artifacts are absent.
+when alternative-learner artifacts are absent. If any required comparison JSON
+is missing, all comparison cells are skipped and the notebook lists the missing
+files; the primary and sensitivity sections still run.
 
 These commands fit no models, create no new predictions and make no final-test openings.
 They read the local canonical detection bundle, panel, CHIRPS features, selected strict

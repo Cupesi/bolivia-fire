@@ -7,9 +7,11 @@ Neither mode uses tile, map, font or chart services.
 
 ## Static hosting
 
-Build from a local checkout of the `live-data` branch:
+Run the build from a `main` source checkout. Keep a separate sibling checkout
+of `live-data`, which contains exported data rather than the application:
 
 ```powershell
+git worktree add ../live-data origin/live-data
 cd frontend
 npm ci
 $env:LIVE_DATA_DIR = '..\..\live-data'  # a checkout of the live-data branch
@@ -28,7 +30,8 @@ ADM0/ADM1/ADM2/ADM3 boundaries, metadata,
 the latest 52 issues' declared forecasts and observations, and the verification
 CSV into `dist/data/`. It excludes model files, rolling state and Parquet files.
 Missing declared weekly files fail the build; a missing verification CSV is
-shown as an unavailable-file state. Data above 200 MB fail the build. Initial JavaScript must remain below 39,338 bytes gzip for static builds
+shown as an unavailable-file state. Place JSON at or above 5 MB and total data
+above 200 MB fail the build. Initial JavaScript must remain below 39,338 bytes gzip for static builds
 and 37,661 bytes for API builds.
 When `model/model_card.json` is present, the build copies its model name into
 the published metadata after checking that the model hashes match. Model
@@ -138,8 +141,9 @@ model and calibrator hashes and the recorded final-test opening time.
 Place names come from GeoNames (CC BY 4.0). Cell detail and hover tooltips show
 the municipality, province, department, nearest populated place and rounded
 distance in kilometres, and up to three populated places inside the cell.
-Names retain their source accents. Static mode reads `static/cell_places.json`
-in exact grid order; API mode reads the corresponding `/grid` columns.
+Names retain their source accents. Static mode decodes the versioned string
+dictionary in `static/cell_places.json` in exact grid order; the client also
+accepts earlier flat exports. API mode reads the corresponding `/grid` columns.
 
 The map raster has one pixel per eligible grid cell. Nearest-neighbor scaling
 preserves cell blocks. It uses a north-up geographic projection with square

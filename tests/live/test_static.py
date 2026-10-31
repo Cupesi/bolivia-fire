@@ -12,6 +12,7 @@ def test_synthetic_static_refresh_preserves_forecasts_and_has_full_provenance(tm
     import yaml
 
     from bolivia_fire.config import Paths
+    from bolivia_fire.live.places_format import decode_places
     from bolivia_fire.live.static import refresh_static
 
     root, out = tmp_path / "source", tmp_path / "live"
@@ -73,7 +74,9 @@ def test_synthetic_static_refresh_preserves_forecasts_and_has_full_provenance(tm
     before = forecast.read_bytes()
     refresh_static(Paths(root), out)
     assert forecast.read_bytes() == before
-    places = json.loads((out / "static/cell_places.json").read_text(encoding="utf-8"))
+    places = decode_places(
+        json.loads((out / "static/cell_places.json").read_text(encoding="utf-8"))
+    )
     assert places["municipality"] == ["Concepción"]
     meta = json.loads((out / "static/meta.json").read_text(encoding="utf-8"))
     assert meta["protocol"]["version"] == "synthetic"

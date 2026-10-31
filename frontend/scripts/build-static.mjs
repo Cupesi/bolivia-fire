@@ -47,6 +47,8 @@ try {
   if (error.code !== "ENOENT") throw error;
 }
 for (const file of files) await stat(join(source, file));
+if ((await stat(join(source, "static/cell_places.json"))).size >= 5_000_000)
+  throw new Error("Static cell places must be below 5 MB.");
 const size = (
   await Promise.all(files.map((file) => stat(join(source, file))))
 ).reduce((sum, item) => sum + item.size, 0);

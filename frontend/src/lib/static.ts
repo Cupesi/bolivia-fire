@@ -104,6 +104,41 @@ export function parseTrackRecord(csv: string): TrackRecord[] {
     .sort((a, b) => a.issue_date.localeCompare(b.issue_date));
 }
 
+export function decodePlaces(raw: Record<string, unknown>): Record<string, unknown> {
+  if (!("format" in raw)) return raw;
+  const { format, strings, ...columns } = raw;
+  if (
+    format !== "dictionary-v1" ||
+    !Array.isArray(strings) ||
+    !strings.every((value) => typeof value === "string") ||
+    !Array.isArray(columns.cell_id)
+  )
+    throw invalid(en.thePlaceDataDoNotAlign);
+  for (const key of [
+    "department",
+    "province",
+    "municipality",
+    "nearest_place_name",
+    "nearest_place_feature_code",
+  ]) {
+    const indices = columns[key];
+    if (!Array.isArray(indices) || indices.length !== columns.cell_id.length)
+      throw invalid(en.thePlaceDataDoNotAlign);
+    columns[key] = indices.map((index) => {
+      if (index === null) return null;
+      if (
+        typeof index !== "number" ||
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= strings.length
+      )
+        throw invalid(en.thePlaceDataDoNotAlign);
+      return strings[index];
+    });
+  }
+  return columns;
+}
+
 export function createStaticClient(base: string) {
   const root = `${base.replace(/\/$/, "")}/data/`;
   let catalog: LiveIndex | null = null;
@@ -163,7 +198,7 @@ export function createStaticClient(base: string) {
     return metadata;
   }
   async function loadInitial(signal?: AbortSignal) {
-    const [live, metaRaw, gridRaw, placesRaw, ...boundaries] =
+    const [live, metaRaw, gridRaw, placesPayload, ...boundaries] =
       await Promise.all([
         index(signal),
         loadMetadata(signal),
@@ -174,6 +209,7 @@ export function createStaticClient(base: string) {
         json<Boundaries>("static/boundaries_adm2.json", signal),
         json<Boundaries>("static/boundaries_adm3.json", signal),
       ]);
+    const placesRaw = decodePlaces(placesPayload);
     const meta = normalizeMeta({
       ...metaRaw,
       protocol: metaRaw.protocol ?? { sha256: metaRaw.protocol_sha256 },

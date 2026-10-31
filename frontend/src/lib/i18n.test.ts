@@ -17,6 +17,13 @@ import {
 import { formatValue } from "./color";
 
 describe("message catalogs", () => {
+  it("localizes the complete combined backfill and climatology note", () => {
+    const note = `${en.backfillNote}; ${en.departmentFallback}`;
+    expect(localizeText({ language: "es", messages: es }, note)).toBe(
+      `${es.backfillNote}; ${es.departmentFallback}`,
+    );
+    expect(localizeText({ language: "en", messages: en }, note)).toBe(note);
+  });
   it("has identical nonempty keys and valid UTF-8 text", () => {
     expect(Object.keys(es).sort()).toEqual(Object.keys(en).sort());
     for (const catalog of [en, es]) {

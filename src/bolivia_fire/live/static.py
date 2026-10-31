@@ -13,6 +13,7 @@ from bolivia_fire.config import Paths
 from bolivia_fire.features import week_index
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.live.files import read_json, write_json, write_parquet
+from bolivia_fire.live.places_format import encode_places
 from bolivia_fire.panel import fit_climatology
 from bolivia_fire.places import places_columnar
 
@@ -185,7 +186,8 @@ def export_places_and_boundaries(paths: Paths, out: Path, cell_ids: list[str]) -
     places_path = paths.datasets / "processed/cell_places.parquet"
     if places_path.exists():
         write_json(
-            out / "static/cell_places.json", places_columnar(pd.read_parquet(places_path), cell_ids)
+            out / "static/cell_places.json",
+            encode_places(places_columnar(pd.read_parquet(places_path), cell_ids)),
         )
     sources = yaml.safe_load((paths.datasets / "sources.yaml").read_text(encoding="utf-8"))
     tolerances = {}
