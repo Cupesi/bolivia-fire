@@ -35,11 +35,17 @@ prevent these variants from overwriting the primary strict experiment.
 `--exclude-low-coverage` excludes `target_low_coverage` rows at every stage as a
 separate sensitivity run.
 
-For `--variant retrospective`, add the extra numeric panel columns to
-`retrospective_features` in `configs/experiments.yaml` before fitting. Every listed
-column is required. An empty list currently gives the same inputs as strict.
-Covariate version and availability constraints are documented separately in
-`docs/covariates.md` when those products are acquired.
+The retrospective list is frozen before fitting: `rain_sum_7d`, `rain_sum_30d`,
+`rain_sum_90d`, `dry_days_30d` and `rain_anomaly_90d`. Model loading joins the
+CHIRPS feature files by cell and issue date through `join_retrospective`. Product,
+protocol, training reference years and manifest hashes must match their recorded
+provenance. Feature files and the manifest enter the stage snapshot hashes.
+The rain completeness and climatology flags gate eligible rows; they are not
+additional model inputs. Every required value must be finite and every associated
+flag true for the stage's eligible population. Missing or incomplete covariates,
+invalid provenance, or a feature list adding nothing over strict prevent
+retrospective training and selection. See `docs/covariates.md` for availability
+constraints.
 
 ## Eligibility and loading
 
@@ -80,8 +86,10 @@ features receive log1p; signed seasonal sine/cosine and boolean history flags
 remain on their original scales. Missing values are imputed with training means
 after transformation, with zero used for a wholly missing training column.
 Means and scales are fitted on the complete eligible training population only.
-All positives and a seeded 10% sample of negatives are fitted, with negative
-sample weight 10. The negative count is rounded up and includes at least one.
+All positives and a seeded 10% sample of negatives are fitted. The negative
+sample count is rounded up, and each sampled negative receives weight
+`N_neg / sampled_count`, preserving the eligible negative population's total
+weight even when its size is not divisible by ten. Positive weights are one.
 
 LightGBM fits 20 distinct seeded configurations: leaves `{7,15,31,63}`, learning
 rate `{0.03,0.06,0.1}`, minimum leaf size `{50,200,1000}`, feature fraction
@@ -139,8 +147,14 @@ H1 is supported only when the lower endpoint of the 95% paired month-block AP
 difference interval for the calibrated strict winner versus the best uncalibrated
 baseline is greater than zero. H2 is supported when the paired AP difference
 interval for retrospective minus strict contains zero. Both decisions appear
-under `hypotheses`; H2 is unavailable until both matching selections exist. A
+under `hypotheses`; H2 is null with a reason until both matching selections exist
+and genuinely additional, provenance-verified retrospective inputs are complete
+for every evaluated row. Invalid retrospective comparison inputs never support
+H2. Identical-input smoke runs are excluded from hypothesis decisions. A
 retrospective final evaluation requires the strict selection to be closed first.
+If the requested retrospective evaluation itself lacks valid inputs, its report
+records `status: unavailable`, empty model metrics and null hypotheses with the
+input failure reason. Final-test access is still logged before any label scan.
 Comparisons use the same eligible cell-weeks and resamples. Validation reports
 do not make final-test hypothesis decisions.
 The primary baseline remains the original clipped climatology or empirical

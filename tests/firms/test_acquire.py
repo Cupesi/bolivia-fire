@@ -11,9 +11,10 @@ import pytest
 
 from bolivia_fire.config import Paths
 from bolivia_fire.firms.acquire import Acquisition, Partition, partition_plan
-from bolivia_fire.firms.client import FirmsClient
+from bolivia_fire.firms.client import FirmsClient, FirmsError
 from bolivia_fire.firms.locking import RunLock
 from bolivia_fire.firms.storage import append_manifest, read_manifest
+from bolivia_fire.firms.validation import HEADER
 from bolivia_fire.redact import Redactor
 
 START = date(2024, 9, 1)
@@ -56,6 +57,13 @@ def test_quarantine_revalidation_promotes_original_bytes_without_requests(
     body = synthetic_csv().rstrip(b"\n")
     source = paths.quarantine / "firms_truncated_synthetic.txt"
     source.write_bytes(body)
+    source.with_suffix(".txt.json").write_text(json.dumps({
+        "product": "VIIRS_SNPP_SP", "bbox": [-70, -23, -57, -9],
+        "start": "2024-09-01", "day_range": 5,
+        "retrieval_utc": "2024-09-06T00:00:00+00:00",
+        "sha256": hashlib.sha256(body).hexdigest(),
+        "original_sha256": hashlib.sha256(body).hexdigest(),
+    }))
     unrelated = paths.quarantine / "firms_truncated_unrelated_synthetic.txt"
     unrelated.write_bytes(b"synthetic invalid response")
     with FirmsClient(
@@ -75,7 +83,7 @@ def test_quarantine_revalidation_promotes_original_bytes_without_requests(
         assert record["recovery_source"] == "quarantine_revalidation"
         assert record["quarantine_file"] == source.name
         assert record["sha256"] == hashlib.sha256(body).hexdigest()
-        assert record["retrieval_utc"] is None
+        assert record["retrieval_utc"] == "2024-09-06T00:00:00+00:00"
         assert record["http_status"] is None
         assert record["row_validation"] == {
             "dates_outside_interval": 0,
@@ -86,6 +94,74 @@ def test_quarantine_revalidation_promotes_original_bytes_without_requests(
         }
         assert len(read_manifest(paths.firms_manifest)) == 1
         assert Acquisition(paths, client, minimum_free_bytes=0).run(START, END).skipped == 1
+
+
+@pytest.mark.parametrize("mismatch", [
+    None, "product", "bbox", "start", "day_range", "sha256", "original_sha256", "retrieval_utc",
+])
+def test_synthetic_header_only_quarantine_requires_matching_recorded_identity(
+    tmp_path: Path, synthetic_key: str, mismatch: str | None,
+) -> None:
+    paths = Paths(tmp_path)
+    paths.quarantine.mkdir(parents=True)
+    source = paths.quarantine / "synthetic_header_only.txt"
+    body = (",".join(HEADER) + "\n").encode()
+    source.write_bytes(body)
+    if mismatch is not None:
+        identity = {
+            "product": "VIIRS_SNPP_SP", "bbox": [-70, -23, -57, -9],
+            "start": "2024-09-01", "day_range": 5,
+            "retrieval_utc": "2024-09-06T00:00:00+00:00",
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "original_sha256": hashlib.sha256(body).hexdigest(),
+        }
+        identity[mismatch] = {
+            "product": "VIIRS_NOAA20_SP", "bbox": [-65, -20, -60, -15],
+            "start": "2024-09-02", "day_range": 1, "sha256": "0" * 64,
+            "original_sha256": "0" * 64, "retrieval_utc": None,
+        }[mismatch]
+        source.with_suffix(".txt.json").write_text(json.dumps(identity))
+    with FirmsClient(
+        synthetic_key, paths.quarantine,
+        transport=httpx.MockTransport(lambda request: pytest.fail("Recovery must be offline")),
+    ) as client:
+        with pytest.raises(ValueError, match="identity|hash"):
+            Acquisition(paths, client, minimum_free_bytes=0).revalidate_quarantine(
+                source, Partition(START, 5),
+            )
+        assert source.read_bytes() == body
+        assert not paths.firms_manifest.exists()
+        assert client.data_requests == 0
+
+
+def test_synthetic_quarantine_roundtrip_preserves_smaller_request_identity(
+    tmp_path: Path, synthetic_key: str,
+) -> None:
+    paths = Paths(tmp_path)
+    body = (",".join(HEADER) + "\n").encode()
+    bbox = (-65, -20, -60, -15)
+    with FirmsClient(
+        synthetic_key, paths.quarantine,
+        transport=httpx.MockTransport(lambda request: httpx.Response(
+            200, content=body, headers={"Content-Length": str(len(body) + 1)},
+        )),
+    ) as client:
+        with pytest.raises(FirmsError):
+            client.fetch(START, 1, bbox)
+        source = next(paths.quarantine.glob("*.txt"))
+        with pytest.raises(ValueError, match="identity"):
+            Acquisition(paths, client, minimum_free_bytes=0).revalidate_quarantine(
+                source, Partition(START, 5),
+            )
+        record = Acquisition(paths, client, bbox=bbox, minimum_free_bytes=0).revalidate_quarantine(
+            source, Partition(START, 1),
+        )
+        assert record["outcome"] == "ok_empty"
+        assert record["bbox"] == [-65, -20, -60, -15]
+        assert record["start"] == "2024-09-01"
+        assert record["day_range"] == 1
+        assert record["retrieval_utc"]
+        assert client.data_requests == 1
 
 
 @pytest.mark.parametrize("outside_quarantine", [False, True])

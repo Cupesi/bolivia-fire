@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
+import json
 import random
 import time
 from collections.abc import Callable
@@ -15,6 +17,7 @@ from uuid import uuid4
 import httpx
 
 from bolivia_fire.firms.quota import Quota
+from bolivia_fire.firms.storage import durable_write
 from bolivia_fire.firms.validation import (
     BBOX,
     BBox,
@@ -103,14 +106,29 @@ class FirmsClient:
         coordinates = ",".join(f"{coordinate:g}" for coordinate in bbox)
         return f"{BASE}/api/area/csv/{self._key}/VIIRS_SNPP_SP/{coordinates}/{day_range}/{start}"
 
-    def _quarantine(self, body: bytes, outcome: Outcome) -> None:
+    def _quarantine(
+        self, body: bytes, outcome: Outcome, identity: dict[str, Any] | None = None,
+    ) -> None:
         self.quarantine.mkdir(parents=True, exist_ok=True)
         name = f"firms_{outcome}_{uuid4().hex}.txt"
-        (self.quarantine / name).write_bytes(
-            self.redactor.text(body.decode("utf-8", errors="replace")).encode("utf-8"),
+        path = self.quarantine / name
+        stored = self.redactor.text(body.decode("utf-8", errors="replace")).encode("utf-8")
+        record = {
+            **(identity or {}),
+            "outcome": outcome,
+            "sha256": hashlib.sha256(stored).hexdigest(),
+            "original_sha256": hashlib.sha256(body).hexdigest(),
+        }
+        durable_write(
+            path.with_suffix(".txt.json"),
+            json.dumps(self.redactor.sanitize(record), allow_nan=False).encode("utf-8"),
         )
+        durable_write(path, stored)
 
-    def _request(self, url: str, cost: int = 1, *, status_request: bool = False) -> httpx.Response:
+    def _request(
+        self, url: str, cost: int = 1, *, status_request: bool = False,
+        identity: dict[str, Any] | None = None,
+    ) -> httpx.Response:
         for attempt in range(self.retries + 1):
             reservation = None
             if self.quota is not None and not status_request:
@@ -118,6 +136,10 @@ class FirmsClient:
             elif self.quota is not None and attempt > 0:
                 reservation = self.quota.reserve(1, status_request=True)
             chunks = bytearray()
+            request_record = (
+                {**identity, "retrieval_utc": datetime.fromtimestamp(self.clock(), UTC).isoformat()}
+                if identity is not None else None
+            )
             try:
                 if "/api/area/" in url:
                     self.data_requests += 1
@@ -126,14 +148,16 @@ class FirmsClient:
                     for chunk in stream.iter_bytes():
                         chunks.extend(chunk)
                         if len(chunks) > MAX_BODY_BYTES:
-                            self._quarantine(bytes(chunks[:16384]), Outcome.TRUNCATED)
+                            self._quarantine(
+                                bytes(chunks[:16384]), Outcome.TRUNCATED, request_record,
+                            )
                             raise FirmsError(Outcome.TRUNCATED, "FIRMS response exceeds size limit")
                     length = stream.headers.get("Content-Length")
                     received = stream.num_bytes_downloaded or len(chunks)
                     if length is not None and (
                         not length.isascii() or not length.isdigit() or int(length) != received
                     ):
-                        self._quarantine(bytes(chunks), Outcome.TRUNCATED)
+                        self._quarantine(bytes(chunks), Outcome.TRUNCATED, request_record)
                         raise FirmsError(Outcome.TRUNCATED, "FIRMS Content-Length mismatch")
                     # iter_bytes has already decoded any HTTP content encoding.
                     headers = httpx.Headers(stream.headers)
@@ -148,7 +172,7 @@ class FirmsClient:
                     self.quota.record_response(reservation)
             except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError) as exc:
                 if chunks:
-                    self._quarantine(bytes(chunks), Outcome.TRUNCATED)
+                    self._quarantine(bytes(chunks), Outcome.TRUNCATED, request_record)
                 if attempt == self.retries:
                     outcome = Outcome.TRUNCATED if chunks else Outcome.HTTP_ERROR
                     raise FirmsError(outcome, self.redactor.text(exc)) from None
@@ -156,7 +180,7 @@ class FirmsClient:
                 continue
             except httpx.HTTPError as exc:
                 if chunks:
-                    self._quarantine(bytes(chunks), Outcome.TRUNCATED)
+                    self._quarantine(bytes(chunks), Outcome.TRUNCATED, request_record)
                 raise FirmsError(Outcome.HTTP_ERROR, self.redactor.text(exc)) from None
             problem = error_outcome(response.content)
             is_quota = response.status_code == 429 or problem == Outcome.QUOTA_EXCEEDED
@@ -167,7 +191,7 @@ class FirmsClient:
             if not retryable:
                 return response
             outcome = Outcome.QUOTA_EXCEEDED if is_quota else Outcome.HTTP_ERROR
-            self._quarantine(response.content, outcome)
+            self._quarantine(response.content, outcome, request_record)
             delay = retry_after(response.headers.get("Retry-After"), self.clock())
             if is_quota and self.quota is not None:
                 self.quota.exhausted(delay)
@@ -180,12 +204,19 @@ class FirmsClient:
         if self.quota is not None:
             self.quota.reconcile(self.status_uncoordinated)
         url = self.area_url(start, day_range, bbox)
-        response = self._request(url, day_range * self.transactions_per_day)
+        identity = {
+            "product": "VIIRS_SNPP_SP", "bbox": list(bbox),
+            "start": start.isoformat(), "day_range": day_range,
+        }
+        response = self._request(url, day_range * self.transactions_per_day, identity=identity)
+        retrieval = datetime.fromtimestamp(self.clock(), UTC).isoformat()
         validation = validate_csv(response.content, start, day_range, bbox, response.status_code)
         if validation.ok and self._key.encode() in response.content:
             validation = Validation(Outcome.SCHEMA_DRIFT)
         if not validation.ok:
-            self._quarantine(response.content, validation.outcome)
+            self._quarantine(
+                response.content, validation.outcome, {**identity, "retrieval_utc": retrieval},
+            )
             raise FirmsError(
                 validation.outcome,
                 f"FIRMS {validation.outcome}: {self.redactor.text(url)}",
@@ -195,7 +226,7 @@ class FirmsClient:
             validation,
             self.redactor.text(url),
             response.status_code,
-            datetime.fromtimestamp(self.clock(), UTC).isoformat(),
+            retrieval,
         )
 
     def status_uncoordinated(self) -> dict[str, Any]:

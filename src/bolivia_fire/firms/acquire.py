@@ -104,6 +104,7 @@ class Acquisition:
             "bbox": list(self.bbox),
             "start": str(partition.start),
             "day_range": partition.day_range,
+            "retrieval_utc": download.retrieval_utc or None,
             "sha256": digest,
             "path": destination.relative_to(self.paths.root).as_posix(),
             "staged_path": temporary.relative_to(self.paths.root).as_posix(),
@@ -165,8 +166,32 @@ class Acquisition:
             raise ValueError("FIRMS day_range must be between 1 and 5")
         with RunLock(self.paths.temporary):
             self._disk_check()
+            try:
+                identity = json.loads(source.with_suffix(source.suffix + ".json").read_text())
+            except (OSError, ValueError):
+                raise ValueError(
+                    "Quarantine request identity is missing or invalid; source preserved",
+                ) from None
+            recorded = request_identity(identity) if isinstance(identity, dict) else None
+            expected = (PRODUCT, tuple(self.bbox), str(partition.start), partition.day_range)
+            if recorded is None or recorded != expected:
+                raise ValueError("Quarantine request identity does not match; source preserved")
+            try:
+                retrieval = datetime.fromisoformat(identity["retrieval_utc"])
+                if retrieval.utcoffset() != timedelta(0):
+                    raise ValueError
+            except (KeyError, TypeError, ValueError):
+                raise ValueError(
+                    "Quarantine request identity lacks a valid retrieval time",
+                ) from None
             body = source.read_bytes()
-            validation = validate_csv(body, partition.start, partition.day_range, self.bbox)
+            digest = hashlib.sha256(body).hexdigest()
+            if identity.get("sha256") != digest or identity.get("original_sha256") != digest:
+                raise ValueError(
+                    "Quarantine body hash does not match original response; source preserved",
+                )
+            partition = Partition(date.fromisoformat(recorded[2]), recorded[3])
+            validation = validate_csv(body, partition.start, partition.day_range, recorded[1])
             if not validation.ok or self.client._key.encode() in body:
                 raise ValueError("Quarantine body failed re-validation; source preserved")
             download = Download(
@@ -176,7 +201,7 @@ class Acquisition:
                     self.client.area_url(partition.start, partition.day_range, self.bbox)
                 ),
                 0,
-                "",
+                identity["retrieval_utc"],
             )
             temporary, canonical = self._stage(partition, download)
             destination = self._promote(temporary, canonical)
@@ -214,11 +239,13 @@ class Acquisition:
         os.replace(temporary, destination)
         return destination
 
-    def _validate_existing(self, path: Path, partition: Partition) -> Download | None:
+    def _validate_existing(
+        self, path: Path, partition: Partition, identity: dict[str, Any],
+    ) -> Download | None:
         body = path.read_bytes()
         validation = validate_csv(body, partition.start, partition.day_range, self.bbox)
         if not validation.ok or self.client._key.encode() in body:
-            self.client._quarantine(body, validation.outcome)
+            self.client._quarantine(body, validation.outcome, identity)
             return None
         return Download(
             body,
@@ -265,7 +292,7 @@ class Acquisition:
             for path in (destination, temporary):
                 if not path.exists() or sha256_file(path) != identity["sha256"]:
                     continue
-                download = self._validate_existing(path, partition)
+                download = self._validate_existing(path, partition, identity)
                 if download is not None:
                     recovered = self._promote(path, destination) if path == temporary else path
                     record = self._record(partition, recovered, download, recovered=True)

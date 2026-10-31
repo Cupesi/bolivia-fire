@@ -57,6 +57,13 @@ def snapshot(paths: Paths, *, include_test: bool = False) -> dict[str, str]:
         for path in (paths.datasets / "processed/panel").glob("year=*/part.parquet")
         if first <= int(path.parent.name.removeprefix("year=")) <= last
     )
+    covariates = paths.datasets / "processed/covariates"
+    if (covariates / "chirps_manifest.jsonl").exists():
+        files.append(covariates / "chirps_manifest.jsonl")
+    files.extend(
+        path for path in (covariates / "chirps_features").glob("year=*/part.parquet")
+        if first <= int(path.parent.name.removeprefix("year=")) <= last
+    )
     return {path.relative_to(paths.root).as_posix(): sha256_file(path) for path in sorted(files)}
 
 

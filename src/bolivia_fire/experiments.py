@@ -34,6 +34,7 @@ from bolivia_fire.models.estimators import (
     lightgbm_datasets,
     search_parameters,
 )
+from bolivia_fire.models.retrospective import RetrospectiveUnavailable
 
 
 def run_name(
@@ -137,8 +138,22 @@ class Experiment:
             self.features,
             self.target,
             exclude_low_coverage=self.exclude_low_coverage,
+            retrospective=self._retrospective_features(),
             **options,
         )
+
+    def _retrospective_features(self) -> list[str]:
+        if not self.variant.startswith("retrospective"):
+            return []
+        strict = experiment_features(
+            self.config, self.variant.replace("retrospective", "strict"), self.drop_group,
+        )
+        additional = [name for name in self.features if name not in strict]
+        if not additional:
+            raise RetrospectiveUnavailable(
+                "retrospective_features_not_additional", "no additional features over strict",
+            )
+        return additional
 
     def geographic(self) -> Experiment:
         variant = self.variant if self.variant.endswith("_geo") else self.variant + "_geo"
@@ -151,6 +166,7 @@ class Experiment:
         )
 
     def train(self) -> dict[str, Any]:
+        self._retrospective_features()
         tick = time.perf_counter()
         self.directory.mkdir(parents=True, exist_ok=True)
         initial_snapshot = snapshot(self.paths)
@@ -208,11 +224,12 @@ class Experiment:
         return report
 
     def select(self) -> dict[str, Any]:
+        self._retrospective_features()
         tick = time.perf_counter()
-        trained = self._trained()
         records: dict[str, Any] = {}
         with PanelStore(self.paths) as store:
             selection = self._load(store, "val_select")
+            trained = self._trained()
             for name in trained["candidates"]:
                 candidate: Candidate = joblib.load(self.directory / f"{name}.joblib")
                 records[name] = {
@@ -338,7 +355,15 @@ class Experiment:
             exclude_low_coverage=self.exclude_low_coverage,
         )
         other_selected = None
-        if other.selection_path.exists():
+        retrospective = self if self.variant.startswith("retrospective") else other
+        h2_reason = None
+        try:
+            retrospective._retrospective_features()
+        except RetrospectiveUnavailable as exc:
+            h2_reason = exc.reason
+        if other.selection_path.exists() and (
+            h2_reason is None or self.variant.startswith("retrospective")
+        ):
             _, other_selected = other._selected()
         elif self.variant.startswith("retrospective"):
             raise ValueError(
@@ -370,6 +395,25 @@ class Experiment:
             opening = record_final_opening(
                 self.paths, identities, calibrators, self.config, reopen_reason
             )
+
+        def publish(report: dict[str, Any]) -> dict[str, Any]:
+            report.update(
+                {
+                    "model_ids": identities,
+                    "calibrator_ids": calibrators,
+                    "final_test_opening": opening,
+                    **self._metadata(tick, include_test=split == "test"),
+                }
+            )
+            if report["dataset_snapshot_hashes"] != evaluation_snapshot:
+                raise ValueError(
+                    "Panel changed during evaluation; this opening is logged but not published"
+                )
+            atomic_json(
+                self.paths.root / "artifacts/evaluation" / f"{split}_{self.name}.json", report,
+            )
+            return report
+
         models = {
             name: joblib.load(self.directory / f"{name}.joblib")
             for name in selected["final_candidates"]
@@ -379,8 +423,20 @@ class Experiment:
             for name in geo_selected["final_candidates"]
         }
         with PanelStore(self.paths) as store:
-            data = self._load(store, split)
-            held = geographic._load(store, split, holdout=True)
+            try:
+                data = self._load(store, split)
+                held = geographic._load(store, split, holdout=True)
+            except RetrospectiveUnavailable as exc:
+                return publish({
+                    "split": split,
+                    "status": "unavailable",
+                    "reason": exc.reason,
+                    "models": {},
+                    "hypotheses": {
+                        name: {"supported": None, "reason": exc.reason}
+                        for name in ("H1", "H2")
+                    },
+                })
             probabilities = {
                 name: {
                     kind: model.predict(data.inputs(model.features), calibrated=calibrated)
@@ -467,9 +523,16 @@ class Experiment:
             strict_interval = report["bootstrap"]["temporal"]["paired_difference"][
                 "average_precision"
             ]
-            h2: dict[str, Any] = {"supported": None, "reason": "retrospective_selection_missing"}
-            if other_selected is not None:
-                other_data = other._load(store, split)
+            h2: dict[str, Any] = {
+                "supported": None, "reason": h2_reason or "retrospective_selection_missing",
+            }
+            other_data = None
+            if other_selected is not None and h2_reason is None:
+                try:
+                    other_data = other._load(store, split)
+                except RetrospectiveUnavailable as exc:
+                    h2 = {"supported": None, "reason": exc.reason}
+            if other_data is not None:
                 if not (
                     np.array_equal(data.column("cell_id"), other_data.column("cell_id"))
                     and np.array_equal(data.column("issue_date"), other_data.column("issue_date"))
@@ -512,20 +575,7 @@ class Experiment:
                     name: {"supported": None, "reason": "not_final_test"} for name in ("H1", "H2")
                 }
             )
-        report.update(
-            {
-                "model_ids": identities,
-                "calibrator_ids": calibrators,
-                "final_test_opening": opening,
-                **self._metadata(tick, include_test=split == "test"),
-            }
-        )
-        if report["dataset_snapshot_hashes"] != evaluation_snapshot:
-            raise ValueError(
-                "Panel changed during evaluation; this opening is logged but not published"
-            )
-        atomic_json(self.paths.root / "artifacts/evaluation" / f"{split}_{self.name}.json", report)
-        return report
+        return publish(report)
 
     def predict(self, *, split: str = "test") -> dict[str, Any]:
         tick = time.perf_counter()

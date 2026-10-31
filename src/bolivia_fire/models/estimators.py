@@ -15,9 +15,10 @@ BATCH_SIZE = 100_000
 def negative_sample(y: NDArray, *, seed: int) -> tuple[NDArray, NDArray]:
     rng = np.random.default_rng(seed)
     positives, negatives = np.flatnonzero(y == 1), np.flatnonzero(y == 0)
-    chosen = rng.choice(negatives, size=max(1, int(np.ceil(len(negatives) * 0.1))), replace=False)
+    count = int(np.ceil(len(negatives) * 0.1))
+    chosen = rng.choice(negatives, size=count, replace=False)
     indices = np.sort(np.r_[positives, chosen])
-    return indices, np.where(y[indices] == 0, 10.0, 1.0)
+    return indices, np.where(y[indices] == 0, len(negatives) / count if count else 1.0, 1.0)
 
 
 class FeatureTransform:
@@ -123,7 +124,7 @@ def fit_logistic(x: NDArray, y: NDArray, features: list[str], *, seed: int) -> C
         transformer=transform,
         parameters={
             "negative_fraction": 0.1,
-            "negative_weight": 10,
+            "negative_weight": float(weights[y[rows] == 0][0]),
             "sampled_rows": len(rows),
             "solver": "lbfgs",
         },

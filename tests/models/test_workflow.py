@@ -7,10 +7,13 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 import pytest
 import yaml
 
 from bolivia_fire.config import REPO_ROOT, Paths
+from bolivia_fire.firms.storage import sha256_file
 
 
 def synthetic_panel(root: Path, rows_per_split: int = 300) -> None:
@@ -62,6 +65,37 @@ def command(root: Path, *argv: str) -> int:
     register(parser.add_subparsers(dest="command", required=True))
     args = parser.parse_args(list(argv))
     return args.pipeline_handler(args, Paths(root))
+
+
+def synthetic_chirps(root: Path) -> None:
+    covariates = root / "datasets/processed/covariates"
+    covariates.mkdir(parents=True, exist_ok=True)
+    manifest = covariates / "chirps_manifest.jsonl"
+    manifest.write_text('{"synthetic": true}\n')
+    for source in (root / "datasets/processed/panel").glob("year=*/part.parquet"):
+        frame = pd.read_parquet(source)[["cell_id", "issue_date"]]
+        for name, value in {
+            "rain_sum_7d": 7.0, "rain_sum_30d": 30.0, "rain_sum_90d": 90.0,
+            "dry_days_30d": 2.0, "rain_anomaly_90d": 1.0,
+        }.items():
+            frame[name] = value
+        for name in (
+            "rain_complete_7d", "rain_complete_30d", "rain_complete_90d",
+            "rain_climatology_complete",
+        ):
+            frame[name] = True
+        table = pa.Table.from_pandas(frame, preserve_index=False).replace_schema_metadata({
+            b"product": (
+                b"CHIRPS v3.0 final daily rnl (ERA5 disaggregation), native 0.05 degree COG"
+            ),
+            b"train_years": json.dumps(list(range(2013, 2021))).encode(),
+            b"reference_rule": b"training years only, reference window end <= issue",
+            b"protocol_sha256": sha256_file(root / "configs/protocol.yaml").encode(),
+            b"manifest_sha256": sha256_file(manifest).encode(),
+        })
+        destination = covariates / "chirps_features" / source.parent.name / "part.parquet"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        pq.write_table(table, destination)
 
 
 def test_synthetic_cli_workflow_guard_and_prediction(tmp_path: Path) -> None:
@@ -189,16 +223,97 @@ def test_synthetic_low_coverage_exclusion_is_counted(tmp_path: Path) -> None:
         assert not data.column("target_low_coverage").any()
 
 
-def test_synthetic_identical_retrospective_features_support_h2(tmp_path: Path) -> None:
+@pytest.mark.parametrize("extra", [[], ["count_last_7d"]])
+def test_synthetic_identical_retrospective_inputs_refuse_fit_and_leave_h2_null(
+    tmp_path: Path, extra: list[str],
+) -> None:
     synthetic_panel(tmp_path)
-    for variant in ("strict", "retrospective"):
-        command(tmp_path, "train", "--variant", variant)
-        command(tmp_path, "select", "--variant", variant)
-    command(tmp_path, "evaluate", "--variant", "retrospective", "--open-final-test")
-    report = json.loads((tmp_path / "artifacts/evaluation/test_retrospective.json").read_text())
-    assert report["hypotheses"]["H2"]["supported"] is True
-    assert report["hypotheses"]["H2"]["interval"]["lower"] == 0
-    assert report["hypotheses"]["H2"]["interval"]["upper"] == 0
+    config_path = tmp_path / "configs/experiments.yaml"
+    config = yaml.safe_load(config_path.read_text())
+    config["retrospective_features"] = extra
+    config_path.write_text(yaml.safe_dump(config))
+    for stage in ("train", "select"):
+        for variant in ("retrospective", "retrospective_geo"):
+            with pytest.raises(ValueError, match="additional"):
+                command(tmp_path, stage, "--variant", variant)
+    assert not (tmp_path / "artifacts/models/retrospective/run.json").exists()
+    command(tmp_path, "train")
+    command(tmp_path, "select")
+    command(tmp_path, "evaluate", "--open-final-test")
+    report = json.loads((tmp_path / "artifacts/evaluation/test_strict.json").read_text())
+    assert report["hypotheses"]["H2"] == {
+        "supported": None, "reason": "retrospective_features_not_additional",
+    }
+
+
+@pytest.mark.parametrize("defect", ["missing", "incomplete", "unverified", None])
+@pytest.mark.parametrize("variant", ["strict", "retrospective"])
+def test_synthetic_h2_requires_complete_verified_retrospective_rows(
+    tmp_path: Path, defect: str | None, variant: str,
+) -> None:
+    synthetic_panel(tmp_path)
+    synthetic_chirps(tmp_path)
+    for fitted in ("strict", "retrospective"):
+        command(tmp_path, "train", "--variant", fitted)
+        command(tmp_path, "select", "--variant", fitted)
+    source = tmp_path / "datasets/processed/covariates/chirps_features/year=2023/part.parquet"
+    table = pq.read_table(source)
+    if defect == "missing":
+        table = table.drop(["rain_sum_7d"])
+    elif defect == "incomplete":
+        values = [True] * len(table)
+        values[10] = False
+        table = table.set_column(
+            table.schema.get_field_index("rain_complete_90d"),
+            "rain_complete_90d", pa.array(values),
+        )
+    elif defect == "unverified":
+        table = table.replace_schema_metadata({})
+    pq.write_table(table, source)
+    command(tmp_path, "evaluate", "--variant", variant, "--open-final-test")
+    report = json.loads((tmp_path / f"artifacts/evaluation/test_{variant}.json").read_text())
+    h2 = report["hypotheses"]["H2"]
+    if defect is None:
+        assert isinstance(h2["supported"], bool)
+        assert h2["reason"] is None
+        assert "strict_retrospective_bootstrap" in report
+    else:
+        assert h2 == {
+            "supported": None,
+            "reason": {
+                "missing": "retrospective_columns_missing",
+                "incomplete": "retrospective_covariates_incomplete",
+                "unverified": "retrospective_provenance_invalid",
+            }[defect],
+        }
+        assert "strict_retrospective_bootstrap" not in report
+
+
+@pytest.mark.parametrize("defect", ["missing", "null", "incomplete", "unverified"])
+def test_synthetic_retrospective_train_and_select_refuse_invalid_covariates(
+    tmp_path: Path, defect: str,
+) -> None:
+    from bolivia_fire.experiments import Experiment
+
+    synthetic_panel(tmp_path)
+    synthetic_chirps(tmp_path)
+    experiment = Experiment(Paths(tmp_path), variant="retrospective")
+    experiment.train()
+    source = tmp_path / "datasets/processed/covariates/chirps_features/year=2021/part.parquet"
+    table = pq.ParquetFile(source).read()
+    if defect == "missing":
+        table = table.drop(["rain_sum_7d"])
+    elif defect == "unverified":
+        table = table.replace_schema_metadata({})
+    else:
+        name = "rain_sum_7d" if defect == "null" else "rain_complete_7d"
+        values = table[name].to_pylist()
+        values[10] = None if defect == "null" else False
+        table = table.set_column(table.schema.get_field_index(name), name, pa.array(values))
+    pq.write_table(table, source)
+    for stage in ("train", "select"):
+        with pytest.raises(ValueError, match="Retrospective.*rain_sum_7d|Retrospective.*CHIRPS"):
+            command(tmp_path, stage, "--variant", "retrospective")
 
 
 def test_calibration_labels_do_not_change_selected_candidate(tmp_path: Path) -> None:

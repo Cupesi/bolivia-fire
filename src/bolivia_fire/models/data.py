@@ -17,6 +17,7 @@ import yaml
 from numpy.typing import NDArray
 
 from bolivia_fire.config import Paths
+from bolivia_fire.models.retrospective import completeness_columns, join_verified, require_complete
 
 META_COLUMNS = [
     "cell_id",
@@ -90,17 +91,28 @@ class PanelStore:
         self.arrays.clear()
         self.temporary.cleanup()
 
-    def batches(self, splits: list[str], columns: list[str]) -> Iterator[pa.Table]:
+    def batches(
+        self, splits: list[str], columns: list[str], *, retrospective: list[str] | None = None,
+    ) -> Iterator[pa.Table]:
         condition = ds.field("partition").isin(splits)
+        joined = set(retrospective or [])
+        if retrospective:
+            joined.update(completeness_columns(retrospective))
+        projected = [name for name in columns if name not in joined]
         for path in self.files:
             dataset = ds.dataset(path, format="parquet")
             if dataset.count_rows(filter=condition) == 0:
                 continue
-            missing = sorted(set(columns) - set(dataset.schema.names))
+            missing = sorted(set(projected) - set(dataset.schema.names))
             if missing:
                 raise ValueError(f"Panel columns are missing: {', '.join(missing)}")
-            for batch in dataset.to_batches(columns=columns, filter=condition, batch_size=100_000):
-                yield pa.Table.from_batches([batch])
+            for batch in dataset.to_batches(
+                columns=projected, filter=condition, batch_size=100_000,
+            ):
+                table = pa.Table.from_batches([batch])
+                if retrospective:
+                    table = join_verified(table, self.paths, retrospective)
+                yield table.select(columns)
 
     def load(
         self,
@@ -111,8 +123,11 @@ class PanelStore:
         holdout: bool | None = False,
         require_labels: bool = True,
         exclude_low_coverage: bool = False,
+        retrospective: list[str] | None = None,
     ) -> PanelData:
         columns = list(dict.fromkeys([*self.meta_columns, target, *features]))
+        if retrospective:
+            columns = list(dict.fromkeys([*columns, *completeness_columns(retrospective)]))
         counts = dict.fromkeys(
             [
                 "scanned",
@@ -168,8 +183,10 @@ class PanelStore:
                 counts["eligible"] += int(mask.sum())
             return mask
 
-        for table in self.batches(splits, columns):
-            eligible(table, count=True)
+        for table in self.batches(splits, columns, retrospective=retrospective):
+            mask = eligible(table, count=True)
+            if retrospective:
+                require_complete(table, retrospective, mask)
         n = counts["eligible"]
         needed = n * len(features) * np.dtype(np.float32).itemsize
         if shutil.disk_usage(self.paths.root).free - needed < self.minimum_free_bytes:
@@ -191,7 +208,7 @@ class PanelStore:
         targets = np.empty(n, dtype=np.float32)
         metadata = []
         offset = 0
-        for table in self.batches(splits, columns):
+        for table in self.batches(splits, columns, retrospective=retrospective):
             table = table.filter(pa.array(eligible(table, count=False)))
             stop = offset + len(table)
             for index, name in enumerate(features):

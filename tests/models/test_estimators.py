@@ -25,6 +25,20 @@ def test_negative_sampling_is_seeded_and_reweighted() -> None:
     np.testing.assert_array_equal(rows, negative_sample(y, seed=7)[0])
 
 
+@pytest.mark.parametrize(("negatives", "sampled", "weight"), [(3, 1, 3), (23, 3, 23 / 3)])
+def test_synthetic_rounded_negative_sample_preserves_population_mass(
+    negatives: int, sampled: int, weight: float,
+) -> None:
+    from bolivia_fire.models.estimators import negative_sample
+
+    y = np.r_[np.ones(2), np.zeros(negatives)]
+    rows, weights = negative_sample(y, seed=7)
+    assert len(rows) == 2 + sampled
+    np.testing.assert_allclose(weights[y[rows] == 0], weight)
+    assert weights[y[rows] == 0].sum() == pytest.approx(negatives)
+    assert weights[y[rows] == 1].tolist() == [1, 1]
+
+
 def test_transform_uses_train_statistics_and_preserves_signed_seasonality() -> None:
     from bolivia_fire.models.estimators import FeatureTransform
 

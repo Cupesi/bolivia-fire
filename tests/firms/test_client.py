@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import gzip
+import hashlib
 import json
 import traceback
 from collections.abc import Callable, Iterator
@@ -54,6 +55,14 @@ def test_content_length_matches_received_bytes(
                 client.fetch(START, 5)
             assert caught.value.outcome == Outcome.TRUNCATED
             assert len(list(tmp_path.glob("firms_truncated_*.txt"))) == 1
+            source = next(tmp_path.glob("firms_truncated_*.txt"))
+            identity = json.loads(source.with_suffix(".txt.json").read_text())
+            assert identity["product"] == "VIIRS_SNPP_SP"
+            assert identity["bbox"] == [-70, -23, -57, -9]
+            assert identity["start"] == "2024-09-01"
+            assert identity["day_range"] == 5
+            assert identity["retrieval_utc"]
+            assert identity["sha256"] == hashlib.sha256(body).hexdigest()
         else:
             assert client.fetch(START, 5).body == body
 
