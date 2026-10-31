@@ -1,0 +1,43 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+
+# Data (large or reproducible; manifests and schemas are tracked)
+data/
+datasets/raw/
+datasets/interim/
+datasets/processed/**/*.parquet
+datasets/.tmp/
+datasets/.quarantine/
+artifacts/**/*.parquet
+artifacts/**/*.txt
+artifacts/models/
+*.part
+*.lock
+!uv.lock
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,61 @@
+[project]
+name = "bolivia-fire"
+version = "0.1.0"
+description = "Open data and reproducible evaluation of satellite fire activity in Bolivia."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [{ name = "Cupesí Labs" }]
+dependencies = [
+    "filelock>=3.16",
+    "httpx>=0.27",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyarrow>=17",
+    "pyyaml>=6",
+    "shapely>=2.0",
+    "pyproj>=3.6",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.5",
+    "duckdb>=1.1",
+    "matplotlib>=3.9",
+]
+
+[project.optional-dependencies]
+covariates = ["rasterio>=1.4"]
+api = ["fastapi>=0.115", "uvicorn>=0.30"]
+
+[project.scripts]
+bolivia-fire = "bolivia_fire.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "hypothesis>=6",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "types-PyYAML",
+    "nbconvert>=7",
+    "nbclient>=0.10",
+    "ipykernel>=6",
+    "httpx>=0.27",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bolivia_fire"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["live: requires network access and a FIRMS key (deselected by default)"]
+addopts = "-m 'not live'"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
