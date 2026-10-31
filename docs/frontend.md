@@ -201,11 +201,28 @@ has independent inclusive date bounds, limited to 700 weeks. The SVG chart
 breaks probability paths at null values and marks missing observations below
 the axis. An expandable table exposes the same weekly values as text.
 
-The current-week table is the semantic alternative to the canvas. Top 50, 100,
-500 or all cells are ranked by the current value, with missing values last.
-Column sorting applies to that subset, with 25 rows per page. Selecting a row
-opens the same detail panel. CSV links export the complete selected week through
-the API, including provenance comments; table pagination does not limit export.
+The current-week table shows Cell, Municipality, Province, Department, Nearest
+place with rounded distance, Area (km²), and Probability for estimates or
+Detected (1/0) and Count for observations. Place text retains the source spelling
+and accents. Text and headers align left; numeric cells and headers align right
+with tabular numerals. Area uses two decimal places and probability uses three.
+Province and nearest place move below municipality when the panel narrows;
+department joins them on phones. The table fits a 390-pixel viewport without
+horizontal scrolling.
+
+The place filter matches municipality, province, department and nearest place,
+ignoring case and accents without changing displayed names. Filtering precedes
+Top 50, 100, 500 or all cells ranked by current value. Every column sorts that
+subset, with missing values last and 25 rows per page. Headers and the sort
+selector expose the direction, including when secondary columns are collapsed.
+Clicking a row or pressing Enter on its cell button opens Cell detail; Up/Down
+arrows move focus between rows. The selected row and keyboard focus remain visible.
+
+Both modes generate the week CSV from the complete loaded layer, independently
+of the place filter, Top N, sorting and pagination. Exports retain source numeric
+precision, nulls as empty fields and provenance comments, adding municipality,
+province, department, nearest-place name and distance, and national area. The
+API endpoint remains available separately with its existing schema.
 
 The layout uses two columns on desktop and stacked panels on narrow screens.
 Native controls, visible focus, descriptive labels, a skip link, keyboard map
@@ -215,11 +232,13 @@ There is no decorative animation.
 
 ## Browser tests
 
-`frontend/e2e/explorer.spec.ts` contains ten scenarios for each of Chromium,
+`frontend/e2e/explorer.spec.ts` contains scenarios for each of Chromium,
 Firefox and WebKit: initial render and console errors, available-week navigation,
 estimate availability, mouse/keyboard cell selection and zoom, sortable table
 and CSV download, offline recovery, a mobile viewport, observation-coverage
-consistency, and project identity/source provenance. They use the real
+consistency, project identity/source provenance, and table place filtering,
+all-column sorting, keyboard selection, numeric alignment, CSV enrichment and
+390-pixel layouts for estimates and observations. They use the real
 backend and local artifacts. Only the offline test intercepts API requests,
 aborting them rather than returning fixture data. Screenshots, downloads and
 failure traces go to `frontend/test-results`.
@@ -234,7 +253,7 @@ the repository root on Windows:
 ```powershell
 docker version
 docker run --rm --ipc=host --memory=3g --cpus=2 `
-  --mount 'type=bind,source=D:\Repositories\papers\bolivia-fire,target=/work' `
+  --mount "type=bind,source=${PWD},target=/work" `
   --mount 'type=volume,target=/work/frontend/node_modules' `
   --workdir /work/frontend `
   --env BASE_URL=http://host.docker.internal:8765 `
@@ -472,3 +491,36 @@ engine's scenario directory under `frontend/test-results/l4-static-real-final/`.
 Reports are under `frontend/test-results/l4-api-final/`,
 `l4-api-places-settled/`, `l4-static-synthetic-final/`, `l4-static-real-final/` and
 `l4-static-subpath/`.
+
+## Explorer table verification
+
+The table update was verified on 2026-10-31:
+
+| Check | Result |
+|---|---|
+| `npm run check` | Passed; zero errors and warnings |
+| `npm run test` | 45 passed in eight files |
+| `npm run build` | Passed; JavaScript 34,589 bytes gzip, below 120,000 bytes |
+| `npm run build:static` with the real live-data checkout | Passed; JavaScript 36,266 bytes gzip, below 43,922 bytes |
+| `npm run test:e2e -- explorer.spec.ts estimates.spec.ts --output=test-results/table-api-final` | 42 passed |
+| `npm run test:e2e:static -- --output=test-results/table-static-final` | 36 passed with synthetic data |
+| `npm run test:e2e:static -- --grep '@smoke' --output=test-results/table-static-real` | 15 passed with real live data |
+| UTF-8, mojibake, absolute local paths and whitespace | Passed for all eight edited text files |
+
+All three browser runs used Chromium, Firefox and WebKit, with no failures,
+skips or retries in these runs. The real run set `LIVE_DATA_DIR` to a local
+checkout of the `live-data` branch and `STATIC_REPORT` to
+`test-results/table-static-real/results.json`. The API run used the local
+backend started with `uv run --no-sync uvicorn backend.app.main:app`.
+The real static distribution contains 13 data files totaling 13,214,724 bytes;
+the complete distribution is 13,341,642 bytes. The source checkout remained
+clean at commit `16784a1e04b59e1941b3dc2c30068819eabc22bc`.
+
+The table regressions cover source place spelling, filtering, each sort column,
+missing values, pointer and keyboard selection, numeric alignment and precision,
+CSV place columns and source precision, and mobile overflow in both layers.
+Desktop and 390-pixel mobile table screenshots were visually inspected for
+API and real static data. Captures include `table-desktop-viewport.png`,
+`table-mobile-viewport.png`, `observed-table-desktop.png` and
+`observed-table-mobile.png` under the corresponding run's scenario directories.
+No dependencies were added. No implementation issues remain open.

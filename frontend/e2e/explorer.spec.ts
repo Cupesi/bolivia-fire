@@ -3,6 +3,44 @@ import { readFile } from "node:fs/promises";
 import { normalizeGrid, normalizeWeeks } from "../src/lib/api";
 import { fitGrid, screenPoint } from "../src/lib/projection";
 import { inspectMapDetail } from "./map-detail";
+import { inspectCellTable, inspectObservedTable } from "./cell-table";
+
+test("observed table shows source indicators and counts on desktop and mobile", async ({
+  page,
+  request,
+}, info) => {
+  await openExplorer(page);
+  const date = await page.getByLabel("Issue week").inputValue();
+  const grid = await (await request.get("/api/v1/grid")).json();
+  const layer = await (
+    await request.get(
+      `/api/v1/layer?issue_date=${date}&kind=observed&variant=strict`,
+    )
+  ).json();
+  await inspectObservedTable(
+    page,
+    info,
+    new Map(
+      layer.cell_index.map((index: number, offset: number) => [
+        grid.cell_id[index],
+        { detected: layer.value[offset], count: layer.n_primary[offset] },
+      ]),
+    ),
+  );
+});
+
+test("table preserves place detail and keyboard access in estimates", async ({
+  page,
+}, info) => {
+  await openExplorer(page);
+  await page.getByLabel("Issue week").fill("2024-09-02");
+  await page.getByLabel("Issue week").press("Tab");
+  await page
+    .getByRole("button", { name: "Retrospective estimate", exact: true })
+    .click();
+  await expect(page.getByTestId("layer-status")).toContainText("with data");
+  await inspectCellTable(page, info);
+});
 
 test("displays place detail, municipality outlines and nonoverlapping town labels", async ({
   page,
@@ -288,7 +326,7 @@ test("table alternative sorts, paginates, selects cells and downloads CSV", asyn
   ).toHaveAttribute("aria-sort", "ascending");
   const departments = await page
     .getByRole("table", { name: "Current week cells" })
-    .locator("tbody tr td:nth-child(2)")
+    .locator('tbody tr [data-column="department"]')
     .allTextContents();
   expect(departments).toEqual(
     [...departments].sort((a, b) => a.localeCompare(b)),
@@ -319,7 +357,7 @@ test("table alternative sorts, paginates, selects cells and downloads CSV", asyn
     .split(/\r?\n/)
     .filter((line) => line && !line.startsWith("#"));
   expect(records[0]).toBe(
-    "cell_id,issue_date,kind,variant,model,value,n_primary",
+    "cell_id,issue_date,kind,variant,model,value,n_primary,municipality,province,department,nearest_place_name,nearest_place_distance_km,national_area_km2",
   );
   expect(records.length).toBeGreaterThan(1);
   const selectedDate = await page.getByLabel("Issue week").inputValue();

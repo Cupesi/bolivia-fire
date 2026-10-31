@@ -1,5 +1,51 @@
 import { expect, test } from "@playwright/test";
 import { inspectMapDetail } from "./map-detail";
+import { inspectCellTable, inspectObservedTable } from "./cell-table";
+import type { Observation } from "../src/lib/types";
+
+test("@smoke observed table shows source indicators and counts on desktop and mobile", async ({
+  page,
+}, info) => {
+  await page.goto("./");
+  const catalog = await (await page.request.get("data/index.json")).json();
+  const grid = await (await page.request.get("data/static/grid.json")).json();
+  let completeObservation: Observation | null = null;
+  for (const issue of [...catalog.issues].reverse()) {
+    if (!issue.observation) continue;
+    const candidate = await (
+      await page.request.get(`data/observations/${issue.issue_date}.json`)
+    ).json();
+    if (candidate.complete) {
+      completeObservation = candidate;
+      break;
+    }
+  }
+  expect(completeObservation).not.toBeNull();
+  const observation = completeObservation!;
+  await page.getByLabel("Issue week").selectOption(observation.issue_date);
+  await page
+    .getByRole("button", { name: "Observed detections", exact: true })
+    .click();
+  await expect(page.getByTestId("layer-status")).toContainText("with data");
+  await inspectObservedTable(
+    page,
+    info,
+    new Map(
+      observation.cell_index.map((index: number, offset: number) => [
+        grid.cell_id[index],
+        { detected: observation.y[offset], count: observation.n[offset] },
+      ]),
+    ),
+  );
+});
+
+test("@smoke table preserves places, filtering, sorting, keyboard selection and CSV", async ({
+  page,
+}, info) => {
+  await page.goto("./");
+  await expect(page.getByTestId("layer-status")).toContainText("Showing");
+  await inspectCellTable(page, info, true);
+});
 
 test("@smoke displays places, zoomed municipality outlines and nonoverlapping town labels", async ({
   page,
@@ -189,6 +235,33 @@ test("switches synthetic weeks and renders complete observations and verificatio
     .click();
   await expect(page.getByTestId("layer-status")).toContainText("4 with data");
   await page.getByRole("button", { name: "Table view" }).click();
+  const cells = page.getByRole("table", { name: "Current week cells" });
+  await expect(cells.locator('tbody [data-column="value"]')).toHaveText([
+    "1",
+    "1",
+    "0",
+    "0",
+  ]);
+  await expect(cells.locator('tbody [data-column="count"]')).toHaveText([
+    "3",
+    "2",
+    "0",
+    "0",
+  ]);
+  await page
+    .getByRole("combobox", { name: "Sort cells by", exact: true })
+    .selectOption("count");
+  await expect(cells.locator('th[data-column="count"]')).toHaveAttribute(
+    "aria-sort",
+    "descending",
+  );
+  await page.getByRole("button", { name: "Reverse cell sort" }).click();
+  await expect(cells.locator('tbody [data-column="count"]')).toHaveText([
+    "0",
+    "0",
+    "2",
+    "3",
+  ]);
   const scores = page.getByRole("table", {
     name: "Weekly verification scores",
   });
@@ -201,6 +274,10 @@ test("switches synthetic weeks and renders complete observations and verificatio
   ).toBeVisible();
   await page.getByRole("button", { name: "Previous week" }).click();
   await expect(page.getByLabel("Issue week")).toHaveValue("2026-10-12");
+  await expect(cells.locator('th[data-column="value"]')).toHaveAttribute(
+    "aria-sort",
+    "descending",
+  );
   await expect(
     page.getByRole("button", { name: "Weekly estimate", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");

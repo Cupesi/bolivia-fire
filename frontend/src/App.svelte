@@ -13,7 +13,8 @@
     liveClient,
     staticMode,
   } from "./lib/data-client";
-  import { ApiError, exportUrl } from "./lib/api";
+  import { ApiError } from "./lib/api";
+  import { weekCsv } from "./lib/cell-table";
   import { formatValue } from "./lib/color";
   import { publishedTime, targetWindow } from "./lib/live-presentation";
   import type {
@@ -47,6 +48,7 @@
   let rangeStart = $state("");
   let rangeEnd = $state("");
   let initialController: AbortController | null = null;
+  let csvUrl = $state("");
   const weekIndex = $derived(
     data?.weeks.findIndex((week) => week.date === date) ?? -1,
   );
@@ -70,6 +72,25 @@
     if (!layer) return "";
     const complete = layer.value.filter((value) => value !== null).length;
     return `Showing ${layer.value.length.toLocaleString("en")} cells · ${complete.toLocaleString("en")} with data · ${(layer.value.length - complete).toLocaleString("en")} missing`;
+  });
+  const counts = $derived(
+    new Map<number, NullableNumber>(
+      layer?.cell_index.map((index, offset) => [
+        index,
+        layer!.n_primary?.[offset] ?? null,
+      ]) ?? [],
+    ),
+  );
+  $effect(() => {
+    csvUrl = "";
+    if (!data || !layer) return;
+    const url = URL.createObjectURL(
+      new Blob([weekCsv(data.grid.cells, layer, date, kind, data.meta)], {
+        type: "text/csv;charset=utf-8",
+      }),
+    );
+    csvUrl = url;
+    return () => URL.revokeObjectURL(url);
   });
 
   async function boot() {
@@ -584,7 +605,9 @@
           {:else}<CellTable
               grid={data.grid}
               {values}
+              {counts}
               {kind}
+              {selected}
               onselect={(cell) => {
                 selected = cell;
               }}
@@ -612,10 +635,11 @@
               Gray means unavailable data. A missing label does not establish
               absence.
             </p>
-            {#if !staticMode && layer && !layerLoading && !layerError}<a
+            {#if csvUrl && layer && !layerLoading && !layerError}<a
                 class="download-link"
-                href={exportUrl(date, kind, model, variant)}
-                download>Download week CSV</a
+                href={csvUrl}
+                download={`bolivia-fire_${date}_${kind}.csv`}
+                >Download week CSV</a
               >{/if}
           </div>
         </section>
