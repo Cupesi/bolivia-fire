@@ -12,7 +12,7 @@
       "file_size": 4100226,
       "sha256": "66a779add61723bbf977a7ff59b218ab7d7d683f787c8616814346b0bf0d5f1f",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.434710+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.867408+00:00",
       "bytes_transferred": 0
     },
     {
@@ -21,7 +21,7 @@
       "file_size": 4219143,
       "sha256": "899f7e76cc08623ca8d32bb9c81857a5e540d99da5153d7916dc253762d78004",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.435176+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.869540+00:00",
       "bytes_transferred": 0
     },
     {
@@ -30,7 +30,7 @@
       "file_size": 4212773,
       "sha256": "320af7da4dedc891f979213d233bccdf04ff213c53baef233e6bbcdff26922df",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.438219+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.889282+00:00",
       "bytes_transferred": 0
     },
     {
@@ -39,7 +39,7 @@
       "file_size": 4229242,
       "sha256": "555add7b614e3f59bca832906fe4ddc98aa6868d09ebbab6ef168b22c43bc6d4",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.438541+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.899245+00:00",
       "bytes_transferred": 0
     },
     {
@@ -48,7 +48,7 @@
       "file_size": 4231542,
       "sha256": "dfe893e37870f46daf473ab9f14e7b3c29d232c5936b0a46b7d94a045985ef1d",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.441914+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.915318+00:00",
       "bytes_transferred": 0
     },
     {
@@ -57,7 +57,7 @@
       "file_size": 4172470,
       "sha256": "c1d6591c8bc6599c95e19c2c7afcd4d0ce3ec8aba7adead574bb3e9f9907025e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.441858+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.924531+00:00",
       "bytes_transferred": 0
     },
     {
@@ -66,7 +66,7 @@
       "file_size": 4113742,
       "sha256": "fd7a3a8e87e11e4aef45690b10d3d9bd532335b67ea818e72be23b92a98d3a69",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.445271+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.937234+00:00",
       "bytes_transferred": 0
     },
     {
@@ -75,7 +75,7 @@
       "file_size": 4023911,
       "sha256": "f29dad0bd83b776761fdc860733aba3772fd42faebf7feef265f6ddfa7d583e3",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.445378+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.952769+00:00",
       "bytes_transferred": 0
     },
     {
@@ -84,7 +84,7 @@
       "file_size": 3984496,
       "sha256": "11eefd02311429ced9b941707ba02f07fa69ba583ae724dc92e788bde741ac73",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.448673+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.961058+00:00",
       "bytes_transferred": 0
     },
     {
@@ -93,7 +93,7 @@
       "file_size": 3958439,
       "sha256": "124f1aa2c2276e0c3f85430ea62e8452fbb363d053f73e9cc2d039afc227dfba",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.448886+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.976596+00:00",
       "bytes_transferred": 0
     },
     {
@@ -102,7 +102,7 @@
       "file_size": 3901881,
       "sha256": "0441c33935bd19f3de22d7a24f3a454f45526cae6495653145532787d31ebcb5",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.451912+00:00",
+      "retrieved_utc": "2026-11-01T21:46:27.982903+00:00",
       "bytes_transferred": 0
     },
     {
@@ -111,7 +111,7 @@
       "file_size": 3872346,
       "sha256": "8061517df56804f70e2c3ebb936a39fc243942ef87b62f3a95319dc683880832",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.452103+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.002962+00:00",
       "bytes_transferred": 0
     },
     {
@@ -120,7 +120,7 @@
       "file_size": 3810725,
       "sha256": "cc67ee4b2dc6af16eff4ed76e728f57c86018476eff59a7778447991327dd313",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.455358+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.004962+00:00",
       "bytes_transferred": 0
     },
     {
@@ -129,7 +129,7 @@
       "file_size": 3819678,
       "sha256": "09987b1d6a566f04af3e2f31a4f1dfea9e5959bfabaa638b5b3e281f5f0092c1",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.455232+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.025617+00:00",
       "bytes_transferred": 0
     },
     {
@@ -138,7 +138,7 @@
       "file_size": 3790694,
       "sha256": "bc4954c1f08032e0a54d3780e4454caaac8fdeb17c554cfc1f86a435d31322e0",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.458497+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.027570+00:00",
       "bytes_transferred": 0
     },
     {
@@ -147,7 +147,7 @@
       "file_size": 3779428,
       "sha256": "195b4021ca8d2967979fafb773942934ba1b14e96cf180a2977d013ad0dbe5c5",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.458790+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.050433+00:00",
       "bytes_transferred": 0
     },
     {
@@ -156,7 +156,7 @@
       "file_size": 3851049,
       "sha256": "9ee27be9428db5bf2c70645ac0434d235a84d19633825ab3be0a1ecf0fc75496",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.462364+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.052554+00:00",
       "bytes_transferred": 0
     },
     {
@@ -165,7 +165,7 @@
       "file_size": 3907035,
       "sha256": "6385e6afcd5258985ef1ce2c2e34af1295b7562dd126d5e80863f9871966728c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.461968+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.072660+00:00",
       "bytes_transferred": 0
     },
     {
@@ -174,7 +174,7 @@
       "file_size": 3935953,
       "sha256": "795e4fcf1c39bb1c0ed504fd0584a44a1a6aa3b1cc0ddd51856c294671773fa0",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.465297+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.075344+00:00",
       "bytes_transferred": 0
     },
     {
@@ -183,7 +183,7 @@
       "file_size": 3987342,
       "sha256": "c5fc13a23001dfaef000356bf47915467832c6139a8a7be2356f19501c1d9a8c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.465541+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.098757+00:00",
       "bytes_transferred": 0
     },
     {
@@ -192,7 +192,7 @@
       "file_size": 4073980,
       "sha256": "c39355a8355a03f8275367d8284c06deff3fc9ddfcae6f26e037a5f46a18877b",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.468495+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.100309+00:00",
       "bytes_transferred": 0
     },
     {
@@ -201,7 +201,7 @@
       "file_size": 4041133,
       "sha256": "a53dc34719820a47d5c77f3e5fddd6ecc7523922948f341b4393055d79d06fdc",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.468725+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.121882+00:00",
       "bytes_transferred": 0
     },
     {
@@ -210,7 +210,7 @@
       "file_size": 4132785,
       "sha256": "e9f6ed8f2604274c417fb631128be20a4e3ea1f708854f18f45f2360e350f6c1",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.471800+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.124821+00:00",
       "bytes_transferred": 0
     },
     {
@@ -219,7 +219,7 @@
       "file_size": 4144624,
       "sha256": "bc5e85eb22657bbdeb694eea08b442f25ea8fb3a8be7f2c4d6514103949a1bf4",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.472015+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.148326+00:00",
       "bytes_transferred": 0
     },
     {
@@ -228,7 +228,7 @@
       "file_size": 4116423,
       "sha256": "7611f62e705439164f43593cfe06f2cf88b9fcb745680dc67a09ba0d86c4bd8b",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.475396+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.150535+00:00",
       "bytes_transferred": 0
     },
     {
@@ -237,7 +237,7 @@
       "file_size": 4282207,
       "sha256": "b4f8286616032e2cc0afef7ade4f0dfa446763612371e0ae9414a75311b80c3e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.475816+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.173036+00:00",
       "bytes_transferred": 0
     },
     {
@@ -246,7 +246,7 @@
       "file_size": 4252595,
       "sha256": "37f02cc7c5b9b816b215ca0b35a1aebbeb1603264608acd244415250ef5e27b7",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.479457+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.175100+00:00",
       "bytes_transferred": 0
     },
     {
@@ -255,7 +255,7 @@
       "file_size": 4293471,
       "sha256": "ec2a398880374001c5186ec0fc3ca81a622d84ff24bac42da344d9fb31d427f2",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.479542+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.198345+00:00",
       "bytes_transferred": 0
     },
     {
@@ -264,7 +264,7 @@
       "file_size": 4334489,
       "sha256": "52fb7a63612c6cc3ec6d0cf25b20a1582f844f470bed2d86e5396a0567f3eba6",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.483253+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.201946+00:00",
       "bytes_transferred": 0
     },
     {
@@ -273,7 +273,7 @@
       "file_size": 4239266,
       "sha256": "cdad78b16720e36a491cb136145b81c917cc56a2e2639556eca0120384177a3b",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.483360+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.223026+00:00",
       "bytes_transferred": 0
     },
     {
@@ -282,7 +282,7 @@
       "file_size": 4165890,
       "sha256": "3faccfb800d4ce7218c56f62e8df355e48ed8d8caaf088f7c3855b9ad7f1ab44",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.486889+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.225997+00:00",
       "bytes_transferred": 0
     },
     {
@@ -291,7 +291,7 @@
       "file_size": 4010326,
       "sha256": "4608d413aefc0879b8165bf4d6fd09f2e2094a620ecaaaa3f03b6f0022ade26c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.486763+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.248995+00:00",
       "bytes_transferred": 0
     },
     {
@@ -300,7 +300,7 @@
       "file_size": 4064497,
       "sha256": "816c8af09612ef22dba55c6c21ed69903e3470cdc316d64ca997f97b51d4d15d",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.490375+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.250891+00:00",
       "bytes_transferred": 0
     },
     {
@@ -309,7 +309,7 @@
       "file_size": 4053435,
       "sha256": "5427a9bdfef00958b47f301979f90d1a37e8f0ee9545a5e5d066fb4c952a367a",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.490159+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.273292+00:00",
       "bytes_transferred": 0
     },
     {
@@ -318,7 +318,7 @@
       "file_size": 3971894,
       "sha256": "0828017cc93c5acceffc0b64da9ab16a0706251af2cb8dd8fabd28d073905a44",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.494143+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.275270+00:00",
       "bytes_transferred": 0
     },
     {
@@ -327,7 +327,7 @@
       "file_size": 3927476,
       "sha256": "99ecf09d1f0d5748eebebf0f9db04812692d4dedd9a26e5adf15e9abecaee727",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.493806+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.297582+00:00",
       "bytes_transferred": 0
     },
     {
@@ -336,7 +336,7 @@
       "file_size": 3894586,
       "sha256": "eafcb1f4e3fdfcc2531392948ddbd92eaa85329ba65d283c9674f7fe92dee221",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.497119+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.299799+00:00",
       "bytes_transferred": 0
     },
     {
@@ -345,7 +345,7 @@
       "file_size": 3892191,
       "sha256": "068157fbf7e7e34617361a900522d3598cd10f251671e2cb3a7621544d155148",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.497328+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.320027+00:00",
       "bytes_transferred": 0
     },
     {
@@ -354,7 +354,7 @@
       "file_size": 3906207,
       "sha256": "9d869dbff617a12b432c0c4aa17d804f83c7ab26deb457de06862fcb9f640b25",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.500410+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.322405+00:00",
       "bytes_transferred": 0
     },
     {
@@ -363,7 +363,7 @@
       "file_size": 3937192,
       "sha256": "f71e59dd08d79343c1f85a6f05558608965b204d230d94fdf035735c1d6172d4",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.500766+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.344205+00:00",
       "bytes_transferred": 0
     },
     {
@@ -372,7 +372,7 @@
       "file_size": 3995537,
       "sha256": "d5cd590e17a046284b58d60bff1a79da41412a0861c6e0a892eef7e169a5aa54",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.503741+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.346435+00:00",
       "bytes_transferred": 0
     },
     {
@@ -381,7 +381,7 @@
       "file_size": 4016985,
       "sha256": "6601052d38ad1261ede2ce17d0c6cc5a8fe5bf80712a40db29a825e64c186a7b",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.504024+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.365808+00:00",
       "bytes_transferred": 0
     },
     {
@@ -390,7 +390,7 @@
       "file_size": 4029545,
       "sha256": "db6228b83f64b228acced4af3bd7b1aacb1f9130cca1eec428d468e26b1d8f12",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.507330+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.374141+00:00",
       "bytes_transferred": 0
     },
     {
@@ -399,7 +399,7 @@
       "file_size": 4037163,
       "sha256": "20e717bbd17d2b525c19d7f041c872c38df72559aaed3ba41d822dcba0d81a5e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.507266+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.388322+00:00",
       "bytes_transferred": 0
     },
     {
@@ -408,7 +408,7 @@
       "file_size": 4091993,
       "sha256": "8876069dc22038ba8cbcc985dfb2bfa0c0d2e94b313783445813a99361a1472f",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.511065+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.397753+00:00",
       "bytes_transferred": 0
     },
     {
@@ -417,7 +417,7 @@
       "file_size": 4034701,
       "sha256": "d6c7c57c40ce3e85600450d579cd9a8a5e4c222d5ae1566636d0d0bf8d047393",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.510668+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.410215+00:00",
       "bytes_transferred": 0
     },
     {
@@ -426,7 +426,7 @@
       "file_size": 4141647,
       "sha256": "54e466375712d2fc3a82cbfb198498f15a55ff540d8b1c8aeac99d2fef1ec469",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.513941+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.425645+00:00",
       "bytes_transferred": 0
     },
     {
@@ -435,7 +435,7 @@
       "file_size": 4174290,
       "sha256": "056812839ab8538169c77491ce36413f0ef676ad8625bebdac63ce4eb5d6836c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.514209+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.433489+00:00",
       "bytes_transferred": 0
     },
     {
@@ -444,7 +444,7 @@
       "file_size": 700772,
       "sha256": "f535971947b8aceee80460eb8438e23e09bd9eadcc6972a2e90a6dbd045d0de8",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.515294+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.430056+00:00",
       "bytes_transferred": 0
     },
     {
@@ -453,7 +453,7 @@
       "file_size": 866921,
       "sha256": "aff501b9431e135558b341d09946d8e3cae6d8685dc47273e50a865f8e9f4d64",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.515541+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.435980+00:00",
       "bytes_transferred": 0
     },
     {
@@ -462,7 +462,7 @@
       "file_size": 738895,
       "sha256": "86816fe52a723a644436e1acf47c96264e23e2e48942f03fae611428afdb4c25",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.516688+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.440026+00:00",
       "bytes_transferred": 0
     },
     {
@@ -471,7 +471,7 @@
       "file_size": 775975,
       "sha256": "32262310ed6628247cb465f77b008e272eb2551fa98bda1a1a41008f18255d34",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.516926+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.442676+00:00",
       "bytes_transferred": 0
     },
     {
@@ -480,7 +480,7 @@
       "file_size": 806776,
       "sha256": "f9b62f5e6f6316ae0bf462ce57c73522dafff103b2b1d694e94cfb8ec0cb0a12",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.518004+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.445008+00:00",
       "bytes_transferred": 0
     },
     {
@@ -489,7 +489,7 @@
       "file_size": 826976,
       "sha256": "90eaef4527c843ba21261e7aeaaab96f624cda3a7a1aaaccb0d8e73da69babdc",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.518238+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.448564+00:00",
       "bytes_transferred": 0
     },
     {
@@ -498,7 +498,7 @@
       "file_size": 692074,
       "sha256": "cdd71eee8b86dd1e4b1ef7dc2a64ac570dbb7a73cf732131451323784c29dd3a",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.519472+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.454206+00:00",
       "bytes_transferred": 0
     },
     {
@@ -507,7 +507,7 @@
       "file_size": 356415,
       "sha256": "6baa4ee6030d77248e924f9f6350bbd3c7cbb48e6e7b0a8b908877f3a55e0b34",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.519259+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.454985+00:00",
       "bytes_transferred": 0
     },
     {
@@ -516,7 +516,7 @@
       "file_size": 520163,
       "sha256": "a02b4c2ca1d76ca57e3931371085572d0dbbc5db2cce3041e8674cbfd9818c81",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.520528+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.457825+00:00",
       "bytes_transferred": 0
     },
     {
@@ -525,7 +525,7 @@
       "file_size": 560625,
       "sha256": "089a5eb80743bb1b0bf8e6fdb72ee5edbdd33f6585621d58619604d9e5d97713",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.520650+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.459494+00:00",
       "bytes_transferred": 0
     },
     {
@@ -534,7 +534,7 @@
       "file_size": 388966,
       "sha256": "62ce1658a5f87944d968a6459863189829cc3d0e43c1a7a839f5b475adef6dcb",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.521680+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.463285+00:00",
       "bytes_transferred": 0
     },
     {
@@ -543,7 +543,7 @@
       "file_size": 346214,
       "sha256": "164ec73c055c5e23836478ead7f5128e55036ebf78c978809e19c1668b2bf54e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.521828+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.462504+00:00",
       "bytes_transferred": 0
     },
     {
@@ -552,7 +552,7 @@
       "file_size": 242854,
       "sha256": "cba4644c71cb72b7b2a680a7c5f245635a443998fbc32e9b920361b248592a64",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.522795+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.464863+00:00",
       "bytes_transferred": 0
     },
     {
@@ -561,7 +561,7 @@
       "file_size": 208988,
       "sha256": "3e3fb700028bf9b306cee1871ffb47482312de2c57b498eeb7bd39064b5ae9ad",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.522918+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.465366+00:00",
       "bytes_transferred": 0
     },
     {
@@ -570,7 +570,7 @@
       "file_size": 208771,
       "sha256": "7c70cf3b1a7dc8cdf3c805067b90c56babbb98f5d3277066374dbce43f485f66",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.523902+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.468401+00:00",
       "bytes_transferred": 0
     },
     {
@@ -579,7 +579,7 @@
       "file_size": 214992,
       "sha256": "d004c5e3b94a4490cf6032f2dea1d54b899394699181083eebc54e270d15e62f",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.524223+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.468731+00:00",
       "bytes_transferred": 0
     },
     {
@@ -588,7 +588,7 @@
       "file_size": 279697,
       "sha256": "efbd9f664f17a02f124a1f61022a0ec887fb9cf535b628adefc101b43c69ee71",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.525173+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.471074+00:00",
       "bytes_transferred": 0
     },
     {
@@ -597,7 +597,7 @@
       "file_size": 330781,
       "sha256": "b18737a0fcb4d94740f6b315b13a6b7b75b2641231a23ab21d29cea9d60a94f6",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.525377+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.471721+00:00",
       "bytes_transferred": 0
     },
     {
@@ -606,7 +606,7 @@
       "file_size": 337809,
       "sha256": "6e63e6e8d2148198da019d03dd75494fefaf1a8281bf4371df2b659c6eadbaca",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.526371+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.474173+00:00",
       "bytes_transferred": 0
     },
     {
@@ -615,7 +615,7 @@
       "file_size": 290194,
       "sha256": "c158458c96322d832a0001f6dd49fcfa19ac9fac3f3cd17686e13f2bbeb7a0e1",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.526525+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.474889+00:00",
       "bytes_transferred": 0
     },
     {
@@ -624,7 +624,7 @@
       "file_size": 563836,
       "sha256": "803ce133d6121c2f6713a42d18d11d60f7d4d094027cc188ca626533672989e3",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.527647+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.479177+00:00",
       "bytes_transferred": 0
     },
     {
@@ -633,7 +633,7 @@
       "file_size": 386714,
       "sha256": "a367372c4998c6d06da1437f034afef7ace5ab9fab927bab153acbe891646e6a",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.527739+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.479525+00:00",
       "bytes_transferred": 0
     },
     {
@@ -642,7 +642,7 @@
       "file_size": 634505,
       "sha256": "dc521f8189dc9e71cfe3493f0756c64d044f2f2cce27a9a3689eb816fe6f3780",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.528856+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.483723+00:00",
       "bytes_transferred": 0
     },
     {
@@ -651,7 +651,7 @@
       "file_size": 746893,
       "sha256": "4c414409f5f948973e22268ad9f7c33f78e1a7645c825688dd48c7f10a0f3eab",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.529116+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.485554+00:00",
       "bytes_transferred": 0
     },
     {
@@ -660,7 +660,7 @@
       "file_size": 491079,
       "sha256": "d7bc9bbb3d621c8196d813665e5097bb2355f58fd251275574877bc74074b799",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.530046+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.488005+00:00",
       "bytes_transferred": 0
     },
     {
@@ -669,7 +669,7 @@
       "file_size": 589496,
       "sha256": "787796de2fecc2239c2be52685f37e06cd687a7d15d25667467c5d5a45fdf2e9",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.530251+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.489882+00:00",
       "bytes_transferred": 0
     },
     {
@@ -678,7 +678,7 @@
       "file_size": 535255,
       "sha256": "5e46e11f4de4e3f4bd8a680be6a46d7ee25e2baca6160a89d781222047125faa",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.531176+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.495480+00:00",
       "bytes_transferred": 0
     },
     {
@@ -687,7 +687,7 @@
       "file_size": 474620,
       "sha256": "ac96edb0d4e94f183db66a361f35d2eaf8d12a9cc93c03f04f3694d35cd36043",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.531287+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.493743+00:00",
       "bytes_transferred": 0
     },
     {
@@ -696,7 +696,7 @@
       "file_size": 527214,
       "sha256": "0278e96fb3da497cdffce3c5a712b90599560aecc4ca0b98feec9bca990a809d",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.532546+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.498037+00:00",
       "bytes_transferred": 0
     },
     {
@@ -705,7 +705,7 @@
       "file_size": 545925,
       "sha256": "930a3e8890dc168d43645a7016f50c567d51d21a252bec248fb0182f206dafb8",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.532454+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.500493+00:00",
       "bytes_transferred": 0
     },
     {
@@ -714,7 +714,7 @@
       "file_size": 474572,
       "sha256": "9676f51d0a3b5cc855337bf67f55916591eb1f9e8bdc3f72e53f07bbb28b60bb",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.533651+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.504173+00:00",
       "bytes_transferred": 0
     },
     {
@@ -723,7 +723,7 @@
       "file_size": 386927,
       "sha256": "e2d3c2512d9522b4c6209c4d3f3f1c8ba3829c1cfbc9941dd53cdf12e6ee0c54",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.533803+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.504962+00:00",
       "bytes_transferred": 0
     },
     {
@@ -732,7 +732,7 @@
       "file_size": 375591,
       "sha256": "cb4e76059c63d127f1d64ce38681c8ef47856a34d9ac0c0b9b4e9979a85a2d14",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.534757+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.508357+00:00",
       "bytes_transferred": 0
     },
     {
@@ -741,7 +741,7 @@
       "file_size": 388875,
       "sha256": "7cdd97aa5069f93bd90050b41ece9165d82da82d76003409df9bdc7be8bbe488",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.534997+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.509291+00:00",
       "bytes_transferred": 0
     },
     {
@@ -750,7 +750,7 @@
       "file_size": 338351,
       "sha256": "cb945c9a76ee86ebe46679b80330934941df1815ed4513d3809c2a84fc53a7ef",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.535842+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.513165+00:00",
       "bytes_transferred": 0
     },
     {
@@ -759,7 +759,7 @@
       "file_size": 351650,
       "sha256": "a9b2bd4b2cec9de077833d36b405e7e69dc4a66984ae2fad3100759e5e42cd20",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.536029+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.511974+00:00",
       "bytes_transferred": 0
     },
     {
@@ -768,7 +768,7 @@
       "file_size": 262124,
       "sha256": "30c01d526ee65132cde8cd5c506faa08e76c1e379c8d3fabb54c4140a0cc0ec2",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.536991+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.514965+00:00",
       "bytes_transferred": 0
     },
     {
@@ -777,7 +777,7 @@
       "file_size": 239038,
       "sha256": "91dd3438e9135d0c19f86587a4f05d258c7ee5365a188a2697a75fc69f5db08c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.537113+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.516285+00:00",
       "bytes_transferred": 0
     },
     {
@@ -786,7 +786,7 @@
       "file_size": 245713,
       "sha256": "065e17686d38e723745b1fbdd161ce798fb09f2097cc08f4ed87f673882ce2cd",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.538079+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.519316+00:00",
       "bytes_transferred": 0
     },
     {
@@ -795,7 +795,7 @@
       "file_size": 258176,
       "sha256": "88474cbd2001f4efb1c5789ffa7cfc32afd8af38ab708889216414c9fcfd5500",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.538222+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.519813+00:00",
       "bytes_transferred": 0
     },
     {
@@ -804,7 +804,7 @@
       "file_size": 360690,
       "sha256": "d5b7273948d8241e87cd5b22112b6b91e4d39b1b15448ca5b8315b4ed61ef928",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.539543+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.522376+00:00",
       "bytes_transferred": 0
     },
     {
@@ -813,7 +813,7 @@
       "file_size": 331005,
       "sha256": "103b0920702f9c79b9d6b29e87b628a70f04fe4d1688813fd299dbb944807bad",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.539293+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.523040+00:00",
       "bytes_transferred": 0
     },
     {
@@ -822,7 +822,7 @@
       "file_size": 406778,
       "sha256": "bb2cbaafe6091618a0913340a8baa873964224f850d586b50bc2c00d66e0a960",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.540565+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.525710+00:00",
       "bytes_transferred": 0
     },
     {
@@ -831,7 +831,7 @@
       "file_size": 298462,
       "sha256": "81afa48cb717993168a718557f49f63fb8d2a1cb55f1511bb18293faa51830c8",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.540643+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.526503+00:00",
       "bytes_transferred": 0
     },
     {
@@ -840,7 +840,7 @@
       "file_size": 408189,
       "sha256": "8700cf2941eeac2f2ffef3f8712d2a5b31c3d30f6711f9aa81ae67cb1f5f0855",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.541647+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.529966+00:00",
       "bytes_transferred": 0
     },
     {
@@ -849,7 +849,7 @@
       "file_size": 276783,
       "sha256": "ce200cae43c78e768ebff24ab9252bb4c5ebfa9665198a3ae2745f4159e5bc11",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.541783+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.530538+00:00",
       "bytes_transferred": 0
     },
     {
@@ -858,7 +858,7 @@
       "file_size": 387990,
       "sha256": "4fef95cf19437eebdc98e28942b0647659b1466cd7691213aec5b55978244fb7",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.542827+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.534105+00:00",
       "bytes_transferred": 0
     },
     {
@@ -867,7 +867,7 @@
       "file_size": 547574,
       "sha256": "bd9e464d09286287f7d9344c9aeea7afb98e79b2d491f60ac10954445ef9f270",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.543023+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.535607+00:00",
       "bytes_transferred": 0
     },
     {
@@ -876,7 +876,7 @@
       "file_size": 331649,
       "sha256": "3efc6060c74d503f126efcacfa1588e6dca88f008a31e6d22231b6582b7dc306",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.543996+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.537048+00:00",
       "bytes_transferred": 0
     },
     {
@@ -885,7 +885,7 @@
       "file_size": 363717,
       "sha256": "eceb2b4ddfd5a226e2034dc64911fd830abe6b8d2d29efd8eef3e2d734c93eb5",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.544390+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.538914+00:00",
       "bytes_transferred": 0
     },
     {
@@ -894,7 +894,7 @@
       "file_size": 300159,
       "sha256": "cccbeab1467b319915bba9c5e24d02729cd87f552f76b495ad37e9ab26c27cb2",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.545066+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.541377+00:00",
       "bytes_transferred": 0
     },
     {
@@ -903,7 +903,7 @@
       "file_size": 339569,
       "sha256": "e3762436b363646f8787fbe5206eaf55803a01df3d2813216e100d7151471235",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.545478+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.541988+00:00",
       "bytes_transferred": 0
     },
     {
@@ -912,7 +912,7 @@
       "file_size": 363556,
       "sha256": "2de45c068ebba53d8a217a5ac07a69b9990e895e411f31bf05df038ce68dc561",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.546304+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.544839+00:00",
       "bytes_transferred": 0
     },
     {
@@ -921,7 +921,7 @@
       "file_size": 365384,
       "sha256": "dfd4b119834e9cbc872e4fe70ee3bd7739861a35ddbe4d9550697ea69233c789",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.546759+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.546676+00:00",
       "bytes_transferred": 0
     },
     {
@@ -930,7 +930,7 @@
       "file_size": 331377,
       "sha256": "90e3cf013ff05649a688f2e98511afc523f5a1c0e89a026e070a668c37fa276e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.547421+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.550207+00:00",
       "bytes_transferred": 0
     },
     {
@@ -939,7 +939,7 @@
       "file_size": 170701,
       "sha256": "23988371b24e6feb60e9b5bfa8ca778e9363f8964952128e7dd4573757925e37",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.547930+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.549994+00:00",
       "bytes_transferred": 0
     },
     {
@@ -948,7 +948,7 @@
       "file_size": 253041,
       "sha256": "20a26ae73977b22f3cfe023ba3cf34186fcaa4bcebbdcd32b3a114e137a42bd7",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.548485+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.553680+00:00",
       "bytes_transferred": 0
     },
     {
@@ -957,7 +957,7 @@
       "file_size": 263350,
       "sha256": "8b7a931148cc34ac6a7843702f5e6c91aa86b64391f54366b9584cb5d2abd374",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.549146+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.553141+00:00",
       "bytes_transferred": 0
     },
     {
@@ -966,7 +966,7 @@
       "file_size": 184872,
       "sha256": "d2e91b4fecc0ef5330f9eb75615720f4365bf009a8070a8634f6166e3fae390b",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.549644+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.556162+00:00",
       "bytes_transferred": 0
     },
     {
@@ -975,7 +975,7 @@
       "file_size": 167037,
       "sha256": "3cebc630d5208bd405fcf5cff2be928a38bf1aa34875374936e79255c3b52aed",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.550188+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.556573+00:00",
       "bytes_transferred": 0
     },
     {
@@ -984,7 +984,7 @@
       "file_size": 135977,
       "sha256": "d1d42a8cd4f610e023da8306d36a6d3f11e867d69375f7e0937e185905ddde2f",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.550478+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.558262+00:00",
       "bytes_transferred": 0
     },
     {
@@ -993,7 +993,7 @@
       "file_size": 120028,
       "sha256": "1daee9666a84b52a0a46c627e2cdc45a0e9b3b1d2b68fb96bc8ded5753077207",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.551397+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.558667+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1002,7 +1002,7 @@
       "file_size": 125324,
       "sha256": "df30d528c83e5372c27eb547c57ea4f2a6dc9ed96a674b0954930ae3c9118b8a",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.551472+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.560818+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1011,7 +1011,7 @@
       "file_size": 129219,
       "sha256": "756c2089f6e1637df2680e69f666fdcdbda3de1e2792cf8c4159c06c64ffca28",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.552473+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.561273+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1020,7 +1020,7 @@
       "file_size": 182986,
       "sha256": "8f36ce21914652502d5e8f83f2759e6b6b80e6429c43b9502f0bb7c0fcd28ca4",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.552603+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.563664+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1029,7 +1029,7 @@
       "file_size": 224488,
       "sha256": "2b8ca084ac2d8b2ee0f813b2737759515aa0ace854dfe0d2b541aca2c0838c4e",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.553822+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.564273+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1038,7 +1038,7 @@
       "file_size": 220812,
       "sha256": "207eaee787a4f8ae313603e453033ddd547c14895ba12af6d1e1d79f9eaa1d75",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.553759+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.566678+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1047,7 +1047,7 @@
       "file_size": 223277,
       "sha256": "8d5112b7bb5daf465a89c5994920c561209f691de8051a1c30c01e8c10c77009",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.555012+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.567155+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1056,7 +1056,7 @@
       "file_size": 273185,
       "sha256": "467f5ed90be68e5792ef7a70d9afef7b900ed088a8bbe7a1871e0cdd76fc83e9",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.555161+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.569460+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1065,7 +1065,7 @@
       "file_size": 207288,
       "sha256": "962e031645e2b99514c0913e050de7507d9de7fb621fa902502fe1209a98ce50",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.556274+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.569941+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1074,7 +1074,7 @@
       "file_size": 313585,
       "sha256": "36b4bbb4c900efad978bb69dff6a0620b3100940843bc1d87abf1031e15288e0",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.556393+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.573505+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1083,7 +1083,7 @@
       "file_size": 334843,
       "sha256": "0dac51c0a75a25a4e1f52c51697dac6ae92a5db4ee029e05a79b85f01e0a917c",
       "file_type": "tif",
-      "retrieved_utc": "2026-11-01T20:11:58.557583+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.572968+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1092,7 +1092,7 @@
       "file_size": 37099,
       "sha256": "56771e88d4865a948c2bbcce2fba610f7b9d48a40b69fc728fe9e438719e7ebe",
       "file_type": "csv",
-      "retrieved_utc": "2026-11-01T20:11:58.557516+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.576033+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1101,7 +1101,7 @@
       "file_size": 165,
       "sha256": "ef0cde2de2606d86a91d673695401be1cc256a3f187c240555546dfde1e29aa0",
       "file_type": "csv",
-      "retrieved_utc": "2026-11-01T20:11:58.558511+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.575385+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1110,7 +1110,7 @@
       "file_size": 26622,
       "sha256": "1bb36fd534bcd95780863a6ada1610242884500f3252f69d2f2e365fddcb1cb8",
       "file_type": "csv",
-      "retrieved_utc": "2026-11-01T20:11:58.558565+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.577864+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1119,7 +1119,7 @@
       "file_size": 2701,
       "sha256": "40832f30a30bcf31f86d25403d088963b53c76f8aa468c1c832a8b19a7029322",
       "file_type": "csv",
-      "retrieved_utc": "2026-11-01T20:11:58.559513+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.578075+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1128,7 +1128,7 @@
       "file_size": 14965,
       "sha256": "d7f6ff46c288aa7712343e8c0634e56333d222e1ae67050d04b81fa6b9a89108",
       "file_type": "csv",
-      "retrieved_utc": "2026-11-01T20:11:58.559577+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.579895+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1137,7 +1137,7 @@
       "file_size": 23328,
       "sha256": "542cf03c3a264d19a070c014d5f52cee4a05f2a1dc96018d850af04d7bb08942",
       "file_type": "txt",
-      "retrieved_utc": "2026-11-01T20:11:58.560574+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.580216+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1146,7 +1146,7 @@
       "file_size": 633097,
       "sha256": "af13c7fd3fe94010938b9a561dae392e0f211cc2cff0c1b15d31a371e6ace0b2",
       "file_type": "json",
-      "retrieved_utc": "2026-11-01T20:11:58.560854+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.584744+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1155,7 +1155,7 @@
       "file_size": 22110,
       "sha256": "c833fec068480dbbe0efcba75ec9c5ab1cfa99cdcad5048d710c8e5bb7d8efc7",
       "file_type": "xml",
-      "retrieved_utc": "2026-11-01T20:11:58.561750+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.582261+00:00",
       "bytes_transferred": 0
     },
     {
@@ -1164,7 +1164,7 @@
       "file_size": 37539,
       "sha256": "68593f34662b8047d80d83404eeb40f28010865916754184e4501704ffb97397",
       "file_type": "txt",
-      "retrieved_utc": "2026-11-01T20:11:58.561790+00:00",
+      "retrieved_utc": "2026-11-01T21:46:28.584851+00:00",
       "bytes_transferred": 0
     }
   ],
@@ -1196,9 +1196,9 @@
     "2014337": 9610512,
     "2014353": 9948224
   },
-  "runtime_seconds": 1.1824469999992289,
+  "runtime_seconds": 1.8878640000002633,
   "created_utc": "2026-11-01T18:38:06.037471",
   "completed_utc": "2026-11-01T19:06:48.333129",
-  "retrieved_utc": "2026-11-01T20:11:58.562039+00:00",
+  "retrieved_utc": "2026-11-01T21:46:28.585146+00:00",
   "service_elapsed_seconds": 1722.295658
 }

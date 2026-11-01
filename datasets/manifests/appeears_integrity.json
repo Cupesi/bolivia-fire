@@ -1,51 +1,165 @@
 {
-  "verified_utc": "2026-11-01T19:40:50.174138+00:00",
+  "verified_utc": "2026-11-01T22:03:53.877986+00:00",
   "status": "pass",
   "bundles": [
     {
+      "task_id": "238ae4b3-52e8-45a1-a8c7-e2e858f7be15",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_238ae4b3-52e8-45a1-a8c7-e2e858f7be15.json",
+      "bundle_manifest_sha256": "048e666044acdc6e5370f819e99d37e17de2c2909b4499b987a18749bcebdaaa",
+      "download_manifest": "datasets/manifests/appeears_download_238ae4b3-52e8-45a1-a8c7-e2e858f7be15.json",
+      "download_manifest_sha256": "8eb7e2e0757a6e5532829eb5b79bfbb4993ab32183182d41b2fda0a814199e50",
+      "files_verified": 129,
+      "bytes_verified": 216949058
+    },
+    {
       "task_id": "322434e3-151a-4c8e-97a2-b87a710feedf",
-      "manifest": "datasets/manifests/appeears_download_322434e3-151a-4c8e-97a2-b87a710feedf.json",
-      "manifest_sha256": "7a2a495a5dbc1c0d56594d1805f2d492f7867d02615087f09fa03969fcf61aa7",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_322434e3-151a-4c8e-97a2-b87a710feedf.json",
+      "bundle_manifest_sha256": "194ac777ebae8d6fa76829ecd1910afeb9c500931d9ad74ba445a5a974a3179c",
+      "download_manifest": "datasets/manifests/appeears_download_322434e3-151a-4c8e-97a2-b87a710feedf.json",
+      "download_manifest_sha256": "663979f5e0742d148ce49f1aaa3b5cc54902db8376d8f6240ac1c3c9515398f0",
       "files_verified": 129,
       "bytes_verified": 222410576
     },
     {
+      "task_id": "385ea4a2-bbe1-42f7-a73e-adf55831d1c9",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_385ea4a2-bbe1-42f7-a73e-adf55831d1c9.json",
+      "bundle_manifest_sha256": "66ca82f3a1acd19aeea838e88f9dd0d8a09e8d7987ab6825c85c8fca945b3b91",
+      "download_manifest": "datasets/manifests/appeears_download_385ea4a2-bbe1-42f7-a73e-adf55831d1c9.json",
+      "download_manifest_sha256": "5d8d469179e696adbfeab9df3fffc5a701b7bc2b6ba6c6fa1205a57d39d895d0",
+      "files_verified": 129,
+      "bytes_verified": 224673533
+    },
+    {
+      "task_id": "622db38b-9414-46a2-8922-f5c3877e5d1e",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_622db38b-9414-46a2-8922-f5c3877e5d1e.json",
+      "bundle_manifest_sha256": "b1532f444a836fc6897d695840fa6cf78ff63d93d7c80b88dcfa11b434a05329",
+      "download_manifest": "datasets/manifests/appeears_download_622db38b-9414-46a2-8922-f5c3877e5d1e.json",
+      "download_manifest_sha256": "6c6bf8a195e8793d7c8abe89fb749e836011972720791f830fa1a01e645d72e2",
+      "files_verified": 129,
+      "bytes_verified": 217926825
+    },
+    {
       "task_id": "6e6d2561-6e0d-4d46-9f4c-2df864442742",
-      "manifest": "datasets/manifests/appeears_download_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
-      "manifest_sha256": "6b96765095c4273d3362d6ef073ecfc72dd431ee104f7509d8a0c0ed4d2e4915",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
+      "bundle_manifest_sha256": "d0bb3f2ee633be00480479560364ad62c2f1fb346b8943be3bba9e7a8103171f",
+      "download_manifest": "datasets/manifests/appeears_download_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
+      "download_manifest_sha256": "0df4830747bde87feb985d216da01f9ce46630861f2da4fdb08ca00c8383077e",
       "files_verified": 24,
       "bytes_verified": 29308714
     },
     {
+      "task_id": "6ebbc2e5-a418-419e-8357-fcc5187c8fe3",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_6ebbc2e5-a418-419e-8357-fcc5187c8fe3.json",
+      "bundle_manifest_sha256": "9e382459426edc560f5da4d16220b7b59bcec1baf276bd1cea0fa338659ee44c",
+      "download_manifest": "datasets/manifests/appeears_download_6ebbc2e5-a418-419e-8357-fcc5187c8fe3.json",
+      "download_manifest_sha256": "1b4911b5ad9c2dfd2f012263d120005e43c0fd61c7c0a70501eb2b211ac8cf4b",
+      "files_verified": 129,
+      "bytes_verified": 218479709
+    },
+    {
+      "task_id": "6f31e601-af7f-44d2-8b43-aea18a199ac3",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_6f31e601-af7f-44d2-8b43-aea18a199ac3.json",
+      "bundle_manifest_sha256": "da807f88326db366ea1de486bbfa90809927d7429b565cfeb20e57d5588ded8b",
+      "download_manifest": "datasets/manifests/appeears_download_6f31e601-af7f-44d2-8b43-aea18a199ac3.json",
+      "download_manifest_sha256": "dd1ab1927da1902be69459691a881dfbdfeb0d0a072f3d67c8f06b3ab3d07db0",
+      "files_verified": 129,
+      "bytes_verified": 222976642
+    },
+    {
+      "task_id": "6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9.json",
+      "bundle_manifest_sha256": "bca2a7637c54d7a9e9803e90f6334798ed8a7a46322cd5adb631f02b7fc15780",
+      "download_manifest": "datasets/manifests/appeears_download_6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9.json",
+      "download_manifest_sha256": "6edbdf272200bf6f0ef195febdc2eb149bfed133a3d6353b5813c4068b2c3fe7",
+      "files_verified": 129,
+      "bytes_verified": 219642738
+    },
+    {
       "task_id": "7b9b48fa-2459-453a-9d0e-494fc148017e",
-      "manifest": "datasets/manifests/appeears_download_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
-      "manifest_sha256": "79d4959e3316eab3666b4a810d8a1d5b5f29417ba1adea5ea9a804e4ab292228",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
+      "bundle_manifest_sha256": "79c7b19caaf4a50bdc2e5ffed629bd3c08b064172e8a58612d1dc4b44399e77f",
+      "download_manifest": "datasets/manifests/appeears_download_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
+      "download_manifest_sha256": "83100ff59ca633c88186b71f5b1e4219c6087d88454e8482e20407dec4adc080",
       "files_verified": 129,
       "bytes_verified": 220116647
     },
     {
+      "task_id": "81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff.json",
+      "bundle_manifest_sha256": "2a24554e6082f8ce702fce2b6caf6b95878c7008d4eec67dae2d808d35004364",
+      "download_manifest": "datasets/manifests/appeears_download_81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff.json",
+      "download_manifest_sha256": "abe7f6c5f0a394ba0125a62e7423b8e647395586f28335a63a585d73cf46d4c0",
+      "files_verified": 129,
+      "bytes_verified": 220826003
+    },
+    {
+      "task_id": "83f8b720-2e9e-4bb0-aa48-b49e16d7746b",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_83f8b720-2e9e-4bb0-aa48-b49e16d7746b.json",
+      "bundle_manifest_sha256": "6bb2beab66acffe1e06d6967bef2dea3973c17b3b8096a588a0e483f4f75341c",
+      "download_manifest": "datasets/manifests/appeears_download_83f8b720-2e9e-4bb0-aa48-b49e16d7746b.json",
+      "download_manifest_sha256": "6ff1f4a3cf54d39b354974bb3f23b46d1800b270dba3079808043443a392bbc4",
+      "files_verified": 129,
+      "bytes_verified": 222430210
+    },
+    {
       "task_id": "88cc0908-0d05-43e7-97d8-383e1b161d7c",
-      "manifest": "datasets/manifests/appeears_download_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
-      "manifest_sha256": "a1f5fdda98f597e6915eaa0b1a0292ec49106383d6acf9bfc3cef4c256f72b79",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
+      "bundle_manifest_sha256": "74afad8b5e8334abf6fa3d9db8b1571e98ed9c66d772156d46ffa08567095d19",
+      "download_manifest": "datasets/manifests/appeears_download_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
+      "download_manifest_sha256": "1765ae58c69ba3dcd12496e07a0781fc9e397e3219eb7644a0770d63f6b0dce4",
       "files_verified": 129,
       "bytes_verified": 219774136
     },
     {
+      "task_id": "a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c.json",
+      "bundle_manifest_sha256": "a5d746fbfa08d96de4ed30b05ef2f2644bc2b8000dd5e0f289e185679b5c7fa5",
+      "download_manifest": "datasets/manifests/appeears_download_a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c.json",
+      "download_manifest_sha256": "47ca324f8de9d29ed1b4b22f55c69bc7d27d5e88682306cb0c133f9c83392595",
+      "files_verified": 129,
+      "bytes_verified": 218578028
+    },
+    {
+      "task_id": "a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4.json",
+      "bundle_manifest_sha256": "0ac191d7df4e8a83e01f8924886eb08c7170cf271a65cdd9aae8221dfe4c5e36",
+      "download_manifest": "datasets/manifests/appeears_download_a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4.json",
+      "download_manifest_sha256": "34a5fa2edd20a5f72580d2fc821f2cf897ea11010ccad04a39d06fd391bfd420",
+      "files_verified": 84,
+      "bytes_verified": 136493683
+    },
+    {
+      "task_id": "a91d3dd2-28a2-4557-a5ed-395ee743c57a",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_a91d3dd2-28a2-4557-a5ed-395ee743c57a.json",
+      "bundle_manifest_sha256": "63d3afbf60a0c2ac50a16f1979c64834ea5db41f40ee9aafe32bb02998261a98",
+      "download_manifest": "datasets/manifests/appeears_download_a91d3dd2-28a2-4557-a5ed-395ee743c57a.json",
+      "download_manifest_sha256": "d43dcda1d3797bc45cdc0c73a2ee03a467b9c966c123aa90d554ce04fc65b322",
+      "files_verified": 129,
+      "bytes_verified": 220986344
+    },
+    {
       "task_id": "be169e84-10c7-4d22-9752-54b049d143d6",
-      "manifest": "datasets/manifests/appeears_download_be169e84-10c7-4d22-9752-54b049d143d6.json",
-      "manifest_sha256": "010d3b5962cc8508c21be95cf5baeae9141a8a9001eefede58f929bfe7d2f252",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_be169e84-10c7-4d22-9752-54b049d143d6.json",
+      "bundle_manifest_sha256": "80b35a01535bcfc6d4a1e76bbc4a766f711573be260eb0b7649f61ed99ec04fd",
+      "download_manifest": "datasets/manifests/appeears_download_be169e84-10c7-4d22-9752-54b049d143d6.json",
+      "download_manifest_sha256": "010d3b5962cc8508c21be95cf5baeae9141a8a9001eefede58f929bfe7d2f252",
       "files_verified": 34,
       "bytes_verified": 45497290
     },
     {
       "task_id": "f698da1c-da72-4e71-9351-5ea4d36944b4",
-      "manifest": "datasets/manifests/appeears_download_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
-      "manifest_sha256": "5624a3dc758167b00ef313e134d21ee1ec345034b41b369468bfadca65aa689a",
+      "bundle_manifest": "datasets/manifests/appeears_bundle_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
+      "bundle_manifest_sha256": "2114e7b47b47bd6d95e0f12caa5d08050a1f868d23bccc76101d4ab09ae04b74",
+      "download_manifest": "datasets/manifests/appeears_download_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
+      "download_manifest_sha256": "4e103ca42e3ed94c5d5ee09771fd3f0942b0bc20b752e663d7e4253d1c8ef3c4",
       "files_verified": 129,
       "bytes_verified": 222370618
     }
   ],
-  "files_verified": 574,
-  "bytes_verified": 959477981,
-  "runtime_seconds": 4.670485300001019
+  "files_verified": 1948,
+  "bytes_verified": 3299440754,
+  "runtime_seconds": 4.711378299998614,
+  "partial_files": 0,
+  "unmanifested_files": 0,
+  "free_bytes": 270555029504
 }

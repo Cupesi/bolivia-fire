@@ -1,0 +1,360 @@
+{
+  "status": "complete",
+  "period": [
+    "2011-12-01",
+    "2026-07-31"
+  ],
+  "verified_utc": "2026-11-01T22:03:53.881644+00:00",
+  "annual_partitions": 16,
+  "annual_files": 1914,
+  "annual_bytes": 3253943464,
+  "pilot_files": 34,
+  "pilot_bytes": 45497290,
+  "total_files_including_pilot": 1948,
+  "total_bytes_including_pilot": 3299440754,
+  "resume_bytes_transferred": 2339962773,
+  "all_invocations_bytes_transferred": 3299440754,
+  "resume_acquisition_runtime_seconds": 6419.5607193,
+  "all_acquisition_invocations_runtime_seconds": 11840.415111399998,
+  "final_invocation_runtime_seconds": 1022.5940458999976,
+  "free_bytes_after_audit": 270555029504,
+  "minimum_free_gib": 55,
+  "poll_timeout_seconds": 21600,
+  "minimum_poll_interval_seconds": 300,
+  "maximum_poll_backoff_seconds": 900,
+  "download_workers": 2,
+  "remote_queue_limit": 4,
+  "rate_limit_or_abuse_encountered": false,
+  "saved_2016_2017_task_ids_unchanged": true,
+  "submitted_tasks_including_pilot": 17,
+  "duplicate_submissions": 0,
+  "per_year": [
+    {
+      "year": 2011,
+      "task_id": "6e6d2561-6e0d-4d46-9f4c-2df864442742",
+      "period": {
+        "startDate": "12-01-2011",
+        "endDate": "12-31-2011"
+      },
+      "files": 24,
+      "bytes_verified": 29308714,
+      "service_runtime_seconds": 149.355193,
+      "completed_local_invocation_seconds": 261.7135539999981,
+      "first_verified_utc": "2026-11-01T18:23:08.846883+00:00",
+      "last_verified_utc": "2026-11-01T21:46:22.427220+00:00"
+    },
+    {
+      "year": 2012,
+      "task_id": "7b9b48fa-2459-453a-9d0e-494fc148017e",
+      "period": {
+        "startDate": "01-01-2012",
+        "endDate": "12-31-2012"
+      },
+      "files": 129,
+      "bytes_verified": 220116647,
+      "service_runtime_seconds": 985.660486,
+      "completed_local_invocation_seconds": 1105.0981090999994,
+      "first_verified_utc": "2026-11-01T18:41:31.306080+00:00",
+      "last_verified_utc": "2026-11-01T21:46:24.393166+00:00"
+    },
+    {
+      "year": 2013,
+      "task_id": "88cc0908-0d05-43e7-97d8-383e1b161d7c",
+      "period": {
+        "startDate": "01-01-2013",
+        "endDate": "12-31-2013"
+      },
+      "files": 129,
+      "bytes_verified": 219774136,
+      "service_runtime_seconds": 1066.213839,
+      "completed_local_invocation_seconds": 144.60873170000195,
+      "first_verified_utc": "2026-11-01T18:43:53.220555+00:00",
+      "last_verified_utc": "2026-11-01T21:46:26.381703+00:00"
+    },
+    {
+      "year": 2014,
+      "task_id": "322434e3-151a-4c8e-97a2-b87a710feedf",
+      "period": {
+        "startDate": "01-01-2014",
+        "endDate": "12-31-2014"
+      },
+      "files": 129,
+      "bytes_verified": 222410576,
+      "service_runtime_seconds": 1722.295658,
+      "completed_local_invocation_seconds": 1586.7339862000008,
+      "first_verified_utc": "2026-11-01T19:10:16.890181+00:00",
+      "last_verified_utc": "2026-11-01T21:46:28.585146+00:00"
+    },
+    {
+      "year": 2015,
+      "task_id": "f698da1c-da72-4e71-9351-5ea4d36944b4",
+      "period": {
+        "startDate": "01-01-2015",
+        "endDate": "12-31-2015"
+      },
+      "files": 129,
+      "bytes_verified": 222370618,
+      "service_runtime_seconds": 1613.136709,
+      "completed_local_invocation_seconds": 145.20205050000004,
+      "first_verified_utc": "2026-11-01T19:12:39.080236+00:00",
+      "last_verified_utc": "2026-11-01T21:46:30.787044+00:00"
+    },
+    {
+      "year": 2016,
+      "task_id": "6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9",
+      "period": {
+        "startDate": "01-01-2016",
+        "endDate": "12-31-2016"
+      },
+      "files": 129,
+      "bytes_verified": 219642738,
+      "service_runtime_seconds": 2242.557335,
+      "completed_local_invocation_seconds": 147.64281449999908,
+      "first_verified_utc": "2026-11-01T20:14:30.614211+00:00",
+      "last_verified_utc": "2026-11-01T21:46:33.123093+00:00"
+    },
+    {
+      "year": 2017,
+      "task_id": "83f8b720-2e9e-4bb0-aa48-b49e16d7746b",
+      "period": {
+        "startDate": "01-01-2017",
+        "endDate": "12-31-2017"
+      },
+      "files": 129,
+      "bytes_verified": 222430210,
+      "service_runtime_seconds": 2183.876311,
+      "completed_local_invocation_seconds": 145.93203200000062,
+      "first_verified_utc": "2026-11-01T20:16:57.203509+00:00",
+      "last_verified_utc": "2026-11-01T21:46:35.374862+00:00"
+    },
+    {
+      "year": 2018,
+      "task_id": "385ea4a2-bbe1-42f7-a73e-adf55831d1c9",
+      "period": {
+        "startDate": "01-01-2018",
+        "endDate": "12-31-2018"
+      },
+      "files": 129,
+      "bytes_verified": 224673533,
+      "service_runtime_seconds": 1711.352457,
+      "completed_local_invocation_seconds": 1576.905380100001,
+      "first_verified_utc": "2026-11-01T20:43:14.908024+00:00",
+      "last_verified_utc": "2026-11-01T21:46:37.637024+00:00"
+    },
+    {
+      "year": 2019,
+      "task_id": "6f31e601-af7f-44d2-8b43-aea18a199ac3",
+      "period": {
+        "startDate": "01-01-2019",
+        "endDate": "12-31-2019"
+      },
+      "files": 129,
+      "bytes_verified": 222976642,
+      "service_runtime_seconds": 1925.722358,
+      "completed_local_invocation_seconds": 448.3501408000011,
+      "first_verified_utc": "2026-11-01T20:50:44.078369+00:00",
+      "last_verified_utc": "2026-11-01T21:46:39.931752+00:00"
+    },
+    {
+      "year": 2020,
+      "task_id": "6ebbc2e5-a418-419e-8357-fcc5187c8fe3",
+      "period": {
+        "startDate": "01-01-2020",
+        "endDate": "12-31-2020"
+      },
+      "files": 129,
+      "bytes_verified": 218479709,
+      "service_runtime_seconds": 1855.066865,
+      "completed_local_invocation_seconds": 147.0236100000002,
+      "first_verified_utc": "2026-11-01T20:53:12.282883+00:00",
+      "last_verified_utc": "2026-11-01T21:46:42.123294+00:00"
+    },
+    {
+      "year": 2021,
+      "task_id": "a91d3dd2-28a2-4557-a5ed-395ee743c57a",
+      "period": {
+        "startDate": "01-01-2021",
+        "endDate": "12-31-2021"
+      },
+      "files": 129,
+      "bytes_verified": 220986344,
+      "service_runtime_seconds": 1649.802868,
+      "completed_local_invocation_seconds": 144.33888709999883,
+      "first_verified_utc": "2026-11-01T20:55:37.842546+00:00",
+      "last_verified_utc": "2026-11-01T21:46:44.352879+00:00"
+    },
+    {
+      "year": 2022,
+      "task_id": "238ae4b3-52e8-45a1-a8c7-e2e858f7be15",
+      "period": {
+        "startDate": "01-01-2022",
+        "endDate": "12-31-2022"
+      },
+      "files": 129,
+      "bytes_verified": 216949058,
+      "service_runtime_seconds": 2248.547562,
+      "completed_local_invocation_seconds": 2476.109032700002,
+      "first_verified_utc": "2026-11-01T21:36:55.915448+00:00",
+      "last_verified_utc": "2026-11-01T21:46:45.891627+00:00"
+    },
+    {
+      "year": 2023,
+      "task_id": "622db38b-9414-46a2-8922-f5c3877e5d1e",
+      "period": {
+        "startDate": "01-01-2023",
+        "endDate": "12-31-2023"
+      },
+      "files": 129,
+      "bytes_verified": 217926825,
+      "service_runtime_seconds": 1740.167721,
+      "completed_local_invocation_seconds": 141.7140817000036,
+      "first_verified_utc": "2026-11-01T21:39:20.895088+00:00",
+      "last_verified_utc": "2026-11-01T21:46:47.379275+00:00"
+    },
+    {
+      "year": 2024,
+      "task_id": "81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff",
+      "period": {
+        "startDate": "01-01-2024",
+        "endDate": "12-31-2024"
+      },
+      "files": 129,
+      "bytes_verified": 220826003,
+      "service_runtime_seconds": 1749.91634,
+      "completed_local_invocation_seconds": 139.6611447999967,
+      "first_verified_utc": "2026-11-01T21:41:39.242392+00:00",
+      "last_verified_utc": "2026-11-01T21:46:48.729340+00:00"
+    },
+    {
+      "year": 2025,
+      "task_id": "a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c",
+      "period": {
+        "startDate": "01-01-2025",
+        "endDate": "12-31-2025"
+      },
+      "files": 129,
+      "bytes_verified": 218578028,
+      "service_runtime_seconds": 1628.786527,
+      "completed_local_invocation_seconds": 138.75198679999812,
+      "first_verified_utc": "2026-11-01T21:49:07.498245+00:00",
+      "last_verified_utc": "2026-11-01T21:49:07.498245+00:00"
+    },
+    {
+      "year": 2026,
+      "task_id": "a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4",
+      "period": {
+        "startDate": "01-01-2026",
+        "endDate": "07-31-2026"
+      },
+      "files": 84,
+      "bytes_verified": 136493683,
+      "service_runtime_seconds": 1281.217767,
+      "completed_local_invocation_seconds": 848.7783780000027,
+      "first_verified_utc": "2026-11-01T22:03:16.294824+00:00",
+      "last_verified_utc": "2026-11-01T22:03:16.294824+00:00"
+    }
+  ],
+  "integrity_report": "datasets/manifests/appeears_integrity.json",
+  "prior_report": "datasets/manifests/appeears_resume_baseline.json",
+  "interrupted_resume_report": "datasets/manifests/appeears_resume_attempt_01.json",
+  "final_report": "datasets/manifests/appeears_full.json",
+  "recovery": {
+    "reason": "Windows extended path prefix retained when a nested parent appeared during resolution",
+    "synthetic_reproduction": {
+      "prefix_retained": true,
+      "containment_check": false,
+      "ordinary_resolution_contained": true
+    },
+    "fix": "Validate and create bundle directories serially before download workers start; retain file containment checks"
+  },
+  "checks": [
+    {
+      "command": "uv run --no-sync ruff check .",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "uv run --no-sync pytest tests/vegetation -q -p no:cacheprovider",
+      "exit_code": 0,
+      "result": "33 passed"
+    },
+    {
+      "command": "uv run --no-sync python -m pytest -m 'not live and not local_data' -q -p no:cacheprovider",
+      "exit_code": 0,
+      "result": "578 passed, 1 skipped, 3 deselected, 9 dependency warnings; 162.49 seconds"
+    },
+    {
+      "command": "uv run --no-sync pytest -m 'not live and not local_data' -q -p no:cacheprovider",
+      "exit_code": 1,
+      "result": "Collection fails in three landcover test modules importing tests.landcover; module invocation passes"
+    }
+  ],
+  "sanitization": {
+    "manifests_scanned": 46,
+    "violations": 0
+  },
+  "files_modified": [
+    "datasets/manifests/appeears_bundle_238ae4b3-52e8-45a1-a8c7-e2e858f7be15.json",
+    "datasets/manifests/appeears_bundle_322434e3-151a-4c8e-97a2-b87a710feedf.json",
+    "datasets/manifests/appeears_bundle_385ea4a2-bbe1-42f7-a73e-adf55831d1c9.json",
+    "datasets/manifests/appeears_bundle_622db38b-9414-46a2-8922-f5c3877e5d1e.json",
+    "datasets/manifests/appeears_bundle_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
+    "datasets/manifests/appeears_bundle_6ebbc2e5-a418-419e-8357-fcc5187c8fe3.json",
+    "datasets/manifests/appeears_bundle_6f31e601-af7f-44d2-8b43-aea18a199ac3.json",
+    "datasets/manifests/appeears_bundle_6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9.json",
+    "datasets/manifests/appeears_bundle_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
+    "datasets/manifests/appeears_bundle_81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff.json",
+    "datasets/manifests/appeears_bundle_83f8b720-2e9e-4bb0-aa48-b49e16d7746b.json",
+    "datasets/manifests/appeears_bundle_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
+    "datasets/manifests/appeears_bundle_a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c.json",
+    "datasets/manifests/appeears_bundle_a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4.json",
+    "datasets/manifests/appeears_bundle_a91d3dd2-28a2-4557-a5ed-395ee743c57a.json",
+    "datasets/manifests/appeears_bundle_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
+    "datasets/manifests/appeears_discovery.json",
+    "datasets/manifests/appeears_download_238ae4b3-52e8-45a1-a8c7-e2e858f7be15.json",
+    "datasets/manifests/appeears_download_322434e3-151a-4c8e-97a2-b87a710feedf.json",
+    "datasets/manifests/appeears_download_385ea4a2-bbe1-42f7-a73e-adf55831d1c9.json",
+    "datasets/manifests/appeears_download_622db38b-9414-46a2-8922-f5c3877e5d1e.json",
+    "datasets/manifests/appeears_download_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
+    "datasets/manifests/appeears_download_6ebbc2e5-a418-419e-8357-fcc5187c8fe3.json",
+    "datasets/manifests/appeears_download_6f31e601-af7f-44d2-8b43-aea18a199ac3.json",
+    "datasets/manifests/appeears_download_6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9.json",
+    "datasets/manifests/appeears_download_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
+    "datasets/manifests/appeears_download_81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff.json",
+    "datasets/manifests/appeears_download_83f8b720-2e9e-4bb0-aa48-b49e16d7746b.json",
+    "datasets/manifests/appeears_download_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
+    "datasets/manifests/appeears_download_a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c.json",
+    "datasets/manifests/appeears_download_a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4.json",
+    "datasets/manifests/appeears_download_a91d3dd2-28a2-4557-a5ed-395ee743c57a.json",
+    "datasets/manifests/appeears_download_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
+    "datasets/manifests/appeears_full.json",
+    "datasets/manifests/appeears_integrity.json",
+    "datasets/manifests/appeears_progress.json",
+    "datasets/manifests/appeears_resume_attempt_01.json",
+    "datasets/manifests/appeears_resume_baseline.json",
+    "datasets/manifests/appeears_resume_summary.json",
+    "datasets/manifests/appeears_tasks.jsonl",
+    "docs/vegetation-acquisition.md",
+    "src/bolivia_fire/vegetation/acquire.py",
+    "src/bolivia_fire/vegetation/client.py",
+    "tests/vegetation/test_acquire.py",
+    "tests/vegetation/test_client.py"
+  ],
+  "raw_gitignored": true,
+  "documentation_encoding_check": "UTF-8, ASCII only; no replacement question marks",
+  "local_acquisition_processes": "exited; acquisition heartbeat threads stopped",
+  "raw_directories_modified": [
+    "datasets/raw/vegetation/6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9",
+    "datasets/raw/vegetation/83f8b720-2e9e-4bb0-aa48-b49e16d7746b",
+    "datasets/raw/vegetation/385ea4a2-bbe1-42f7-a73e-adf55831d1c9",
+    "datasets/raw/vegetation/6f31e601-af7f-44d2-8b43-aea18a199ac3",
+    "datasets/raw/vegetation/6ebbc2e5-a418-419e-8357-fcc5187c8fe3",
+    "datasets/raw/vegetation/a91d3dd2-28a2-4557-a5ed-395ee743c57a",
+    "datasets/raw/vegetation/238ae4b3-52e8-45a1-a8c7-e2e858f7be15",
+    "datasets/raw/vegetation/622db38b-9414-46a2-8922-f5c3877e5d1e",
+    "datasets/raw/vegetation/81a22bc7-98b9-4eaa-ab2b-5dc4e30699ff",
+    "datasets/raw/vegetation/a4aa8e5a-9dbc-4153-a62c-ba76c20afc2c",
+    "datasets/raw/vegetation/a8592f30-9cdf-4b46-9ff1-a5ba0c62c6f4"
+  ],
+  "additional_verified_files": 1374
+}

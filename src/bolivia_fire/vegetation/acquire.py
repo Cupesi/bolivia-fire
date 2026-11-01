@@ -17,7 +17,12 @@ from filelock import FileLock
 
 from bolivia_fire.vegetation.client import AppEEARSClient, AppEEARSError
 from bolivia_fire.vegetation.credentials import load_credentials
-from bolivia_fire.vegetation.download import Budget, download_file, validate_bundle
+from bolivia_fire.vegetation.download import (
+    Budget,
+    IncompleteBundleError,
+    download_file,
+    validate_bundle,
+)
 from bolivia_fire.vegetation.manifest import TaskManifest, atomic_json, utc_now
 from bolivia_fire.vegetation.request import (
     PRODUCT,
@@ -167,6 +172,13 @@ def _run_task(
             "retrieved_utc": utc_now(),
         },
     )
+    # Windows resolution can retain a different prefix if a parent appears mid-resolution.
+    resolved_raw = raw.resolve()
+    for item in safe_files:
+        directory = (raw / item["file_name"]).parent.resolve()
+        if not directory.is_relative_to(resolved_raw):
+            raise IncompleteBundleError("Bundle directory escapes output directory")
+        directory.mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         downloaded = list(
             pool.map(

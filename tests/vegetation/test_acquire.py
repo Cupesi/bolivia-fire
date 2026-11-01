@@ -37,6 +37,41 @@ def test_queue_fills_four_requests_before_waiting_and_refills_after_completion()
     assert synthetic_manifest.calls == synthetic_payloads
 
 
+def test_nested_bundle_directories_exist_before_download_workers_start(tmp_path, monkeypatch):
+    import hashlib
+    import importlib
+
+    from bolivia_fire.vegetation.download import Budget
+
+    module = importlib.import_module("bolivia_fire.vegetation.acquire")
+    synthetic_item = {
+        "file_id": "synthetic-file",
+        "file_name": "synthetic-bundle/synthetic_NDVI_doy2025001.tif",
+        "file_size": 1,
+        "sha256": hashlib.sha256(b"x").hexdigest(),
+    }
+
+    class SyntheticClient:
+        def wait(self, task_id, timeout):
+            return {"status": "done"}
+
+        def bundle(self, task_id):
+            return {"task_id": task_id, "files": [synthetic_item]}
+
+    def download(client, task_id, item, raw, budget):
+        assert (raw / item["file_name"]).parent.is_dir()
+        return {**item, "bytes_transferred": 1}
+
+    monkeypatch.setattr(module, "download_file", download)
+    result = module._run_task(
+        SyntheticClient(), tmp_path,
+        {"params": {"dates": [{"startDate": "01-01-2025", "endDate": "01-01-2025"}]}},
+        {"ndvi": "NDVI"}, Budget(tmp_path, 0),
+        workers=2, timeout=21600, task_id="synthetic-task",
+    )
+    assert result["bytes_stored"] == 1
+
+
 def test_restart_never_submits_duplicate_task(tmp_path):
     submissions = []
     payload = {"task_type": "area", "params": {"synthetic": True}}
