@@ -1,0 +1,85 @@
+schema_version: 1
+product: MapBiomas Bolivia Collection 4
+classification: retrospective
+status: partial_raster_paused_unknown_request_eecu
+output_directory: datasets/processed/landcover
+manifest: datasets/manifests/mapbiomas_pilot.jsonl
+partial_raster_manifest: datasets/manifests/mapbiomas_raster_partial.jsonl
+raster_manifest: datasets/manifests/mapbiomas_raster.jsonl
+raster_request_manifest: datasets/manifests/mapbiomas_raster_requests.jsonl
+keys: [cell_id, year]
+year:
+  meaning: actual reference map year; map_year is an explicit alias
+  planned_range: [2012, 2025]
+  issue_rule: greatest accessible year <= issue year - 1; maximum age two years
+geometry:
+  cells: datasets/processed/cells.parquet
+  resolution_degrees: 0.05
+  support: native pixel footprint intersected with project cell and pinned ADM0
+  crs: EPSG:4326
+  categorical_interpolation: none
+  weights: Earth Engine pixelArea with weighted grouped sum at the exact native affine
+  boundary_precision: Earth Engine quantizes fractional pixel coverage to 256 levels
+  raster_method:
+    support: national mask applied at native resolution before binary aggregation
+    grid_affine: [0.05, 0, -69.65, 0, -0.05, -9.65]
+    grid_dimensions: {width: 244, height: 266}
+    relation_to_registered_origin: integer offsets from [-180, -90]; same cell edges
+    reduction: reduceResolution(mean) and reproject to exact project affine; bestEffort=false
+    maximum_native_inputs_per_output_pixel: 65536
+    intermediate_dtype: float32
+    maximum_request_edge_cells: 16
+    request_geometry: tile intersection with pinned ADM0 plus one native-pixel halo
+    mask_handling: zero outside national support before all mean stages
+    local_area_weights: pinned geodesic national_area_km2 from the project cells
+    precision: binary overlap means use degree area; national areas scale the local totals
+    audit_requirement: compare against native-pixel-area polygon pilot before remaining years
+fields:
+  cell_id: {type: string, nullable: false}
+  year: {type: int, nullable: false}
+  map_year: {type: int, nullable: false}
+  response_feature_present: {type: bool, nullable: false}
+  raster_tile_downloaded: {type: bool, nullable: false, scope: partial_raster_only}
+  raster_request_status:
+    type: string
+    scope: partial_raster_only
+    values: [downloaded, not_requested, usage_unknown]
+  available: {type: bool, nullable: false}
+  mapped_area_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+  mapped_area_m2: {type: float64, nullable: true, minimum: 0}
+  national_support_area_m2:
+    type: float64
+    nullable: false
+    minimum: 0
+    meaning: polygon pilot uses weighted native pixelArea; raster uses pinned national cell area
+  unmapped_class_area_m2:
+    type: string
+    nullable: false
+    encoding: JSON object from invalid class code to weighted area; raster key other groups undeclared codes
+  mapbiomas_forest_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+  mapbiomas_nonforest_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+  mapbiomas_farming_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+  mapbiomas_nonvegetated_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+  mapbiomas_water_fraction: {type: float64, nullable: true, bounds: [0, 1]}
+groups:
+  forest: [1, 3, 4, 6]
+  nonforest: [10, 11, 12, 13, 29, 63, 66, 77, 81, 82]
+  farming: [14, 15, 18, 21, 39, 40, 72]
+  nonvegetated: [22, 23, 24, 25, 30, 61, 68, 92]
+  water: [26, 31, 33, 34]
+validation:
+  denominator: total area of the five mapped groups
+  invalid_codes: [0, 27, all_codes_outside_declared_groups]
+  minimum_mapped_area_fraction: 0.95
+  fraction_sum_absolute_tolerance: 0.000001
+  missing: all five fractions null if support is absent or coverage is insufficient
+  missing_response: retain requested cell with response_feature_present=false and null fractions
+  raster_agreement_absolute_tolerance: 0.01
+  raster_agreement_fields: [five_fractions, mapped_area_fraction, availability]
+  partial_outputs: preserve all requested cell keys; unrequested or unknown fractions remain null
+  feature_use: partial outputs are not eligible for H4 or H5
+temporal:
+  release_date: '2026-10-01'
+  filters: temporal rules can use two following years; frequency filters use the full series
+  additional_lag_years: 0
+  interpretation: one-year map lag is a retrospective definition, not proof of historical availability

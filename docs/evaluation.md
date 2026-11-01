@@ -224,3 +224,93 @@ flowchart LR
     classDef product fill:#F3F6F8,stroke:#59717E,color:#172C35
     class A,B,C product
 ```
+
+## Registered vegetation extension
+
+The separate [extension contract](../configs/extension_vegetation.yaml) and
+[registration](../artifacts/evaluation/extension_registration.json) control
+`bolivia-fire extension`. Every command verifies the registration timestamp,
+no-access attestation, exact contract/document/parent hashes, expanded run
+manifest, Git tracking and byte equality with `HEAD`. Missing registration,
+changed or uncommitted files, failed audits and unlisted inputs refuse execution
+before labels load. `extension guard` performs only registration checks.
+
+`extension select --inputs artifacts/evaluation/extension_inputs.json` requires
+an existing, label-free input plan. Its fields are:
+
+| Field | Required content |
+| --- | --- |
+| `contract_sha256` | Exact registered contract hash |
+| `input_hashes` | Repository-relative file paths and SHA-256 hashes for every consumed panel, feature, audit and source manifest |
+| `panel_files` | Frozen panel Parquet paths; labels stay in these files |
+| `runs` | Entries keyed by registered run ID, with `status`, `feature_files` and `audit` |
+
+An eligible run has `status: evaluated_eligible`. Its hashed audit repeats
+`run_id`, `ordered_features`, `geography`, `availability_lag_days` and
+`contract_sha256`; records its nonempty `input_hashes`; and requires true
+`scaling_verified`, `quality_verified`, `temporal_verified`,
+`climatology_verified` and `provenance_verified` checks. Land-cover runs also
+require true `zero_cost_mapbiomas_verification` and `land_cover_features`
+checks backed by the audit's frozen evidence files. Unavailable land-cover
+groups propagate `not_evaluated` without reducing vegetation support. Freeze
+availability before metrics; changing it after scores requires a new registration.
+
+Vegetation inputs follow
+[vegetation_features.yaml](../datasets/schemas/vegetation_features.yaml):
+separate lag/geography/year Parquet outputs keyed by `cell_id, issue_date`,
+with the registered contract, snapshot, lag and geography metadata. The input
+plan pins the associated `source.json`, resource/coverage report, acquisition
+and grid manifests and audit evidence. Preserve the recorded acquisition AOI
+buffer deviation in that evidence; it does not override eligibility checks.
+CHIRPS manifests, annual feature hashes, parent-protocol metadata and
+training-reference definitions must pass preflight before any label projection.
+Joins retain panel order, reject duplicate keys and never impute missing features.
+
+Each available registered fit independently searches the same ordered 20
+LightGBM configurations with seed 7, selects uncalibrated `val_select` AP with
+ascending model-name ties, then fits isotonic calibration on `val_calib`.
+Published comparators and their calibrators are hash-verified and reused.
+Temporal and geographic families keep separate common support; held-out labels
+enter no fitting, selection or calibration. Primary fits share ordered rows
+across both comparators and all available primary variants. The 32-day fits
+retain their own support and an additional common-support lag comparison.
+
+Validation H3-H5 decisions use calibrated AP differences and 500 paired UTC
+calendar-month bootstrap replicates with seed 7. Both interval endpoints must
+be finite and the lower endpoint strictly positive. All other available results
+are `inconclusive`; identity calibration cannot support a positive decision.
+These intervals condition on calibrators fitted to the same validation labels.
+No test result changes selection or chooses a lag.
+
+`extension score-test --inputs artifacts/evaluation/extension_inputs.json
+--open-test --reopen-reason "Exploratory extension on previously opened test"`
+requires the frozen selection and unchanged input/model/calibrator hashes.
+Before label access, it appends an exploratory reopening with planned row-key
+hashes to `final_test_log.json`; it later appends completion or failure.
+Primary evaluation uses the joint finite prediction support. Fixed Santa Cruz,
+July-October and intersection subgroups remain exploratory. Geographic holdout
+reports use geographic models and spatial blocks.
+
+`extension confirm` separately requires `--open-confirmation`, `--reason` and
+`--evidence`, together with the same frozen `--inputs` plan. The evidence file
+must already be pinned in that plan. It contains an `access_audit` with
+`untouched: true` and `inspected_for_development: false`; `coverage` dates
+`firms_end` and `outages_end` through 2026-07-31 and `chirps_end` through
+2026-07-19; an `archive` cutoff of `2026-07-31T23:59:59Z` with
+`all_used_granules_produced_and_archived_by_cutoff: true`; true
+`frozen_before_label_access`; and nonempty, verified `input_hashes` for the
+supporting evidence. Missing or failed gates make confirmation unavailable.
+The separate confirmation log consumes one opening even if scoring fails.
+Only the registered January 5-July 20 Monday issues enter this temporal batch;
+models and calibrators remain fixed. A future-study proposal requires positive
+intervals for the same hypothesis in validation and confirmation.
+
+Selection, fit, checkpoint, resource and uniquely named scoring JSON files use
+the `artifacts/evaluation/extension_` prefix. They retain registration/commit
+proof, input and model hashes, ordered configurations, stage support and
+exclusions, row-key hashes, environment, hardware and runtime. Models live under
+`artifacts/models/extension`. Completed fit checkpoints are reused only when
+their frozen inputs, support and model hashes still match. Interrupted searches
+restart that fit. Resource monitoring samples summed process-tree RSS every
+second, checks allocations and boosting iterations, preserves per-stage peaks
+and failure checkpoints, and enforces the contract's memory and disk reserves.

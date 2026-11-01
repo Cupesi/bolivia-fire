@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 covariates = ["rasterio>=1.4", "netCDF4>=1.7"]
+landcover = ["earthengine-api>=1.7.50", "psutil>=7.2"]
 api = ["fastapi>=0.115", "uvicorn>=0.30"]
 comparison = ["xgboost==3.4.1", "catboost==1.2.10", "torch==2.11.0", "psutil>=7.2"]
 

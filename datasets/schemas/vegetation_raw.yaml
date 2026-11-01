@@ -1,0 +1,62 @@
+schema_version: '1'
+product: MOD13A2.061
+format: GeoTIFF
+projection: native MODIS sinusoidal
+resolution: retained from the source; measured in the pilot report
+spatial_support: pinned Bolivia ADM0 polygon buffered by 0.05 degrees
+temporal_support: 16-day composites; acquisition dates are not availability timestamps
+layer_discovery: datasets/manifests/appeears_discovery.json
+layers:
+  ndvi:
+    layer: _1_km_16_days_NDVI
+    advertised_dtype: float32
+    pilot_delivered_dtype: int16
+    pilot_delivered_scale: 0.0001
+    pilot_delivered_offset: 0.0
+    pilot_values_already_scaled: false
+    source_scale_factor: 0.0001
+    source_add_offset: 0.0
+    advertised_fill_value: -3000
+    advertised_valid_range: [-0.2, 1.0]
+  evi:
+    layer: _1_km_16_days_EVI
+    advertised_dtype: float32
+    pilot_delivered_dtype: int16
+    pilot_delivered_scale: 0.0001
+    pilot_delivered_offset: 0.0
+    pilot_values_already_scaled: false
+    source_scale_factor: 0.0001
+    source_add_offset: 0.0
+    advertised_fill_value: -3000
+    advertised_valid_range: [-0.2, 1.0]
+  vi_quality:
+    layer: _1_km_16_days_VI_Quality
+    advertised_dtype: uint16
+    advertised_fill_value: 65535
+    source_scale_factor: null
+    interpretation: packed quality bits; retain without numeric rescaling
+  pixel_reliability:
+    layer: _1_km_16_days_pixel_reliability
+    advertised_dtype: int32
+    advertised_fill_value: -1
+    source_scale_factor: null
+    advertised_valid_range: [0, 4]
+  composite_doy:
+    layer: _1_km_16_days_composite_day_of_the_year
+    advertised_dtype: int16
+    advertised_fill_value: -1
+    source_scale_factor: null
+    advertised_valid_range: [1, 366]
+scaling_rule: >-
+  Inspect delivered dtype, pixel range, GDAL scale, offset and nodata in appeears_pilot.json.
+  Source scale factors describe the original product and must not be applied a second
+  time when AppEEARS has already delivered scaled floating-point values.
+bundle_integrity:
+  required: [file_id, file_name, file_size, sha256]
+  algorithm: SHA-256
+  promotion: atomic rename after byte-size and digest verification
+provenance:
+  task_manifest: datasets/manifests/appeears_tasks.jsonl
+  bundle_manifest_pattern: datasets/manifests/appeears_bundle_{task_id}.json
+  download_manifest_pattern: datasets/manifests/appeears_download_{task_id}.json
+  prohibited: [credentials, bearer_tokens, signed_download_urls, account_identifiers]

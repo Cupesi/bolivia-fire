@@ -1,0 +1,189 @@
+{
+  "product": {
+    "Product": "MOD13A2",
+    "Platform": "Terra MODIS",
+    "Description": "Vegetation Indices (NDVI & EVI)",
+    "RasterType": "Tile",
+    "Resolution": "1000m",
+    "TemporalGranularity": "16 day",
+    "Version": "061",
+    "Available": true,
+    "DocLink": "https://doi.org/10.5067/MODIS/MOD13A2.061",
+    "Source": "LP DAAC",
+    "TemporalExtentStart": "2000-02-18",
+    "TemporalExtentEnd": "Present",
+    "Deleted": false,
+    "DOI": "10.5067/MODIS/MOD13A2.061",
+    "Info": {
+      "collection_concept_id": "C2565788905-LPCLOUD",
+      "provider_id": "lp_prod"
+    },
+    "ProductAndVersion": "MOD13A2.061"
+  },
+  "selected_layers": {
+    "ndvi": "_1_km_16_days_NDVI",
+    "evi": "_1_km_16_days_EVI",
+    "vi_quality": "_1_km_16_days_VI_Quality",
+    "pixel_reliability": "_1_km_16_days_pixel_reliability",
+    "composite_doy": "_1_km_16_days_composite_day_of_the_year"
+  },
+  "layers": {
+    "ndvi": {
+      "AddOffset": 0.0,
+      "Available": true,
+      "DataType": "float32",
+      "Description": "1 km 16 days NDVI",
+      "Dimensions": [
+        "time",
+        "YDim",
+        "XDim"
+      ],
+      "FillValue": -3000,
+      "FillValueAll": [
+        -3000
+      ],
+      "Group": "",
+      "Info": {},
+      "IsQA": false,
+      "Layer": "_1_km_16_days_NDVI",
+      "OrigDataType": "int16",
+      "OrigValidMax": 10000,
+      "OrigValidMin": -2000,
+      "QualityLayers": "['_1_km_16_days_VI_Quality']",
+      "QualityProductAndVersion": "MOD13A2.061",
+      "ScaleFactor": 0.0001,
+      "Units": "",
+      "ValidMax": 1.0,
+      "ValidMin": -0.200000003,
+      "XSize": 1200,
+      "YSize": 1200
+    },
+    "evi": {
+      "AddOffset": 0.0,
+      "Available": true,
+      "DataType": "float32",
+      "Description": "1 km 16 days EVI",
+      "Dimensions": [
+        "time",
+        "YDim",
+        "XDim"
+      ],
+      "FillValue": -3000,
+      "FillValueAll": [
+        -3000
+      ],
+      "Group": "",
+      "Info": {},
+      "IsQA": false,
+      "Layer": "_1_km_16_days_EVI",
+      "OrigDataType": "int16",
+      "OrigValidMax": 10000,
+      "OrigValidMin": -2000,
+      "QualityLayers": "['_1_km_16_days_VI_Quality']",
+      "QualityProductAndVersion": "MOD13A2.061",
+      "ScaleFactor": 0.0001,
+      "Units": "",
+      "ValidMax": 1.0,
+      "ValidMin": -0.200000003,
+      "XSize": 1200,
+      "YSize": 1200
+    },
+    "vi_quality": {
+      "AddOffset": "",
+      "Available": true,
+      "DataType": "uint16",
+      "Description": "1 km 16 days VI Quality",
+      "Dimensions": [
+        "time",
+        "YDim",
+        "XDim"
+      ],
+      "FillValue": 65535,
+      "FillValueAll": [
+        65535
+      ],
+      "Group": "",
+      "Info": {},
+      "IsQA": true,
+      "Layer": "_1_km_16_days_VI_Quality",
+      "OrigDataType": "uint16",
+      "OrigValidMax": 65534,
+      "OrigValidMin": 0,
+      "QualityLayers": "",
+      "QualityProductAndVersion": "",
+      "ScaleFactor": "",
+      "Units": "",
+      "ValidMax": 65534.0,
+      "ValidMin": 0.0,
+      "XSize": 1200,
+      "YSize": 1200
+    },
+    "pixel_reliability": {
+      "AddOffset": "",
+      "Available": true,
+      "DataType": "int32",
+      "Description": "1 km 16 days pixel reliability",
+      "Dimensions": [
+        "time",
+        "YDim",
+        "XDim"
+      ],
+      "FillValue": -1,
+      "FillValueAll": [
+        -1
+      ],
+      "Group": "",
+      "Info": {},
+      "IsQA": true,
+      "Layer": "_1_km_16_days_pixel_reliability",
+      "OrigDataType": "int32",
+      "OrigValidMax": 4,
+      "OrigValidMin": 0,
+      "QualityLayers": "",
+      "QualityProductAndVersion": "",
+      "ScaleFactor": "",
+      "Units": "",
+      "ValidMax": 4.0,
+      "ValidMin": 0.0,
+      "XSize": 1200,
+      "YSize": 1200
+    },
+    "composite_doy": {
+      "AddOffset": "",
+      "Available": true,
+      "DataType": "int16",
+      "Description": "1 km 16 days composite day of the year",
+      "Dimensions": [
+        "time",
+        "YDim",
+        "XDim"
+      ],
+      "FillValue": -1,
+      "FillValueAll": [
+        -1
+      ],
+      "Group": "",
+      "Info": {},
+      "IsQA": false,
+      "Layer": "_1_km_16_days_composite_day_of_the_year",
+      "OrigDataType": "int16",
+      "OrigValidMax": 366,
+      "OrigValidMin": 1,
+      "QualityLayers": "",
+      "QualityProductAndVersion": "",
+      "ScaleFactor": "",
+      "Units": "",
+      "ValidMax": 366.0,
+      "ValidMin": 1.0,
+      "XSize": 1200,
+      "YSize": 1200
+    }
+  },
+  "aoi": {
+    "source_path": "datasets/raw/boundaries/geoBoundaries-BOL-ADM0_65d3926f721a1810fb7659f4bd1b575db1a02ab5c9658a38cc83b6a13e85ba15.geojson",
+    "source_sha256": "65d3926f721a1810fb7659f4bd1b575db1a02ab5c9658a38cc83b6a13e85ba15",
+    "buffer_degrees": 0.05,
+    "aoi_sha256": "5d8c8df250862bb6c6553abd3f9daa1a3bae342730e3b8381a82e6eb75477f8f"
+  },
+  "retrieved_utc": "2026-11-01T20:11:51.789277+00:00"
+}

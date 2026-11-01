@@ -1,0 +1,122 @@
+{
+  "observed_utc": "2026-11-01T19:43:33.042124+00:00",
+  "reason": "provider_task_polling_timeout",
+  "poll_timeout_seconds": 1800,
+  "waiting_year": 2016,
+  "waiting_task_id": "6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9",
+  "remaining_annual_partitions": 11,
+  "completed_annual_partitions": 5,
+  "bytes_transferred": 913980691,
+  "bytes_stored_including_pilot": 959477981,
+  "runtime_seconds": 5031.517872699998,
+  "service_tasks": [
+    {
+      "task_id": "83f8b720-2e9e-4bb0-aa48-b49e16d7746b",
+      "task_name": "bolivia-mod13a2-dd420d885c71cb3b89ba2151",
+      "status": "processing",
+      "created": "2026-11-01T19:08:56.589599",
+      "updated": "2026-11-01T19:33:04.362532",
+      "completed": null,
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "6fc8ee32-a8b8-41b6-93c2-a8052a5cfef9",
+      "task_name": "bolivia-mod13a2-60e0cbaa2faa1cdf8e5068f1",
+      "status": "processing",
+      "created": "2026-11-01T19:07:21.788695",
+      "updated": "2026-11-01T19:31:55.648449",
+      "completed": null,
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "f698da1c-da72-4e71-9351-5ea4d36944b4",
+      "task_name": "bolivia-mod13a2-721780324ee59a1e8b53c3e8",
+      "status": "done",
+      "created": "2026-11-01T18:41:42.987853",
+      "updated": "2026-11-01T19:08:36.145938",
+      "completed": "2026-11-01T19:08:36.124562",
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "322434e3-151a-4c8e-97a2-b87a710feedf",
+      "task_name": "bolivia-mod13a2-523a91c6664f13eb2c2a9604",
+      "status": "done",
+      "created": "2026-11-01T18:38:06.037471",
+      "updated": "2026-11-01T19:06:48.353304",
+      "completed": "2026-11-01T19:06:48.333129",
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "88cc0908-0d05-43e7-97d8-383e1b161d7c",
+      "task_name": "bolivia-mod13a2-175671c53cdc30e421ca0a38",
+      "status": "done",
+      "created": "2026-11-01T18:23:28.815281",
+      "updated": "2026-11-01T18:41:15.051811",
+      "completed": "2026-11-01T18:41:15.029120",
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "7b9b48fa-2459-453a-9d0e-494fc148017e",
+      "task_name": "bolivia-mod13a2-a35f209bf3c7446209f2ae08",
+      "status": "done",
+      "created": "2026-11-01T18:21:14.727368",
+      "updated": "2026-11-01T18:37:40.405954",
+      "completed": "2026-11-01T18:37:40.387854",
+      "estimate": {
+        "request_size": 804909153.6988288,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "6e6d2561-6e0d-4d46-9f4c-2df864442742",
+      "task_name": "bolivia-mod13a2-800165d068500ef530f25601",
+      "status": "done",
+      "created": "2026-11-01T18:18:55.603332",
+      "updated": "2026-11-01T18:21:24.980480",
+      "completed": "2026-11-01T18:21:24.958525",
+      "estimate": {
+        "request_size": 36586779.71358313,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    },
+    {
+      "task_id": "be169e84-10c7-4d22-9752-54b049d143d6",
+      "task_name": "bolivia-mod13a2-c0776db4549855540892edc7",
+      "status": "done",
+      "created": "2026-11-01T18:10:16.093702",
+      "updated": "2026-11-01T18:16:16.238550",
+      "completed": "2026-11-01T18:16:16.215345",
+      "estimate": {
+        "request_size": 109760339.14074938,
+        "request_tier": 0,
+        "request_memory": 1
+      }
+    }
+  ],
+  "local_prefetch_status": "stopped",
+  "local_acquisition_status": "stopped",
+  "prefetched_year": 2017,
+  "prefetched_task_id": "83f8b720-2e9e-4bb0-aa48-b49e16d7746b"
+}

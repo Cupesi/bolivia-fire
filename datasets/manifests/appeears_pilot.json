@@ -1,0 +1,797 @@
+{
+  "started_utc": "2026-11-01T18:11:39.925413+00:00",
+  "mode": "pilot",
+  "minimum_free_gib": 55,
+  "tasks": [
+    {
+      "task_id": "be169e84-10c7-4d22-9752-54b049d143d6",
+      "status": "downloaded",
+      "files": [
+        {
+          "file_id": "22941244-d04e-4528-9456-ab6df6b04009",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024209000000_aid0001.tif",
+          "file_size": 3860368,
+          "sha256": "4798eb61fa6ba125c9e595794d503f86a51dd538d922f4d629af4d1796d40aff",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:31.510969+00:00",
+          "bytes_transferred": 3860368
+        },
+        {
+          "file_id": "f47de654-b319-4460-b5d8-e5667cf7734e",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024225000000_aid0001.tif",
+          "file_size": 3836831,
+          "sha256": "62ef022956b325a0a538d30926eb9c58565d9454b3e73a342c94621fcc436df8",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:31.327745+00:00",
+          "bytes_transferred": 3836831
+        },
+        {
+          "file_id": "393304d7-6b67-4a6d-baa8-399c32f090f5",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024241000000_aid0001.tif",
+          "file_size": 3926818,
+          "sha256": "8f7ee7ddc00a498e38995e51fcc12f2ef73a764b4219d4e7e3c155d3970ef8c1",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:33.709263+00:00",
+          "bytes_transferred": 3926818
+        },
+        {
+          "file_id": "c8543bc5-5d20-442d-b1f7-f18541ffbece",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024257000000_aid0001.tif",
+          "file_size": 3893983,
+          "sha256": "5ab82706eef5e934cac097972283e129c74a802af29d5980e16ca43b1c01c6ec",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:33.796844+00:00",
+          "bytes_transferred": 3893983
+        },
+        {
+          "file_id": "fb980ea6-8df2-40c7-96dd-e118de4e03b0",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024273000000_aid0001.tif",
+          "file_size": 3987369,
+          "sha256": "eb65a227ae39c1cf8947272b6b5d0befc94b286501c0112a9e8b2838fe4f491d",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:36.340639+00:00",
+          "bytes_transferred": 3987369
+        },
+        {
+          "file_id": "88360fd1-fe50-4849-992b-431241033bd6",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024209000000_aid0001.tif",
+          "file_size": 4049513,
+          "sha256": "b1159189e65c5d5deae390c7195adbb1cab11d74cd705b225acfad306a514119",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:36.679014+00:00",
+          "bytes_transferred": 4049513
+        },
+        {
+          "file_id": "9f8dd52c-1cd2-4381-ba71-c144b664f075",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024225000000_aid0001.tif",
+          "file_size": 4054798,
+          "sha256": "ce0adba6f35e2b6797c82a7d03d20212d64bce7dcbd097080320321556156774",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:38.671969+00:00",
+          "bytes_transferred": 4054798
+        },
+        {
+          "file_id": "12db6f5f-2862-4898-8035-66c63d3a092f",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024241000000_aid0001.tif",
+          "file_size": 4189940,
+          "sha256": "475a645b701deb16a7cc9cf3ce3075d2f3d0c4d5b7c52004437867d77b43115b",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:39.069708+00:00",
+          "bytes_transferred": 4189940
+        },
+        {
+          "file_id": "67cb667a-32ba-4c2a-9a5c-b9b9a6b3e974",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024257000000_aid0001.tif",
+          "file_size": 4155761,
+          "sha256": "a5896907ecfe63ed01b9cbe161afe584ff60c5d3b2cce9addc56cfd866ae321e",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:41.307508+00:00",
+          "bytes_transferred": 4155761
+        },
+        {
+          "file_id": "22a996dd-b9e6-4af0-ae5f-3611f21c20ad",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024273000000_aid0001.tif",
+          "file_size": 4131622,
+          "sha256": "b75ce842bfac524dac1a3a234d7c4dda06fd6d312b5a46789d07feb5de731fb2",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:41.756945+00:00",
+          "bytes_transferred": 4131622
+        },
+        {
+          "file_id": "b5ddbd0f-e51e-4758-a36b-8ce7a46b6810",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024209000000_aid0001.tif",
+          "file_size": 373602,
+          "sha256": "303fc7334e338aee5b7b350fc91a4cc5b41a08c8da777ca52c9797ed82ce6dde",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:43.641361+00:00",
+          "bytes_transferred": 373602
+        },
+        {
+          "file_id": "6dd93afb-1b79-4a89-99bc-b99cf8073717",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024225000000_aid0001.tif",
+          "file_size": 337420,
+          "sha256": "34e6d0eb3de32567660e993c522f2b3f8260a541d7a7fa50735475445948c99a",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:44.173406+00:00",
+          "bytes_transferred": 337420
+        },
+        {
+          "file_id": "334a1225-c525-4b47-8557-d552529c47ad",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024241000000_aid0001.tif",
+          "file_size": 330714,
+          "sha256": "0809584f256c460e0ef2fdf0849b1584f07def95615f6f937666ddc87020c1d4",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:45.809980+00:00",
+          "bytes_transferred": 330714
+        },
+        {
+          "file_id": "b96435c8-a938-4b24-8f04-f3b14d201fd8",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024257000000_aid0001.tif",
+          "file_size": 345860,
+          "sha256": "7a67c3412f1207042d3c84c6ee95a1ce16047d139e97d57e8f0880ee45c38e53",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:47.134469+00:00",
+          "bytes_transferred": 345860
+        },
+        {
+          "file_id": "b89a356e-a7c7-4eb9-bd0c-241fd5e5281f",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024273000000_aid0001.tif",
+          "file_size": 378443,
+          "sha256": "eb96a2a6427a6076338114a3cfc4ce5abccf83c0a40590b44df0b8b98186eb3c",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:47.948608+00:00",
+          "bytes_transferred": 378443
+        },
+        {
+          "file_id": "15209649-9390-45d4-ab39-825e7dde97c0",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024209000000_aid0001.tif",
+          "file_size": 351060,
+          "sha256": "9acaa9480dfffb711fb6e442e0680f80792c0d11e6de038e29a957034408f4bb",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:49.518407+00:00",
+          "bytes_transferred": 351060
+        },
+        {
+          "file_id": "eb2834cf-63de-44c9-abc3-d6173de195c4",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024225000000_aid0001.tif",
+          "file_size": 338195,
+          "sha256": "5bb07a296c4f88d9274c2d014d9933e69729d041de6963ae9ef65b9fad8d7098",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:50.694432+00:00",
+          "bytes_transferred": 338195
+        },
+        {
+          "file_id": "bb85c29d-9a43-498d-ab20-6e39788aa0d3",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024241000000_aid0001.tif",
+          "file_size": 336172,
+          "sha256": "fcd6d1e30bd0193f5d5e70237a99e95ef5fbcfe9623de3ba400bca79ca0b7a48",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:51.478818+00:00",
+          "bytes_transferred": 336172
+        },
+        {
+          "file_id": "2de32ed7-ce48-4912-ba0c-b502708785cb",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024257000000_aid0001.tif",
+          "file_size": 337551,
+          "sha256": "3f551de3e344b900087232aea6b031e5bfc84a6f437287abcf7902e717c430f4",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:53.199290+00:00",
+          "bytes_transferred": 337551
+        },
+        {
+          "file_id": "93278a1c-2c74-4c41-892d-75d943723cbd",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024273000000_aid0001.tif",
+          "file_size": 340198,
+          "sha256": "22f562e4600af3e274d14e61a84223d87096fdfa6070ee29d4ea205558534734",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:53.582421+00:00",
+          "bytes_transferred": 340198
+        },
+        {
+          "file_id": "f5112aa0-cf4b-4652-abb2-7dca7ea0533d",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024209000000_aid0001.tif",
+          "file_size": 238752,
+          "sha256": "392df4a4a8e0069d3bb11e82862b05dc4f0384f1c824393ffbf6acdd3d612b67",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:55.343960+00:00",
+          "bytes_transferred": 238752
+        },
+        {
+          "file_id": "23284fdd-8bbc-4176-b637-e10771636017",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024225000000_aid0001.tif",
+          "file_size": 246424,
+          "sha256": "bd5fa69605c76197c10a34dac71bef32cb14b019b27eb36217e8479b1e60345c",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:55.909932+00:00",
+          "bytes_transferred": 246424
+        },
+        {
+          "file_id": "099efcfe-e0dc-4df9-8fa2-ceee5d648376",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024241000000_aid0001.tif",
+          "file_size": 236630,
+          "sha256": "881f30d2632bc026d6ffcaed3b9db5ce5eadf57ddf396ae28929dd3348fedb94",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:57.298781+00:00",
+          "bytes_transferred": 236630
+        },
+        {
+          "file_id": "8781eb35-ead8-44f0-ba66-2a5a1688a1f1",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024257000000_aid0001.tif",
+          "file_size": 240763,
+          "sha256": "e1da04acdd80251cf38e06400c00ebce44b806dfb05f4ddb6f3620871f3a419b",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:57.962286+00:00",
+          "bytes_transferred": 240763
+        },
+        {
+          "file_id": "ce582dbd-0f69-41e6-b812-e1a6b154e4d5",
+          "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024273000000_aid0001.tif",
+          "file_size": 240693,
+          "sha256": "9cce22ec444dee74ebfd3172df79e4330520600817d42b6b84df00c5ddce9c69",
+          "file_type": "tif",
+          "retrieved_utc": "2026-11-01T18:17:59.572969+00:00",
+          "bytes_transferred": 240693
+        },
+        {
+          "file_id": "5149b45f-8403-47bb-936f-afa065bcabe2",
+          "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-lookup.csv",
+          "file_size": 30794,
+          "sha256": "aab89c91f8d900605c2c21abd9881add51d26af53992d55438a98bf891928737",
+          "file_type": "csv",
+          "retrieved_utc": "2026-11-01T18:18:00.136982+00:00",
+          "bytes_transferred": 30794
+        },
+        {
+          "file_id": "82c5276f-9149-40ba-ab5e-9cd6401ca373",
+          "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-lookup.csv",
+          "file_size": 165,
+          "sha256": "ef0cde2de2606d86a91d673695401be1cc256a3f187c240555546dfde1e29aa0",
+          "file_type": "csv",
+          "retrieved_utc": "2026-11-01T18:18:01.088109+00:00",
+          "bytes_transferred": 165
+        },
+        {
+          "file_id": "ca9575de-393a-496b-a4ef-e6da11138b3b",
+          "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-Statistics-QA.csv",
+          "file_size": 5418,
+          "sha256": "57bdce7634e07b8abb8b8b69a267d9ca6146a6968695fcc3111b285eebe950c6",
+          "file_type": "csv",
+          "retrieved_utc": "2026-11-01T18:18:02.208265+00:00",
+          "bytes_transferred": 5418
+        },
+        {
+          "file_id": "bc223069-2a51-432e-a39f-a85c66839586",
+          "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-Statistics-QA.csv",
+          "file_size": 575,
+          "sha256": "de44722f5ad78b0bfb885bf3c2275058e812ab5c3b15bc09ea5d6433ac32144e",
+          "file_type": "csv",
+          "retrieved_utc": "2026-11-01T18:18:02.702970+00:00",
+          "bytes_transferred": 575
+        },
+        {
+          "file_id": "aebf93ea-1912-45b6-9d29-480f92c7d2be",
+          "file_name": "MOD13A2-061-Statistics.csv",
+          "file_size": 3253,
+          "sha256": "f6ce4257b08ea414b5bd6a2f5c5c925ff8fae98adfe6cc43cede27bb1402d351",
+          "file_type": "csv",
+          "retrieved_utc": "2026-11-01T18:18:03.986979+00:00",
+          "bytes_transferred": 3253
+        },
+        {
+          "file_id": "ab4b3fde-f65b-4af9-87ee-81634df07dbb",
+          "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-granule-list.txt",
+          "file_size": 4860,
+          "sha256": "3b1d3230d90f99698ebda5f43c0c3b92249d86b35b78ea460ec22b3810a967bf",
+          "file_type": "txt",
+          "retrieved_utc": "2026-11-01T18:18:04.670723+00:00",
+          "bytes_transferred": 4860
+        },
+        {
+          "file_id": "6f0d6112-acfc-4fdb-a615-7569862a35b4",
+          "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-request.json",
+          "file_size": 633098,
+          "sha256": "ad0f02463694574a282f7986441a984be57bc7f2c58a10953d84d8f2c47d884e",
+          "file_type": "json",
+          "retrieved_utc": "2026-11-01T18:18:05.864867+00:00",
+          "bytes_transferred": 633098
+        },
+        {
+          "file_id": "6484d269-3191-4bbc-baf4-2a8bda746c7c",
+          "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-MOD13A2-061-metadata.xml",
+          "file_size": 22110,
+          "sha256": "c873227b353a7b00b851c1d0137749e962483bb5c952eeb5ab9717cb405ba8c1",
+          "file_type": "xml",
+          "retrieved_utc": "2026-11-01T18:18:07.459207+00:00",
+          "bytes_transferred": 22110
+        },
+        {
+          "file_id": "402d5709-6429-49b2-9b19-4ad078140a8b",
+          "file_name": "README.md",
+          "file_size": 37537,
+          "sha256": "63d520c5dea0ffc35b6368e649de56636093c5379e3034278b41c99742e84247",
+          "file_type": "txt",
+          "retrieved_utc": "2026-11-01T18:18:08.627374+00:00",
+          "bytes_transferred": 37537
+        }
+      ],
+      "bytes_stored": 45497290,
+      "bytes_transferred": 45497290,
+      "composite_bytes": {
+        "2024209": 8873295,
+        "2024225": 8813668,
+        "2024241": 9020274,
+        "2024257": 8973918,
+        "2024273": 9078325
+      },
+      "runtime_seconds": 385.4191332999999,
+      "created_utc": "2026-11-01T18:10:16.093702",
+      "completed_utc": "2026-11-01T18:16:16.215345",
+      "retrieved_utc": "2026-11-01T18:18:08.627956+00:00"
+    }
+  ],
+  "status": "complete",
+  "task": {
+    "task_id": "be169e84-10c7-4d22-9752-54b049d143d6",
+    "status": "downloaded",
+    "files": [
+      {
+        "file_id": "22941244-d04e-4528-9456-ab6df6b04009",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024209000000_aid0001.tif",
+        "file_size": 3860368,
+        "sha256": "4798eb61fa6ba125c9e595794d503f86a51dd538d922f4d629af4d1796d40aff",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:31.510969+00:00",
+        "bytes_transferred": 3860368
+      },
+      {
+        "file_id": "f47de654-b319-4460-b5d8-e5667cf7734e",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024225000000_aid0001.tif",
+        "file_size": 3836831,
+        "sha256": "62ef022956b325a0a538d30926eb9c58565d9454b3e73a342c94621fcc436df8",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:31.327745+00:00",
+        "bytes_transferred": 3836831
+      },
+      {
+        "file_id": "393304d7-6b67-4a6d-baa8-399c32f090f5",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024241000000_aid0001.tif",
+        "file_size": 3926818,
+        "sha256": "8f7ee7ddc00a498e38995e51fcc12f2ef73a764b4219d4e7e3c155d3970ef8c1",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:33.709263+00:00",
+        "bytes_transferred": 3926818
+      },
+      {
+        "file_id": "c8543bc5-5d20-442d-b1f7-f18541ffbece",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024257000000_aid0001.tif",
+        "file_size": 3893983,
+        "sha256": "5ab82706eef5e934cac097972283e129c74a802af29d5980e16ca43b1c01c6ec",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:33.796844+00:00",
+        "bytes_transferred": 3893983
+      },
+      {
+        "file_id": "fb980ea6-8df2-40c7-96dd-e118de4e03b0",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_EVI_doy2024273000000_aid0001.tif",
+        "file_size": 3987369,
+        "sha256": "eb65a227ae39c1cf8947272b6b5d0befc94b286501c0112a9e8b2838fe4f491d",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:36.340639+00:00",
+        "bytes_transferred": 3987369
+      },
+      {
+        "file_id": "88360fd1-fe50-4849-992b-431241033bd6",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024209000000_aid0001.tif",
+        "file_size": 4049513,
+        "sha256": "b1159189e65c5d5deae390c7195adbb1cab11d74cd705b225acfad306a514119",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:36.679014+00:00",
+        "bytes_transferred": 4049513
+      },
+      {
+        "file_id": "9f8dd52c-1cd2-4381-ba71-c144b664f075",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024225000000_aid0001.tif",
+        "file_size": 4054798,
+        "sha256": "ce0adba6f35e2b6797c82a7d03d20212d64bce7dcbd097080320321556156774",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:38.671969+00:00",
+        "bytes_transferred": 4054798
+      },
+      {
+        "file_id": "12db6f5f-2862-4898-8035-66c63d3a092f",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024241000000_aid0001.tif",
+        "file_size": 4189940,
+        "sha256": "475a645b701deb16a7cc9cf3ce3075d2f3d0c4d5b7c52004437867d77b43115b",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:39.069708+00:00",
+        "bytes_transferred": 4189940
+      },
+      {
+        "file_id": "67cb667a-32ba-4c2a-9a5c-b9b9a6b3e974",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024257000000_aid0001.tif",
+        "file_size": 4155761,
+        "sha256": "a5896907ecfe63ed01b9cbe161afe584ff60c5d3b2cce9addc56cfd866ae321e",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:41.307508+00:00",
+        "bytes_transferred": 4155761
+      },
+      {
+        "file_id": "22a996dd-b9e6-4af0-ae5f-3611f21c20ad",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_NDVI_doy2024273000000_aid0001.tif",
+        "file_size": 4131622,
+        "sha256": "b75ce842bfac524dac1a3a234d7c4dda06fd6d312b5a46789d07feb5de731fb2",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:41.756945+00:00",
+        "bytes_transferred": 4131622
+      },
+      {
+        "file_id": "b5ddbd0f-e51e-4758-a36b-8ce7a46b6810",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024209000000_aid0001.tif",
+        "file_size": 373602,
+        "sha256": "303fc7334e338aee5b7b350fc91a4cc5b41a08c8da777ca52c9797ed82ce6dde",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:43.641361+00:00",
+        "bytes_transferred": 373602
+      },
+      {
+        "file_id": "6dd93afb-1b79-4a89-99bc-b99cf8073717",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024225000000_aid0001.tif",
+        "file_size": 337420,
+        "sha256": "34e6d0eb3de32567660e993c522f2b3f8260a541d7a7fa50735475445948c99a",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:44.173406+00:00",
+        "bytes_transferred": 337420
+      },
+      {
+        "file_id": "334a1225-c525-4b47-8557-d552529c47ad",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024241000000_aid0001.tif",
+        "file_size": 330714,
+        "sha256": "0809584f256c460e0ef2fdf0849b1584f07def95615f6f937666ddc87020c1d4",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:45.809980+00:00",
+        "bytes_transferred": 330714
+      },
+      {
+        "file_id": "b96435c8-a938-4b24-8f04-f3b14d201fd8",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024257000000_aid0001.tif",
+        "file_size": 345860,
+        "sha256": "7a67c3412f1207042d3c84c6ee95a1ce16047d139e97d57e8f0880ee45c38e53",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:47.134469+00:00",
+        "bytes_transferred": 345860
+      },
+      {
+        "file_id": "b89a356e-a7c7-4eb9-bd0c-241fd5e5281f",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_VI_Quality_doy2024273000000_aid0001.tif",
+        "file_size": 378443,
+        "sha256": "eb96a2a6427a6076338114a3cfc4ce5abccf83c0a40590b44df0b8b98186eb3c",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:47.948608+00:00",
+        "bytes_transferred": 378443
+      },
+      {
+        "file_id": "15209649-9390-45d4-ab39-825e7dde97c0",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024209000000_aid0001.tif",
+        "file_size": 351060,
+        "sha256": "9acaa9480dfffb711fb6e442e0680f80792c0d11e6de038e29a957034408f4bb",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:49.518407+00:00",
+        "bytes_transferred": 351060
+      },
+      {
+        "file_id": "eb2834cf-63de-44c9-abc3-d6173de195c4",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024225000000_aid0001.tif",
+        "file_size": 338195,
+        "sha256": "5bb07a296c4f88d9274c2d014d9933e69729d041de6963ae9ef65b9fad8d7098",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:50.694432+00:00",
+        "bytes_transferred": 338195
+      },
+      {
+        "file_id": "bb85c29d-9a43-498d-ab20-6e39788aa0d3",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024241000000_aid0001.tif",
+        "file_size": 336172,
+        "sha256": "fcd6d1e30bd0193f5d5e70237a99e95ef5fbcfe9623de3ba400bca79ca0b7a48",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:51.478818+00:00",
+        "bytes_transferred": 336172
+      },
+      {
+        "file_id": "2de32ed7-ce48-4912-ba0c-b502708785cb",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024257000000_aid0001.tif",
+        "file_size": 337551,
+        "sha256": "3f551de3e344b900087232aea6b031e5bfc84a6f437287abcf7902e717c430f4",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:53.199290+00:00",
+        "bytes_transferred": 337551
+      },
+      {
+        "file_id": "93278a1c-2c74-4c41-892d-75d943723cbd",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024273000000_aid0001.tif",
+        "file_size": 340198,
+        "sha256": "22f562e4600af3e274d14e61a84223d87096fdfa6070ee29d4ea205558534734",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:53.582421+00:00",
+        "bytes_transferred": 340198
+      },
+      {
+        "file_id": "f5112aa0-cf4b-4652-abb2-7dca7ea0533d",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024209000000_aid0001.tif",
+        "file_size": 238752,
+        "sha256": "392df4a4a8e0069d3bb11e82862b05dc4f0384f1c824393ffbf6acdd3d612b67",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:55.343960+00:00",
+        "bytes_transferred": 238752
+      },
+      {
+        "file_id": "23284fdd-8bbc-4176-b637-e10771636017",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024225000000_aid0001.tif",
+        "file_size": 246424,
+        "sha256": "bd5fa69605c76197c10a34dac71bef32cb14b019b27eb36217e8479b1e60345c",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:55.909932+00:00",
+        "bytes_transferred": 246424
+      },
+      {
+        "file_id": "099efcfe-e0dc-4df9-8fa2-ceee5d648376",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024241000000_aid0001.tif",
+        "file_size": 236630,
+        "sha256": "881f30d2632bc026d6ffcaed3b9db5ce5eadf57ddf396ae28929dd3348fedb94",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:57.298781+00:00",
+        "bytes_transferred": 236630
+      },
+      {
+        "file_id": "8781eb35-ead8-44f0-ba66-2a5a1688a1f1",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024257000000_aid0001.tif",
+        "file_size": 240763,
+        "sha256": "e1da04acdd80251cf38e06400c00ebce44b806dfb05f4ddb6f3620871f3a419b",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:57.962286+00:00",
+        "bytes_transferred": 240763
+      },
+      {
+        "file_id": "ce582dbd-0f69-41e6-b812-e1a6b154e4d5",
+        "file_name": "MOD13A2.061_2024199_to_2024274/MOD13A2.061__1_km_16_days_pixel_reliability_doy2024273000000_aid0001.tif",
+        "file_size": 240693,
+        "sha256": "9cce22ec444dee74ebfd3172df79e4330520600817d42b6b84df00c5ddce9c69",
+        "file_type": "tif",
+        "retrieved_utc": "2026-11-01T18:17:59.572969+00:00",
+        "bytes_transferred": 240693
+      },
+      {
+        "file_id": "5149b45f-8403-47bb-936f-afa065bcabe2",
+        "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-lookup.csv",
+        "file_size": 30794,
+        "sha256": "aab89c91f8d900605c2c21abd9881add51d26af53992d55438a98bf891928737",
+        "file_type": "csv",
+        "retrieved_utc": "2026-11-01T18:18:00.136982+00:00",
+        "bytes_transferred": 30794
+      },
+      {
+        "file_id": "82c5276f-9149-40ba-ab5e-9cd6401ca373",
+        "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-lookup.csv",
+        "file_size": 165,
+        "sha256": "ef0cde2de2606d86a91d673695401be1cc256a3f187c240555546dfde1e29aa0",
+        "file_type": "csv",
+        "retrieved_utc": "2026-11-01T18:18:01.088109+00:00",
+        "bytes_transferred": 165
+      },
+      {
+        "file_id": "ca9575de-393a-496b-a4ef-e6da11138b3b",
+        "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-Statistics-QA.csv",
+        "file_size": 5418,
+        "sha256": "57bdce7634e07b8abb8b8b69a267d9ca6146a6968695fcc3111b285eebe950c6",
+        "file_type": "csv",
+        "retrieved_utc": "2026-11-01T18:18:02.208265+00:00",
+        "bytes_transferred": 5418
+      },
+      {
+        "file_id": "bc223069-2a51-432e-a39f-a85c66839586",
+        "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-Statistics-QA.csv",
+        "file_size": 575,
+        "sha256": "de44722f5ad78b0bfb885bf3c2275058e812ab5c3b15bc09ea5d6433ac32144e",
+        "file_type": "csv",
+        "retrieved_utc": "2026-11-01T18:18:02.702970+00:00",
+        "bytes_transferred": 575
+      },
+      {
+        "file_id": "aebf93ea-1912-45b6-9d29-480f92c7d2be",
+        "file_name": "MOD13A2-061-Statistics.csv",
+        "file_size": 3253,
+        "sha256": "f6ce4257b08ea414b5bd6a2f5c5c925ff8fae98adfe6cc43cede27bb1402d351",
+        "file_type": "csv",
+        "retrieved_utc": "2026-11-01T18:18:03.986979+00:00",
+        "bytes_transferred": 3253
+      },
+      {
+        "file_id": "ab4b3fde-f65b-4af9-87ee-81634df07dbb",
+        "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-granule-list.txt",
+        "file_size": 4860,
+        "sha256": "3b1d3230d90f99698ebda5f43c0c3b92249d86b35b78ea460ec22b3810a967bf",
+        "file_type": "txt",
+        "retrieved_utc": "2026-11-01T18:18:04.670723+00:00",
+        "bytes_transferred": 4860
+      },
+      {
+        "file_id": "6f0d6112-acfc-4fdb-a615-7569862a35b4",
+        "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-request.json",
+        "file_size": 633098,
+        "sha256": "ad0f02463694574a282f7986441a984be57bc7f2c58a10953d84d8f2c47d884e",
+        "file_type": "json",
+        "retrieved_utc": "2026-11-01T18:18:05.864867+00:00",
+        "bytes_transferred": 633098
+      },
+      {
+        "file_id": "6484d269-3191-4bbc-baf4-2a8bda746c7c",
+        "file_name": "bolivia-mod13a2-c0776db4549855540892edc7-MOD13A2-061-metadata.xml",
+        "file_size": 22110,
+        "sha256": "c873227b353a7b00b851c1d0137749e962483bb5c952eeb5ab9717cb405ba8c1",
+        "file_type": "xml",
+        "retrieved_utc": "2026-11-01T18:18:07.459207+00:00",
+        "bytes_transferred": 22110
+      },
+      {
+        "file_id": "402d5709-6429-49b2-9b19-4ad078140a8b",
+        "file_name": "README.md",
+        "file_size": 37537,
+        "sha256": "63d520c5dea0ffc35b6368e649de56636093c5379e3034278b41c99742e84247",
+        "file_type": "txt",
+        "retrieved_utc": "2026-11-01T18:18:08.627374+00:00",
+        "bytes_transferred": 37537
+      }
+    ],
+    "bytes_stored": 45497290,
+    "bytes_transferred": 45497290,
+    "composite_bytes": {
+      "2024209": 8873295,
+      "2024225": 8813668,
+      "2024241": 9020274,
+      "2024257": 8973918,
+      "2024273": 9078325
+    },
+    "runtime_seconds": 385.4191332999999,
+    "created_utc": "2026-11-01T18:10:16.093702",
+    "completed_utc": "2026-11-01T18:16:16.215345",
+    "retrieved_utc": "2026-11-01T18:18:08.627956+00:00"
+  },
+  "rasters": [
+    {
+      "file_name": "MOD13A2.061__1_km_16_days_NDVI_doy2024209000000_aid0001.tif",
+      "role": "ndvi",
+      "dtype": "int16",
+      "crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "crs_wkt": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "resolution": [
+        926.62543305,
+        926.62543305
+      ],
+      "width": 1685,
+      "height": 1601,
+      "nodata": -3000.0,
+      "delivered_scale": 0.0001,
+      "delivered_offset": 0.0,
+      "source_scale_factor": 0.0001,
+      "source_add_offset": 0.0,
+      "source_fill_value": -3000,
+      "observed_min": -2000.0,
+      "observed_max": 10000.0,
+      "valid_pixels": 1299206,
+      "values_already_scaled": false,
+      "file_size": 4049513
+    },
+    {
+      "file_name": "MOD13A2.061__1_km_16_days_EVI_doy2024209000000_aid0001.tif",
+      "role": "evi",
+      "dtype": "int16",
+      "crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "crs_wkt": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "resolution": [
+        926.62543305,
+        926.62543305
+      ],
+      "width": 1685,
+      "height": 1601,
+      "nodata": -3000.0,
+      "delivered_scale": 0.0001,
+      "delivered_offset": 0.0,
+      "source_scale_factor": 0.0001,
+      "source_add_offset": 0.0,
+      "source_fill_value": -3000,
+      "observed_min": -1994.0,
+      "observed_max": 9124.0,
+      "valid_pixels": 1299206,
+      "values_already_scaled": false,
+      "file_size": 3860368
+    },
+    {
+      "file_name": "MOD13A2.061__1_km_16_days_VI_Quality_doy2024209000000_aid0001.tif",
+      "role": "vi_quality",
+      "dtype": "uint16",
+      "crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "crs_wkt": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "resolution": [
+        926.62543305,
+        926.62543305
+      ],
+      "width": 1685,
+      "height": 1601,
+      "nodata": 65535.0,
+      "delivered_scale": 1.0,
+      "delivered_offset": 0.0,
+      "source_scale_factor": "",
+      "source_add_offset": "",
+      "source_fill_value": 65535,
+      "observed_min": 2057.0,
+      "observed_max": 40255.0,
+      "valid_pixels": 1301968,
+      "values_already_scaled": null,
+      "file_size": 373602
+    },
+    {
+      "file_name": "MOD13A2.061__1_km_16_days_pixel_reliability_doy2024209000000_aid0001.tif",
+      "role": "pixel_reliability",
+      "dtype": "int32",
+      "crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "crs_wkt": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "resolution": [
+        926.62543305,
+        926.62543305
+      ],
+      "width": 1685,
+      "height": 1601,
+      "nodata": -1.0,
+      "delivered_scale": 1.0,
+      "delivered_offset": 0.0,
+      "source_scale_factor": "",
+      "source_add_offset": "",
+      "source_fill_value": -1,
+      "observed_min": 0.0,
+      "observed_max": 3.0,
+      "valid_pixels": 1299206,
+      "values_already_scaled": null,
+      "file_size": 238752
+    },
+    {
+      "file_name": "MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2024209000000_aid0001.tif",
+      "role": "composite_doy",
+      "dtype": "int16",
+      "crs": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "crs_wkt": "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"unknown\",SPHEROID[\"unknown\",6371007.181,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Sinusoidal\"],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+      "resolution": [
+        926.62543305,
+        926.62543305
+      ],
+      "width": 1685,
+      "height": 1601,
+      "nodata": -1.0,
+      "delivered_scale": 1.0,
+      "delivered_offset": 0.0,
+      "source_scale_factor": "",
+      "source_add_offset": "",
+      "source_fill_value": -1,
+      "observed_min": 209.0,
+      "observed_max": 224.0,
+      "valid_pixels": 1299206,
+      "values_already_scaled": null,
+      "file_size": 351060
+    }
+  ],
+  "estimate": {
+    "kind": "estimate",
+    "period": [
+      "2011-12-01",
+      "2026-07-31"
+    ],
+    "composite_count": 338,
+    "estimated_bytes_per_composite": 8951896.0,
+    "estimated_transfer_bytes": 3025740848,
+    "storage_safety_multiplier": 1.5,
+    "reserved_storage_bytes": 4538611272
+  },
+  "finished_utc": "2026-11-01T18:18:09.261932+00:00",
+  "runtime_seconds": 389.3365193999998,
+  "bytes_transferred": 45497290,
+  "bytes_stored": 45497290,
+  "free_bytes_after": 95076020224
+}

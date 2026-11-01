@@ -1,0 +1,60 @@
+schema_version: '1'
+contract: configs/extension_vegetation.yaml
+classification: retrospective
+root: datasets/processed/vegetation
+composites:
+  path: composites/YYYYDDD.parquet
+  keys: [cell_id]
+  columns: [cell_id, ndvi, evi, valid_fraction, oldest_day, latest_day]
+  date_encoding: oldest_day and latest_day are integer UTC days since 1970-01-01; -1 means missing
+  period: start from matching raster, statistics and source granule metadata; end is next 16-day boundary, capped at January 1
+features:
+  path: features/lag={16|32}/geography={temporal|geographic}/year={YYYY}/part.parquet
+  keys: [cell_id, issue_date]
+  issue_date: timestamp without timezone representing Monday 00:00 UTC
+  lags: {primary: 16, sensitivity: 32}
+  geographies: {temporal: cell climatology, geographic: department climatology}
+  ordered_features:
+    - veg_ndvi_latest
+    - veg_evi_latest
+    - veg_ndvi_change_previous
+    - veg_evi_change_previous
+    - veg_ndvi_change_48d
+    - veg_evi_change_48d
+    - veg_ndvi_seasonal_anomaly
+    - veg_evi_seasonal_anomaly
+    - veg_valid_pixel_fraction
+    - veg_observation_age_days
+  audit_columns:
+    - composite_index
+    - composite_start
+    - composite_end_boundary
+    - oldest_observation
+    - latest_observation
+    - vegetation_available
+    - vegetation_lag_days
+  vegetation_available: all ten registered features finite
+  coverage_failure: all ten features null below 0.5 valid national pixel area fraction
+  missing_reference: anomaly or change remains null; no imputation
+  metadata:
+    extension_contract_sha256: exact registered contract bytes
+    vegetation_snapshot_sha256: aggregate, grid, contract and implementation dependency fingerprint
+    vegetation_lag_days: '16 or 32'
+    vegetation_geography: temporal or geographic
+    vegetation_source_manifest: source.json
+incremental:
+  checkpoints: each composite and annual feature output has an adjacent .json checksum receipt
+  aggregation: finished hash-valid composites reused; new composites appended
+  features: only outputs with changed data or climatology dependencies regenerated
+  incomplete_acquisition_year: output is provisional and regenerated as more composites arrive
+  skipped_years: no downloaded composite in year; absent joins remain missing
+provenance:
+  source: source.json
+  resources_and_coverage: report.json
+  weight_method: densified native pixel footprints intersect national cell portions in longitude-latitude; geodesic WGS84 areas
+  weight_edge_segments: 4 per native pixel edge; national edges at most 0.001 degree
+  national_coverage_relative_tolerance: 0.00001
+  weights: weights/{grid-fingerprint}.npz with checksum receipt
+  scaling: raw rasterio read; require integer storage and GDAL scale 0.0001; compare float32 decoded values
+  aoi_deviation: contract buffer 0.1 degree; recorded acquisition buffer 0.05 degree; national coverage verified independently
+  confirmation_2026: require production and archive evidence before 2026-07-31T23:59:59Z; otherwise missing

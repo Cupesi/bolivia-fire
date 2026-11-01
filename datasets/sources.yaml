@@ -191,3 +191,73 @@ geonames:
   bytes: 1073582
   path: datasets/raw/geonames/BO_c78195cf34d32f5b5becba9015f7b0d0e34cf8e56efeb291d3f25ce44f311e47.zip
   feature_class: P
+vegetation:
+  provider: NASA LP DAAC, through AppEEARS
+  product: MOD13A2.061
+  description: MODIS/Terra Vegetation Indices 16-Day L3 Global 1km SIN Grid V061
+  doi: 10.5067/MODIS/MOD13A2.061
+  product_url: https://cmr.earthdata.nasa.gov/search/concepts/C2565788905-LPCLOUD.html
+  api_documentation: https://appeears.earthdatacloud.nasa.gov/api/
+  product_discovery_url: https://appeears.earthdatacloud.nasa.gov/api/product/MOD13A2.061
+  license: NASA Earth science open data; unrestricted use unless otherwise specified
+  license_url: https://www.usgs.gov/centers/eros/science/usgs-eros-archive-data-use-and-citation
+  nominal_resolution_m: 1000
+  composite_days: 16
+  requested_period: ['2011-12-01', '2026-07-31']
+  pilot_period: ['2024-08-01', '2024-09-30']
+  projection: native
+  format: GeoTIFF
+  boundary_pin: boundaries.ADM0
+  boundary_buffer_degrees: 0.05
+  tasks_manifest: datasets/manifests/appeears_tasks.jsonl
+  discovery_manifest: datasets/manifests/appeears_discovery.json
+  pilot_report: datasets/manifests/appeears_pilot.json
+  full_report: datasets/manifests/appeears_full.json
+  schema: datasets/schemas/vegetation_raw.yaml
+  verified_date: '2026-11-01'
+landcover:
+  provider: MapBiomas Bolivia
+  product: Annual land cover and land use
+  collection: 4
+  release_date: '2026-10-01'
+  asset: projects/mapbiomas-public/assets/bolivia/lulc/collection4/mapbiomas_bolivia_collection4_coverage_v1
+  asset_listing: https://bolivia.mapbiomas.org/downloads/assets-en-google-earth-engine/
+  product_url: https://bolivia.mapbiomas.org/iniciativas-y-productos/cobertura-y-uso-del-suelo/cobertura/
+  legend_url: https://bolivia.mapbiomas.org/wp-content/uploads/sites/5/2026/09/Leyenda_Code_Bolivia_Col4.pdf
+  methodology_url: https://bolivia.mapbiomas.org/wp-content/uploads/sites/5/2026/10/ATBD_General_MapBiomas_Bolivia_COL4.pdf
+  legend_sha256: c600b6120da6a9908e6b2598d35bac0039da7d65716870faf38676683149a434
+  license: CC BY 4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  access_mode: authenticated Earth Engine, noncommercial Community Tier, no linked billing
+  tier_and_billing_evidence: owner-attested, verified 2026-11-01
+  api_and_usage_visibility: verified 2026-11-01; free console Monitoring and request profiling
+  native_crs: EPSG:4326
+  native_pixel_width_degrees: 0.00026949458523585647
+  nominal_resolution_m: 30
+  available_years: [1985, 2025]
+  planned_map_years: [2012, 2025]
+  classes:
+    forest: [1, 3, 4, 6]
+    nonforest: [10, 11, 12, 13, 29, 63, 66, 77, 81, 82]
+    farming: [14, 15, 18, 21, 39, 40, 72]
+    nonvegetated: [22, 23, 24, 25, 30, 61, 68, 92]
+    water: [26, 31, 33, 34]
+  invalid_codes: [0, 27, all_codes_outside_declared_groups]
+  minimum_mapped_area_fraction: 0.95
+  classification: retrospective
+  direct_download: computeFeatures polygon pilots; computePixels NumPy raster arrays; serial local files
+  pilot_manifest: datasets/manifests/mapbiomas_pilot.jsonl
+  raster_manifest: datasets/manifests/mapbiomas_raster.jsonl
+  raster_request_manifest: datasets/manifests/mapbiomas_raster_requests.jsonl
+  partial_raster_manifest: datasets/manifests/mapbiomas_raster_partial.jsonl
+  raster_method: national binary masks; nested mean reductions to exact project affine; local geodesic national-area weighting
+  raster_safety_factor: 1.5
+  raster_agreement_absolute_tolerance: 0.01
+  verification_manifest: datasets/manifests/mapbiomas_access.jsonl
+  schema: datasets/schemas/landcover.yaml
+  access_status: authenticated_metadata_polygon_pilots_and_partial_2012_raster_verified
+  full_extraction_status: paused_unknown_request_eecu_no_annual_raster_features
+  polygon_full_grid_rate_estimate_eecu_hours: 40.16863193
+  raster_full_year_measurement_eecu_hours: null
+  raster_full_14_year_projection_eecu_hours_1_5x: null
+  verified_date: '2026-11-01'

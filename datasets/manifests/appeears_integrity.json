@@ -1,0 +1,51 @@
+{
+  "verified_utc": "2026-11-01T19:40:50.174138+00:00",
+  "status": "pass",
+  "bundles": [
+    {
+      "task_id": "322434e3-151a-4c8e-97a2-b87a710feedf",
+      "manifest": "datasets/manifests/appeears_download_322434e3-151a-4c8e-97a2-b87a710feedf.json",
+      "manifest_sha256": "7a2a495a5dbc1c0d56594d1805f2d492f7867d02615087f09fa03969fcf61aa7",
+      "files_verified": 129,
+      "bytes_verified": 222410576
+    },
+    {
+      "task_id": "6e6d2561-6e0d-4d46-9f4c-2df864442742",
+      "manifest": "datasets/manifests/appeears_download_6e6d2561-6e0d-4d46-9f4c-2df864442742.json",
+      "manifest_sha256": "6b96765095c4273d3362d6ef073ecfc72dd431ee104f7509d8a0c0ed4d2e4915",
+      "files_verified": 24,
+      "bytes_verified": 29308714
+    },
+    {
+      "task_id": "7b9b48fa-2459-453a-9d0e-494fc148017e",
+      "manifest": "datasets/manifests/appeears_download_7b9b48fa-2459-453a-9d0e-494fc148017e.json",
+      "manifest_sha256": "79d4959e3316eab3666b4a810d8a1d5b5f29417ba1adea5ea9a804e4ab292228",
+      "files_verified": 129,
+      "bytes_verified": 220116647
+    },
+    {
+      "task_id": "88cc0908-0d05-43e7-97d8-383e1b161d7c",
+      "manifest": "datasets/manifests/appeears_download_88cc0908-0d05-43e7-97d8-383e1b161d7c.json",
+      "manifest_sha256": "a1f5fdda98f597e6915eaa0b1a0292ec49106383d6acf9bfc3cef4c256f72b79",
+      "files_verified": 129,
+      "bytes_verified": 219774136
+    },
+    {
+      "task_id": "be169e84-10c7-4d22-9752-54b049d143d6",
+      "manifest": "datasets/manifests/appeears_download_be169e84-10c7-4d22-9752-54b049d143d6.json",
+      "manifest_sha256": "010d3b5962cc8508c21be95cf5baeae9141a8a9001eefede58f929bfe7d2f252",
+      "files_verified": 34,
+      "bytes_verified": 45497290
+    },
+    {
+      "task_id": "f698da1c-da72-4e71-9351-5ea4d36944b4",
+      "manifest": "datasets/manifests/appeears_download_f698da1c-da72-4e71-9351-5ea4d36944b4.json",
+      "manifest_sha256": "5624a3dc758167b00ef313e134d21ee1ec345034b41b369468bfadca65aa689a",
+      "files_verified": 129,
+      "bytes_verified": 222370618
+    }
+  ],
+  "files_verified": 574,
+  "bytes_verified": 959477981,
+  "runtime_seconds": 4.670485300001019
+}

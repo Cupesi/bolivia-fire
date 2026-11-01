@@ -1,0 +1,909 @@
+{
+  "task_id": "f698da1c-da72-4e71-9351-5ea4d36944b4",
+  "files": [
+    {
+      "file_id": "a2ffb9f2-f825-442d-9cb9-4dd3ecb38ac9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2014353000000_aid0001.tif",
+      "file_size": 4144624,
+      "sha256": "bc5e85eb22657bbdeb694eea08b442f25ea8fb3a8be7f2c4d6514103949a1bf4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0d2affe3-b784-447c-89af-43aa5ec54f31",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015001000000_aid0001.tif",
+      "file_size": 4144060,
+      "sha256": "6c054e753f003302eef52bd30ebbf9247bdd680357d4b344e91f2db98cf8355c",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "ca116f2c-66f5-4e06-955a-0d425a2c2fa6",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015017000000_aid0001.tif",
+      "file_size": 4179575,
+      "sha256": "9e665f8f678efc1c0251850d288b4a29cd8a5af7b1ad22d4de1e896508cbd46d",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "56cca69a-9e1f-41f5-af3d-59832e0b7343",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015033000000_aid0001.tif",
+      "file_size": 4133936,
+      "sha256": "31ff6545bbab95e1030aa34c3fedfdc48ff5229a1bfe38e7cffd6a1d6e15669a",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "021a696f-5af0-476e-aa6b-6b1a44b79398",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015049000000_aid0001.tif",
+      "file_size": 4164470,
+      "sha256": "efb2471ab9b3569d6f75efc8fc24dbe066df2d8d7a5bf06b59ba4fbae1d35dfc",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "fbe6be20-29b7-4dcb-b82b-e88f9fd84225",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015065000000_aid0001.tif",
+      "file_size": 4152722,
+      "sha256": "534f59e37c8ebe43fb9907fe0ac11f0f23b471319d26c1e17f5ed67694842f91",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "566ec9fc-8a86-4c71-a586-16f0f3e9b5b3",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015081000000_aid0001.tif",
+      "file_size": 4088614,
+      "sha256": "732f3b77988967d682bb87e293db3730910c62fe7e436ec0b08176b0d65378cc",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "9dc33ec6-a5e4-4e0e-a489-6d55b9abafd2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015097000000_aid0001.tif",
+      "file_size": 4032231,
+      "sha256": "f446cfe8c43919f437bb1f55f65b9dc606ba81ae0637bb3a49b04a90508a3dc8",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0ecb0185-f03b-4447-9214-2078ca159f3a",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015113000000_aid0001.tif",
+      "file_size": 4023008,
+      "sha256": "ac5c1fb7871f0c8259b09eb35bd7127a015f544b8d9972789a3c56f48daf38c1",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "b803fc99-8c1f-4618-a7f4-35b9e4173c1a",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015129000000_aid0001.tif",
+      "file_size": 3984603,
+      "sha256": "44469de45154074db9fcbc873e083141c25e89f34e20eb96140b68ea5e787244",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "dffdc076-1565-4c39-b48c-fa7d894c696f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015145000000_aid0001.tif",
+      "file_size": 3873053,
+      "sha256": "b444fb91adbc189f6d7c57611aa7123484e5276a4f33b1dc718706d3dcb1a82b",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "5a40e3e0-b10e-4527-9956-a61dc4419b67",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015161000000_aid0001.tif",
+      "file_size": 3831962,
+      "sha256": "7fabcd7ac745fbb9d31f904b70eb989f5d842d1319a3a52b130bdac7426a49c5",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "fafe24ac-291b-4793-9749-8c72dd4f2ceb",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015177000000_aid0001.tif",
+      "file_size": 3826976,
+      "sha256": "ea6fc739a749b99eda32b49d0e40534593af38b5ef636f83422638f203a29e63",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "2729e739-d2ed-475e-bc32-292bc325a8d3",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015193000000_aid0001.tif",
+      "file_size": 3808079,
+      "sha256": "6b9016597af66409c2966816954e0a53c2b9d3bb39694c2565ea32258804a514",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "ca4cec5a-2870-4452-9221-45852e45760a",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015209000000_aid0001.tif",
+      "file_size": 3782215,
+      "sha256": "d1f21988050e9045dc2d3ac1626229aae93b4b668ca207527ac0bea84a79cc6a",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "7f5bf21b-6147-4fca-a044-4fcc1f481184",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015225000000_aid0001.tif",
+      "file_size": 3839641,
+      "sha256": "672a5bc39fc5e05055860c8bd1c7e9312dfc0f8f9d22e8ec93df3c69f9e8fe7b",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "6e5c0422-1a47-4a0c-871e-c892a2818ed3",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015241000000_aid0001.tif",
+      "file_size": 3826824,
+      "sha256": "deb9975357a6d8b3e8663dde38cc29a5752bd7306d51567c0b4ec0c05c8a6b92",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "d19ab2ea-a866-471e-907c-0cd8fd00c4f9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015257000000_aid0001.tif",
+      "file_size": 3862013,
+      "sha256": "8f52bac3b17acaba4f84b53faca74869869c855f97af466288600ac1afc47914",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "8407ba6a-5319-4ec6-a048-581e8997021f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015273000000_aid0001.tif",
+      "file_size": 3940198,
+      "sha256": "f125715c6ba6b1764a74df8676c7477e458a1f3295640e9c9d2d272724e71a04",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "5662bdef-865d-4b51-8ae1-8745d4f9e86e",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015289000000_aid0001.tif",
+      "file_size": 3983968,
+      "sha256": "437314743b70cdb681c2ada72440834371a8292f49b0bfff1b7a5d2eb8ffd731",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "6ee91a6c-34ac-4a8c-b24f-a0e7719aa97f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015305000000_aid0001.tif",
+      "file_size": 4035732,
+      "sha256": "af82f7b12b82af6613205acdbc089d695d2055f5aacef827908bbe1c68f56f01",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "5c98fbe1-114b-422b-995f-c043c9fead0e",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015321000000_aid0001.tif",
+      "file_size": 4070744,
+      "sha256": "a63f5a3ba1ac1c73d708656a4a7a63719e6efd2e0bfc4702b6f6f6a577b2b5c0",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "fe930004-4a83-4f31-804e-d95854c47c86",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015337000000_aid0001.tif",
+      "file_size": 4072781,
+      "sha256": "4b25e4bf3040922dec1efe3bd6034d6a9cf0bd41164ed8f7303130285e0bfde5",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0fa2bf64-dd31-4fd0-89b5-a5321714cd23",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_EVI_doy2015353000000_aid0001.tif",
+      "file_size": 4135492,
+      "sha256": "c8b5c066395058b0a621418428d527e07e9d8f970f61449770ef431bcaca1bb6",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "75465ac5-4828-4a26-b324-e4de3d62656c",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2014353000000_aid0001.tif",
+      "file_size": 4174290,
+      "sha256": "056812839ab8538169c77491ce36413f0ef676ad8625bebdac63ce4eb5d6836c",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "b161af4d-1e0c-4cd0-8a2e-6a203280f8c2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015001000000_aid0001.tif",
+      "file_size": 4126453,
+      "sha256": "043bde70a0ef598c493f1d7633ce02e83613246674b8cb8524c431aa7a447eed",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "442aef78-0a37-4c72-a294-f9994e47fbaa",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015017000000_aid0001.tif",
+      "file_size": 4172743,
+      "sha256": "98df7ec69f167c1d9e12600919d5e4f3b8bba1f594d8fbf4843618c131ab2cb1",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "bab944ca-9547-49c9-8f59-2d8de6982d80",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015033000000_aid0001.tif",
+      "file_size": 4118691,
+      "sha256": "1b7058aee1108b3f592dad803db7ead734fa36850bb3c7394f18317c9d414bf8",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "05301ed3-888d-4a1d-8bbc-2aebeff93930",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015049000000_aid0001.tif",
+      "file_size": 4248543,
+      "sha256": "051b2900bb6a37bdf8762dca4d03ebf469a5f52a8739e961b66b19ae26f8afd6",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "b9872298-d128-4d31-9383-62c274013bc0",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015065000000_aid0001.tif",
+      "file_size": 4142749,
+      "sha256": "df3131d446a1382f9acd1e75c737014dc3e91104e5e65ef9968dd31fd536dce4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e2f2c40a-4e65-43ba-b5ba-d36e94c44544",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015081000000_aid0001.tif",
+      "file_size": 4101847,
+      "sha256": "451967347db094bd9f21e8f2a80b0996f83f58fdd0fe9e0a7d9151d934be9eb0",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "04ab47bd-03ee-4875-81e5-52244a0983e3",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015097000000_aid0001.tif",
+      "file_size": 4028368,
+      "sha256": "d21f2fac614189608ced1102b7e4734baacc95356a1b162eeb06a436af426ed9",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "179f7b93-f968-43a9-bdb5-461d1ebee1ad",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015113000000_aid0001.tif",
+      "file_size": 4115857,
+      "sha256": "6a91f620e66c2082b5ee1eb3f4216da698c611a867b2ce38cad32f297c22c378",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "81877d9c-7970-4eba-a759-b1560fc59381",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015129000000_aid0001.tif",
+      "file_size": 4042489,
+      "sha256": "52101262b0525129c3f6668d9b8793b7b056924ef5416aff2d83dee14716b7f7",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "1ee6aff1-1d19-46cf-a375-1be0ae831d81",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015145000000_aid0001.tif",
+      "file_size": 3935063,
+      "sha256": "a13f9062939fb0f6ed8afd193c4cde4e11f46246c847697ac39e93cbdd104574",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "1c73dca1-1515-468c-9d81-60b15f122a32",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015161000000_aid0001.tif",
+      "file_size": 3890057,
+      "sha256": "12061fff5ee2480504d208bb57b46a0d657242a66ac7f32032c3a5634cb6292e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "9719c6db-9a1b-4ca3-bfdd-38b713f8a81c",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015177000000_aid0001.tif",
+      "file_size": 3914343,
+      "sha256": "76d9abb37113d8faf5cf2d9375c93e194a41852518964b5ac1a83294fc9e6b57",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "c9ab259c-5cb6-4b0b-b123-91fd6566348b",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015193000000_aid0001.tif",
+      "file_size": 3912946,
+      "sha256": "5cfcac938731eebb8d2d34fc679534bfbdedf93c2423e1e10804d4cb9bf95597",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "95da3575-6578-4a46-96f5-53901e341ef9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015209000000_aid0001.tif",
+      "file_size": 3918759,
+      "sha256": "9a17de414b42966ec521a9d859c8a21b088e2bdb75e177f67b9b6b95e9a69e98",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e672ffec-196c-4519-84f5-cc4221ccb2af",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015225000000_aid0001.tif",
+      "file_size": 3954138,
+      "sha256": "e51da448b1ed8f8a182dd2ade0ffa4e0ef889fe77103a1902fa834dcf9757676",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "6be2f29a-b0fd-406c-a45e-74a92dd966f0",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015241000000_aid0001.tif",
+      "file_size": 3969184,
+      "sha256": "94560407b98aaa976d8ea740288244ec225591955d6989059f6e826c6de93389",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "d4921ef5-40af-4e1f-8335-d6edff7d8fc6",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015257000000_aid0001.tif",
+      "file_size": 3979834,
+      "sha256": "6c498cfc25b02a59f31388445034b20976a237536fff1c497f4c200b0c483638",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "fbfcd4c9-005f-43c5-9447-c82ebbc482e7",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015273000000_aid0001.tif",
+      "file_size": 4007905,
+      "sha256": "dd22ef6aea565c14600e864d83369a23804fc2401af6555ff92524991249ec62",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f6347ce8-9322-467b-a23a-c65abf500dd8",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015289000000_aid0001.tif",
+      "file_size": 4030266,
+      "sha256": "1d51728cccf0b39262a86cb1388b0fbe20b232354a25cf5b0a744b0d1e112e02",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f5d81bef-f597-4599-b082-b3acbc6e222a",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015305000000_aid0001.tif",
+      "file_size": 4047188,
+      "sha256": "ba17330bbad25e3a19158d92492b2feb4b03962a1bc6e4d3ca9085a9c85d8cea",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "bf3492bc-d22f-4c27-8ea9-8bf4df5d8202",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015321000000_aid0001.tif",
+      "file_size": 4075841,
+      "sha256": "9fcba965e58a55f50496c51f659868b126021d28bfa5c725a5a369cadcf8160e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "40a29a2c-0016-4ca3-b58a-5afccdeeceee",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015337000000_aid0001.tif",
+      "file_size": 4023089,
+      "sha256": "81115abcc972cddf6132cd8652e3e0f33d48be2fefe22c145afae99293733971",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "757b9c96-298f-450d-8d29-208442d6a7a4",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_NDVI_doy2015353000000_aid0001.tif",
+      "file_size": 4149806,
+      "sha256": "c4dc9027e9ecd16a9f1d92239eaae1ff2a12b39c146bcfcd7b989786100749ac",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "478b98f1-eaab-42ea-871d-992618d8fd49",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2014353000000_aid0001.tif",
+      "file_size": 746893,
+      "sha256": "4c414409f5f948973e22268ad9f7c33f78e1a7645c825688dd48c7f10a0f3eab",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "9f8aeab1-2574-47e5-8d1a-c678d7bdb41d",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015001000000_aid0001.tif",
+      "file_size": 706822,
+      "sha256": "3082c3778ad34b69b7cadcf7c5fe501db789b1a305abfd57e77c3e7e3cf0b847",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "aeb46a38-1875-4c6a-b6a7-bf8767c8e107",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015017000000_aid0001.tif",
+      "file_size": 670176,
+      "sha256": "8baa00ec80743129d21c4569c2de425adaf5b048d04ac299ce3828b2cfc910ce",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "277cd496-f20a-4b4f-962b-bae0dbf6cbd5",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015033000000_aid0001.tif",
+      "file_size": 754569,
+      "sha256": "4bbc903d577240718ac924ba94289146efdc62756a4e6d0bc6309ac5897455cf",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "424eb2a1-9a7c-476f-adbb-279b1a2fae10",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015049000000_aid0001.tif",
+      "file_size": 854350,
+      "sha256": "c1cbb2857c40504725ad3f8429f3df83e953feb0a12482078641d35ba4f12a39",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "3a6d33d9-a57f-45fa-9934-dd14ea7825b5",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015065000000_aid0001.tif",
+      "file_size": 810839,
+      "sha256": "7e8d02addd96c5963c21bba18d6f76e25f33e292838253508ba6097908b94c47",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "9691d26f-0ab4-4e2a-a998-caf89a79c271",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015081000000_aid0001.tif",
+      "file_size": 588930,
+      "sha256": "afb1481870d86907eeff6877772f988885c4d6ef83d697d219bde100d1d02e26",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "cc192ba9-489e-4cf9-9be3-14f982f9a874",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015097000000_aid0001.tif",
+      "file_size": 485316,
+      "sha256": "075fd30a2abf3a1cd5bb371e1147ab051a17b643ec258f03d1a14a3fc71b01c3",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "befe3aa3-045d-4e68-9113-396d3c759477",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015113000000_aid0001.tif",
+      "file_size": 705423,
+      "sha256": "3d820fe6fd8efc7444f495b4f47dde76558ff8c735c0cdbdff928f5e80ceb8f5",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "af531d37-e607-4d31-9214-7cd26373056c",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015129000000_aid0001.tif",
+      "file_size": 572817,
+      "sha256": "5021bc6ceaa6a7b77fe85cd49de6139b0323f3a30d1d79c71a1cc251e89734b3",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "20affe97-3689-4ad4-872c-c3726384d5e0",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015145000000_aid0001.tif",
+      "file_size": 407235,
+      "sha256": "78fd947cc81456c8076f5eb1ecd9baae3b84db91d6be0275de6075fa1aec6f71",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "b1d19571-f7a2-47d1-a627-3e2227c73131",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015161000000_aid0001.tif",
+      "file_size": 284317,
+      "sha256": "5dcfc832b686eb5d5325c95fe0327401a4b41b064d031840f3a5c723bc2c2f2f",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f1f27271-61aa-4de6-950d-9b1c1223e5cb",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015177000000_aid0001.tif",
+      "file_size": 308183,
+      "sha256": "e91f26582d6727ea8d868568f7fc1b4bc9017ce39f4a37af6a468d8d96fe5c40",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e615d57f-16b7-4045-8402-95b48e72e4c1",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015193000000_aid0001.tif",
+      "file_size": 290784,
+      "sha256": "7fb04780551530e3d204f978fcc3c67bebcfc04e595da2c026a2b424de8fcce1",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "5398c013-f835-48f9-8809-8e6ae9d57c2f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015209000000_aid0001.tif",
+      "file_size": 237106,
+      "sha256": "a7b2a9dd6ea54f1ba2760f20406dfee1f36219519b315a6108ab4401b0caed07",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "95bdea97-7842-4a58-851a-ebbb71334ed9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015225000000_aid0001.tif",
+      "file_size": 324182,
+      "sha256": "e519ce88f3975c2e223092232863acaf2055355cf91ffbfeed3aa68a40883605",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "2a7506b3-9960-4864-89de-34f60adaea9b",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015241000000_aid0001.tif",
+      "file_size": 277440,
+      "sha256": "dd570fb61163adf76fb30cf204f8b96224856d5962e93efad815ee4a36a0cbb4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f262ab5b-45e0-4a51-9e7e-5bdb72d68db2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015257000000_aid0001.tif",
+      "file_size": 321535,
+      "sha256": "031ed1fe6a75edbc4681d2a64a73c2a47b3b3aee17146639095fd7e14be0d312",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f0de354d-17f8-4455-935b-a9c11f9d684c",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015273000000_aid0001.tif",
+      "file_size": 323961,
+      "sha256": "d9b61e3186569ecf924cd5265623bf37137b2e6bca48db11a74bff67ab11c0c6",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e328bf11-644f-482f-b6ca-44f4ee6420a4",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015289000000_aid0001.tif",
+      "file_size": 342072,
+      "sha256": "85cb3461c3dc0dcc724acc8622d1f191c390738e9adb1223514405c69be28870",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "154e4a76-d212-4883-bd73-83872ed51866",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015305000000_aid0001.tif",
+      "file_size": 463815,
+      "sha256": "c9f1dc2ce97970d3d29c2866f6840c8bf4720573d5a486c48ab52ca760c104a2",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f865cd7e-dbde-4102-b65c-d8a27b7f1ecf",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015321000000_aid0001.tif",
+      "file_size": 538406,
+      "sha256": "5d8de3543e6c3ee434da7f579836da643346649c8cf13ad03c781a37fc003854",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "71ab4f11-e485-4fb7-abca-ca7cf400f813",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015337000000_aid0001.tif",
+      "file_size": 466330,
+      "sha256": "5629d98b860674420a54ce8c4a105b4b025e67c79b66e78eabcc7ec187fe047e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "952e5f06-79df-4695-8a0c-0e1903d6f34e",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_VI_Quality_doy2015353000000_aid0001.tif",
+      "file_size": 837850,
+      "sha256": "18a66d2aa9313aacc047771c69c3018c32a6f3502db073958ce2dad1b43d8a37",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e8a0ddfd-80ac-492c-a308-e44051489779",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2014353000000_aid0001.tif",
+      "file_size": 547574,
+      "sha256": "bd9e464d09286287f7d9344c9aeea7afb98e79b2d491f60ac10954445ef9f270",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "4f98886e-019d-4b84-9c3f-2ee8ca9f9050",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015001000000_aid0001.tif",
+      "file_size": 517943,
+      "sha256": "3110d11c26c7a209a515ea6bd42649268b5962a135f627f0108c2d0a53d84dc4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f8e3d142-70b0-405a-a5c3-0cfa2ed91dc3",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015017000000_aid0001.tif",
+      "file_size": 504347,
+      "sha256": "e53ae8e00db6df449fa1d3ccb271cc02f731201b949da3ff6f9a08864268c910",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "23ac0ed7-c94c-40a6-9063-5b3b9ef4aed2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015033000000_aid0001.tif",
+      "file_size": 462186,
+      "sha256": "f0d0ead9f30c99f4dc1258e07e5957cb6ed655bb9e7d2aa20c44e348e747d933",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e62614d0-d54c-4872-8a1b-180b50a418e9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015049000000_aid0001.tif",
+      "file_size": 472275,
+      "sha256": "a2a6971e21074a21861d20438647fbd31b85607a1c1f34f5bd05a36356cf6c26",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "807036bc-23f8-4c1c-a4e6-80b1e2819728",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015065000000_aid0001.tif",
+      "file_size": 548464,
+      "sha256": "e443dcd9ec4b28f8258c2507d624c6e929c6cc289e2d3d7e3aea722cbd146fab",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "b4b81c9c-cb0d-42a7-9976-333a63d0531d",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015081000000_aid0001.tif",
+      "file_size": 437070,
+      "sha256": "b1cdbeb2b321c7b955baf863067f4c4ed012ab850b19be529044c1408c923c18",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "535d7245-0ab5-4c38-af6c-34e4cf39a90d",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015097000000_aid0001.tif",
+      "file_size": 373599,
+      "sha256": "fbddb2cdd6bf43d6ae47d21d53e16ae52f363756022b771cb031d155c349ba19",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "36f0b5b2-47f0-4d81-b0a5-b1ccd879e329",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015113000000_aid0001.tif",
+      "file_size": 491508,
+      "sha256": "e9fdb199705059548ba2eb604a7232ccf9c46c48aa9e4e23f077103309f3e92f",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "52c42e82-20ba-49e9-9bf8-6212ad31c8b9",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015129000000_aid0001.tif",
+      "file_size": 447721,
+      "sha256": "90b6750e88fbcff12815f7be95446e825fef5967be7a254eb0a97addbff00b94",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "40a04ae9-6a03-4faf-b07a-53fc0148b05a",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015145000000_aid0001.tif",
+      "file_size": 391750,
+      "sha256": "933e7dcdb58dca2a1bbb9f7451796506f52f51541b258c7e97b1c2cd39604daa",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0dbae86c-061b-4ac4-be60-17dad9d05344",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015161000000_aid0001.tif",
+      "file_size": 342936,
+      "sha256": "9c9a39fae8ef4ec6d53c17ed1a69ecd682f697b52217543d33c785116d52f06e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "94642610-e9ac-4d87-a15a-d4ed181675e2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015177000000_aid0001.tif",
+      "file_size": 309100,
+      "sha256": "339efb0fb86191660fdd0971c25ec25fb5ed2e0712099f6c50179a843363d72d",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "2dbb837a-b225-4748-b44d-7c7a733a2ce2",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015193000000_aid0001.tif",
+      "file_size": 317887,
+      "sha256": "f374c1eacba0d949f0905f5b6a95c8dada33ee8f27e14a7343a8467c213947ec",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "4cddf3e2-6446-455c-a363-1cd4e44d86fb",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015209000000_aid0001.tif",
+      "file_size": 240576,
+      "sha256": "7849cb29fdf066e190e59ba58e714974d840cc65d226029de48e14b73e77f0d4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "d6a968d8-ccb8-41f2-8a8e-cebb732b359f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015225000000_aid0001.tif",
+      "file_size": 352726,
+      "sha256": "8c1725288a06478f62e3eb0d6f2887281da9931b65a199480f11bc5ab23a0db9",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "fe67a530-25d7-4766-bda0-fda57085128b",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015241000000_aid0001.tif",
+      "file_size": 301255,
+      "sha256": "40636c73c1ded7eee90cd6bbe2bb1c768c5e530c4cca176334f2941b970f945e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "aa173169-8a29-4d2f-a78e-f1d632b515e0",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015257000000_aid0001.tif",
+      "file_size": 348285,
+      "sha256": "5c60c72bd9a5f52be09ad1b6af44c40de7d983123763c56b9eb869bff31421a3",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "dcddcd71-fe66-4747-9b8a-92edcced4120",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015273000000_aid0001.tif",
+      "file_size": 302075,
+      "sha256": "dbdf8e1eeeafaf6adc952d2a14cca8aae75998921c8184cd6e1e412aec02d62a",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "06534643-3cea-46bf-9746-9362c54b4870",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015289000000_aid0001.tif",
+      "file_size": 339584,
+      "sha256": "0708a40e5bf55ba9655a4244d7a8b918848df48e4cdbf404c288e9526c2fa593",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "7e6e4850-a03c-4a95-b52e-79884facd87f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015305000000_aid0001.tif",
+      "file_size": 405412,
+      "sha256": "f4d82126e4901aaea3c8b9ac6b9d8b80cb88fbb0fccbf226f4f5cc6c13d35f4f",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "3de050a7-8cf6-4fc7-802f-13cd6107a5ee",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015321000000_aid0001.tif",
+      "file_size": 413500,
+      "sha256": "4a79e25b4dae4cd9f324ce2bc904b9143e44efde04fbccc33c121ef7b52a451c",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "651eec7e-8a8f-40bc-b75a-aa23be5076b6",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015337000000_aid0001.tif",
+      "file_size": 474267,
+      "sha256": "6b571450a32a885a1bc65d970bda5ca8583d21ea2c787eb5d04939485520dde5",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "df7f45cd-f23a-4c88-b418-fe5003795aa0",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_composite_day_of_the_year_doy2015353000000_aid0001.tif",
+      "file_size": 552860,
+      "sha256": "0d6073f41036018628ca0b254a8ebecbd731be6f99f46d58d50100a1446319be",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0f0266c1-7d74-4a0c-b83d-a785246f6108",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2014353000000_aid0001.tif",
+      "file_size": 334843,
+      "sha256": "0dac51c0a75a25a4e1f52c51697dac6ae92a5db4ee029e05a79b85f01e0a917c",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "960c1200-a737-4ea8-b95f-7144ccef631b",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015001000000_aid0001.tif",
+      "file_size": 312629,
+      "sha256": "b4f5afe9181b52d5bb0f047d8f04e98bc6bebbea4446d8079f86e5e9b9fe54fb",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "04e4f171-a2c7-4e16-a00f-dbb35e5d7313",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015017000000_aid0001.tif",
+      "file_size": 293031,
+      "sha256": "0adfa29d27d49af688934fd4352fa24a62158de7cc50391c3f0618ccd284983a",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "38744cf7-6d96-4351-83b2-10fbb4f535ff",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015033000000_aid0001.tif",
+      "file_size": 353208,
+      "sha256": "22dbac9bffe0a643bf7b3dec907ef6a807b3b28cb8e9aeb148f2e0ec74150cc1",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "866f0143-1df7-4bef-8814-9a2c3af6b103",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015049000000_aid0001.tif",
+      "file_size": 385809,
+      "sha256": "f5d3f3a16eeb7ee2b83b7749ec6353c940d21f709f305f9159b5330954be4c55",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "762b095b-c608-446d-aa59-38826449cb1b",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015065000000_aid0001.tif",
+      "file_size": 362396,
+      "sha256": "2c1928092e6f6cabc168c59ceb578288812dd844083e35a99fba5f224c3bd024",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "0536418a-b88a-442f-9981-a1c308f7a498",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015081000000_aid0001.tif",
+      "file_size": 281103,
+      "sha256": "2cb364b5656222aa83fe8fa992dfc32847c8f383229603052de61fc5c22bc9b3",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "a2d5e23e-686e-42d0-89d8-1377f1a79169",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015097000000_aid0001.tif",
+      "file_size": 228117,
+      "sha256": "0989521fe0a05d1353201e63e0f62723c23271c55dc148246c7bd1fb2c7ae014",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "9822927a-b003-402c-86ef-c8b3362339c8",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015113000000_aid0001.tif",
+      "file_size": 331640,
+      "sha256": "1a84739c7aa8f5d0d51aabe48131cb4414379d949fc60eef4d1ca99831f51d77",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "cb814b25-7d13-420a-9a60-0d425af2ad8f",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015129000000_aid0001.tif",
+      "file_size": 271124,
+      "sha256": "dce450fe411c900138616c49e3902d823334540c9460362171a9cae2b182cc58",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "cf3b966e-a7de-452c-a4ea-5b7828b5234e",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015145000000_aid0001.tif",
+      "file_size": 198125,
+      "sha256": "59bbe7cb3c75f96b4e19f2257f3555f2680e384f6d5abc33eb0bc34ca34a6433",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "acb6aa67-ef02-4572-b85c-c44092f49d5d",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015161000000_aid0001.tif",
+      "file_size": 144208,
+      "sha256": "8e0452a8d13d8db5ca7aa3abb0eaea53b52566c6633a0b47bbb11b6d715788b4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "392fdb0c-e896-474a-b110-7f37431367af",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015177000000_aid0001.tif",
+      "file_size": 162939,
+      "sha256": "6dc6ab4488570c212be6d461afec9adf8d8f7e6b5e8f24fdacd20148750c5710",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "5c60b600-2983-4f51-a0a1-2f7f493c42b1",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015193000000_aid0001.tif",
+      "file_size": 154466,
+      "sha256": "1e39f86a6dda7fe2eab406c3f5f9382288f763997e5611adb9f3f962a0c2d34e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "65cb9be4-1eb5-4652-9726-c6302675ea28",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015209000000_aid0001.tif",
+      "file_size": 147765,
+      "sha256": "879ab1b605732f5f37f8684e26124e9f507c0eb395ebb50ee2840d028be903b4",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "a70ce453-7852-443a-890a-8e2459868b02",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015225000000_aid0001.tif",
+      "file_size": 224708,
+      "sha256": "94167f3ee81bb5e334ddd6da1d939cdce899c345292758be0739f8b05849ea69",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "7b844562-5e2f-4ceb-bd7b-d1cdc584d6c4",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015241000000_aid0001.tif",
+      "file_size": 209399,
+      "sha256": "67af1b2a09b8cb9be0dbe71a6da0795576756a04cba6067fc3a577bce99adece",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "928680c7-01a1-4991-930c-0fd493591b09",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015257000000_aid0001.tif",
+      "file_size": 256632,
+      "sha256": "066d28cab64fbedf1a63037158d7eca6a20c4fa582e0204612a28e726ae5cf3b",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "e6c5c364-9f56-4a67-834d-d23f7e725257",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015273000000_aid0001.tif",
+      "file_size": 198947,
+      "sha256": "89594cee5dd1aed55597897be15d281a1b7a14cebfdccad61b984f9d717f681e",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "cc575aeb-f7b4-4cab-ac39-2ac2a691f0ba",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015289000000_aid0001.tif",
+      "file_size": 268978,
+      "sha256": "04e877297da68932c789dbd24a4a076bf70a9772cd3e860f178ff438316e6072",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "f0176fcd-7567-445f-a30f-61f64d465093",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015305000000_aid0001.tif",
+      "file_size": 265232,
+      "sha256": "d80173cca36087d3010603cc1d768410ee66189736fd7c6e1b113d1dadfdb6ec",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "28fcb9b1-5e4a-4612-9e1a-0d4c1f05d2ae",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015321000000_aid0001.tif",
+      "file_size": 303261,
+      "sha256": "d76e1a28f1806176a77fa315c4463a38ea1186581e0fe8acb5035295f12f378f",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "a8409b8c-a452-4c95-b878-a6c2dc2d8037",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015337000000_aid0001.tif",
+      "file_size": 276275,
+      "sha256": "35bc03f39d8051c3bc33a6be2456a05a9975e25106a1a801c2855e1fb154bbc0",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "71814196-bd9a-4c0a-b622-96a0d01c77b1",
+      "file_name": "MOD13A2.061_2014351_to_2015365/MOD13A2.061__1_km_16_days_pixel_reliability_doy2015353000000_aid0001.tif",
+      "file_size": 378416,
+      "sha256": "f255e9cefc3b42f1b9599c1e371e7f228c6d4ec8e66158b60c027771c0af5311",
+      "file_type": "tif"
+    },
+    {
+      "file_id": "a781cfe8-fb78-4396-acee-f14dd45ff6bd",
+      "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-lookup.csv",
+      "file_size": 35448,
+      "sha256": "feba0624dc1af64c235704c54c858041a996104394a239f18f93eeda92ad4c92",
+      "file_type": "csv"
+    },
+    {
+      "file_id": "aa8fc5cd-d8f4-4af1-8529-9961d9d3df4b",
+      "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-lookup.csv",
+      "file_size": 165,
+      "sha256": "ef0cde2de2606d86a91d673695401be1cc256a3f187c240555546dfde1e29aa0",
+      "file_type": "csv"
+    },
+    {
+      "file_id": "c61236c1-3f4b-47f8-9286-bec5d18181fb",
+      "file_name": "MOD13A2-061-1-km-16-days-VI-Quality-Statistics-QA.csv",
+      "file_size": 25755,
+      "sha256": "20a958b706f5b765ea4a636a450174be7bc35f2411908e3d55cd678f64f63bbb",
+      "file_type": "csv"
+    },
+    {
+      "file_id": "fea1c288-64f3-4cb6-bdf7-23c0cf7b48d0",
+      "file_name": "MOD13A2-061-1-km-16-days-pixel-reliability-Statistics-QA.csv",
+      "file_size": 2697,
+      "sha256": "248258cde1ddcb3b759267edec5ab3809276978db2c342acb93a929933af9396",
+      "file_type": "csv"
+    },
+    {
+      "file_id": "62d9c7d4-604a-4af3-bc17-dbc698cae0ad",
+      "file_name": "MOD13A2-061-Statistics.csv",
+      "file_size": 15007,
+      "sha256": "4e0f78d588fffc67e34f9df24779a385d495c5f5dd97a4c5bd6d66465650ee0f",
+      "file_type": "csv"
+    },
+    {
+      "file_id": "62632ef3-0b54-44f0-a39f-17228f30fb36",
+      "file_name": "bolivia-mod13a2-721780324ee59a1e8b53c3e8-granule-list.txt",
+      "file_size": 23328,
+      "sha256": "a288ae0137a952422fd32ebeb32d508a480f07769c66d22e3b01d569bfbc1e8c",
+      "file_type": "txt"
+    },
+    {
+      "file_id": "e5ba634a-5aa6-439a-9bdf-8e6b7016d1c4",
+      "file_name": "bolivia-mod13a2-721780324ee59a1e8b53c3e8-request.json",
+      "file_size": 633097,
+      "sha256": "1dc9214a426b0461e988f492b632957cd73a5d8e10fadb62433bbb606873c391",
+      "file_type": "json"
+    },
+    {
+      "file_id": "e2d873ea-402e-4ad1-b1b5-da4300c47a67",
+      "file_name": "bolivia-mod13a2-721780324ee59a1e8b53c3e8-MOD13A2-061-metadata.xml",
+      "file_size": 22110,
+      "sha256": "f5038c295fb4f60d2ff7586de762bb5e4209fa61e9f5aa2a320eb7a86a4a47b2",
+      "file_type": "xml"
+    },
+    {
+      "file_id": "afeda622-3edb-4d97-8ee5-74cdd36079c2",
+      "file_name": "README.md",
+      "file_size": 37539,
+      "sha256": "7827ec7b023475851c2c08e4b79fa9a819c62db4f77e6f7582e44d2481c59617",
+      "file_type": "txt"
+    }
+  ],
+  "retrieved_utc": "2026-11-01T20:12:02.295794+00:00"
+}

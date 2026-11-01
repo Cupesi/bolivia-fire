@@ -16,9 +16,11 @@ from bolivia_fire.firms.acquire import Acquisition, partition_plan
 from bolivia_fire.firms.client import FirmsClient
 from bolivia_fire.firms.quota import Quota
 from bolivia_fire.firms.storage import durable_write
+from bolivia_fire.landcover_cli import register as register_landcover
 from bolivia_fire.live_cli import register as register_live
 from bolivia_fire.pipeline_cli import register
 from bolivia_fire.redact import RedactionFilter, Redactor
+from bolivia_fire.vegetation_cli import register as register_vegetation
 
 
 def _logging(paths: Paths, redactor: Redactor) -> None:
@@ -71,6 +73,10 @@ def _parser() -> argparse.ArgumentParser:
     register_experiments(commands)
     register_live(commands)
     register_comparison(commands)
+    register_vegetation(commands)
+    __import__("bolivia_fire.vegetation_features_cli", fromlist=["register"]).register(commands)
+    register_landcover(commands)
+    __import__("bolivia_fire.extension_cli", fromlist=["register"]).register(commands)
     return parser
 
 
