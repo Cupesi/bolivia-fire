@@ -8,10 +8,12 @@ composites:
   columns: [cell_id, ndvi, evi, valid_fraction, oldest_day, latest_day]
   date_encoding: oldest_day and latest_day are integer UTC days since 1970-01-01; -1 means missing
   period: start from matching raster, statistics and source granule metadata; end is next 16-day boundary, capped at January 1
+  acquisition_window: 2011-12-01 through 2026-07-31; preceding boundary composite retained
 features:
   path: features/lag={16|32}/geography={temporal|geographic}/year={YYYY}/part.parquet
   keys: [cell_id, issue_date]
   issue_date: timestamp without timezone representing Monday 00:00 UTC
+  issue_window: 2013-01-07 through 2026-07-20; 2011-2012 composites provide warm-up only
   lags: {primary: 16, sensitivity: 32}
   geographies: {temporal: cell climatology, geographic: department climatology}
   ordered_features:
@@ -51,6 +53,11 @@ incremental:
 provenance:
   source: source.json
   resources_and_coverage: report.json
+  full_build_resources_and_coverage: all_years_build.json
+  full_build_independent_audit: all_years_audit.json
+  full_build_idempotence: all_years_idempotence.json
+  coverage_audit: monthly composite coverage and monthly per-feature finite counts for all four lag/geography combinations
+  climatology_audit: independent reconstruction from all 2013-2020 slots; seven possible reference years for training issues and eight for later issues, requiring four valid years
   weight_method: densified native pixel footprints intersect national cell portions in longitude-latitude; geodesic WGS84 areas
   weight_edge_segments: 4 per native pixel edge; national edges at most 0.001 degree
   national_coverage_relative_tolerance: 0.00001
