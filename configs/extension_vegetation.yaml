@@ -1,0 +1,946 @@
+protocol_extension_version: "1.1"
+registration_date: "2026-11-01"
+status: registration_prepared_pending_coordinator_commit_and_runner_verification
+classification: retrospective
+parent:
+  protocol: configs/protocol.yaml
+  protocol_version: "1.1"
+  protocol_sha256: 661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf
+  experiments: configs/experiments.yaml
+  experiments_sha256: a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46
+  amendment_scope: separate extension; no alteration of the published protocol or model
+provenance:
+  extension_sha256:
+    algorithm: sha256
+    input: exact bytes of configs/extension_vegetation.yaml
+    record_at: registration before any extension training, selection, calibration, label access or metric
+    self_hash_in_this_file: false
+  registration:
+    path: artifacts/evaluation/extension_registration.json
+    document: docs/extension-vegetation.md
+    required_fields: [registered_at_utc, contract_sha256, document_sha256, protocol_sha256, experiments_sha256, planned_runs, no_extension_labels_or_metrics_accessed]
+    commit_required: true
+    commit_owner: coordinator
+    commit_timing: exact contract, document and registration bytes committed together before any extension training or selection
+    commit_proof: runner verifies all three blobs in a retained Git commit; records that commit in each run artifact
+    attestation: no extension labels or metrics accessed in this amendment and registration task; external access histories require separate audits
+    runtime_guard:
+      policy: fail closed; no override, unregistered fallback or automatic registration
+      before: any label load, fitting, search, early stopping, calibration, scoring or bootstrap for any extension run
+      required_checks:
+        - registration exists, parses and has a valid UTC timestamp and no-access attestation
+        - exact current YAML, document, parent protocol and experiments SHA-256 match the registered hashes
+        - the registration, YAML and document have the required coordinator commit proof
+        - requested run, ordered features, lag, geography and comparators match the registered run manifest
+        - group availability, feature preflight and resource gates pass before labels are loaded
+      refusal: missing or malformed record, mismatched hash, missing commit proof, unlisted run or failed gate exits without accessing labels or metrics
+      implementation_gate: experiment code must implement this guard and demonstrate missing-record, changed-contract and uncommitted-record refusal before any extension execution
+  selection_must_record:
+    - registration file hash, coordinator commit proof and registered run identity
+    - extension and parent protocol hashes
+    - experiments hash and ordered sampled configurations
+    - selected model and calibrator hashes, including published comparators
+    - feature names, lag, quality thresholds and source collection identifiers
+    - AppEEARS request identity, polygon hash, layer metadata and output checksums
+    - source granule identifiers, production times and available release or ingest times
+    - scaling verification and quality rejection counts
+    - panel, cell grid, CHIRPS, outage and MapBiomas manifest hashes
+    - feature snapshot hashes and ordered row-key hashes per stage and comparison
+    - availability decisions, exclusion counts, seeds, environment and resource measurements
+  change_rule: any substantive change requires a dated version and new committed registration before new fitting or metrics; retain exact prior contracts, documents, registrations, selections and all prior scores
+  registration_retention: preserve each committed record under its contract hash before replacing the current record; never overwrite or reinterpret prior scores
+  preceding_revision:
+    version: "1.0"
+    contract_sha256: 8516f0496431e843d04e772d658bc8b6c63846ace5631c0eb095f55ed63f2045
+    document_sha256: 755e12f7845eba47d529e0b95eaf58008f6e44d34c77f012453e1c733a8fbb4b
+    evidence: V13 independent protocol review, 2026-11-01
+
+questions:
+  H3:
+    variant: retrospective_vegetation
+    comparator: published_retrospective
+    question: Does vegetation condition add calibrated average precision beyond strict FIRMS plus CHIRPS?
+    requires: [vegetation]
+  H4:
+    variant: retrospective_land_cover
+    comparator: published_retrospective
+    question: Does previous-available-year land cover add calibrated average precision beyond the same baseline?
+    requires: [zero_cost_mapbiomas_verification, land_cover_features]
+    status: not_evaluated
+    status_reason: anonymous access denied; zero-cost GEE verification and land-cover feature build not yet verified
+    unavailable_result: not_evaluated
+  H5:
+    variant: retrospective_vegetation_land_cover
+    comparator: published_retrospective
+    question: Does the combination add calibrated average precision beyond the same baseline?
+    requires: [vegetation, zero_cost_mapbiomas_verification, land_cover_features]
+    status: not_evaluated
+    status_reason: anonymous access denied; zero-cost GEE verification and land-cover feature build not yet verified
+    unavailable_result: not_evaluated
+  interpretation: predictive association; improvement is not assumed and effects are not causal
+
+comparators:
+  published_retrospective:
+    selection: artifacts/evaluation/selection_retrospective.json
+    selection_sha256: a269225593db82c5c65fee4f725f90c2d4825e591088ad66f9de3b7662e870a8
+    selected_model: lightgbm_16
+    model_sha256: f86873e90d7fd471af56a1a72eae9827ee65981626f93d6c8d24a52f001511fb
+    calibrator_sha256: ac42724c630a8ffe61836c5b1f3a925f3aeaaa5272cc61f0764e083eab2b9538
+    features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_cell
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    refit_or_recalibrate: false
+    role: temporal H3-H5 comparator
+  published_strict_context:
+    selection: artifacts/evaluation/selection_strict.json
+    selection_sha256: d03d6cb00cd184730cb2e66a471f95f9b57255e6a1d1cc45881b069dabec20ad
+    selected_model: lightgbm_08
+    model_sha256: ed72987f3dcbb1407601ee262b0e416d06a31f047a20e2386c1c4f4e7021b65b
+    calibrator_sha256: fb3886126c1910dd28f92b49f57eff3017fad9ae385471736caf3a906262bf8e
+    features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_cell
+    - train_climatology_dept
+    - window_obs_complete_365d
+    refit_or_recalibrate: false
+    role: temporal contextual report only
+  published_retrospective_geo:
+    selection: artifacts/evaluation/selection_retrospective_geo.json
+    selection_sha256: 9478ea5948d5cb91913e94e174de4911e2aa49a9af49cb9fa00db55e62927811
+    selected_model: lightgbm_04
+    model_sha256: 6ff3fca270faf6fc3c90bdb7e429b1f593afd92f2f22302f1e7f256219be20f3
+    calibrator_sha256: ea3912c10d99de76074b112e2d25da74837c5dd1edf0505e0328f9a8bf5551aa
+    features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    refit_or_recalibrate: false
+    role: geographic H3-H5 comparator; exploratory only
+  published_strict_geo_context:
+    selection: artifacts/evaluation/selection_strict_geo.json
+    selection_sha256: 2f139f5227c68efce95a97b0e898b6cacf025677e52e96d2711073cca867ce0d
+    selected_model: lightgbm_04
+    model_sha256: dfe436de916d6984f317bdb64582d0f01847c15a0ec6d0cd02b19a82ff173887
+    calibrator_sha256: 7594363d551b87800b543e40a7eafaec136bf7d18e56f19ab9bb1285d9a703c4
+    features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_dept
+    - window_obs_complete_365d
+    refit_or_recalibrate: false
+    role: geographic contextual report only; exploratory only
+variants:
+  retrospective_vegetation:
+    hypothesis: H3
+    geography: temporal
+    status: planned_pending_preflight
+    required_gates:
+    - vegetation
+    base_selection: artifacts/evaluation/selection_retrospective.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_cell
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - veg_ndvi_latest
+    - veg_evi_latest
+    - veg_ndvi_change_previous
+    - veg_evi_change_previous
+    - veg_ndvi_change_48d
+    - veg_evi_change_48d
+    - veg_ndvi_seasonal_anomaly
+    - veg_evi_seasonal_anomaly
+    - veg_valid_pixel_fraction
+    - veg_observation_age_days
+    comparator: published_retrospective
+    contextual_comparator: published_strict_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: cell
+    label_climatology: train_climatology_cell and train_climatology_dept
+    decision_role: primary validation comparison at lag 16; lag 32 is sensitivity only
+  retrospective_land_cover:
+    hypothesis: H4
+    geography: temporal
+    status: not_evaluated
+    required_gates:
+    - zero_cost_mapbiomas_verification
+    - land_cover_features
+    base_selection: artifacts/evaluation/selection_retrospective.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_cell
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - mapbiomas_forest_fraction
+    - mapbiomas_nonforest_fraction
+    - mapbiomas_farming_fraction
+    - mapbiomas_nonvegetated_fraction
+    - mapbiomas_water_fraction
+    comparator: published_retrospective
+    contextual_comparator: published_strict_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: not_applicable
+    label_climatology: train_climatology_cell and train_climatology_dept
+    decision_role: primary validation comparison; no vegetation lag applies
+  retrospective_vegetation_land_cover:
+    hypothesis: H5
+    geography: temporal
+    status: not_evaluated
+    required_gates:
+    - vegetation
+    - zero_cost_mapbiomas_verification
+    - land_cover_features
+    base_selection: artifacts/evaluation/selection_retrospective.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_cell
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - veg_ndvi_latest
+    - veg_evi_latest
+    - veg_ndvi_change_previous
+    - veg_evi_change_previous
+    - veg_ndvi_change_48d
+    - veg_evi_change_48d
+    - veg_ndvi_seasonal_anomaly
+    - veg_evi_seasonal_anomaly
+    - veg_valid_pixel_fraction
+    - veg_observation_age_days
+    - mapbiomas_forest_fraction
+    - mapbiomas_nonforest_fraction
+    - mapbiomas_farming_fraction
+    - mapbiomas_nonvegetated_fraction
+    - mapbiomas_water_fraction
+    comparator: published_retrospective
+    contextual_comparator: published_strict_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: cell
+    label_climatology: train_climatology_cell and train_climatology_dept
+    decision_role: primary validation comparison at lag 16; lag 32 is sensitivity only
+  retrospective_vegetation_geo:
+    hypothesis: H3
+    geography: geographic
+    status: planned_pending_preflight
+    required_gates:
+    - vegetation
+    base_selection: artifacts/evaluation/selection_retrospective_geo.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - veg_ndvi_latest
+    - veg_evi_latest
+    - veg_ndvi_change_previous
+    - veg_evi_change_previous
+    - veg_ndvi_change_48d
+    - veg_evi_change_48d
+    - veg_ndvi_seasonal_anomaly
+    - veg_evi_seasonal_anomaly
+    - veg_valid_pixel_fraction
+    - veg_observation_age_days
+    comparator: published_retrospective_geo
+    contextual_comparator: published_strict_geo_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: department
+    label_climatology: train_climatology_dept only
+    decision_role: exploratory geographic comparison only
+  retrospective_land_cover_geo:
+    hypothesis: H4
+    geography: geographic
+    status: not_evaluated
+    required_gates:
+    - zero_cost_mapbiomas_verification
+    - land_cover_features
+    base_selection: artifacts/evaluation/selection_retrospective_geo.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - mapbiomas_forest_fraction
+    - mapbiomas_nonforest_fraction
+    - mapbiomas_farming_fraction
+    - mapbiomas_nonvegetated_fraction
+    - mapbiomas_water_fraction
+    comparator: published_retrospective_geo
+    contextual_comparator: published_strict_geo_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: not_applicable
+    label_climatology: train_climatology_dept only
+    decision_role: exploratory geographic comparison only
+  retrospective_vegetation_land_cover_geo:
+    hypothesis: H5
+    geography: geographic
+    status: not_evaluated
+    required_gates:
+    - vegetation
+    - zero_cost_mapbiomas_verification
+    - land_cover_features
+    base_selection: artifacts/evaluation/selection_retrospective_geo.json
+    ordered_features:
+    - count_last_7d
+    - count_last_14d
+    - count_last_28d
+    - count_last_91d
+    - count_last_365d
+    - any_last_7d
+    - days_since_last
+    - no_prior_detection
+    - frp_sum_28d
+    - same_week_last_year
+    - neighborhood_3x3_last_7d
+    - neighborhood_7x7_last_7d
+    - neighborhood_3x3_last_28d
+    - neighborhood_7x7_last_28d
+    - national_last_7d
+    - national_last_28d
+    - week_of_year_sin
+    - week_of_year_cos
+    - train_climatology_dept
+    - window_obs_complete_365d
+    - rain_sum_7d
+    - rain_sum_30d
+    - rain_sum_90d
+    - dry_days_30d
+    - rain_anomaly_90d
+    - veg_ndvi_latest
+    - veg_evi_latest
+    - veg_ndvi_change_previous
+    - veg_evi_change_previous
+    - veg_ndvi_change_48d
+    - veg_evi_change_48d
+    - veg_ndvi_seasonal_anomaly
+    - veg_evi_seasonal_anomaly
+    - veg_valid_pixel_fraction
+    - veg_observation_age_days
+    - mapbiomas_forest_fraction
+    - mapbiomas_nonforest_fraction
+    - mapbiomas_farming_fraction
+    - mapbiomas_nonvegetated_fraction
+    - mapbiomas_water_fraction
+    comparator: published_retrospective_geo
+    contextual_comparator: published_strict_geo_context
+    selection: independent estimation.search on non-held-out val_select; same ordered 20 configurations and training/holdout
+      exclusions
+    calibration: separately fitted isotonic on non-held-out val_calib; never reuse another extension fit
+    vegetation_climatology: department
+    label_climatology: train_climatology_dept only
+    decision_role: exploratory geographic comparison only
+run_manifest:
+- run_id: retrospective_vegetation_lag16
+  variant: retrospective_vegetation
+  geography: temporal
+  hypothesis: H3
+  availability_lag_days: 16
+  role: primary
+  status: planned_pending_preflight
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_lag16.json
+- run_id: retrospective_vegetation_lag32
+  variant: retrospective_vegetation
+  geography: temporal
+  hypothesis: H3
+  availability_lag_days: 32
+  role: longer_lag_sensitivity
+  status: planned_pending_preflight
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_lag32.json
+- run_id: retrospective_land_cover
+  variant: retrospective_land_cover
+  geography: temporal
+  hypothesis: H4
+  availability_lag_days: null
+  role: primary
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_land_cover.json
+- run_id: retrospective_vegetation_land_cover_lag16
+  variant: retrospective_vegetation_land_cover
+  geography: temporal
+  hypothesis: H5
+  availability_lag_days: 16
+  role: primary
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_land_cover_lag16.json
+- run_id: retrospective_vegetation_land_cover_lag32
+  variant: retrospective_vegetation_land_cover
+  geography: temporal
+  hypothesis: H5
+  availability_lag_days: 32
+  role: longer_lag_sensitivity
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_land_cover_lag32.json
+- run_id: retrospective_vegetation_geo_lag16
+  variant: retrospective_vegetation_geo
+  geography: geographic
+  hypothesis: H3
+  availability_lag_days: 16
+  role: exploratory_geographic
+  status: planned_pending_preflight
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_geo_lag16.json
+- run_id: retrospective_vegetation_geo_lag32
+  variant: retrospective_vegetation_geo
+  geography: geographic
+  hypothesis: H3
+  availability_lag_days: 32
+  role: longer_lag_sensitivity
+  status: planned_pending_preflight
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_geo_lag32.json
+- run_id: retrospective_land_cover_geo
+  variant: retrospective_land_cover_geo
+  geography: geographic
+  hypothesis: H4
+  availability_lag_days: null
+  role: exploratory_geographic
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_land_cover_geo.json
+- run_id: retrospective_vegetation_land_cover_geo_lag16
+  variant: retrospective_vegetation_land_cover_geo
+  geography: geographic
+  hypothesis: H5
+  availability_lag_days: 16
+  role: exploratory_geographic
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_land_cover_geo_lag16.json
+- run_id: retrospective_vegetation_land_cover_geo_lag32
+  variant: retrospective_vegetation_land_cover_geo
+  geography: geographic
+  hypothesis: H5
+  availability_lag_days: 32
+  role: longer_lag_sensitivity
+  status: not_evaluated
+  fit: separate 20-configuration selection and isotonic calibration
+  selection_artifact: artifacts/evaluation/selection_extension_retrospective_vegetation_land_cover_geo_lag32.json
+
+partitions:
+  assignment: issue time; inherit parent boundary-crossing target purges
+  train: ["2013-01-07", "2020-12-31"]
+  val_select: ["2021-01-01", "2021-12-31"]
+  val_calib: ["2022-01-01", "2022-12-31"]
+  test: ["2023-01-01", "2025-12-31"]
+  geographic_holdout:
+    block_deg: 1.0
+    fraction: 0.2
+    seed: 20261031
+    assignment: reuse frozen cell flags; sha256 ranking and floor(0.2 * unique block count)
+    exclude_from: [fitting, selection, calibration, training_statistics]
+  target: inherit any_detection_next_7d, primary confidence selection, UTC and seven-day observation rules
+  eligibility:
+    base: assigned non-purged row, finite binary label, correct geography, window_obs_complete_28d true
+    rainfall: all five frozen values finite, corresponding completeness flags true, provenance verified
+    retain_feature: window_obs_complete_365d
+    exclude_low_coverage: false
+    feature_missingness: drop required missing or non-finite values; never zero-fill
+    availability_freeze: decide available groups from access and feature audits before extension metrics
+    training: each extension uses base eligibility and complete required features; report support differences from the frozen baseline
+    selection_and_calibration: common complete feature support across all available primary variants and both comparators
+    evaluation: identical ordered intersection of eligible finite features and predictions for all compared variants
+    unavailable_group: omit its variants from the intersection and report not_evaluated; do not null all other rows
+    row_key: [cell_id, issue_date]
+    counts_required:
+      - scanned, purged, missing label, wrong geography, incomplete recent history
+      - missing CHIRPS values or flags and invalid provenance
+      - per-variant missing features, failed QA, stale observations, unavailable change reference or climatology
+      - each variant's eligible rows before intersection and rows lost to the common intersection
+      - final paired rows, positives, prevalence, represented months and row-key hash
+
+estimation:
+  family: lightgbm
+  feature_construction: use each variant's exact ordered features below; temporal and geographic bases are distinct
+  selection_scope: independent 20-configuration selection and calibration for every run_manifest fit; never transfer temporal selections to geographic fits or select between lags
+  support_scope: compute common selection/calibration/evaluation support separately for temporal and geographic families; never compare a temporal extension to geographic comparators
+  search:
+    implementation: bolivia_fire.models.estimators.search_parameters
+    seed: 7
+    configurations: 20
+    distinct: true
+    reuse_order_across_variants: true
+    space:
+      num_leaves: [7, 15, 31, 63]
+      learning_rate: [0.03, 0.06, 0.1]
+      min_data_in_leaf: [50, 200, 1000]
+      feature_fraction: [0.7, 0.85, 1.0]
+      lambda_l2: [0, 1, 10]
+    boosting_rounds: 400
+    early_stopping_rounds: 30
+    max_bin: 63
+    num_threads: 4
+    deterministic: true
+    force_col_wise: true
+    negative_sampling: none
+    selection_metric: uncalibrated average_precision on val_select
+    ties: model name, ascending
+  calibration:
+    method: isotonic
+    partition: val_calib
+    timing: after all configurations and tree counts are selected using val_select only
+    out_of_bounds: clip
+    probability_bounds: [0, 1]
+    invalid_or_single_class: record identity fallback and reason; no positive extension decision
+    comparator: reuse the published isotonic calibrator unchanged
+  primary_decision:
+    population: non-held-out val_calib common rows
+    metric: calibrated step-wise average_precision
+    contrast: extension minus published_retrospective
+    bootstrap:
+      implementation: bolivia_fire.evaluation.bootstrap.block_bootstrap
+      blocks: UTC calendar year-month of issue_date
+      replicates: 500
+      seed: 7
+      rng: numpy.random.default_rng
+      paired: identical month multiplicities and rows for every compared variant
+      interval: percentile [2.5, 97.5]
+      undefined_draws: omit jointly undefined AP differences; report valid replicate count
+      no_valid_draws: null interval and inconclusive decision
+    adds_information: both interval endpoints finite and lower endpoint strictly greater than 0
+    otherwise: inconclusive / no detected gain; never equivalence
+    limitation: calibrators are fitted on these labels; intervals condition on fixed models and calibrators
+    multiplicity: marginal hypothesis-specific intervals; no family-wise superiority claim or selection by these results
+  secondary_metrics: [brier_score, log_loss, roc_auc, expected_calibration_error, recall_at_area_budget_5pct, recall_at_area_budget_10pct]
+  secondary_definitions: inherit parent metric, area-budget, tie and undefined-subset rules
+
+vegetation:
+  product: MOD13A2.061
+  doi: https://doi.org/10.5067/MODIS/MOD13A2.061
+  spatial_resolution: native nominal 1 km sinusoidal pixels
+  acquisition:
+    service: AppEEARS area
+    start: "2011-12-01"
+    end: "2026-07-31"
+    purpose: warm-up for changes; reference climatology remains training years only
+    polygon: pinned Bolivia ADM0 buffered outward by 0.1 degree; verify it contains every intersecting 0.05-degree border cell
+    output: GeoTIFF in native MODIS sinusoidal projection; no continuous-value interpolation
+    layers:
+      - 1_km_16_days_NDVI
+      - 1_km_16_days_EVI
+      - 1_km_16_days_VI_Quality
+      - 1_km_16_days_pixel_reliability
+      - 1_km_16_days_composite_day_of_the_year
+    layer_identity: verify exact layer identifiers against the service product metadata before submission
+    request_limits: split into sequential year requests only if service limits require; preserve identical polygon and layers
+  quality:
+    references: [mod13_user_guide, mod13_filespec]
+    raw_ndvi_evi_valid_range: [-2000, 10000]
+    raw_ndvi_evi_fill: -3000
+    physical_ndvi_evi_valid_range: [-0.2, 1.0]
+    physical_conversion: raw * 0.0001; offset 0
+    vi_quality_valid_range: [0, 65534]
+    vi_quality_fill: 65535
+    reliability_valid_values: [0, 1, 2, 3]
+    reliability_fill: -1
+    reliability_accepted_values: [0]
+    detailed_qa_accepted:
+      modland_bits_0_1: [0]
+      usefulness_bits_2_5: [0, 1, 2, 4]
+      aerosol_bits_6_7: [1, 2]
+      adjacent_cloud_bit_8: [0]
+      brdf_correction_bit_9: [0, 1]
+      mixed_cloud_bit_10: [0]
+      land_water_bits_11_13: [1]
+      snow_ice_bit_14: [0]
+      shadow_bit_15: [0]
+    composite_doy_valid_range: [1, 366]
+    composite_doy_fill: -1
+    composite_doy_rule: resolve to a real UTC date within the source granule period; reject impossible dates
+    common_pixel_mask: NDVI, EVI, QA, reliability and observation date must all pass
+    min_valid_pixel_area_fraction: 0.5
+    denominator: geodesic area of the complete national portion of the cell, including rejected or missing pixels
+    numerator: summed national pixel-cell intersection area passing the common mask
+    below_threshold: all vegetation features missing, never zero
+  scaling:
+    reference: appeears_scaling
+    expected_area_geotiff_storage: unscaled integers with scale and offset metadata; readers may auto-decode
+    verify_before_features:
+      - record service version, dtype, nodata, scale, offset and raw versus decoded reader mode
+      - read raw values with automatic scaling disabled; verify product ranges and fill masks
+      - compare non-fill pixel values with metadata-decoded values to float32 precision
+      - require decoded = raw * 0.0001 and record whether the reader already applied it
+      - reject conflicting or ambiguous metadata; magnitude alone cannot identify double scaling
+    apply_conversion: exactly once; QA, reliability and DOY remain unscaled integers
+  aggregation:
+    support: native pixel footprint intersected with cell and ADM0; border buffer is acquisition only
+    weighting: geodesic WGS84 intersection area; sum(weight * physical index) / sum(valid weight)
+    common_support: same accepted pixels for NDVI and EVI within each composite
+  temporal:
+    period: metadata start through end inclusive; implement end boundary as next UTC midnight
+    rule: end_boundary + availability_lag_days <= issue_time
+    availability_lag_days: 16
+    lag_evidence: no MOD13A2-specific guaranteed publication latency established from the cited primary pages
+    lag_interpretation: conservative simulation assumption; MODAPS L1/L2 latency is not MOD13A2 latency
+    historical_production_timestamp_gate: false
+    historical_gate_reason: reprocessed vintages can postdate issue time; no operational-availability claim
+    latest: greatest composite end passing availability, QA, coverage and age gates for the cell
+    observation_age_days: issue_time minus latest contributing pixel observation date, in fractional UTC days
+    max_current_observation_age_days: 64
+    age_gate: every contributing pixel observation must be no older than the maximum
+    max_change_reference_observation_age_days: 128
+    interpolation: none; no future composite, centered interpolation, generic forward/backfill or backward use of later observations
+    provenance: retain period bounds, oldest and latest contributing dates and actual age alongside features
+  features:
+    latest: [veg_ndvi_latest, veg_evi_latest]
+    previous_change: [veg_ndvi_change_previous, veg_evi_change_previous]
+    previous_rule: latest minus immediately previous valid available composite; start-date gap at most 32 days
+    change_48d: [veg_ndvi_change_48d, veg_evi_change_48d]
+    change_48d_rule: latest minus valid available composite nearest latest start minus 48 days, tolerance 8 days; earlier wins ties
+    anomaly: [veg_ndvi_seasonal_anomaly, veg_evi_seasonal_anomaly]
+    anomaly_rule: latest minus arithmetic training-reference mean for the same composite-of-year slot; no variance scaling
+    quality_and_age: [veg_valid_pixel_fraction, veg_observation_age_days]
+    required: all ten features finite; missing reference makes the variant row unavailable
+  climatology:
+    reference_years: [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+    slot: min((day_of_year(composite_start) - 1) // 16, 22)
+    train_cross_fitting: exclude the issue calendar year; other training years, including later ones, permitted
+    later_rows: all and only reference years
+    excluded: geographic holdout observations, validation/test/confirmation years and warm-up-only years
+    temporal_reference: cell by composite slot, equally weighted valid annual cell composites
+    geographic_reference: department by composite slot, equal weight per non-held-out cell within each year then equal years
+    reference_quality_scope: QA and coverage in each reference composite's own period; current-issue age gate does not apply to historical reference years
+    min_distinct_reference_years: 4
+    missing_reference: null anomaly; no validation or test backfill
+  longer_lag_sensitivity:
+    availability_lag_days: 32
+    status: pre-specified sensitivity, not an alternative primary or a way to rescue a decision
+    fitting: separate 20-configuration search with identical space and seeds; same calibration procedure
+    rows: report sensitivity support and an additional primary-versus-sensitivity common-support comparison
+    other_rules: unchanged, including current age limit; report increased missingness
+
+land_cover:
+  product: MapBiomas Bolivia Collection 4
+  classification: retrospective; reference year is not release year
+  access:
+    requirement: lawful official access verified by a separate task, strictly zero-cost Community Tier GEE or verified anonymous provider download; no private assets or access-control bypass
+    owner_authorization: authenticated Google Earth Engine use authorized only under strict zero-cost Community Tier conditions
+    existing_status: anonymous GeoTIFF ranged GET returned HTTP 403 for 2012, 2018, 2024 and 2025 on 2026-11-01
+    existing_evidence: research_mapbiomas_access.md; retained external access report dated 2026-11-01
+    existing_evidence_sha256: cfb7929f3fafd13a90aba88ef0a26f45055ffe68225810a847f019a58cbd3539
+    earlier_evidence: datasets/processed/covariates/probe_mapbiomas.json; 2026-10-31
+    gee_route:
+      status: conditional_pending_separate_verification
+      asset: projects/mapbiomas-public/assets/bolivia/lulc/collection4/mapbiomas_bolivia_collection4_coverage_v1
+      separate_task_must_verify: [zero_cost_Community_Tier, authenticated_access, collection_and_year_identity, legend, licence_and_attribution]
+      cost_rule: verify no charges for compute, export or destination storage; no paid tier, billing activation or billable fallback; stop if zero cost cannot be established
+      execution_here: none; authorization alone does not establish access, zero cost or feature availability
+    unblock: separate verification passes and land-cover features are built, audited and frozen before any availability decision or extension metric
+    availability_change_after_metrics: requires a new dated committed registration; no post-score addition to the common support
+    new_audit: record provider URL or GEE asset, access mode, zero-cost evidence, status, metadata, licence, legend, collection, year, checksum and date before feature evaluation
+    failure: H4 and H5 not_evaluated with reason; no substitute collection or silent group omission
+  reference_year: greatest map year accessible at extraction with map year <= issue year - 1; nominally issue year - 1
+  historical_availability: extraction-time accessibility and one-year map lag do not establish release or availability at historical issue time
+  future_year_filtering: Collection 4 temporal gap filling and smoothing can use future map years; a one-year map lag does not remove this information
+  max_reference_age_years: 2
+  nominal_map_year_range: {first: 2012, last: 2025, endpoints: inclusive}
+  optional_fallback_map_year_first: 2011
+  year_provenance: record actual selected year and nominal year for every cell-issue; no future-year maps
+  area_weights: national native-pixel-cell intersection areas; no categorical interpolation
+  denominator: total mapped area in the national cell portion
+  min_mapped_area_fraction: 0.95
+  invalid_codes: nodata, unobserved class 27, or codes outside the five declared groups
+  invalid_rule: exclude from mapped denominator; below coverage threshold makes all fractions missing
+  valid_fraction_bounds: [0, 1]
+  sum_rule: five fractions sum to 1 within 1e-6; reject otherwise
+  classes:
+    forest: [1, 3, 4, 6]
+    nonforest: [10, 11, 12, 13, 29, 63, 66, 77, 81, 82]
+    farming: [14, 15, 18, 21, 39, 40, 72]
+    nonvegetated: [22, 23, 24, 25, 30, 61, 68, 92]
+    water: [26, 31, 33, 34]
+  legend_rule: validate against the pinned Collection 4 legend before extraction; mismatch blocks H4/H5
+  features: [mapbiomas_forest_fraction, mapbiomas_nonforest_fraction, mapbiomas_farming_fraction, mapbiomas_nonvegetated_fraction, mapbiomas_water_fraction]
+
+test_access:
+  published_log: artifacts/evaluation/final_test_log.json
+  observed_entries_at_registration: 7
+  entry_roles: {primary: 1, sensitivity_reopenings: 5, post_hoc_comparison: 1}
+  interpretation: post-hoc comparison has reopening false in its own namespace; the test is nevertheless previously inspected
+  extension_scoring: exploratory logged reopening only; never tuning or changing the published model
+  required_reason: exploratory vegetation/land-cover extension on previously opened 2023-2025 test; frozen selection
+  log_before_labels: true
+  log_before_scoring: true
+  log_timing: append and durably retain the exploratory opening before label access or scoring, including geographic and sensitivity runs; abort if logging fails
+  attempt_record: log planned runs, ordered row-key hashes, registration hash and commit proof; append completion or failure without deleting the opening
+  require: explicit open flag, nonempty reopen reason and immutable extension/model/calibrator/panel hashes
+
+fresh_confirmation:
+  preregister: true
+  role: supplementary once-only temporal confirmation; primary extension decision remains val_calib
+  issue_first: "2026-01-05"
+  issue_last: "2026-07-20"
+  issue_calendar: Monday 00:00 UTC, endpoints inclusive
+  target: same seven-day primary FIRMS SP detection target; last target ends 2026-07-27 exclusive
+  firms_acquisition_end: "2026-07-31"
+  vegetation_archive_cutoff: "2026-07-31T23:59:59Z"
+  population: all eligible non-held-out national cells, same grid, coverage and common-support rules
+  fitting_or_recalibration: none on 2026 rows
+  prerequisites:
+    - document an access audit attesting that no 2026 confirmation labels, outcome summaries or scores were inspected for development
+    - freeze extension contract, available variants, models, calibrators, manifests and row-support rules before label access
+    - extend FIRMS SP observations and documented outage coverage through 2026-07-31; retain existing history
+    - extend unchanged CHIRPS definitions through the final antecedent day, 2026-07-19
+    - accept only MOD13A2 granules evidenced as produced and archived by the vegetation archive cutoff, also passing end-plus-lag gates
+    - if archive availability cannot be established, mark affected features missing rather than assume early availability
+  preregistration_integrity_failure: mark confirmation unavailable; do not claim an untouched window or choose another window after scores
+  scoring:
+    maximum_label_openings: 1
+    schedule: one logged batch after selection; include every available temporal hypothesis, its 32-day sensitivity and fixed temporal subgroups; geographic runs remain exploratory on the registered holdout
+    log_timing: append and durably retain the single batch opening before label access or scoring; abort if logging fails
+    failed_after_label_access: consumes the opening; any retry is exploratory and cannot restore confirmation status
+    inference: same 500 paired calendar-month replicates and seed 7; fixed models and calibrators
+    agreement: same hypothesis has finite AP difference interval with lower endpoint strictly above 0
+    undefined_or_nonpositive_interval: inconclusive / no detected gain; no equivalence or confirmation claim
+  prevalence_caveat: January to July 20 omits August-October and most of the full July-October dry-season subgroup; prevalence may be lower and AP is not directly comparable across windows
+
+exploratory_subgroups:
+  fixed_before_scoring:
+    santa_cruz: existing santa_cruz cell flag, computed with the pinned ADM1 definition
+    dry_season: issue UTC month in [7, 8, 9, 10]
+    santa_cruz_dry_season: intersection of the two fixed definitions
+    geographic_holdout: same held-out blocks with corresponding geo models; never fitting labels
+  reports: common rows, exclusions, positives, prevalence, AP and paired differences
+  uncertainty: calendar-month blocks for temporal subgroups; 1-degree spatial blocks for geographic holdout; 500 replicates, seed 7
+  restrictions: no subgroup-specific selection, calibration, thresholds, primary decisions or confirmatory claims
+
+promotion:
+  replace_live_or_published_model: false
+  future_study_proposal_only: corresponding validation interval entirely above 0 and corresponding fresh confirmation interval entirely above 0
+  confirmation_unavailable_or_inconclusive: no promotion proposal under this contract
+  full_fire_season_claim: requires a future separately registered untouched seasonal study
+
+resources:
+  disk_free_floor_gib: 55
+  extension_disk_budget_gib: 30
+  accounting: GiB = 1024^3 bytes, matching the existing free-space guard
+  memory_limit_gib: 12
+  memory_measurement:
+    scope: summed resident RAM of the entire process tree, including download, aggregation, fitting and bootstrap child processes
+    sample_interval_seconds: 1
+    record: per-stage peak process-tree RSS bytes and timestamps; all temporal, geographic and sensitivity fits
+    enforce: check projected allocations and measured process-tree RAM; checkpoint and stop before the 12-GiB limit; stop if monitoring fails
+  download_parallelism: 1
+  fitting_parallelism: 1
+  batch_rows: 100000
+  enforce: projected post-allocation free space must remain >=55 GiB; extension peak disk <=30 GiB
+  retention: process windows sequentially; preserve metadata/checksums and compact cell features; remove only owned verified intermediates
+  insufficient_resources: checkpoint and stop before crossing limits; no silent date/layer/QA reduction
+  runtime_estimates:
+    status: planning estimates, not measured; provider queue and transfer rate unknown
+    appeears_queue_and_extract_hours: [6, 72]
+    transfer_and_aggregation_hours: [2, 24]
+    search_calibration_and_bootstrap_hours_per_variant: [1, 12]
+    measurement_required: record actual bytes, elapsed stage times, peak process-tree RAM and minimum free disk
+
+references:
+  mod13_user_guide: https://landweb.modaps.eosdis.nasa.gov/data/userguide/MODISC6VIUserguide.pdf
+  mod13_v61_user_guide: https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf
+  mod13_filespec: https://ladsweb.modaps.eosdis.nasa.gov/filespec/MODIS/61/MOD13A2
+  mod13_catalog: https://cmr.earthdata.nasa.gov/search/concepts/C2565788905-LPCLOUD.html
+  modaps_production: https://modaps.modaps.eosdis.nasa.gov/services/about/
+  c61_reprocessing_changes: https://landweb.modaps.eosdis.nasa.gov/data/userguide/MODIS_Land_C61_Changes.pdf
+  c61_reprocessing_status: https://landweb.modaps.eosdis.nasa.gov/data/userguide/C61MODISLandStatus.pdf
+  appeears_scaling: https://forum.earthdata.nasa.gov/viewtopic.php?t=3934
+  mapbiomas_product: https://bolivia.mapbiomas.org/iniciativas-y-productos/cobertura-y-uso-del-suelo/cobertura/
+  mapbiomas_legend: https://bolivia.mapbiomas.org/wp-content/uploads/sites/5/2026/09/Leyenda_Code_Bolivia_Col4.pdf
+  mapbiomas_gee_assets: https://bolivia.mapbiomas.org/downloads/assets-en-google-earth-engine/
