@@ -1,0 +1,33 @@
+{
+  "timestamp_utc": "2026-11-01T23:17:39.401147+00:00",
+  "commands": [
+    {
+      "command": "uv run --no-sync bolivia-fire extension guard",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync bolivia-fire extension --help",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m pytest tests/extension -q -p no:cacheprovider",
+      "outcome": "29 passed",
+      "runtime_seconds": 30.28
+    },
+    {
+      "command": "uv run --no-sync ruff check .",
+      "outcome": "passed"
+    },
+    {
+      "command": "uv run --no-sync python -m pytest -m 'not live and not local_data' -q -p no:cacheprovider",
+      "outcome": "585 passed, 1 skipped, 3 deselected",
+      "warnings": 9,
+      "warning_scope": "pandas dependency deprecations in figure tests",
+      "runtime_seconds": 179.03
+    }
+  ],
+  "modified_code_hashes": {
+    "src/bolivia_fire/extension/inputs.py": "688c1826bb94d668704247921beb6024f9765064593c5a459b08f5b9b993923a",
+    "tests/extension/test_inputs.py": "9210e8c7908e0e103bcc89218ae71986c8b94e2065ad2659cfb75d029e537f80"
+  }
+}

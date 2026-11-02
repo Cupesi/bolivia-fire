@@ -1,0 +1,40 @@
+{
+  "status": "unavailable",
+  "frozen_before_label_access": true,
+  "no_confirmation_labels_accessed_in_this_run": true,
+  "access_audit": {
+    "untouched": null,
+    "inspected_for_development": null,
+    "reason": "External access history has not been evidenced"
+  },
+  "coverage": {
+    "firms_end": null,
+    "outages_end": null,
+    "chirps_end": "2025-12-31"
+  },
+  "archive": {
+    "cutoff": "2026-07-31T23:59:59Z",
+    "all_used_granules_produced_and_archived_by_cutoff": false,
+    "archive_proven_composites": 0
+  },
+  "blockers": [
+    "No source composite proves archive availability before the cutoff",
+    "All ten vegetation features null for all 29 confirmation Mondays in both lags and geographies",
+    "No 2026 frozen panel or CHIRPS feature partition",
+    "FIRMS and outage coverage through 2026-07-31 and external untouched access history not evidenced"
+  ],
+  "input_hashes": {
+    "datasets/processed/vegetation/source.json": "8132516039d20ff7ba4b2aec76ef56125ded877cf32aa6a40961c670623e31e1",
+    "datasets/processed/vegetation/all_years_audit.json": "dafb6e61dd5880f89e9bf70d8b62f16dc451e18b3aab2baaaca017a6b5fed8be",
+    "datasets/processed/vegetation/all_years_acceptance.json": "78b625824e7a6ca802f7fddb5892cc3a58e1dc405650534244af6b2c13a48f14",
+    "datasets/manifests/snpp_outages.csv": "248bf9eaaf3a7daebb5c855a927233518e7dd00949f690983e57a5bbb0b39633",
+    "datasets/manifests/firms_VIIRS_SNPP_SP.jsonl": "f0c7253a600b3bfc5274af3ce5ffb17de99c62da6ebd4fbced9f4cce917af101",
+    "datasets/processed/covariates/chirps_manifest.jsonl": "b49240e5b5703bbd384b642d0dde25822377bc76703106924a6fca69af49696c"
+  },
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+}

@@ -1,0 +1,71 @@
+{
+  "timestamp_utc": "2026-11-02T05:00:26.116124+00:00",
+  "comparison": "exact JSON-value equality; zero tolerance",
+  "runtime_memory_override": "BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB=20",
+  "safety_wrapper_sha256": "aaba88167c3980980430d125cdf82f75ef3deec7ce0e3239791ca22f16666778",
+  "runs": {
+    "retrospective_vegetation_lag16": {
+      "status": "exact_match",
+      "checked_fields": [
+        "selected_model",
+        "calibration_status",
+        "search",
+        "train_support",
+        "support",
+        "validation",
+        "raw_val_calib",
+        "contextual_comparator_val_calib"
+      ],
+      "differences": {},
+      "selected_model": "lightgbm_02",
+      "average_precision": 0.3479769201300111,
+      "average_precision_ci": {
+        "lower": 0.27112844799644836,
+        "upper": 0.4093238353870436,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "paired_difference_ci": {
+        "lower": -0.00831493079999896,
+        "upper": 0.017417699299770634,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "previous_fit_sha256": "e58d68a49c1fe7b0cd76e1404c294e49d10690b644a534c1ab9906eca0664a6f",
+      "rerun_fit_sha256": "5e9835b73a5919e0cc93682cf1951a271b84c00df038b4638514b73a37886412",
+      "serialized_model_and_calibrator_hashes_exact": true
+    },
+    "retrospective_vegetation_lag32": {
+      "status": "exact_match",
+      "checked_fields": [
+        "selected_model",
+        "calibration_status",
+        "search",
+        "train_support",
+        "support",
+        "validation",
+        "raw_val_calib",
+        "contextual_comparator_val_calib"
+      ],
+      "differences": {},
+      "selected_model": "lightgbm_09",
+      "average_precision": 0.3556608932526732,
+      "average_precision_ci": {
+        "lower": 0.27319787768452053,
+        "upper": 0.4177253938240082,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "paired_difference_ci": {
+        "lower": 0.0005715738406185472,
+        "upper": 0.011102280360193973,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "previous_fit_sha256": "7e971568630326514dbf0778938568c311ac0737419f514f29cc5f20dd0c2376",
+      "rerun_fit_sha256": "80e2edadc442050d1d341d28635ebef577319efc08cf36f6437f90ccf10f9bba",
+      "serialized_model_and_calibrator_hashes_exact": true
+    }
+  },
+  "all_completed_temporal_fits_match": true
+}

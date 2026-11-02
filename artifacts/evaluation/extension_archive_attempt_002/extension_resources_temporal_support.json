@@ -1,0 +1,19 @@
+{
+  "stage": "temporal_support",
+  "status": "completed",
+  "started_at_utc": "2026-11-01T23:13:44.704517+00:00",
+  "timestamp_utc": "2026-11-01T23:16:52.376443+00:00",
+  "runtime_seconds": 187.66102420000243,
+  "peak_process_tree_rss_bytes": 3614756864,
+  "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:16:51.269540+00:00",
+  "minimum_free_disk_bytes": 267246370816,
+  "peak_extension_disk_bytes": 4573464773,
+  "sample_interval_seconds": 1,
+  "violation": null,
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+}

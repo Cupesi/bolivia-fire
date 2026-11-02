@@ -1,0 +1,23 @@
+{
+  "status": "refused_unopened",
+  "guard": "bolivia_fire.extension.access.confirmation_gates",
+  "error": "Fresh confirmation unavailable: contract prerequisite failed",
+  "blockers": [
+    "No source composite proves archive availability before the cutoff",
+    "All ten vegetation features null for all 29 confirmation Mondays in both lags and geographies",
+    "No 2026 frozen panel or CHIRPS feature partition",
+    "FIRMS and outage coverage through 2026-07-31 and external untouched access history not evidenced"
+  ],
+  "confirmation_log_exists": false,
+  "no_confirmation_labels_accessed": true,
+  "input_hashes": {
+    "artifacts/evaluation/extension_inputs.json": "56f1da52aced3eaee8c090a7cfa60b0d591e3c0c4d7cdb321210b93fb2e9aefe",
+    "artifacts/evaluation/extension_confirmation_evidence.json": "97fdf14b3b8fafdb24b97990352e9e4005d4ecafd9366ddb420aa2619d77546b"
+  },
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+}

@@ -1,0 +1,19 @@
+{
+  "stage": "retrospective_vegetation_lag16",
+  "status": "completed",
+  "started_at_utc": "2026-11-01T23:16:52.377922+00:00",
+  "timestamp_utc": "2026-11-01T23:26:38.407927+00:00",
+  "runtime_seconds": 585.9959589000064,
+  "peak_process_tree_rss_bytes": 5550829568,
+  "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:25:12.981679+00:00",
+  "minimum_free_disk_bytes": 266132533248,
+  "peak_extension_disk_bytes": 5517577437,
+  "sample_interval_seconds": 1,
+  "violation": null,
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+}

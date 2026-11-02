@@ -1,0 +1,32 @@
+{
+  "stage": "geographic_support",
+  "status": "completed",
+  "started_at_utc": "2026-11-02T05:01:22.013156+00:00",
+  "timestamp_utc": "2026-11-02T05:04:28.775062+00:00",
+  "runtime_seconds": 186.76188449999609,
+  "peak_process_tree_rss_bytes": 3304665088,
+  "current_process_tree_rss_bytes": 2492059648,
+  "registered_memory_limit_gib": 12,
+  "effective_memory_limit_gib": 20.0,
+  "memory_limit_source": "BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB",
+  "implementation_hashes": {
+    "src/bolivia_fire/extension/__init__.py": "748b783df5f26340fce8d46a1259d375d15b4ef2f2b8bf38ffd1fc392d59ef96",
+    "src/bolivia_fire/extension/access.py": "7267fe6c82b72e4020c1460e7f8dbaee419b94bcb20a6eba73adde07fd3d4751",
+    "src/bolivia_fire/extension/inference.py": "e4054452383351b0b033c62c2f09f9f3d8f04a872ef76ef49625322cd7099f5b",
+    "src/bolivia_fire/extension/inputs.py": "f1afa23ecb8327b5510e0ac9cfa8556498c88161bc17b90e6acf2c9126fc718b",
+    "src/bolivia_fire/extension/registration.py": "a8964d5b8264e8e98c356130f948ef8b718618a693d540fac6fb989cabab3e14",
+    "src/bolivia_fire/extension/resources.py": "fa1f67b8e052724b33a88a66858d4a6a3e138dbced2831dce10f62119bab34a4",
+    "src/bolivia_fire/extension/runner.py": "2abb78b4ff2e5a2d2d0e430d678fa7d86ed404d4691847c8d30b5476bccb535c"
+  },
+  "peak_process_tree_rss_timestamp_utc": "2026-11-02T05:04:26.627743+00:00",
+  "minimum_free_disk_bytes": 263928037376,
+  "peak_extension_disk_bytes": 4171155670,
+  "sample_interval_seconds": 1,
+  "violation": null,
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "ec68c0b1615df96fbb20fc830a9bef044083e86b",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+}

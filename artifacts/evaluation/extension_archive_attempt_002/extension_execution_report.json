@@ -1,0 +1,2011 @@
+{
+  "status": "partial_validation_resource_guard_stop",
+  "task": "E4 extension experiment execution",
+  "timestamp_utc": "2026-11-01T23:43:28.413206+00:00",
+  "scope_update": {
+    "coordinator_message": "msg_f476d11e5deb",
+    "instruction": "Finish validation then stop before test scoring or any further confirmation step; do not edit extension code",
+    "test_scoring": "not_run; deferred for independently reviewed guard repair",
+    "further_confirmation": "not_run"
+  },
+  "commands": [
+    {
+      "command": "uv run --no-sync bolivia-fire extension select --inputs artifacts/evaluation/extension_inputs.json",
+      "attempt": 1,
+      "exit_code": 1,
+      "reason": "Empty annual partition batches reached CHIRPS concatenation",
+      "durable_attempt": "artifacts/evaluation/extension_attempt_001.json"
+    },
+    {
+      "command": "uv run --no-sync bolivia-fire extension select --inputs artifacts/evaluation/extension_inputs.json",
+      "attempt": 2,
+      "exit_code": 1,
+      "reason": "Projected allocation exceeds process-tree memory reserve",
+      "stage": "retrospective_vegetation_geo_lag16",
+      "models_completed": 2,
+      "geographic_searches_started": 0
+    }
+  ],
+  "primary_hypotheses": {
+    "H3": {
+      "status": "inconclusive",
+      "reason": "no_detected_gain"
+    },
+    "H4": {
+      "status": "not_evaluated",
+      "reason": "Land-cover features unavailable at frozen availability decision"
+    },
+    "H5": {
+      "status": "not_evaluated",
+      "reason": "Land-cover features unavailable at frozen availability decision"
+    }
+  },
+  "runs": {
+    "retrospective_vegetation_lag16": {
+      "status": "completed_validation_fit",
+      "selected_model": "lightgbm_02",
+      "calibration_status": "fitted",
+      "decision": {
+        "status": "inconclusive",
+        "reason": "no_detected_gain"
+      },
+      "average_precision": 0.3479769201300111,
+      "average_precision_ci": {
+        "lower": 0.27112844799644836,
+        "upper": 0.4093238353870436,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "comparator_average_precision": 0.3489485159896789,
+      "paired_average_precision_difference": -0.0009715958596678287,
+      "paired_average_precision_difference_ci": {
+        "lower": -0.00831493079999896,
+        "upper": 0.017417699299770634,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "rows": 645548,
+      "positives": 21530,
+      "prevalence": 0.033351510763168335,
+      "represented_months": 10,
+      "bootstrap_replicates": 500,
+      "train_support": {
+        "rows": 6555557,
+        "exclusions": {
+          "scanned": 15452736,
+          "purged": 111438,
+          "missing_label": 74292,
+          "wrong_geography": 3162960,
+          "incomplete_recent_history": 236048,
+          "missing_chirps_or_flags": 0,
+          "missing_features": 3246219,
+          "eligible": 6555557,
+          "failed_qa_or_missing_coverage": 2177660,
+          "stale_or_missing_observation": 0,
+          "invalid_land_cover_fractions": 0,
+          "missing_feature_count_last_7d": 0,
+          "missing_feature_count_last_14d": 0,
+          "missing_feature_count_last_28d": 0,
+          "missing_feature_count_last_91d": 0,
+          "missing_feature_count_last_365d": 0,
+          "missing_feature_any_last_7d": 0,
+          "missing_feature_days_since_last": 0,
+          "missing_feature_no_prior_detection": 0,
+          "missing_feature_frp_sum_28d": 0,
+          "missing_feature_same_week_last_year": 0,
+          "missing_feature_neighborhood_3x3_last_7d": 0,
+          "missing_feature_neighborhood_7x7_last_7d": 0,
+          "missing_feature_neighborhood_3x3_last_28d": 0,
+          "missing_feature_neighborhood_7x7_last_28d": 0,
+          "missing_feature_national_last_7d": 0,
+          "missing_feature_national_last_28d": 0,
+          "missing_feature_week_of_year_sin": 0,
+          "missing_feature_week_of_year_cos": 0,
+          "missing_feature_train_climatology_cell": 0,
+          "missing_feature_train_climatology_dept": 0,
+          "missing_feature_window_obs_complete_365d": 0,
+          "missing_feature_rain_sum_7d": 0,
+          "missing_feature_rain_sum_30d": 0,
+          "missing_feature_rain_sum_90d": 0,
+          "missing_feature_dry_days_30d": 0,
+          "missing_feature_rain_anomaly_90d": 0,
+          "missing_feature_veg_ndvi_latest": 0,
+          "missing_feature_veg_evi_latest": 0,
+          "missing_feature_veg_ndvi_change_previous": 996568,
+          "missing_feature_veg_evi_change_previous": 996568,
+          "missing_feature_veg_ndvi_change_48d": 2160929,
+          "missing_feature_veg_evi_change_48d": 2160929,
+          "missing_feature_veg_ndvi_seasonal_anomaly": 1517819,
+          "missing_feature_veg_evi_seasonal_anomaly": 1517819,
+          "missing_feature_veg_valid_pixel_fraction": 0,
+          "missing_feature_veg_observation_age_days": 0
+        },
+        "row_key_sha256": "27a1d4235b2f17cabe92cd22a06131a2fdd24a8b612210e8e5f48f68d44b078c",
+        "published_comparator": {
+          "scanned": 15564174,
+          "purged_partition": 111438,
+          "missing_label": 74292,
+          "geographic_holdout": 3162960,
+          "incomplete_28d": 236048,
+          "target_low_coverage": 0,
+          "eligible": 11979436
+        }
+      },
+      "support": {
+        "val_select": {
+          "retrospective_vegetation_lag16": {
+            "eligible_before_intersection": 755126,
+            "lost_to_common_support": 0,
+            "paired_rows": 755126,
+            "row_key_sha256": "dded44145383270fe5387a5fd43f04c4c6119335fecbd1c3bbbd39183b198474",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 355829,
+              "eligible": 755126,
+              "failed_qa_or_missing_coverage": 246321,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0,
+              "missing_feature_veg_ndvi_latest": 0,
+              "missing_feature_veg_evi_latest": 0,
+              "missing_feature_veg_ndvi_change_previous": 113359,
+              "missing_feature_veg_evi_change_previous": 113359,
+              "missing_feature_veg_ndvi_change_48d": 247841,
+              "missing_feature_veg_evi_change_48d": 247841,
+              "missing_feature_veg_ndvi_seasonal_anomaly": 143831,
+              "missing_feature_veg_evi_seasonal_anomaly": 143831,
+              "missing_feature_veg_valid_pixel_fraction": 0,
+              "missing_feature_veg_observation_age_days": 0
+            }
+          },
+          "published_retrospective": {
+            "eligible_before_intersection": 1357276,
+            "lost_to_common_support": 602150,
+            "paired_rows": 755126,
+            "row_key_sha256": "dded44145383270fe5387a5fd43f04c4c6119335fecbd1c3bbbd39183b198474",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1357276,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0
+            }
+          },
+          "published_strict_context": {
+            "eligible_before_intersection": 1357276,
+            "lost_to_common_support": 602150,
+            "paired_rows": 755126,
+            "row_key_sha256": "dded44145383270fe5387a5fd43f04c4c6119335fecbd1c3bbbd39183b198474",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1357276,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0
+            }
+          }
+        },
+        "val_calib": {
+          "retrospective_vegetation_lag16": {
+            "eligible_before_intersection": 645548,
+            "lost_to_common_support": 0,
+            "paired_rows": 645548,
+            "row_key_sha256": "7bae54d33f2e4ec3ca4f1c283cbd1f370d8f59a764a75abc3631137c15dd61b2",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 311966,
+              "eligible": 645548,
+              "failed_qa_or_missing_coverage": 222726,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0,
+              "missing_feature_veg_ndvi_latest": 0,
+              "missing_feature_veg_evi_latest": 0,
+              "missing_feature_veg_ndvi_change_previous": 108395,
+              "missing_feature_veg_evi_change_previous": 108395,
+              "missing_feature_veg_ndvi_change_48d": 228716,
+              "missing_feature_veg_evi_change_48d": 228716,
+              "missing_feature_veg_ndvi_seasonal_anomaly": 151923,
+              "missing_feature_veg_evi_seasonal_anomaly": 151923,
+              "missing_feature_veg_valid_pixel_fraction": 0,
+              "missing_feature_veg_observation_age_days": 0
+            }
+          },
+          "published_retrospective": {
+            "eligible_before_intersection": 1180240,
+            "lost_to_common_support": 534692,
+            "paired_rows": 645548,
+            "row_key_sha256": "7bae54d33f2e4ec3ca4f1c283cbd1f370d8f59a764a75abc3631137c15dd61b2",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1180240,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0
+            }
+          },
+          "published_strict_context": {
+            "eligible_before_intersection": 1180240,
+            "lost_to_common_support": 534692,
+            "paired_rows": 645548,
+            "row_key_sha256": "7bae54d33f2e4ec3ca4f1c283cbd1f370d8f59a764a75abc3631137c15dd61b2",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1180240,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0
+            }
+          }
+        }
+      },
+      "raw_val_calib": {
+        "average_precision": 0.35129745555158365,
+        "brier_score": 0.025854662808406825,
+        "log_loss": 0.09627111294211893,
+        "roc_auc": 0.9179527059446224,
+        "expected_calibration_error": 0.002147622859718441,
+        "recall_at_area_budget_5pct": null,
+        "recall_at_area_budget_10pct": null,
+        "undefined_reasons": {
+          "recall_at_area_budget_5pct": "area_not_supplied",
+          "recall_at_area_budget_10pct": "area_not_supplied"
+        },
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 64554.8,
+            "mean_probability": 0.00044221881731214724,
+            "positive_rate": 0.000278832867579173
+          },
+          {
+            "bin": 1,
+            "count": 64554.8,
+            "mean_probability": 0.000752613078084951,
+            "positive_rate": 0.0003407957270412115
+          },
+          {
+            "bin": 2,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0011440778368556727,
+            "positive_rate": 0.0008210078878720096
+          },
+          {
+            "bin": 3,
+            "count": 64554.80000000002,
+            "mean_probability": 0.00178310692788217,
+            "positive_rate": 0.0011153314703166918
+          },
+          {
+            "bin": 4,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0028654407859395816,
+            "positive_rate": 0.0023545886595574615
+          },
+          {
+            "bin": 5,
+            "count": 64554.79999999999,
+            "mean_probability": 0.004759090161694434,
+            "positive_rate": 0.004678195889383904
+          },
+          {
+            "bin": 6,
+            "count": 64554.79999999999,
+            "mean_probability": 0.009384509695894694,
+            "positive_rate": 0.011432147570746096
+          },
+          {
+            "bin": 7,
+            "count": 64554.80000000005,
+            "mean_probability": 0.020731166768130416,
+            "positive_rate": 0.025048485937529025
+          },
+          {
+            "bin": 8,
+            "count": 64554.79999999993,
+            "mean_probability": 0.05310327504746702,
+            "positive_rate": 0.06397665239455477
+          },
+          {
+            "bin": 9,
+            "count": 64554.80000000005,
+            "mean_probability": 0.22138895355001337,
+            "positive_rate": 0.22346905264984152
+          }
+        ]
+      },
+      "calibrated_metrics": {
+        "average_precision": 0.3479769201300111,
+        "brier_score": 0.02579330177792277,
+        "log_loss": 0.09586324788847787,
+        "roc_auc": 0.9182142240597205,
+        "expected_calibration_error": 4.592952616443738e-05,
+        "recall_at_area_budget_5pct": 0.4010217854298292,
+        "recall_at_area_budget_10pct": 0.5843416257490641,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 64554.8,
+            "mean_probability": 0.00024519155144000094,
+            "positive_rate": 0.000278832867579173
+          },
+          {
+            "bin": 1,
+            "count": 64554.8,
+            "mean_probability": 0.000368422329607919,
+            "positive_rate": 0.00032530501217570187
+          },
+          {
+            "bin": 2,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0007734303284306308,
+            "positive_rate": 0.0007435543135444616
+          },
+          {
+            "bin": 3,
+            "count": 64554.80000000002,
+            "mean_probability": 0.0011293680905782213,
+            "positive_rate": 0.0011618036149132207
+          },
+          {
+            "bin": 4,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0023018641810056578,
+            "positive_rate": 0.0023236072298264423
+          },
+          {
+            "bin": 5,
+            "count": 64554.79999999999,
+            "mean_probability": 0.004740826745912218,
+            "positive_rate": 0.004833103038039
+          },
+          {
+            "bin": 6,
+            "count": 64554.79999999999,
+            "mean_probability": 0.011288423544981354,
+            "positive_rate": 0.01130822185182202
+          },
+          {
+            "bin": 7,
+            "count": 64554.80000000005,
+            "mean_probability": 0.0250208458916757,
+            "positive_rate": 0.025048485937529025
+          },
+          {
+            "bin": 8,
+            "count": 64554.79999999993,
+            "mean_probability": 0.06386527713857411,
+            "positive_rate": 0.06375978238643763
+          },
+          {
+            "bin": 9,
+            "count": 64554.80000000005,
+            "mean_probability": 0.22378566744562897,
+            "positive_rate": 0.2237323948025552
+          }
+        ]
+      },
+      "comparator_metrics": {
+        "average_precision": 0.3489485159896789,
+        "brier_score": 0.025759390211538894,
+        "log_loss": 0.09613725113195358,
+        "roc_auc": 0.9166144651492681,
+        "expected_calibration_error": 0.000693255200374245,
+        "recall_at_area_budget_5pct": 0.39851557878732535,
+        "recall_at_area_budget_10pct": 0.5791086822902479,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 64554.8,
+            "mean_probability": 0.00043437970452941954,
+            "positive_rate": 0.0006661007392169134
+          },
+          {
+            "bin": 1,
+            "count": 64554.8,
+            "mean_probability": 0.00043437970452941954,
+            "positive_rate": 0.0005266843054273268
+          },
+          {
+            "bin": 2,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0006818726757091776,
+            "positive_rate": 0.0006506100243514038
+          },
+          {
+            "bin": 3,
+            "count": 64554.80000000002,
+            "mean_probability": 0.0012438998142560887,
+            "positive_rate": 0.0014716179122234128
+          },
+          {
+            "bin": 4,
+            "count": 64554.79999999999,
+            "mean_probability": 0.002155649820873193,
+            "positive_rate": 0.002447532948750519
+          },
+          {
+            "bin": 5,
+            "count": 64554.79999999999,
+            "mean_probability": 0.004389644822199649,
+            "positive_rate": 0.004786630893442471
+          },
+          {
+            "bin": 6,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0102885626592424,
+            "positive_rate": 0.01088997255045326
+          },
+          {
+            "bin": 7,
+            "count": 64554.80000000005,
+            "mean_probability": 0.02489092129624276,
+            "positive_rate": 0.02531182809024269
+          },
+          {
+            "bin": 8,
+            "count": 64554.79999999993,
+            "mean_probability": 0.06093779064926255,
+            "positive_rate": 0.0616065730201318
+          },
+          {
+            "bin": 9,
+            "count": 64554.80000000005,
+            "mean_probability": 0.22912711793381382,
+            "positive_rate": 0.22515754057018206
+          }
+        ]
+      },
+      "metric_cis": {
+        "average_precision": {
+          "lower": 0.27112844799644836,
+          "upper": 0.4093238353870436,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "brier_score": {
+          "lower": 0.012860328022852138,
+          "upper": 0.03712311183886414,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "log_loss": {
+          "lower": 0.05158256724577863,
+          "upper": 0.13335907331710098,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "roc_auc": {
+          "lower": 0.8950226429345727,
+          "upper": 0.9374010348576958,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "expected_calibration_error": {
+          "lower": 0.00041707351443927006,
+          "upper": 0.006817353227490033,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_5pct": {
+          "lower": 0.3715144372984621,
+          "upper": 0.4903345086442001,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_10pct": {
+          "lower": 0.5556922282591163,
+          "upper": 0.667920416994543,
+          "valid_replicates": 500,
+          "reason": null
+        }
+      },
+      "paired_metric_cis": {
+        "average_precision": {
+          "lower": -0.00831493079999896,
+          "upper": 0.017417699299770634,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "brier_score": {
+          "lower": -0.00021854277509327112,
+          "upper": 0.0002774544368117914,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "log_loss": {
+          "lower": -0.0013659642785714527,
+          "upper": 0.0008384881344911411,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "roc_auc": {
+          "lower": -0.0015467804711471382,
+          "upper": 0.006647362521628236,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "expected_calibration_error": {
+          "lower": -0.002058722669386574,
+          "upper": 0.0018257837558163903,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_5pct": {
+          "lower": 1.5163372271756467e-05,
+          "upper": 0.006063184646490988,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_10pct": {
+          "lower": 2.147927081922476e-05,
+          "upper": 0.010585880703119579,
+          "valid_replicates": 500,
+          "reason": null
+        }
+      },
+      "contextual_comparator_val_calib": {
+        "average_precision": 0.34672705148912847,
+        "brier_score": 0.0258258294255981,
+        "log_loss": 0.09620821878879719,
+        "roc_auc": 0.9169511168646738,
+        "expected_calibration_error": 0.0008647770751513178,
+        "recall_at_area_budget_5pct": null,
+        "recall_at_area_budget_10pct": null,
+        "undefined_reasons": {
+          "recall_at_area_budget_5pct": "area_not_supplied",
+          "recall_at_area_budget_10pct": "area_not_supplied"
+        },
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 64554.8,
+            "mean_probability": 0.0002665152424015105,
+            "positive_rate": 0.00043374001623426914
+          },
+          {
+            "bin": 1,
+            "count": 64554.8,
+            "mean_probability": 0.0004839129706437153,
+            "positive_rate": 0.0005266843054273268
+          },
+          {
+            "bin": 2,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0006596081684558633,
+            "positive_rate": 0.0006815914540824231
+          },
+          {
+            "bin": 3,
+            "count": 64554.80000000002,
+            "mean_probability": 0.0012293731885816114,
+            "positive_rate": 0.0014716179122234128
+          },
+          {
+            "bin": 4,
+            "count": 64554.79999999999,
+            "mean_probability": 0.0023224648427413006,
+            "positive_rate": 0.002447532948750519
+          },
+          {
+            "bin": 5,
+            "count": 64554.79999999999,
+            "mean_probability": 0.004234125057633143,
+            "positive_rate": 0.004631723744787375
+          },
+          {
+            "bin": 6,
+            "count": 64554.79999999999,
+            "mean_probability": 0.010507924212973693,
+            "positive_rate": 0.01135469399641855
+          },
+          {
+            "bin": 7,
+            "count": 64554.80000000005,
+            "mean_probability": 0.02551989707117602,
+            "positive_rate": 0.02459925520642925
+          },
+          {
+            "bin": 8,
+            "count": 64554.79999999993,
+            "mean_probability": 0.06260196957298052,
+            "positive_rate": 0.06406959668374783
+          },
+          {
+            "bin": 9,
+            "count": 64554.80000000005,
+            "mean_probability": 0.22771449586782697,
+            "positive_rate": 0.2232986547863209
+          }
+        ]
+      },
+      "artifact": "artifacts/evaluation/extension_fit_retrospective_vegetation_lag16.json",
+      "artifact_sha256": "e58d68a49c1fe7b0cd76e1404c294e49d10690b644a534c1ab9906eca0664a6f",
+      "model_hashes": {
+        "artifacts/models/extension/retrospective_vegetation_lag16/lightgbm_02.joblib": "cd6f8f14b901568a0ea47db78e32ee9d3efe75e602215292349cdff6fbb2445d",
+        "artifacts/models/extension/retrospective_vegetation_lag16/lightgbm_02.calibrator.joblib": "dd72156c6f019797bf2610c71c4df9858d687cf7d36e583bc9bc7ad22dc3fde7"
+      },
+      "resources_at_report": {
+        "stage": "retrospective_vegetation_lag16",
+        "status": "completed",
+        "started_at_utc": "2026-11-01T23:16:52.377922+00:00",
+        "timestamp_utc": "2026-11-01T23:26:21.648104+00:00",
+        "runtime_seconds": 569.2371109000014,
+        "peak_process_tree_rss_bytes": 5550829568,
+        "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:25:12.981679+00:00",
+        "minimum_free_disk_bytes": 266132533248,
+        "peak_extension_disk_bytes": 5517577437,
+        "sample_interval_seconds": 1,
+        "violation": null
+      },
+      "final_stage_resources": {
+        "stage": "retrospective_vegetation_lag16",
+        "status": "completed",
+        "started_at_utc": "2026-11-01T23:16:52.377922+00:00",
+        "timestamp_utc": "2026-11-01T23:26:38.407927+00:00",
+        "runtime_seconds": 585.9959589000064,
+        "peak_process_tree_rss_bytes": 5550829568,
+        "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:25:12.981679+00:00",
+        "minimum_free_disk_bytes": 266132533248,
+        "peak_extension_disk_bytes": 5517577437,
+        "sample_interval_seconds": 1,
+        "violation": null,
+        "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+        "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+        "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+        "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+        "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+        "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+      },
+      "train_rows_lost_vs_original_comparator": 5423879
+    },
+    "retrospective_vegetation_lag32": {
+      "status": "completed_validation_fit",
+      "selected_model": "lightgbm_09",
+      "calibration_status": "fitted",
+      "decision": {
+        "status": "adds_information",
+        "reason": "finite_interval_above_zero"
+      },
+      "average_precision": 0.3556608932526732,
+      "average_precision_ci": {
+        "lower": 0.27319787768452053,
+        "upper": 0.4177253938240082,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "comparator_average_precision": 0.34981574493899,
+      "paired_average_precision_difference": 0.005845148313683213,
+      "paired_average_precision_difference_ci": {
+        "lower": 0.0005715738406185472,
+        "upper": 0.011102280360193973,
+        "valid_replicates": 500,
+        "reason": null
+      },
+      "rows": 580563,
+      "positives": 19374,
+      "prevalence": 0.033371053636074066,
+      "represented_months": 10,
+      "bootstrap_replicates": 500,
+      "train_support": {
+        "rows": 6022216,
+        "exclusions": {
+          "scanned": 15452736,
+          "purged": 111438,
+          "missing_label": 74292,
+          "wrong_geography": 3162960,
+          "incomplete_recent_history": 236048,
+          "missing_chirps_or_flags": 0,
+          "missing_features": 2645835,
+          "eligible": 6022216,
+          "failed_qa_or_missing_coverage": 3311385,
+          "stale_or_missing_observation": 0,
+          "invalid_land_cover_fractions": 0,
+          "missing_feature_count_last_7d": 0,
+          "missing_feature_count_last_14d": 0,
+          "missing_feature_count_last_28d": 0,
+          "missing_feature_count_last_91d": 0,
+          "missing_feature_count_last_365d": 0,
+          "missing_feature_any_last_7d": 0,
+          "missing_feature_days_since_last": 0,
+          "missing_feature_no_prior_detection": 0,
+          "missing_feature_frp_sum_28d": 0,
+          "missing_feature_same_week_last_year": 0,
+          "missing_feature_neighborhood_3x3_last_7d": 0,
+          "missing_feature_neighborhood_7x7_last_7d": 0,
+          "missing_feature_neighborhood_3x3_last_28d": 0,
+          "missing_feature_neighborhood_7x7_last_28d": 0,
+          "missing_feature_national_last_7d": 0,
+          "missing_feature_national_last_28d": 0,
+          "missing_feature_week_of_year_sin": 0,
+          "missing_feature_week_of_year_cos": 0,
+          "missing_feature_train_climatology_cell": 0,
+          "missing_feature_train_climatology_dept": 0,
+          "missing_feature_window_obs_complete_365d": 0,
+          "missing_feature_rain_sum_7d": 0,
+          "missing_feature_rain_sum_30d": 0,
+          "missing_feature_rain_sum_90d": 0,
+          "missing_feature_dry_days_30d": 0,
+          "missing_feature_rain_anomaly_90d": 0,
+          "missing_feature_veg_ndvi_latest": 0,
+          "missing_feature_veg_evi_latest": 0,
+          "missing_feature_veg_ndvi_change_previous": 762224,
+          "missing_feature_veg_evi_change_previous": 762224,
+          "missing_feature_veg_ndvi_change_48d": 1806061,
+          "missing_feature_veg_evi_change_48d": 1806061,
+          "missing_feature_veg_ndvi_seasonal_anomaly": 1138351,
+          "missing_feature_veg_evi_seasonal_anomaly": 1138351,
+          "missing_feature_veg_valid_pixel_fraction": 0,
+          "missing_feature_veg_observation_age_days": 0
+        },
+        "row_key_sha256": "5010f55b262e77d4ae830d5d679871b5b146e43fe70e4e146e82c186e3f946d3",
+        "published_comparator": {
+          "scanned": 15564174,
+          "purged_partition": 111438,
+          "missing_label": 74292,
+          "geographic_holdout": 3162960,
+          "incomplete_28d": 236048,
+          "target_low_coverage": 0,
+          "eligible": 11979436
+        }
+      },
+      "support": {
+        "val_select": {
+          "retrospective_vegetation_lag32": {
+            "eligible_before_intersection": 679802,
+            "lost_to_common_support": 0,
+            "paired_rows": 679802,
+            "row_key_sha256": "75c3fca429c8d09a5c49d471be3371569c7a4248f6b4b99ed4acb13da4be6d2f",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 299823,
+              "eligible": 679802,
+              "failed_qa_or_missing_coverage": 377651,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0,
+              "missing_feature_veg_ndvi_latest": 0,
+              "missing_feature_veg_evi_latest": 0,
+              "missing_feature_veg_ndvi_change_previous": 91941,
+              "missing_feature_veg_evi_change_previous": 91941,
+              "missing_feature_veg_ndvi_change_48d": 217170,
+              "missing_feature_veg_evi_change_48d": 217170,
+              "missing_feature_veg_ndvi_seasonal_anomaly": 105805,
+              "missing_feature_veg_evi_seasonal_anomaly": 105805,
+              "missing_feature_veg_valid_pixel_fraction": 0,
+              "missing_feature_veg_observation_age_days": 0
+            }
+          },
+          "published_retrospective": {
+            "eligible_before_intersection": 1357276,
+            "lost_to_common_support": 677474,
+            "paired_rows": 679802,
+            "row_key_sha256": "75c3fca429c8d09a5c49d471be3371569c7a4248f6b4b99ed4acb13da4be6d2f",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1357276,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0
+            }
+          },
+          "published_strict_context": {
+            "eligible_before_intersection": 1357276,
+            "lost_to_common_support": 677474,
+            "paired_rows": 679802,
+            "row_key_sha256": "75c3fca429c8d09a5c49d471be3371569c7a4248f6b4b99ed4acb13da4be6d2f",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 37146,
+              "wrong_geography": 382000,
+              "incomplete_recent_history": 118024,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1357276,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0
+            }
+          }
+        },
+        "val_calib": {
+          "retrospective_vegetation_lag32": {
+            "eligible_before_intersection": 580563,
+            "lost_to_common_support": 0,
+            "paired_rows": 580563,
+            "row_key_sha256": "1c8d417e2dcb2eb2644177332fc3c885d7c9e17b0663afd34f20f02e7b3ef8cc",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 251110,
+              "eligible": 580563,
+              "failed_qa_or_missing_coverage": 348567,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0,
+              "missing_feature_veg_ndvi_latest": 0,
+              "missing_feature_veg_evi_latest": 0,
+              "missing_feature_veg_ndvi_change_previous": 82006,
+              "missing_feature_veg_evi_change_previous": 82006,
+              "missing_feature_veg_ndvi_change_48d": 188912,
+              "missing_feature_veg_evi_change_48d": 188912,
+              "missing_feature_veg_ndvi_seasonal_anomaly": 109428,
+              "missing_feature_veg_evi_seasonal_anomaly": 109428,
+              "missing_feature_veg_valid_pixel_fraction": 0,
+              "missing_feature_veg_observation_age_days": 0
+            }
+          },
+          "published_retrospective": {
+            "eligible_before_intersection": 1180240,
+            "lost_to_common_support": 599677,
+            "paired_rows": 580563,
+            "row_key_sha256": "1c8d417e2dcb2eb2644177332fc3c885d7c9e17b0663afd34f20f02e7b3ef8cc",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1180240,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0,
+              "missing_feature_rain_sum_7d": 0,
+              "missing_feature_rain_sum_30d": 0,
+              "missing_feature_rain_sum_90d": 0,
+              "missing_feature_dry_days_30d": 0,
+              "missing_feature_rain_anomaly_90d": 0
+            }
+          },
+          "published_strict_context": {
+            "eligible_before_intersection": 1180240,
+            "lost_to_common_support": 599677,
+            "paired_rows": 580563,
+            "row_key_sha256": "1c8d417e2dcb2eb2644177332fc3c885d7c9e17b0663afd34f20f02e7b3ef8cc",
+            "exclusions": {
+              "scanned": 1894446,
+              "purged": 111438,
+              "missing_label": 148584,
+              "wrong_geography": 359080,
+              "incomplete_recent_history": 206542,
+              "missing_chirps_or_flags": 0,
+              "missing_features": 0,
+              "eligible": 1180240,
+              "failed_qa_or_missing_coverage": 0,
+              "stale_or_missing_observation": 0,
+              "invalid_land_cover_fractions": 0,
+              "missing_feature_count_last_7d": 0,
+              "missing_feature_count_last_14d": 0,
+              "missing_feature_count_last_28d": 0,
+              "missing_feature_count_last_91d": 0,
+              "missing_feature_count_last_365d": 0,
+              "missing_feature_any_last_7d": 0,
+              "missing_feature_days_since_last": 0,
+              "missing_feature_no_prior_detection": 0,
+              "missing_feature_frp_sum_28d": 0,
+              "missing_feature_same_week_last_year": 0,
+              "missing_feature_neighborhood_3x3_last_7d": 0,
+              "missing_feature_neighborhood_7x7_last_7d": 0,
+              "missing_feature_neighborhood_3x3_last_28d": 0,
+              "missing_feature_neighborhood_7x7_last_28d": 0,
+              "missing_feature_national_last_7d": 0,
+              "missing_feature_national_last_28d": 0,
+              "missing_feature_week_of_year_sin": 0,
+              "missing_feature_week_of_year_cos": 0,
+              "missing_feature_train_climatology_cell": 0,
+              "missing_feature_train_climatology_dept": 0,
+              "missing_feature_window_obs_complete_365d": 0
+            }
+          }
+        }
+      },
+      "raw_val_calib": {
+        "average_precision": 0.35912829332016666,
+        "brier_score": 0.02607245894289272,
+        "log_loss": 0.09875647918093182,
+        "roc_auc": 0.9179472897650406,
+        "expected_calibration_error": 0.009578941843633669,
+        "recall_at_area_budget_5pct": null,
+        "recall_at_area_budget_10pct": null,
+        "undefined_reasons": {
+          "recall_at_area_budget_5pct": "area_not_supplied",
+          "recall_at_area_budget_10pct": "area_not_supplied"
+        },
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 58056.3,
+            "mean_probability": 0.005825516767799855,
+            "positive_rate": 0.0006028630829040087
+          },
+          {
+            "bin": 1,
+            "count": 58056.3,
+            "mean_probability": 0.005825516767799853,
+            "positive_rate": 0.0004478411473001207
+          },
+          {
+            "bin": 2,
+            "count": 58056.29999999999,
+            "mean_probability": 0.006114976708718801,
+            "positive_rate": 0.0007751096780194399
+          },
+          {
+            "bin": 3,
+            "count": 58056.30000000002,
+            "mean_probability": 0.006871573921486471,
+            "positive_rate": 0.001532994696527336
+          },
+          {
+            "bin": 4,
+            "count": 58056.29999999999,
+            "mean_probability": 0.0076005862618033,
+            "positive_rate": 0.002239205736500604
+          },
+          {
+            "bin": 5,
+            "count": 58056.29999999999,
+            "mean_probability": 0.009423113837642914,
+            "positive_rate": 0.004254490899351148
+          },
+          {
+            "bin": 6,
+            "count": 58056.29999999999,
+            "mean_probability": 0.013851498893263554,
+            "positive_rate": 0.011299376639572279
+          },
+          {
+            "bin": 7,
+            "count": 58056.30000000005,
+            "mean_probability": 0.02340225255656396,
+            "positive_rate": 0.023804479444952554
+          },
+          {
+            "bin": 8,
+            "count": 58056.29999999999,
+            "mean_probability": 0.050998285261508625,
+            "positive_rate": 0.06288723187664388
+          },
+          {
+            "bin": 9,
+            "count": 58056.29999999999,
+            "mean_probability": 0.17672961652039176,
+            "positive_rate": 0.2258669601748648
+          }
+        ]
+      },
+      "calibrated_metrics": {
+        "average_precision": 0.3556608932526732,
+        "brier_score": 0.02563133946656796,
+        "log_loss": 0.09548559411279245,
+        "roc_auc": 0.9182150508145087,
+        "expected_calibration_error": 9.432439331205008e-05,
+        "recall_at_area_budget_5pct": 0.408773435574533,
+        "recall_at_area_budget_10pct": 0.5858247991944056,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 58056.3,
+            "mean_probability": 0.0005415569758042693,
+            "positive_rate": 0.0006028630829040087
+          },
+          {
+            "bin": 1,
+            "count": 58056.3,
+            "mean_probability": 0.0005415569758042693,
+            "positive_rate": 0.0004478411473001207
+          },
+          {
+            "bin": 2,
+            "count": 58056.29999999999,
+            "mean_probability": 0.0006915061312365952,
+            "positive_rate": 0.0007578850185078968
+          },
+          {
+            "bin": 3,
+            "count": 58056.30000000002,
+            "mean_probability": 0.0014701094131584996,
+            "positive_rate": 0.0014468713989696203
+          },
+          {
+            "bin": 4,
+            "count": 58056.29999999999,
+            "mean_probability": 0.002256377389371763,
+            "positive_rate": 0.002170307098454432
+          },
+          {
+            "bin": 5,
+            "count": 58056.29999999999,
+            "mean_probability": 0.004283298171920807,
+            "positive_rate": 0.0043061648778857774
+          },
+          {
+            "bin": 6,
+            "count": 58056.29999999999,
+            "mean_probability": 0.011235193858490386,
+            "positive_rate": 0.011178804022991477
+          },
+          {
+            "bin": 7,
+            "count": 58056.30000000005,
+            "mean_probability": 0.02381433380277812,
+            "positive_rate": 0.023873378082998727
+          },
+          {
+            "bin": 8,
+            "count": 58056.29999999999,
+            "mean_probability": 0.06252349326002514,
+            "positive_rate": 0.06278388391957464
+          },
+          {
+            "bin": 9,
+            "count": 58056.29999999999,
+            "mean_probability": 0.2263563980509546,
+            "positive_rate": 0.22614255472704947
+          }
+        ]
+      },
+      "comparator_metrics": {
+        "average_precision": 0.34981574493899,
+        "brier_score": 0.02575786409892271,
+        "log_loss": 0.09603051495618062,
+        "roc_auc": 0.9170553168344883,
+        "expected_calibration_error": 0.0009497967690588439,
+        "recall_at_area_budget_5pct": 0.403716047978046,
+        "recall_at_area_budget_10pct": 0.5854405447132872,
+        "undefined_reasons": {},
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 58056.3,
+            "mean_probability": 0.00043437970452941954,
+            "positive_rate": 0.000654537061438638
+          },
+          {
+            "bin": 1,
+            "count": 58056.3,
+            "mean_probability": 0.00043437970452941954,
+            "positive_rate": 0.0004478411473001207
+          },
+          {
+            "bin": 2,
+            "count": 58056.29999999999,
+            "mean_probability": 0.0006630472752877196,
+            "positive_rate": 0.0008612329755771555
+          },
+          {
+            "bin": 3,
+            "count": 58056.30000000002,
+            "mean_probability": 0.0011994467128413498,
+            "positive_rate": 0.0014985453775042496
+          },
+          {
+            "bin": 4,
+            "count": 58056.29999999999,
+            "mean_probability": 0.002141565825353194,
+            "positive_rate": 0.0021875317579659746
+          },
+          {
+            "bin": 5,
+            "count": 58056.29999999999,
+            "mean_probability": 0.00430901557468849,
+            "positive_rate": 0.004426737494466579
+          },
+          {
+            "bin": 6,
+            "count": 58056.29999999999,
+            "mean_probability": 0.010203523938775069,
+            "positive_rate": 0.011299376639572279
+          },
+          {
+            "bin": 7,
+            "count": 58056.30000000005,
+            "mean_probability": 0.025047100438056066,
+            "positive_rate": 0.024665712420529708
+          },
+          {
+            "bin": 8,
+            "count": 58056.29999999999,
+            "mean_probability": 0.06225540628693242,
+            "positive_rate": 0.061969157524678846
+          },
+          {
+            "bin": 9,
+            "count": 58056.29999999999,
+            "mean_probability": 0.2325397681705908,
+            "positive_rate": 0.22569988097760263
+          }
+        ]
+      },
+      "metric_cis": {
+        "average_precision": {
+          "lower": 0.27319787768452053,
+          "upper": 0.4177253938240082,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "brier_score": {
+          "lower": 0.012771180626654574,
+          "upper": 0.036463891881495035,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "log_loss": {
+          "lower": 0.05096343116955564,
+          "upper": 0.13199758983261767,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "roc_auc": {
+          "lower": 0.8961524550020827,
+          "upper": 0.9369188849860698,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "expected_calibration_error": {
+          "lower": 0.00043003353600781666,
+          "upper": 0.005640680136258404,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_5pct": {
+          "lower": 0.37858789661008274,
+          "upper": 0.513584077710027,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_10pct": {
+          "lower": 0.5547476259248063,
+          "upper": 0.6871865023198452,
+          "valid_replicates": 500,
+          "reason": null
+        }
+      },
+      "paired_metric_cis": {
+        "average_precision": {
+          "lower": 0.0005715738406185472,
+          "upper": 0.011102280360193973,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "brier_score": {
+          "lower": -0.00025106203779937125,
+          "upper": -2.794306709463122e-05,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "log_loss": {
+          "lower": -0.0009595976301799193,
+          "upper": -0.00017358739990366284,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "roc_auc": {
+          "lower": 0.0003751931610213005,
+          "upper": 0.0018802995537926968,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "expected_calibration_error": {
+          "lower": -0.0021200592555501137,
+          "upper": 0.0013026113750176443,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_5pct": {
+          "lower": -0.000391266249924925,
+          "upper": 0.008388508379322545,
+          "valid_replicates": 500,
+          "reason": null
+        },
+        "recall_at_area_budget_10pct": {
+          "lower": -0.0031436201247770023,
+          "upper": 0.0029337163055937654,
+          "valid_replicates": 500,
+          "reason": null
+        }
+      },
+      "contextual_comparator_val_calib": {
+        "average_precision": 0.3482800492031943,
+        "brier_score": 0.025813982794392936,
+        "log_loss": 0.09609243693727955,
+        "roc_auc": 0.9173594938770967,
+        "expected_calibration_error": 0.0010531765027749617,
+        "recall_at_area_budget_5pct": null,
+        "recall_at_area_budget_10pct": null,
+        "undefined_reasons": {
+          "recall_at_area_budget_5pct": "area_not_supplied",
+          "recall_at_area_budget_10pct": "area_not_supplied"
+        },
+        "reliability": [
+          {
+            "bin": 0,
+            "count": 58056.3,
+            "mean_probability": 0.0002665152424015105,
+            "positive_rate": 0.00043061648778857764
+          },
+          {
+            "bin": 1,
+            "count": 58056.3,
+            "mean_probability": 0.0004861893625686495,
+            "positive_rate": 0.0006373124019270949
+          },
+          {
+            "bin": 2,
+            "count": 58056.29999999999,
+            "mean_probability": 0.0006334541933148744,
+            "positive_rate": 0.0006717617209501813
+          },
+          {
+            "bin": 3,
+            "count": 58056.30000000002,
+            "mean_probability": 0.0012199975649922895,
+            "positive_rate": 0.0014985453775042496
+          },
+          {
+            "bin": 4,
+            "count": 58056.29999999999,
+            "mean_probability": 0.002270273824728436,
+            "positive_rate": 0.0022564303960121474
+          },
+          {
+            "bin": 5,
+            "count": 58056.29999999999,
+            "mean_probability": 0.004147788517466651,
+            "positive_rate": 0.004340614196908864
+          },
+          {
+            "bin": 6,
+            "count": 58056.29999999999,
+            "mean_probability": 0.010380417075735272,
+            "positive_rate": 0.011540521872733883
+          },
+          {
+            "bin": 7,
+            "count": 58056.30000000005,
+            "mean_probability": 0.025591453461313623,
+            "positive_rate": 0.024545139803948905
+          },
+          {
+            "bin": 8,
+            "count": 58056.29999999999,
+            "mean_probability": 0.06391989394846295,
+            "positive_rate": 0.06407573338294037
+          },
+          {
+            "bin": 9,
+            "count": 58056.29999999999,
+            "mean_probability": 0.2310446361417795,
+            "positive_rate": 0.2237138777359219
+          }
+        ]
+      },
+      "artifact": "artifacts/evaluation/extension_fit_retrospective_vegetation_lag32.json",
+      "artifact_sha256": "7e971568630326514dbf0778938568c311ac0737419f514f29cc5f20dd0c2376",
+      "model_hashes": {
+        "artifacts/models/extension/retrospective_vegetation_lag32/lightgbm_09.joblib": "9eabf26736a5f810359a4ba07ea7dc432266b1d286930bc3cba07e7db3ca0aa3",
+        "artifacts/models/extension/retrospective_vegetation_lag32/lightgbm_09.calibrator.joblib": "158fac6c63dd8408fc3b796d01da907c033ab2b8196a7326b609768b58090f80"
+      },
+      "resources_at_report": {
+        "stage": "retrospective_vegetation_lag32",
+        "status": "completed",
+        "started_at_utc": "2026-11-01T23:26:38.409620+00:00",
+        "timestamp_utc": "2026-11-01T23:35:38.855225+00:00",
+        "runtime_seconds": 540.4213964999944,
+        "peak_process_tree_rss_bytes": 6573752320,
+        "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:34:22.464811+00:00",
+        "minimum_free_disk_bytes": 265425231872,
+        "peak_extension_disk_bytes": 6384868566,
+        "sample_interval_seconds": 1,
+        "violation": null
+      },
+      "final_stage_resources": {
+        "stage": "retrospective_vegetation_lag32",
+        "status": "completed",
+        "started_at_utc": "2026-11-01T23:26:38.409620+00:00",
+        "timestamp_utc": "2026-11-01T23:35:42.549781+00:00",
+        "runtime_seconds": 544.1158049000005,
+        "peak_process_tree_rss_bytes": 6573752320,
+        "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:34:22.464811+00:00",
+        "minimum_free_disk_bytes": 265425231872,
+        "peak_extension_disk_bytes": 6384868566,
+        "sample_interval_seconds": 1,
+        "violation": null,
+        "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+        "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+        "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+        "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+        "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+        "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+      },
+      "train_rows_lost_vs_original_comparator": 5957220
+    },
+    "retrospective_land_cover": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    },
+    "retrospective_vegetation_land_cover_lag16": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    },
+    "retrospective_vegetation_land_cover_lag32": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    },
+    "retrospective_vegetation_geo_lag16": {
+      "status": "not_completed_resource_guard",
+      "reason": "Geographic search not started because the projected-memory guard stopped execution"
+    },
+    "retrospective_vegetation_geo_lag32": {
+      "status": "not_completed_resource_guard",
+      "reason": "Geographic search not started because the projected-memory guard stopped execution"
+    },
+    "retrospective_land_cover_geo": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    },
+    "retrospective_vegetation_land_cover_geo_lag16": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    },
+    "retrospective_vegetation_land_cover_geo_lag32": {
+      "status": "not_evaluated",
+      "reason": "Land-cover feature production and evaluated-eligible audit unavailable at pre-metric availability freeze; user directed not to wait"
+    }
+  },
+  "resources": {
+    "extension_resources_diagnostic_label_free.json": {
+      "stage": "diagnostic_label_free",
+      "status": "failed",
+      "started_at_utc": "2026-11-01T23:12:21.505354+00:00",
+      "timestamp_utc": "2026-11-01T23:12:25.791558+00:00",
+      "runtime_seconds": 4.285954099999799,
+      "peak_process_tree_rss_bytes": 277716992,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:12:25.791109+00:00",
+      "minimum_free_disk_bytes": 268109676544,
+      "peak_extension_disk_bytes": 0,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_geographic_support.json": {
+      "stage": "geographic_support",
+      "status": "completed",
+      "started_at_utc": "2026-11-01T23:36:31.547074+00:00",
+      "timestamp_utc": "2026-11-01T23:39:35.723227+00:00",
+      "runtime_seconds": 184.16848310000205,
+      "peak_process_tree_rss_bytes": 7432986624,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:39:34.660480+00:00",
+      "minimum_free_disk_bytes": 264574480384,
+      "peak_extension_disk_bytes": 7235991926,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_retrospective_vegetation_geo_lag16.json": {
+      "stage": "retrospective_vegetation_geo_lag16",
+      "status": "failed",
+      "started_at_utc": "2026-11-01T23:39:35.724659+00:00",
+      "timestamp_utc": "2026-11-01T23:41:27.769817+00:00",
+      "runtime_seconds": 112.04049959999975,
+      "peak_process_tree_rss_bytes": 8403021824,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:41:26.789119+00:00",
+      "minimum_free_disk_bytes": 263569997824,
+      "peak_extension_disk_bytes": 8240463646,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_retrospective_vegetation_lag16.json": {
+      "stage": "retrospective_vegetation_lag16",
+      "status": "completed",
+      "started_at_utc": "2026-11-01T23:16:52.377922+00:00",
+      "timestamp_utc": "2026-11-01T23:26:38.407927+00:00",
+      "runtime_seconds": 585.9959589000064,
+      "peak_process_tree_rss_bytes": 5550829568,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:25:12.981679+00:00",
+      "minimum_free_disk_bytes": 266132533248,
+      "peak_extension_disk_bytes": 5517577437,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_retrospective_vegetation_lag32.json": {
+      "stage": "retrospective_vegetation_lag32",
+      "status": "completed",
+      "started_at_utc": "2026-11-01T23:26:38.409620+00:00",
+      "timestamp_utc": "2026-11-01T23:35:42.549781+00:00",
+      "runtime_seconds": 544.1158049000005,
+      "peak_process_tree_rss_bytes": 6573752320,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:34:22.464811+00:00",
+      "minimum_free_disk_bytes": 265425231872,
+      "peak_extension_disk_bytes": 6384868566,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_temporal_lag_comparison.json": {
+      "stage": "temporal_lag_comparison",
+      "status": "completed",
+      "started_at_utc": "2026-11-01T23:35:42.551499+00:00",
+      "timestamp_utc": "2026-11-01T23:36:31.517267+00:00",
+      "runtime_seconds": 48.96373389999644,
+      "peak_process_tree_rss_bytes": 5835120640,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:35:46.321168+00:00",
+      "minimum_free_disk_bytes": 265425629184,
+      "peak_extension_disk_bytes": 6384868566,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    },
+    "extension_resources_temporal_support.json": {
+      "stage": "temporal_support",
+      "status": "completed",
+      "started_at_utc": "2026-11-01T23:13:44.704517+00:00",
+      "timestamp_utc": "2026-11-01T23:16:52.376443+00:00",
+      "runtime_seconds": 187.66102420000243,
+      "peak_process_tree_rss_bytes": 3614756864,
+      "peak_process_tree_rss_timestamp_utc": "2026-11-01T23:16:51.269540+00:00",
+      "minimum_free_disk_bytes": 267246370816,
+      "peak_extension_disk_bytes": 4573464773,
+      "sample_interval_seconds": 1,
+      "violation": null,
+      "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+      "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+      "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+      "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+      "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+      "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+    }
+  },
+  "peak_process_tree_rss_bytes": 8403021824,
+  "minimum_free_disk_bytes": 263569997824,
+  "total_recorded_stage_runtime_seconds": 1662.9455046000076,
+  "selection_frozen": false,
+  "selection_path_exists": false,
+  "test_log_unchanged": true,
+  "test_log_entries": 7,
+  "test_log_sha256": "2ef9b424267505f30cd02e1cce70e92ad270eba8db9c86cf9e1737a620d92bbb",
+  "confirmation_log_exists": false,
+  "confirmation": {
+    "status": "unavailable",
+    "frozen_before_label_access": true,
+    "no_confirmation_labels_accessed_in_this_run": true,
+    "access_audit": {
+      "untouched": null,
+      "inspected_for_development": null,
+      "reason": "External access history has not been evidenced"
+    },
+    "coverage": {
+      "firms_end": null,
+      "outages_end": null,
+      "chirps_end": "2025-12-31"
+    },
+    "archive": {
+      "cutoff": "2026-07-31T23:59:59Z",
+      "all_used_granules_produced_and_archived_by_cutoff": false,
+      "archive_proven_composites": 0
+    },
+    "blockers": [
+      "No source composite proves archive availability before the cutoff",
+      "All ten vegetation features null for all 29 confirmation Mondays in both lags and geographies",
+      "No 2026 frozen panel or CHIRPS feature partition",
+      "FIRMS and outage coverage through 2026-07-31 and external untouched access history not evidenced"
+    ],
+    "input_hashes": {
+      "datasets/processed/vegetation/source.json": "8132516039d20ff7ba4b2aec76ef56125ded877cf32aa6a40961c670623e31e1",
+      "datasets/processed/vegetation/all_years_audit.json": "dafb6e61dd5880f89e9bf70d8b62f16dc451e18b3aab2baaaca017a6b5fed8be",
+      "datasets/processed/vegetation/all_years_acceptance.json": "78b625824e7a6ca802f7fddb5892cc3a58e1dc405650534244af6b2c13a48f14",
+      "datasets/manifests/snpp_outages.csv": "248bf9eaaf3a7daebb5c855a927233518e7dd00949f690983e57a5bbb0b39633",
+      "datasets/manifests/firms_VIIRS_SNPP_SP.jsonl": "f0c7253a600b3bfc5274af3ce5ffb17de99c62da6ebd4fbced9f4cce917af101",
+      "datasets/processed/covariates/chirps_manifest.jsonl": "b49240e5b5703bbd384b642d0dde25822377bc76703106924a6fca69af49696c"
+    },
+    "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+    "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+    "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+    "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+    "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+  },
+  "initial_confirmation_guard": {
+    "status": "refused_unopened",
+    "guard": "bolivia_fire.extension.access.confirmation_gates",
+    "error": "Fresh confirmation unavailable: contract prerequisite failed",
+    "blockers": [
+      "No source composite proves archive availability before the cutoff",
+      "All ten vegetation features null for all 29 confirmation Mondays in both lags and geographies",
+      "No 2026 frozen panel or CHIRPS feature partition",
+      "FIRMS and outage coverage through 2026-07-31 and external untouched access history not evidenced"
+    ],
+    "confirmation_log_exists": false,
+    "no_confirmation_labels_accessed": true,
+    "input_hashes": {
+      "artifacts/evaluation/extension_inputs.json": "56f1da52aced3eaee8c090a7cfa60b0d591e3c0c4d7cdb321210b93fb2e9aefe",
+      "artifacts/evaluation/extension_confirmation_evidence.json": "97fdf14b3b8fafdb24b97990352e9e4005d4ecafd9366ddb420aa2619d77546b"
+    },
+    "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+    "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+    "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+    "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+    "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+    "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46"
+  },
+  "aoi_buffer_deviation": {
+    "registered_acquisition_buffer_degrees": 0.1,
+    "actual_acquisition_buffer_degrees": 0.05,
+    "note": "Retained acquisition deviation; every saved AOI covers the pinned national geometry and every national cell portion passes the independent area audit; eligibility gates are unchanged.",
+    "maximum_relative_national_area_error": 3.5222584848781935e-07,
+    "uncovered_cells_above_tolerance": 0,
+    "evidence": "datasets/processed/vegetation/source.json"
+  },
+  "verification": {
+    "timestamp_utc": "2026-11-01T23:17:39.401147+00:00",
+    "commands": [
+      {
+        "command": "uv run --no-sync bolivia-fire extension guard",
+        "outcome": "passed"
+      },
+      {
+        "command": "uv run --no-sync bolivia-fire extension --help",
+        "outcome": "passed"
+      },
+      {
+        "command": "uv run --no-sync python -m pytest tests/extension -q -p no:cacheprovider",
+        "outcome": "29 passed",
+        "runtime_seconds": 30.28
+      },
+      {
+        "command": "uv run --no-sync ruff check .",
+        "outcome": "passed"
+      },
+      {
+        "command": "uv run --no-sync python -m pytest -m 'not live and not local_data' -q -p no:cacheprovider",
+        "outcome": "585 passed, 1 skipped, 3 deselected",
+        "warnings": 9,
+        "warning_scope": "pandas dependency deprecations in figure tests",
+        "runtime_seconds": 179.03
+      }
+    ],
+    "modified_code_hashes": {
+      "src/bolivia_fire/extension/inputs.py": "688c1826bb94d668704247921beb6024f9765064593c5a459b08f5b9b993923a",
+      "tests/extension/test_inputs.py": "9210e8c7908e0e103bcc89218ae71986c8b94e2065ad2659cfb75d029e537f80"
+    }
+  },
+  "frozen_input_hashes_verified_at_report": true,
+  "protected_published_artifact_count": 452,
+  "protected_published_artifacts_unchanged": true,
+  "cache_memmap_files_remaining": 0,
+  "input_plan": "artifacts/evaluation/extension_inputs.json",
+  "input_plan_sha256": "9ef980d9c2e8eb4097f3d20eaa0cc24a4342f179479216d64f0ed48284a45ebe",
+  "frozen_input_count": 1231,
+  "limitations": [
+    "Validation isotonic calibrators fit these same labels; intervals condition on fixed models and calibrators and omit training/search uncertainty",
+    "Feature-complete extension training rows differ from original comparator population",
+    "Temporal 32-day sensitivity does not replace the primary 16-day decision",
+    "Neither geographic validation fit nor a complete frozen selection is available",
+    "Temporal lag comparison ran but its result was held in memory until final selection and was lost on the later guarded stop; its resource record is retained",
+    "Scoring guard repair and resource lifetime handling require separate coordinator authorization"
+  ],
+  "environment": {
+    "python": "3.13.15",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "pyarrow": "26.0.0",
+      "scikit-learn": "1.9.1",
+      "lightgbm": "4.7.0",
+      "joblib": "1.6.0",
+      "xgboost": "3.4.1",
+      "catboost": "1.2.10",
+      "torch": "2.11.0+cu128",
+      "psutil": "7.2.2"
+    }
+  },
+  "hardware": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "logical_cpus": 8,
+    "ram_bytes": 33408688128
+  },
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "registration_commit": "39ee78fb4f5f9b1a7704d9fa45e27ee3ec76f489",
+  "contract_sha256": "978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2",
+  "document_sha256": "a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8",
+  "protocol_sha256": "661b841c5dade7b8f0dab0787cc6916888b498ca13ef94f6b1272055c1644fbf",
+  "experiments_sha256": "a6eba3883044840843607bf42065b2f1ce363a9de5f2332b75edd7a706219d46",
+  "initial_confirmation_guard_original_plan": "artifacts/evaluation/extension_inputs_attempt_001.json",
+  "completed_fit_artifact_hashes_verified": true,
+  "identical_validation_support_verified": true,
+  "execution": {
+    "task_id": "task_23d2d2442839",
+    "dispatch_id": "ctx_06fd8ee5ad08"
+  },
+  "files_created_or_modified": [
+    "src/bolivia_fire/extension/inputs.py",
+    "tests/extension/test_inputs.py",
+    "artifacts/evaluation/extension_attempt_001.json",
+    "artifacts/evaluation/extension_audit_retrospective_vegetation_geo_lag16.json",
+    "artifacts/evaluation/extension_audit_retrospective_vegetation_geo_lag32.json",
+    "artifacts/evaluation/extension_audit_retrospective_vegetation_lag16.json",
+    "artifacts/evaluation/extension_audit_retrospective_vegetation_lag32.json",
+    "artifacts/evaluation/extension_checkpoint_retrospective_vegetation_lag16.json",
+    "artifacts/evaluation/extension_checkpoint_retrospective_vegetation_lag32.json",
+    "artifacts/evaluation/extension_confirmation_evidence.json",
+    "artifacts/evaluation/extension_confirmation_guard.json",
+    "artifacts/evaluation/extension_execution_baseline.json",
+    "artifacts/evaluation/extension_execution_report.json",
+    "artifacts/evaluation/extension_fit_retrospective_vegetation_lag16.json",
+    "artifacts/evaluation/extension_fit_retrospective_vegetation_lag32.json",
+    "artifacts/evaluation/extension_inputs.json",
+    "artifacts/evaluation/extension_inputs_attempt_001.json",
+    "artifacts/evaluation/extension_resources_diagnostic_label_free.json",
+    "artifacts/evaluation/extension_resources_geographic_support.json",
+    "artifacts/evaluation/extension_resources_retrospective_vegetation_geo_lag16.json",
+    "artifacts/evaluation/extension_resources_retrospective_vegetation_lag16.json",
+    "artifacts/evaluation/extension_resources_retrospective_vegetation_lag32.json",
+    "artifacts/evaluation/extension_resources_temporal_lag_comparison.json",
+    "artifacts/evaluation/extension_resources_temporal_support.json",
+    "artifacts/evaluation/extension_verification.json",
+    "artifacts/models/extension/retrospective_vegetation_lag16/lightgbm_02.calibrator.joblib",
+    "artifacts/models/extension/retrospective_vegetation_lag16/lightgbm_02.joblib",
+    "artifacts/models/extension/retrospective_vegetation_lag32/lightgbm_09.calibrator.joblib",
+    "artifacts/models/extension/retrospective_vegetation_lag32/lightgbm_09.joblib"
+  ],
+  "dispatch_outcome": "failed",
+  "settled_at_utc": "2026-11-01T23:52:04.163927+00:00",
+  "coordinator_resolution": "Settle this dispatch failed with partial report; a separate task will fix guards and resource lifetimes, then re-run all four registered fits under fixed, re-pinned code; temporal results must reproduce exactly before exploratory test scoring",
+  "remaining_work": [
+    "Patch reviewed scoring guards and resource lifetimes in a separate task",
+    "Re-run all four registered fits under fixed, re-pinned implementation; require exact reproduction of both retained temporal results",
+    "Freeze complete selection before any exploratory test reopening",
+    "Keep 2026 unopened unless archive, complete inputs and untouched-history gates are evidenced"
+  ],
+  "worker_summary": "Prepared the frozen vegetation input plan and four eligibility audits, fixed empty annual-batch handling, and completed both temporal 20-configuration LightGBM/isotonic/500-replicate month-block validation fits; ruff and the non-live suite passed with 585 tests. Primary 16-day H3 is inconclusive (AP 0.347977 versus 0.348949; paired AP-difference 95% CI [-0.008315, 0.017418]; 645548 paired rows; 534692 comparator validation rows excluded; 6555557 training rows; 586 seconds), while the registered 32-day sensitivity is positive (AP 0.355661 versus 0.349816; CI [0.000572, 0.011102]; 580563 paired rows; 599677 validation rows excluded; 6022216 training rows; 544 seconds), and H4/H5 remain not_evaluated. Geographic fitting stopped before search at the projected-memory guard with 7.83 GiB peak RSS and 245.47 GiB minimum free disk, leaving no complete frozen selection; all 452 protected artifacts and the test log are unchanged, and the coordinator assigned guard/resource fixes plus an exact-reproduction re-run of all four fits before test scoring, while 2026 remains unopened for missing gates."
+}

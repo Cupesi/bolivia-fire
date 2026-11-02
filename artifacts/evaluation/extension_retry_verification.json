@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-11-02T04:44:53.248440+00:00",
+  "memory_environment": "BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB=20",
+  "commands": [
+    {
+      "command": "uv run --no-sync pytest tests/extension -q -m \"not live and not local_data\"",
+      "exit_code": 0,
+      "passed": 65,
+      "runtime_seconds": 246.22,
+      "warnings": [
+        "Pytest cache directory write denied; test assertions all passed"
+      ]
+    },
+    {
+      "command": "uv run --no-sync ruff check src/bolivia_fire/extension src/bolivia_fire/extension_cli.py tests/extension",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --no-sync bolivia-fire extension --help",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --no-sync bolivia-fire extension guard",
+      "exit_code": 0
+    }
+  ]
+}
