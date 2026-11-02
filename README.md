@@ -18,6 +18,8 @@ See [results and sensitivity analyses](docs/results.md), the source
 [post-hoc learner comparison](docs/model-comparison.md), which retains the published LightGBM
 model and reports exploratory results separately.
 
+[Environmental covariate findings](docs/results.md#environmental-covariates) are reported separately; the deployed weekly model is unchanged.
+
 The target describes satellite detections, not numbers of fires, ignitions, burned area or an
 official warning. Complete negative labels mean no selected detection was observed; incomplete
 target weeks have null labels. See the [dataset card](datasets/dataset_card.md).

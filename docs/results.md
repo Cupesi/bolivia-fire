@@ -288,3 +288,71 @@ The calibrated-baseline sensitivity remains separate in
 [test_strict.json](../artifacts/evaluation/test_strict.json) under
 `calibrated_baseline_sensitivity`. Primary tables and figures above describe the original
 primary report.
+
+## Environmental covariates
+
+Vegetation (H3), land cover (H4) and their combination (H5) are assessed after the primary
+analysis under a [separately specified protocol](extension-vegetation.md). Candidates are
+selected on uncalibrated 2021 AP and calibrated on 2022. The covariate decision uses
+calibrated AP minus the saved retrospective comparator's calibrated AP on identical 2022
+validation rows; only a 95% paired interval entirely above zero supports added information.
+Both feature families exclude geographic holdout rows from validation. Calibration and
+decision labels overlap, and the intervals condition on fixed fitted models and calibrators.
+
+| Hypothesis / feature family / lag (selected model) | Paired validation rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] | Validation finding |
+|---|---:|---|---:|---|---|
+| H3 temporal, 16 days (`lightgbm_02`) | 645,548 | 0.348 [0.271, 0.409] | 0.349 | -0.00097 [-0.008, 0.017] | Inconclusive / no detected gain |
+| H3 temporal, 32 days (`lightgbm_09`) | 580,563 | 0.356 [0.273, 0.418] | 0.350 | 0.006 [0.00057, 0.011] | Positive sensitivity interval |
+| H3 geographic, 16 days (`lightgbm_05`) | 684,528 | 0.332 [0.248, 0.400] | 0.335 | -0.003 [-0.007, 0.010] | Inconclusive / no detected gain |
+| H3 geographic, 32 days (`lightgbm_03`) | 607,980 | 0.341 [0.246, 0.409] | 0.336 | 0.005 [-0.003, 0.011] | Inconclusive / no detected gain |
+| H4 land cover, temporal / geographic | pending | pending | pending | pending | pending |
+| H5 vegetation + land cover, both lags and families | pending | pending | pending | pending | pending |
+
+The primary 16-day H3 result is inconclusive/no detected gain. The positive 32-day temporal
+validation interval is a prespecified sensitivity; it does not replace the primary lag or
+change that decision. This is not evidence of equivalence.
+
+Sources: the [frozen selection](../artifacts/evaluation/extension_selection.json) and
+[execution report](../artifacts/evaluation/extension_execution_report.json). All shown
+validation intervals use 10 represented calendar-month blocks and 500 valid replicates.
+Each comparison pairs the same candidate and comparator rows; support differs between
+lags and from the primary analysis. AP levels across different populations are not directly
+comparable.
+
+H4/H5 follow a dated [land-cover amendment](extension-landcover-amendment.md), specified
+after H3 validation results were inspected and before accessing outcome labels or computing
+metrics for H4/H5. It specifies the implemented degree-grid mean estimator and its
+polygon-comparison evidence. The vegetation selection records H4/H5 as `not_evaluated`
+under its original availability freeze; results under the later amendment remain pending.
+
+Vegetation acquisition and feature construction are complete; all 2012-2025 land-cover maps
+and the land-cover and combined feature partitions are also complete. See
+[vegetation acquisition](vegetation-acquisition.md) and
+[land-cover features and acquisition evidence](covariates.md#land-cover-and-joining).
+Feature availability alone does not establish a completed fit.
+
+### Exploratory test-year scores
+
+The already inspected 2023-2025 test years were reopened for exploratory scoring after
+selection was frozen. The opening is recorded in
+[the access log](../artifacts/evaluation/final_test_log.json); these scores did not inform
+selection or the validation decision. The models and calibrated comparator are those
+recorded above, evaluated on each row's common feature-complete support.
+
+| Feature family / lag | Paired test rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] |
+|---|---:|---|---:|---|
+| Temporal, 16 days | 1,754,909 | 0.354 [0.259, 0.415] | 0.352 | 0.003 [-0.003, 0.013] |
+| Temporal, 32 days | 1,624,869 | 0.367 [0.267, 0.427] | 0.359 | 0.009 [0.004, 0.016] |
+| Geographic, 16 days | 557,107 | 0.424 [0.268, 0.513] | 0.409 | 0.016 [0.002, 0.030] |
+| Geographic, 32 days | 513,107 | 0.429 [0.272, 0.520] | 0.413 | 0.016 [0.010, 0.022] |
+
+Source: the [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json).
+All shown test intervals retain 500 valid replicates: 28 represented calendar-month blocks
+for temporal scores and 24 one-degree spatial blocks for geographic holdout. Subgroups and
+secondary metrics are retained in the report; none changes the primary H3 decision.
+
+The 2026 confirmation attempt was
+[refused without opening labels](../artifacts/evaluation/extension_confirmation_guard_retry.json):
+vegetation archive timing, complete confirmation inputs and untouched access history were
+not established. No fresh confirmation or model promotion is supported. The deployed weekly
+model remains unchanged.

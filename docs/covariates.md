@@ -9,7 +9,7 @@ Definitions are in `datasets/schemas/covariates.yaml`.
 | Product | Version release | Latency and revisions | Use |
 |---|---|---|---|
 | CHIRPS v3.0 final daily `rnl`, ERA5-disaggregated | 2025-01-01, from the [provider version history](https://data.chc.ucsb.edu/products/CHIRPS/v3.0/README-CHIRPSv3.0.txt) | Final data are normally completed in the third week of the following month; version changes can revise history. The exact first release of the daily `rnl` packaging is not stated on the product pages. | Retrospective only; the historical v3 record was unavailable through most study years. |
-| MapBiomas Bolivia Collection 4 | 2026-10-01, from the [release announcement](https://bolivia.mapbiomas.org/2026/09/29/lanzamiento-de-la-coleccion-4-de-mapbiomas-bolivia/) | Annual maps; no fixed publication latency is promised. New collections update the full historical series and methodology. | Retrospective only. Polygon and partial raster pilots verified; full extraction paused on unknown request EECU. |
+| MapBiomas Bolivia Collection 4 | 2026-10-01, from the [release announcement](https://bolivia.mapbiomas.org/2026/09/29/lanzamiento-de-la-coleccion-4-de-mapbiomas-bolivia/) | Annual maps; no fixed publication latency is promised. New collections update the full historical series and methodology. | Retrospective only. National maps for 2012-2025 and issue features for 2013-2026 are available in the separate extension. |
 
 The [CHIRPS daily documentation](https://data.chc.ucsb.edu/products/CHIRPS/v3.0/daily/readme.txt)
 identifies ERA5 as `rnl` and IMERG Late V07 as `sat`. Only **final daily `rnl`**
@@ -142,133 +142,78 @@ it is never replaced with rainfall from validation or test years.
 
 ## Land cover and joining
 
-```python
-from bolivia_fire.covariates import join_retrospective
+The primary retrospective panel uses `join_retrospective(panel_table)` to join
+CHIRPS by `(cell_id, issue_date)`, preserving panel row order and rejecting
+duplicate keys. It contains no MapBiomas inputs: anonymous official raster
+access failed before the primary analysis. The legacy optional join uses
+issue year Y-1 and six pixel-count groups, including `other`; it is separate
+from the five-feature land-cover analysis below.
 
-retrospective_table = join_retrospective(panel_table)
-```
+### Completed Collection 4 features
 
-The function preserves panel row order and columns, and rejects duplicate
-covariate keys. Rainfall joins `(cell_id, issue_date)`. If a fraction table is
-present, issue year Y joins land-cover year Y-1. Missing source years produce
-null feature values; absent product files add no columns.
+The [separately specified covariate protocol](extension-vegetation.md) and
+[configuration](../configs/extension_vegetation.yaml) define five inputs:
 
-The legacy anonymous-raster implementation assigns each source pixel center to a
-half-open protocol grid cell, transforming coordinates to WGS84 when necessary.
-It accumulates pixel counts in bounded 512-pixel batches within the Bolivia
-bbox and normalizes six class groups by non-nodata pixel count. Unknown codes
-and unobserved class 27 are retained in `other`; nodata 0 is excluded. These
-are pixel-count fractions, not fractional polygon intersections.
+| Feature | Collection 4 class codes |
+|---|---|
+| `mapbiomas_forest_fraction` | 1, 3, 4, 6 |
+| `mapbiomas_nonforest_fraction` | 10, 11, 12, 13, 29, 63, 66, 77, 81, 82 |
+| `mapbiomas_farming_fraction` | 14, 15, 18, 21, 39, 40, 72 |
+| `mapbiomas_nonvegetated_fraction` | 22, 23, 24, 25, 30, 61, 68, 92 |
+| `mapbiomas_water_fraction` | 26, 31, 33, 34 |
 
-The exact [official download page](https://bolivia.mapbiomas.org/downloads/mapas-para-descargar-geotiff/)
-publishes the Collection 4 URL template recorded in `datasets/sources.yaml`.
-Anonymous access to the official 2012 and 2023 raster URLs returned HTTP 403
-on 2026-10-31. No accessible public raster URL is recorded in the source registry.
-MapBiomas is therefore omitted from the published retrospective dataset. The
-legacy aggregation and Y-1 join remain tested for future accessible files.
+Each fraction divides its class area by total mapped area in the national
+portion of the cell. Nodata, unobserved code 27 and undeclared codes are
+excluded from mapped area. Mapped coverage must be at least 0.95 of national
+cell area; otherwise all five fractions are null. Available fractions must
+lie in [0, 1] and sum to one within 1e-6. Missing cells and failed coverage
+retain nulls; there is no sixth model input or zero-filled vector.
 
-### Authenticated Collection 4 extension
+For issue year Y, select the greatest accessible map year at most Y-1,
+with maximum reference age two years. Retain nominal year, actual year and
+reference age. The completed 2013-2026 feature build uses maps for 2012-2025;
+an unavailable cell does not fall back to an older map. The one-year lag
+does not establish availability at historical issue time. Collection 4
+reprocesses history with temporal filtering, so these features remain
+retrospective.
 
-The separate extension follows `configs/extension_vegetation.yaml` and
-`datasets/schemas/landcover.yaml`. On 2026-11-01, the official
-[Earth Engine asset listing](https://bolivia.mapbiomas.org/downloads/assets-en-google-earth-engine/)
-identified the public integration asset recorded under `landcover` in
-`datasets/sources.yaml`. Authenticated metadata exposed 41 classification bands
-for 1985-2025 on an EPSG:4326 grid with pixel width
-`0.00026949458523585647` degrees, nominally 30 m. The selected native affine is
-recorded in each pilot manifest; no categorical interpolation is applied.
+### Acquisition and aggregation evidence
 
-The polygon pilots compute pixel-area sums by class on the server over each
-project cell's intersection with the pinned national boundary. Results use direct
-`computeFeatures` responses. Five fractions divide by mapped area; nodata,
-unobserved code 27 and undeclared codes are excluded from that denominator and
-retained in the area audit. Coverage below 0.95 makes every fraction null.
-Missing response cells retain nulls. The
-[Earth Engine weighting documentation](https://developers.google.com/earth-engine/guides/reducers_weighting)
-specifies 256 levels for fractional boundary-pixel weights, so this is a native
-grid weighted approximation to polygon intersection area. Very small national
-cell parts require special attention in any future full-output audit.
+Authenticated Earth Engine access to the official public Collection 4 asset
+completed all 180 occupied native-grid tiles per year for 2012-2025 through
+the zero-cost Community Tier route. The final Monitoring total was
+**22.87 EECU-hours**, including earlier pilots,
+failed attempts and diagnostic overhead. A separate 0.1-hour reserve remained
+within the authorized 100-hour workstream cap. Read-only billing verification
+recorded no enabled billing or linked billing account. Source identity,
+licence, access evidence and costs are retained in the
+[source manifest](../datasets/manifests/mapbiomas_source.jsonl) and
+[Monitoring audit](../datasets/manifests/mapbiomas_monitoring_audit.jsonl).
 
-The ledger uses a 150 EECU-hour Pacific-calendar-month project budget and a
-30 EECU-hour workstream cap. API access, noncommercial registration and enabled
-service state were checked directly. Community Tier and the absence of linked
-billing were owner-attested. Month-to-date usage was read through the free
-Cloud Console Monitoring route, and per-request EECU profiles were verified.
-Unknown, stale or unreconciled usage pauses submissions. The private ledger is
-paused; the raster follow-up's unknown request usage must be reconciled before
-any computation can resume.
+The raster method reduces native class masks to the exact project grid
+without categorical interpolation. It measures degree-area overlap,
+normalizes class groups over mapped coverage, and scales areas by the pinned
+geodesic national cell area. It approximates native pixel/polygon geodesic
+intersection weighting. Against the independent 1,000-cell polygon pilot,
+989 cells were jointly available, with no availability disagreement;
+maximum absolute errors were 0.000653379663364 for class fractions and
+0.000245167413933 for coverage, below the declared 0.01 tolerance.
+These pilot measurements do not establish a national error bound. The
+[land-cover amendment](extension-landcover-amendment.md) specifies this
+estimator while retaining the base fraction definitions.
 
-| 2012 request | Reported EECU-seconds | Response JSON bytes | Available cells |
-|---|---:|---:|---:|
-| Small 0.001-degree rectangle | 0.025 | 59 | Not a project-cell extraction |
-| Geographically spread 100-cell pilot | 8.227 | 34,816 | 97/100 |
-| Geographically spread 1,000-cell pilot | 278.067 | 325,544 | 989/1,000 |
-
-All requested pilot cells were returned. Eleven cells in the larger pilot had
-insufficient mapped coverage and retain null fractions. The maximum fraction
-sum deviation among available cells was `2.220446049250313e-16`.
-The grid has 37,146 cells; maps 2012-2025 require 520,044 cell-years. The larger
-pilot's measured rate projects to **40.16863193 EECU-hours** before a safety
-margin, exceeding the fixed 30-hour cap. The polygon method was stopped before
-full-year extraction.
-Polygon-pilot checksums, native-grid parameters and per-batch EECU profiles are in
-`datasets/manifests/mapbiomas_pilot.jsonl`; outputs are under
-`datasets/processed/landcover/`. These pilots do not satisfy H4/H5 feature
-availability and do not change the published benchmark.
-
-The raster alternative creates binary masks for the five declared groups and
-invalid codes, applies the pinned national geometry at native resolution and
-zero-fills outside national support. `reduceResolution(mean)` combines up to
-65,536 native inputs per output pixel with `bestEffort=false`, followed by
-`reproject` on the exact project grid. Binary masks and responses use float32.
-Categorical overview sampling is not used. The final EPSG:4326 affine is
-`[0.05, 0, -69.65, 0, -0.05, -9.65]`, width
-244 and height 266; this is an integer offset of the registered global origin.
-
-Direct `computePixels` NumPy arrays are downloaded serially in tiles of at most
-16 cells on each side. Of the 272 bounding-grid tiles, 180 contain project
-cells; the other 92 require no request. Each request uses the tile's local
-intersection with the pinned national boundary, with a one-native-pixel halo
-to retain overlapping pixels at tile edges. Each array is checkpointed with a
-checksum before the next request. The local
-normalization divides group means by their mapped sum, and multiplies the
-mapped and invalid shares by each project's pinned geodesic national cell area.
-Binary means measure degree-area overlap; the local area scaling approximates
-native geodesic weighting within a 0.05-degree cell. Raster masking can also
-differ from polygon boundary weights, especially in tiny national cell parts.
-The predeclared pilot tolerance is 0.01 absolute for each class fraction and
-mapped coverage, with matching availability on the 1,000 polygon-pilot cells.
-Both the measured 14-year cost with a 1.5 safety factor and this agreement gate
-must pass before another map year is requested. The request manifest retains
-EECU profiles and failure evidence; the annual manifest retains arrays, compact
-cell fractions, checksums and validation results.
-
-The raster pilot stopped after 21 of 180 occupied tiles. These tiles cover
-3,548 of 37,146 project cells and cost 716.890 rounded-upper EECU-seconds.
-The next request did not provide a usable EECU profile. Total workstream usage
-is therefore unknown, the request's reservation remains unreconciled, and
-submissions are disabled. No full-country year was completed, no formal
-14-year projection was established, and no later year was requested.
-
-The partial comparison covers 95 of the 1,000 polygon-pilot cells. All 95 match
-availability and pass the predeclared 0.01 absolute tolerance: maximum class
-fraction error is 0.000129027 and maximum mapped-coverage error is 0.000046479.
-This is partial validation and does not establish agreement on the remaining
-cells. The partial Parquet retains every project-cell key, marks request status
-explicitly and leaves unrequested or unknown fractions null. Its manifest is
-`datasets/manifests/mapbiomas_raster_partial.jsonl`; the arrays and cell table
-are `partial_raster_2012.npz` and `partial_raster_2012.parquet` under the
-land-cover output directory. These outputs are not eligible for H4/H5 features.
-
-The nominal reference for issue year Y is Y-1, with at most two years of age if
-the greatest accessible eligible map year is older. Actual selected years must
-be retained. Collection 4 was released on 2026-10-01; reference year does not
-establish historical availability. Its
-[ATBD](https://bolivia.mapbiomas.org/wp-content/uploads/sites/5/2026/10/ATBD_General_MapBiomas_Bolivia_COL4.pdf)
-describes temporal rules using T+1 and T+2 and frequency filtering over the full
-series. A one-year lag does not remove future information. The registered
-extension remains retrospective and specifies no additional lag; an arbitrary
-extra lag would not establish an operational historical vintage.
+The annual outputs contain 520,044 cell-year rows, including 515,886 available
+rows. Canonical maps are `datasets/processed/landcover/mapbiomas_YYYY.parquet`
+and `raster_YYYY.npz`; issue features are under `landcover/features/year=YYYY/`
+and combined inputs under `landcover/combined/lag=L/geography=G/year=YYYY/`.
+Feature construction uses cell identifiers and the Monday calendar without
+labels. Combined files preserve the vegetation snapshot, receipt hashes and
+unavailable 2026 confirmation values. The
+[feature manifest](../datasets/manifests/mapbiomas_features.jsonl) records
+output hashes and missingness; the Monitoring audit links six registered
+land-cover runs with `evaluated_eligible` feature status. This establishes
+input availability only. H4/H5 fits and findings remain pending in
+[environmental covariate results](results.md#environmental-covariates).
 
 ## Artifacts and measured status
 
@@ -355,7 +300,8 @@ floor remained enforced before downloads and output writes.
 
 Measured audit details are in annual_daily_validation.json and
 annual_feature_validation.json. MapBiomas remains unavailable through the
-verified anonymous URLs and is omitted from the retrospective dataset.
+verified anonymous URLs and is omitted from the published retrospective dataset.
+Authenticated extension outputs are documented above.
 
 The stored covariate tree totals **1,563,039,121 bytes**, including
 daily archives, features, manifests, access logs and audit records.
@@ -487,3 +433,96 @@ Each percentage uses all 1,931,592 national cell-weeks in its issue year.
 Temporal references are unavailable in held-out cells; geographic references
 use non-held-out department observations. These are feature-support counts,
 without labels or model evaluation.
+
+The completed acquisition build retained 339 unique composites: three in
+2011, 23 in each year 2012-2025, and 14 in 2026. The acquisition includes the
+preceding composite starting 2011-11-17; the final start is 2026-07-28.
+All 141 existing composites retained their hashes and modification times;
+198 new composites were aggregated. All 56 annual feature partitions were
+written, including refreshed anomalies in the 20 existing partitions. Every
+2013-2020 reference year now supplies all 23 slots. Training issues exclude
+their own year, leaving seven possible reference years; later issues use
+eight. Each cell or department reference still requires four valid years.
+
+The build took 450.97 seconds, peaked at 1,650,724,864 bytes of process-tree
+RSS, and measured 268,112,646,144 minimum free bytes. At build completion,
+the output tree contained 3,891,569,765 bytes, before later audit records.
+Composite files and receipts occupy 164,368,010 bytes, features and receipts
+3,713,233,233 bytes, and cached weights and their receipt 13,025,477 bytes.
+The full-build measurements remain in `all_years_build.json` independently
+of the latest-run `report.json`.
+
+An independent audit checked all 105,048,888 feature rows, their unique
+cell-issue support, metadata, latest available composite, both change
+references, coverage and age gates, and both seasonal anomalies. It
+reconstructed climatologies directly from the annual aggregates and verified
+652 monthly lag/geography coverage records and all ten finite-value counts.
+For each of the 339 real composite periods and both lags, a synthetic
+one-cell series checked the nanosecond before availability, the exact
+boundary and the first eligible Monday: 2,034 boundary assertions passed.
+The audit took 65.75 seconds and peaked at 678,793,216 bytes RSS.
+`all_years_audit.json` retains monthly composite and feature coverage,
+per-feature missingness counts, annual summaries and resource measurements.
+
+The following anomaly percentages use every national cell-week in each
+lag/geography combination. NDVI and EVI anomaly availability counts agree.
+Geographic anomaly support equals latest-condition support in this build.
+
+| Issue year | Cell-weeks per combination | Anomaly temporal 16 (%) | Anomaly temporal 32 (%) | Anomaly geographic 16 (%) | Anomaly geographic 32 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2013 | 1,931,592 | 54.46 | 50.31 | 84.26 | 75.75 |
+| 2014 | 1,931,592 | 54.05 | 49.99 | 80.61 | 72.26 |
+| 2015 | 1,931,592 | 55.38 | 49.34 | 82.30 | 71.63 |
+| 2016 | 1,931,592 | 56.22 | 51.45 | 86.76 | 78.06 |
+| 2017 | 1,931,592 | 56.45 | 50.43 | 84.42 | 73.83 |
+| 2018 | 1,968,738 | 54.03 | 49.80 | 81.69 | 72.87 |
+| 2019 | 1,931,592 | 55.29 | 49.44 | 81.02 | 70.61 |
+| 2020 | 1,931,592 | 53.93 | 49.30 | 82.06 | 73.38 |
+| 2021 | 1,931,592 | 57.82 | 52.75 | 83.59 | 74.79 |
+| 2022 | 1,931,592 | 57.76 | 52.89 | 84.32 | 75.39 |
+| 2023 | 1,931,592 | 57.02 | 52.78 | 85.37 | 77.00 |
+| 2024 | 1,968,738 | 53.12 | 47.71 | 79.27 | 70.43 |
+| 2025 | 1,931,592 | 58.21 | 54.33 | 88.21 | 80.85 |
+| 2026 | 1,077,234 | 0.00 | 0.00 | 0.00 | 0.00 |
+
+Complete support additionally requires both changes, valid fraction and age:
+
+| Issue year | Complete temporal 16 (%) | Complete temporal 32 (%) | Complete geographic 16 (%) | Complete geographic 32 (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 2013 | 45.38 | 42.62 | 65.18 | 60.24 |
+| 2014 | 41.87 | 39.36 | 60.03 | 55.34 |
+| 2015 | 41.83 | 38.15 | 58.94 | 53.10 |
+| 2016 | 44.43 | 41.56 | 64.52 | 59.89 |
+| 2017 | 44.74 | 39.80 | 62.49 | 55.24 |
+| 2018 | 43.79 | 40.25 | 61.87 | 55.93 |
+| 2019 | 41.19 | 36.77 | 55.77 | 49.52 |
+| 2020 | 44.74 | 41.83 | 62.48 | 57.98 |
+| 2021 | 46.36 | 42.26 | 63.42 | 57.44 |
+| 2022 | 48.35 | 43.83 | 64.87 | 58.25 |
+| 2023 | 48.00 | 45.01 | 68.16 | 63.06 |
+| 2024 | 41.35 | 37.85 | 57.66 | 52.54 |
+| 2025 | 49.19 | 45.51 | 69.64 | 63.89 |
+| 2026 | 0.00 | 0.00 | 0.00 | 0.00 |
+
+All 29 confirmation Mondays, 2026-01-05 through 2026-07-20, are present.
+All ten vegetation features are null for their 1,077,234 rows per combination:
+none of the source records proves archive availability before the registered
+July 31 cutoff. Complete acquisition does not establish that evidence.
+The 2026 composites remain retained with their QA, scaling and coverage
+audits, while confirmation vegetation remains unavailable. No labels were
+read and no models were trained.
+
+The unchanged full rerun took 106.71 seconds, peaked at 863,821,824 bytes RSS
+and reused all 339 composites and 56 feature partitions. All 1,131 retained
+composite, feature and weight files, including receipts, preserved their
+hashes and modification times. The 395 Parquet files total 3,877,107,516
+bytes. Minimum free space across build, audit and rerun was
+268,111,671,296 bytes. Evidence is in `all_years_idempotence.json`; the combined
+acceptance report is `all_years_acceptance.json`.
+
+Validation: `uv run --no-sync ruff check .` passed;
+`uv run --no-sync python -m pytest tests/vegetation_features -q -p no:cacheprovider`
+passed all 22 tests; and
+`uv run --no-sync python -m pytest -m 'not live and not local_data' -q -p no:cacheprovider`
+finished with 583 passed, one skipped and three deselected in 144.02 seconds.
+Nine dependency warnings concerned pandas behavior in the figure tests.

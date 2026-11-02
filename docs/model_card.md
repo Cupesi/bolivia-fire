@@ -135,6 +135,19 @@ All pre-registered sensitivities are published as logged reopenings: H1 remains 
 each run, and low-coverage exclusion reproduces the primary result because it removes no
 eligible test rows; see the [sensitivity results and source reports](results.md#sensitivity-analyses).
 
+## Environmental covariates
+
+The deployed weekly model remains the strict model identified above. Vegetation (H3) was
+assessed after the primary analysis under a [separately specified protocol](extension-vegetation.md).
+Its primary validation decision is inconclusive/no detected gain. The 32-day temporal
+sensitivity has a positive validation interval and does not replace the primary lag.
+Test-year scores are exploratory logged reopenings; fresh confirmation was refused
+without opening labels. Land-cover (H4) and combined (H5) findings remain pending under a
+dated [amendment](extension-landcover-amendment.md), specified after H3 validation results
+were inspected and before accessing outcome labels or computing metrics for H4/H5.
+See [environmental covariate results](results.md#environmental-covariates) for measured
+values, support, uncertainty and confirmation limits.
+
 ## Intended and unsupported uses
 
 Intended uses are a research benchmark, reproducible comparison of detection-probability models,
@@ -153,7 +166,8 @@ ignitions, individual fire events, causes or damages.
 - The cross-fitted climatology exception is a training statistic, not a fully causal historical
   replay. Historical detections from held-out locations remain allowed inputs.
 - CHIRPS is retrospective; H2 applies to the tested input set and frozen interval rule, not to
-  all weather information. MapBiomas was omitted after verified raster access failed.
+  all weather information. MapBiomas was omitted from the primary retrospective model after
+  anonymous raster access failed; the later covariate analysis uses a separately acquired source.
 - Missing labels and recent-history exclusions change the evaluation population and its annual
   composition. Reported performance does not cover excluded weeks or unsupported locations.
 - Geographic cells differ in area; the boundary snapshot excludes large interior salt flats and

@@ -20,6 +20,8 @@ Consulte los [resultados y análisis de sensibilidad](docs/results.md), la
 [comparación posterior de modelos](docs/model-comparison.md), que conserva el LightGBM publicado
 y presenta por separado los resultados exploratorios.
 
+[Environmental covariate findings](docs/results.md#environmental-covariates) are reported separately; the deployed weekly model is unchanged.
+
 La variable objetivo describe detecciones satelitales, no cantidades de incendios, igniciones,
 superficie quemada ni una alerta oficial. Las etiquetas negativas completas indican que no se
 observó ninguna detección seleccionada; las semanas objetivo incompletas tienen etiquetas nulas.
