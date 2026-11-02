@@ -20,6 +20,7 @@ from bolivia_fire.landcover_cli import register as register_landcover
 from bolivia_fire.live_cli import register as register_live
 from bolivia_fire.pipeline_cli import register
 from bolivia_fire.redact import RedactionFilter, Redactor
+from bolivia_fire.release import register as register_release
 from bolivia_fire.vegetation_cli import register as register_vegetation
 
 
@@ -76,6 +77,7 @@ def _parser() -> argparse.ArgumentParser:
     register_vegetation(commands)
     __import__("bolivia_fire.vegetation_features_cli", fromlist=["register"]).register(commands)
     register_landcover(commands)
+    register_release(commands)
     __import__("bolivia_fire.extension_cli", fromlist=["register"]).register(commands)
     return parser
 

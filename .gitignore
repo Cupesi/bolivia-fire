@@ -21,6 +21,7 @@ data/
 datasets/raw/
 datasets/interim/
 datasets/processed/
+datasets/releases/
 datasets/.tmp/
 datasets/.quarantine/
 artifacts/**/*.parquet
