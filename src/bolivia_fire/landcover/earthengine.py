@@ -122,17 +122,24 @@ class ResourceMonitor:
         self.thread = threading.Thread(target=self._sample_loop, daemon=True)
 
     def _sample(self) -> None:
+        import psutil
+
         try:
-            processes = [self.process, *self.process.children(recursive=True)]
-            rss = sum(process.memory_info().rss for process in processes)
+            rss = self.process.memory_info().rss
+            for child in self.process.children(recursive=True):
+                try:
+                    rss += child.memory_info().rss
+                except psutil.NoSuchProcess:
+                    # Children can exit between enumeration and RSS sampling.
+                    continue
             self.peak_rss_bytes = max(self.peak_rss_bytes, rss)
             self.minimum_free_bytes = min(
                 self.minimum_free_bytes, shutil.disk_usage(self.root).free
             )
             if rss >= 12 * 1024**3:
                 self.error = "Process-tree RAM reached the 12-GiB limit"
-        except Exception:
-            self.error = "Process-tree resource monitoring failed"
+        except Exception as exc:
+            self.error = f"Process-tree resource monitoring failed ({type(exc).__name__})"
 
     def _sample_loop(self) -> None:
         while not self.stopping.wait(1):

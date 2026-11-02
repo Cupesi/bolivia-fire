@@ -1,14 +1,16 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from contextlib import contextmanager
+from datetime import UTC, datetime
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
 import numpy as np
 import pandas as pd
 import pytest
-from shapely.geometry import box
+from shapely.geometry import box, mapping
 
 from bolivia_fire.config import Paths
 from bolivia_fire.landcover.core import FEATURES, GROUPS
@@ -198,3 +200,287 @@ def test_synthetic_polygon_validation_rejects_missing_cells() -> None:
     raster = normalize_pixels(pixels, cells, grid, 2012)
     with pytest.raises(ValueError, match="omits"):
         compare_polygon_pilot(raster.iloc[:1], raster)
+
+
+@pytest.mark.parametrize("corrupt", [False, True])
+def test_synthetic_resume_reuses_verified_tiles_and_refuses_corruption(tmp_path, corrupt) -> None:
+    paths = Paths(tmp_path)
+    paths.manifests.mkdir(parents=True)
+    cells = synthetic_cells()
+    grid = RasterGrid.from_cells(cells)
+    country = box(0, 0, 0.1, 0.05)
+    pixels = np.zeros((1, 2), dtype=[(name, "f8") for name in BANDS])
+    pixels["forest"] = 1
+    checkpoint = paths.datasets / "processed/landcover/raster_tiles_2012/cropped/row_0_col_0.npz"
+    checkpoint.parent.mkdir(parents=True)
+    np.savez_compressed(checkpoint, pixels=pixels)
+    native_width = 0.000269
+    record = {
+        "batch": "raster-national-2012-binary-cropped-v8-tile-0",
+        "year": 2012,
+        "grid": grid.request_grid(),
+        "national_geometry_sha256": hashlib.sha256(
+            json.dumps(
+                mapping(tile_country_geometry(country, grid, native_width)), sort_keys=True
+            ).encode()
+        ).hexdigest(),
+        "status": "downloaded",
+        "profile": "EECU s PeakMem Count Description\n 1.000 1k 1 synthetic\n",
+        "reported_eecu_seconds": 1,
+        "upper_eecu_seconds": 1.001,
+        "runtime_seconds": 1,
+        "output": checkpoint.relative_to(paths.root).as_posix(),
+        "output_bytes": checkpoint.stat().st_size,
+        "output_sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+    }
+    (paths.manifests / "mapbiomas_raster_requests.jsonl").write_text(
+        json.dumps(record) + "\n", encoding="utf-8"
+    )
+    if corrupt:
+        checkpoint.write_bytes(b"synthetic corruption")
+    ee = MagicMock()
+    ee.data.computePixels.side_effect = AssertionError("Finished tile was re-requested")
+    ledger = synthetic_ledger(tmp_path / "usage.json")
+    session = SimpleNamespace(
+        ee=ee,
+        ledger=ledger,
+        paths=paths,
+        project="synthetic-project",
+        transform=[native_width, 0, 0, 0, -native_width, 0],
+        resources=SimpleNamespace(check=lambda: None, peak_rss_bytes=1, minimum_free_bytes=10**12),
+    )
+    if corrupt:
+        with pytest.raises(UsagePaused, match="checkpoint"):
+            raster_year(session, cells, country, 2012, 2)
+    else:
+        frame, restored, report = raster_year(session, cells, country, 2012, 2)
+        assert frame.mapbiomas_forest_fraction.tolist() == [1, 1]
+        np.testing.assert_array_equal(restored, pixels)
+        assert report["reused_tiles"] == 1
+        assert report["compute_pixels_requests"] == 0
+        assert report["upper_eecu_seconds"] == 1.001
+    assert json.loads(ledger.path.read_text("utf-8"))["batches"] == []
+
+
+def test_synthetic_returned_tile_survives_missing_profile_without_further_requests(
+    tmp_path,
+) -> None:
+    paths = Paths(tmp_path)
+    paths.manifests.mkdir(parents=True)
+    ledger = synthetic_ledger(tmp_path / "usage.json")
+    ee = MagicMock()
+    pixels = np.zeros((1, 2), dtype=[(name, "f8") for name in BANDS])
+    pixels["forest"] = 1
+    ee.data.computePixels.return_value = pixels
+
+    @contextmanager
+    def synthetic_missing_profile(*, destination):
+        destination.write("No usable profile")
+        yield
+
+    ee.profilePrinting.side_effect = synthetic_missing_profile
+    session = SimpleNamespace(
+        ee=ee,
+        ledger=ledger,
+        paths=paths,
+        project="synthetic-project",
+        transform=[0.000269, 0, 0, 0, -0.000269, 0],
+        resources=SimpleNamespace(check=lambda: None),
+    )
+    with pytest.raises(UsagePaused, match="could not be determined"):
+        raster_year(session, synthetic_cells(), box(0, 0, 0.1, 0.05), 2012, 2)
+    saved = json.loads((paths.manifests / "mapbiomas_raster_requests.jsonl").read_text("utf-8"))
+    checkpoint = paths.root / saved["output"]
+    assert checkpoint.exists()
+    with np.load(checkpoint, allow_pickle=False) as archive:
+        np.testing.assert_array_equal(archive["pixels"], pixels)
+    assert saved["status"] == "usage_unknown"
+    assert json.loads(ledger.path.read_text("utf-8"))["status"] == "paused"
+
+
+def test_synthetic_monitoring_reconciled_tile_reuses_without_profile(tmp_path) -> None:
+    from bolivia_fire.landcover.raster import _restore_tile
+
+    tile = RasterGrid(0, 0.05, 2, 1)
+    pixels = np.zeros((1, 2), dtype=[(name, "f8") for name in BANDS])
+    pixels["forest"] = 1
+    checkpoint = tmp_path / "synthetic.npz"
+    np.savez_compressed(checkpoint, pixels=pixels)
+    record = {
+        "batch": "synthetic-reconciled",
+        "status": "usage_unknown",
+        "year": 2012,
+        "grid": tile.request_grid(),
+        "national_geometry_sha256": "synthetic-geometry",
+        "output_bytes": checkpoint.stat().st_size,
+        "output_sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+        "profile": "",
+        "reported_eecu_seconds": None,
+        "upper_eecu_seconds": None,
+    }
+    with pytest.raises(UsagePaused):
+        _restore_tile(checkpoint, record, tile, 2012, "synthetic-geometry")
+    result = _restore_tile(
+        checkpoint,
+        record,
+        tile,
+        2012,
+        "synthetic-geometry",
+        reconciled_batches={"synthetic-reconciled"},
+    )
+    np.testing.assert_array_equal(result, pixels)
+
+
+def test_synthetic_missing_profile_continues_only_after_monitoring_settles(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    from bolivia_fire.landcover.monitoring import UsageSnapshot
+
+    paths = Paths(tmp_path)
+    paths.manifests.mkdir(parents=True)
+    ledger = synthetic_ledger(
+        tmp_path / "usage.json",
+        accounting_primary="cloud_monitoring",
+        project_month_eecu_hours=1,
+        workstream_eecu_hours=1,
+        monitoring_seed_per_tile_eecu_hours=0.01,
+    )
+    pixels = np.zeros((1, 2), dtype=[(name, "f8") for name in BANDS])
+    pixels["forest"] = 1
+    ee = MagicMock()
+    ee.data.computePixels.return_value = pixels
+
+    @contextmanager
+    def synthetic_missing_profile(*, destination):
+        yield
+        raise RuntimeError("Profile not found")
+
+    ee.profilePrinting.side_effect = synthetic_missing_profile
+    observed = datetime.now(UTC)
+    monkeypatch.setattr(
+        "bolivia_fire.landcover.raster.wait_for_settlement",
+        lambda *args, **kwargs: UsageSnapshot(3602, observed, observed, 1, 1),
+    )
+    session = SimpleNamespace(
+        ee=ee,
+        ledger=ledger,
+        paths=paths,
+        project="synthetic-project",
+        monitoring=SimpleNamespace(read=lambda: None),
+        transform=[0.000269, 0, 0, 0, -0.000269, 0],
+        resources=SimpleNamespace(check=lambda: None, peak_rss_bytes=1, minimum_free_bytes=10**12),
+    )
+    frame, _, report = raster_year(
+        session,
+        synthetic_cells(),
+        box(0, 0, 0.1, 0.05),
+        2012,
+        2,
+    )
+    assert frame.mapbiomas_forest_fraction.tolist() == [1, 1]
+    assert report["reported_eecu_seconds"] == pytest.approx(3602)
+    assert report["secondary_profile_tiles"] == 0
+    assert ledger._load()["batches"][-1]["monitoring_delta_eecu_seconds"] == pytest.approx(2)
+    assert ledger._load()["workstream_eecu_hours"] == pytest.approx(3602 / 3600)
+    frame, _, report = raster_year(
+        session,
+        synthetic_cells(),
+        box(0, 0, 0.1, 0.05),
+        2012,
+        2,
+    )
+    assert report["reused_tiles"] == 1
+    ee.data.computePixels.assert_called_once()
+
+
+def test_synthetic_fully_mapped_support_has_exact_unit_coverage() -> None:
+    cells = synthetic_cells()
+    grid = RasterGrid.from_cells(cells)
+    pixels = np.zeros((1, 2), dtype=[(name, "f8") for name in BANDS])
+    weights = [
+        0.873553454875946,
+        0.0052653043530881405,
+        0.8212284445762634,
+        0.7970694303512573,
+        0.4679349660873413,
+    ]
+    for name, weight in zip(GROUPS, weights, strict=True):
+        pixels[name] = weight / 4
+    frame = normalize_pixels(pixels, cells, grid, 2012)
+    assert frame.mapped_area_fraction.tolist() == [1.0, 1.0]
+    assert frame[list(FEATURES)].ge(0).all().all()
+    assert frame[list(FEATURES)].le(1).all().all()
+
+
+@pytest.mark.parametrize("failed_attempt", [1, 4])
+def test_synthetic_early_failure_records_actual_group_counts(tmp_path, monkeypatch, failed_attempt):
+    from bolivia_fire.landcover.monitoring import UsageSnapshot
+
+    paths = Paths(tmp_path)
+    paths.manifests.mkdir(parents=True)
+    seed = synthetic_cells().iloc[0].to_dict()
+    cells = pd.DataFrame(
+        [
+            {
+                **seed,
+                "cell_id": f"synthetic-{index}",
+                "west": index * 0.05,
+                "east": (index + 1) * 0.05,
+            }
+            for index in range(160)
+        ]
+    )
+    ledger = synthetic_ledger(
+        tmp_path / "usage.json",
+        accounting_primary="cloud_monitoring",
+        project_month_eecu_hours=1,
+        workstream_eecu_hours=1,
+        workstream_safety_cap_eecu_hours=60,
+        raster_pilot_authorized=True,
+        monitoring_seed_per_tile_eecu_hours=0.01,
+    )
+    ee = MagicMock()
+    attempted = [0]
+
+    def compute(parameters):
+        attempted[0] += 1
+        if attempted[0] == failed_attempt:
+            raise RuntimeError("synthetic computation failed")
+        dimensions = parameters["grid"]["dimensions"]
+        response = np.zeros(
+            (dimensions["height"], dimensions["width"]), dtype=[(name, "f8") for name in BANDS]
+        )
+        response["forest"] = 1
+        return response
+
+    @contextmanager
+    def profile(*, destination):
+        destination.write("EECU s PeakMem Count Description\n 1.000 1k 1 synthetic\n")
+        yield
+
+    ee.profilePrinting.side_effect = profile
+    ee.data.computePixels.side_effect = compute
+    now = datetime.now(UTC)
+    monkeypatch.setattr(
+        "bolivia_fire.landcover.raster.wait_for_settlement",
+        lambda *args, **kwargs: UsageSnapshot(4320, now, now),
+    )
+    session = SimpleNamespace(
+        ee=ee,
+        ledger=ledger,
+        paths=paths,
+        project="synthetic-project",
+        transform=[0.000269, 0, 0, 0, -0.000269, 0],
+        monitoring=SimpleNamespace(read=lambda: None),
+        resources=SimpleNamespace(check=lambda: None),
+    )
+    with pytest.raises(RuntimeError, match="synthetic computation failed"):
+        raster_year(session, cells, box(0, 0, 8, 0.05), 2012, 2)
+    entry = ledger._load()["batches"][-1]
+    assert entry["planned_tile_count"] == 10
+    assert entry["attempted_tiles"] == entry["tile_count"] == failed_attempt
+    assert entry["completed_tiles"] == failed_attempt - 1
+    assert entry["rate_sample_complete"] is False
+    assert entry["partial_batch_overhead_eecu_seconds"] == pytest.approx(720)
+    assert attempted[0] == failed_attempt

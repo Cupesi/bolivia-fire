@@ -130,3 +130,43 @@ def test_synthetic_complete_profiles_advance_continuous_accounting(tmp_path: Pat
     assert saved["usage_observed_at_utc"] != original
     assert saved["usage_observed_at_utc"] == state["usage_observed_at_utc"]
     assert saved["batches"][-1]["batch"] == "synthetic-second"
+
+
+@pytest.mark.parametrize("cap", [60, 100])
+def test_synthetic_authorized_cap_preserves_boundary(tmp_path: Path, cap: int) -> None:
+    ledger = synthetic_ledger(
+        tmp_path / "usage.json",
+        workstream_safety_cap_eecu_hours=cap,
+        workstream_eecu_hours=cap - 29.0,
+    )
+    ledger.reserve("synthetic-within-cap", 0.2)
+    ledger.reconcile("synthetic-within-cap", reported_eecu_seconds=1, upper_eecu_seconds=1)
+    assert json.loads(ledger.path.read_text("utf-8"))["workstream_eecu_hours"] > cap - 29
+    with pytest.raises(UsagePaused, match="safety cap"):
+        ledger.reserve("synthetic-over-cap", 29)
+
+
+@pytest.mark.parametrize("cap", [61, 101])
+def test_synthetic_unrecognized_budget_is_rejected(tmp_path: Path, cap: int) -> None:
+    ledger = synthetic_ledger(tmp_path / "usage.json", workstream_safety_cap_eecu_hours=cap)
+    with pytest.raises(UsagePaused, match="budgets"):
+        ledger.reserve("synthetic-invalid-budget", 0.1)
+
+
+def test_synthetic_structured_consumer_numbers_are_redacted_without_changing_cost() -> None:
+    source = {
+        "project_number": "123456789012",
+        "projectNumber": 123456789012,
+        "consumer": "project_number:123456789012",
+        "consumer_id": "123456789012",
+        "reported_eecu_hours": 0.010478857280721347,
+    }
+    text = redact_project(json.dumps(source), "synthetic-project")
+    assert "123456789012" not in text
+    assert json.loads(text)["reported_eecu_hours"] == source["reported_eecu_hours"]
+    nested = redact_project(json.dumps({"error": json.dumps(source)}), "synthetic-project")
+    assert "123456789012" not in nested
+    assert (
+        json.loads(json.loads(nested)["error"])["reported_eecu_hours"]
+        == source["reported_eecu_hours"]
+    )

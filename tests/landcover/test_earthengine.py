@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+from pathlib import Path
+from types import SimpleNamespace
+
+import psutil
 import pytest
 
-from bolivia_fire.landcover.earthengine import normalize_features
+from bolivia_fire.landcover.earthengine import ResourceMonitor, normalize_features
+from bolivia_fire.landcover.usage import UsagePaused
 
 
 def test_synthetic_missing_feature_is_retained_as_missing() -> None:
@@ -53,3 +58,62 @@ def test_synthetic_duplicate_class_groups_are_added() -> None:
     }
     frame = normalize_features([feature], ["synthetic-cell"], 2012)
     assert frame.iloc[0].mapbiomas_forest_fraction == 0.5
+
+
+def test_synthetic_exited_child_does_not_invalidate_resource_sample(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def exited_child_memory() -> None:
+        raise psutil.NoSuchProcess(991)
+
+    parent = SimpleNamespace(
+        memory_info=lambda: SimpleNamespace(rss=128),
+        children=lambda **kwargs: [
+            SimpleNamespace(memory_info=exited_child_memory),
+            SimpleNamespace(memory_info=lambda: SimpleNamespace(rss=256)),
+        ],
+    )
+    monkeypatch.setattr(psutil, "Process", lambda: parent)
+    monitor = ResourceMonitor(tmp_path)
+    monitor.check()
+    assert monitor.error is None
+    assert monitor.peak_rss_bytes == 384
+
+
+@pytest.mark.parametrize("failure", [psutil.AccessDenied(992), psutil.NoSuchProcess(993)])
+def test_synthetic_parent_measurement_failure_still_pauses(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: Exception,
+) -> None:
+    def unreadable_parent_memory() -> None:
+        raise failure
+
+    parent = SimpleNamespace(memory_info=unreadable_parent_memory, children=lambda **kwargs: [])
+    monkeypatch.setattr(psutil, "Process", lambda: parent)
+    with pytest.raises(UsagePaused, match="resource monitoring failed"):
+        ResourceMonitor(tmp_path).check()
+
+
+def test_synthetic_unreadable_live_child_still_pauses(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def unreadable_child_memory() -> None:
+        raise psutil.AccessDenied(994)
+
+    parent = SimpleNamespace(
+        memory_info=lambda: SimpleNamespace(rss=128),
+        children=lambda **kwargs: [SimpleNamespace(memory_info=unreadable_child_memory)],
+    )
+    monkeypatch.setattr(psutil, "Process", lambda: parent)
+    with pytest.raises(UsagePaused, match="resource monitoring failed"):
+        ResourceMonitor(tmp_path).check()
+
+
+def test_synthetic_memory_limit_still_pauses(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    parent = SimpleNamespace(
+        memory_info=lambda: SimpleNamespace(rss=12 * 1024**3), children=lambda **kwargs: [],
+    )
+    monkeypatch.setattr(psutil, "Process", lambda: parent)
+    with pytest.raises(UsagePaused, match="12-GiB"):
+        ResourceMonitor(tmp_path).check()
