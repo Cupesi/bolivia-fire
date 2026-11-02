@@ -212,7 +212,9 @@ unavailable 2026 confirmation values. The
 [feature manifest](../datasets/manifests/mapbiomas_features.jsonl) records
 output hashes and missingness; the Monitoring audit links six registered
 land-cover runs with `evaluated_eligible` feature status. This establishes
-input availability only. H4/H5 fits and findings remain pending in
+input availability only. Six H4/H5 fits are complete under the dated amendment;
+both primary validation decisions are inconclusive, and test-year scores are exploratory.
+Confirmation was refused without opening labels. Measured findings are in
 [environmental covariate results](results.md#environmental-covariates).
 
 ## Artifacts and measured status

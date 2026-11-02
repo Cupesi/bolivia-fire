@@ -142,9 +142,15 @@ assessed after the primary analysis under a [separately specified protocol](exte
 Its primary validation decision is inconclusive/no detected gain. The 32-day temporal
 sensitivity has a positive validation interval and does not replace the primary lag.
 Test-year scores are exploratory logged reopenings; fresh confirmation was refused
-without opening labels. Land-cover (H4) and combined (H5) findings remain pending under a
+without opening labels. Land-cover (H4) and combined (H5) fits are complete under a
 dated [amendment](extension-landcover-amendment.md), specified after H3 validation results
 were inspected and before accessing outcome labels or computing metrics for H4/H5.
+Primary temporal H4 and 16-day H5 validation decisions are inconclusive, with paired AP
+difference intervals [-0.005, 0.004] and [-0.00083, 0.012], respectively; neither establishes
+no effect. Positive H4 geographic and H5 geographic 32-day validation intervals remain
+exploratory. H4/H5 test-year scores are logged exploratory reopenings and did not select
+models or lags. Confirmation under the amendment was also refused without opening labels;
+no fresh confirmation or model promotion is supported.
 See [environmental covariate results](results.md#environmental-covariates) for measured
 values, support, uncertainty and confirmation limits.
 
@@ -187,7 +193,8 @@ Code is [MIT licensed](../LICENSE). Source observations retain their own terms:
   (2025), final daily `rnl` and ERA5 disaggregation; identify native-pixel mapping to cell
   centers and antecedent-rainfall aggregation when redistributing derived inputs.
 - [MapBiomas](../datasets/licenses/MapBiomas.md): Creative Commons Attribution 4.0 International;
-  no MapBiomas inputs are included in these fitted models.
+  Collection 4 features enter the amended H4/H5 models. The primary strict and retrospective
+  models contain no MapBiomas inputs.
 
 The code licence does not replace source-specific terms. Preserve source pins, attribution and
 processing descriptions when redistributing derived inputs or outputs.

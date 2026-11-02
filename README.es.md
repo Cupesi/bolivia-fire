@@ -20,7 +20,9 @@ Consulte los [resultados y análisis de sensibilidad](docs/results.md), la
 [comparación posterior de modelos](docs/model-comparison.md), que conserva el LightGBM publicado
 y presenta por separado los resultados exploratorios.
 
-[Environmental covariate findings](docs/results.md#environmental-covariates) are reported separately; the deployed weekly model is unchanged.
+[Resultados de covariables](docs/results.md#environmental-covariates): la validación primaria
+de H4/H5 no es concluyente; las puntuaciones de prueba son exploratorias.
+El modelo semanal desplegado se mantiene sin cambios.
 
 La variable objetivo describe detecciones satelitales, no cantidades de incendios, igniciones,
 superficie quemada ni una alerta oficial. Las etiquetas negativas completas indican que no se

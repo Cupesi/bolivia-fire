@@ -305,16 +305,22 @@ decision labels overlap, and the intervals condition on fixed fitted models and 
 | H3 temporal, 32 days (`lightgbm_09`) | 580,563 | 0.356 [0.273, 0.418] | 0.350 | 0.006 [0.00057, 0.011] | Positive sensitivity interval |
 | H3 geographic, 16 days (`lightgbm_05`) | 684,528 | 0.332 [0.248, 0.400] | 0.335 | -0.003 [-0.007, 0.010] | Inconclusive / no detected gain |
 | H3 geographic, 32 days (`lightgbm_03`) | 607,980 | 0.341 [0.246, 0.409] | 0.336 | 0.005 [-0.003, 0.011] | Inconclusive / no detected gain |
-| H4 land cover, temporal / geographic | pending | pending | pending | pending | pending |
-| H5 vegetation + land cover, both lags and families | pending | pending | pending | pending | pending |
+| H4 land cover, temporal (`lightgbm_08`) | 1,172,000 | 0.317 [0.227, 0.373] | 0.319 | -0.002 [-0.005, 0.004] | Inconclusive |
+| H4 land cover, geographic (`lightgbm_03`) | 1,172,000 | 0.313 [0.223, 0.372] | 0.306 | 0.007 [0.003, 0.011] | Positive exploratory interval |
+| H5 vegetation + land cover, temporal, 16 days (`lightgbm_00`) | 640,862 | 0.357 [0.268, 0.414] | 0.349 | 0.008 [-0.00083, 0.012] | Inconclusive |
+| H5 vegetation + land cover, temporal, 32 days (`lightgbm_14`) | 576,222 | 0.358 [0.272, 0.420] | 0.350 | 0.008 [-3.8e-06, 0.013] | Inconclusive sensitivity |
+| H5 vegetation + land cover, geographic, 16 days (`lightgbm_07`) | 679,634 | 0.344 [0.259, 0.403] | 0.335 | 0.009 [-0.001, 0.019] | Inconclusive exploratory result |
+| H5 vegetation + land cover, geographic, 32 days (`lightgbm_14`) | 603,525 | 0.350 [0.259, 0.412] | 0.336 | 0.014 [0.00096, 0.020] | Positive exploratory interval |
 
 The primary 16-day H3 result is inconclusive/no detected gain. The positive 32-day temporal
 validation interval is a prespecified sensitivity; it does not replace the primary lag or
 change that decision. This is not evidence of equivalence.
 
-Sources: the [frozen selection](../artifacts/evaluation/extension_selection.json) and
-[execution report](../artifacts/evaluation/extension_execution_report.json). All shown
-validation intervals use 10 represented calendar-month blocks and 500 valid replicates.
+Sources: the H3 [frozen selection](../artifacts/evaluation/extension_selection.json) and
+[execution report](../artifacts/evaluation/extension_execution_report.json), and the
+H4/H5 [amended selection](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_selection.json).
+All shown validation intervals use 10 represented calendar-month blocks, 500 valid
+replicates and seed 7.
 Each comparison pairs the same candidate and comparator rows; support differs between
 lags and from the primary analysis. AP levels across different populations are not directly
 comparable.
@@ -322,14 +328,22 @@ comparable.
 H4/H5 follow a dated [land-cover amendment](extension-landcover-amendment.md), specified
 after H3 validation results were inspected and before accessing outcome labels or computing
 metrics for H4/H5. It specifies the implemented degree-grid mean estimator and its
-polygon-comparison evidence. The vegetation selection records H4/H5 as `not_evaluated`
-under its original availability freeze; results under the later amendment remain pending.
+polygon-comparison evidence. The original vegetation selection retains H4/H5 as
+`not_evaluated` under its original availability freeze; the amended selection records
+the six completed fits above. Prior H3 scores and decisions remain unchanged.
+
+The primary temporal H4 and 16-day H5 decisions are inconclusive; their paired intervals
+contain zero. This does not establish no effect or equivalence. The 32-day temporal H5
+interval also includes zero, with its negative lower bound retained above. Positive H4
+geographic and H5 geographic 32-day intervals are exploratory and do not change the
+primary decisions. H4/H5 each use their own common-support intersection against the
+published retrospective comparator for the corresponding feature family.
 
 Vegetation acquisition and feature construction are complete; all 2012-2025 land-cover maps
 and the land-cover and combined feature partitions are also complete. See
 [vegetation acquisition](vegetation-acquisition.md) and
 [land-cover features and acquisition evidence](covariates.md#land-cover-and-joining).
-Feature availability alone does not establish a completed fit.
+The amended selection records the completed H4/H5 fits separately from feature availability.
 
 ### Exploratory test-year scores
 
@@ -341,18 +355,27 @@ recorded above, evaluated on each row's common feature-complete support.
 
 | Feature family / lag | Paired test rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] |
 |---|---:|---|---:|---|
-| Temporal, 16 days | 1,754,909 | 0.354 [0.259, 0.415] | 0.352 | 0.003 [-0.003, 0.013] |
-| Temporal, 32 days | 1,624,869 | 0.367 [0.267, 0.427] | 0.359 | 0.009 [0.004, 0.016] |
-| Geographic, 16 days | 557,107 | 0.424 [0.268, 0.513] | 0.409 | 0.016 [0.002, 0.030] |
-| Geographic, 32 days | 513,107 | 0.429 [0.272, 0.520] | 0.413 | 0.016 [0.010, 0.022] |
+| H3 temporal, 16 days | 1,754,909 | 0.354 [0.259, 0.415] | 0.352 | 0.003 [-0.003, 0.013] |
+| H3 temporal, 32 days | 1,624,869 | 0.367 [0.267, 0.427] | 0.359 | 0.009 [0.004, 0.016] |
+| H3 geographic, 16 days | 557,107 | 0.424 [0.268, 0.513] | 0.409 | 0.016 [0.002, 0.030] |
+| H3 geographic, 32 days | 513,107 | 0.429 [0.272, 0.520] | 0.413 | 0.016 [0.010, 0.022] |
+| H4 land cover, temporal | 3,105,800 | 0.325 [0.223, 0.384] | 0.323 | 0.002 [0.00027, 0.004] |
+| H4 land cover, geographic | 800,194 | 0.393 [0.257, 0.476] | 0.383 | 0.010 [0.005, 0.016] |
+| H5 vegetation + land cover, temporal, 16 days | 1,742,193 | 0.360 [0.262, 0.418] | 0.352 | 0.008 [0.002, 0.016] |
+| H5 vegetation + land cover, temporal, 32 days | 1,612,765 | 0.375 [0.273, 0.435] | 0.359 | 0.015 [0.010, 0.024] |
+| H5 vegetation + land cover, geographic, 16 days | 549,893 | 0.434 [0.276, 0.525] | 0.409 | 0.025 [0.009, 0.040] |
+| H5 vegetation + land cover, geographic, 32 days | 506,143 | 0.436 [0.282, 0.522] | 0.413 | 0.023 [0.012, 0.036] |
 
-Source: the [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json).
+Sources: the H3 [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json)
+and the H4/H5 [amended exploratory test report](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_test_a469d9bc13b149d9997f2a6e9c30971a.json).
 All shown test intervals retain 500 valid replicates: 28 represented calendar-month blocks
 for temporal scores and 24 one-degree spatial blocks for geographic holdout. Subgroups and
-secondary metrics are retained in the report; none changes the primary H3 decision.
+secondary metrics are retained in the reports. These exploratory scores did not select
+models or lags and do not change the primary H3/H4/H5 decisions.
 
 The 2026 confirmation attempt was
-[refused without opening labels](../artifacts/evaluation/extension_confirmation_guard_retry.json):
+[refused without opening labels](../artifacts/evaluation/extension_confirmation_guard_retry.json),
+including under the [H4/H5 amendment](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_confirmation_guard.json):
 vegetation archive timing, complete confirmation inputs and untouched access history were
 not established. No fresh confirmation or model promotion is supported. The deployed weekly
 model remains unchanged.
