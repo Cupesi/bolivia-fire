@@ -18,9 +18,13 @@ are published. The sensitivity artifacts cover
 [removing climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) and
 [removing national activity features](../artifacts/evaluation/test_strict_drop_national.json).
 Each sensitivity analysis has a separately logged test reopening and reason.
-Model selection and calibration use validation years only. MapBiomas fractions
-are absent because verified anonymous raster requests returned HTTP 403. See
-[the covariate guide](../docs/covariates.md) for acquisition verification.
+Model selection and calibration use validation years only. The original retrospective
+comparison uses CHIRPS rainfall after anonymous MapBiomas raster requests failed.
+Later experiments use MOD13A2 vegetation under the
+[vegetation protocol](../docs/extension-vegetation.md) and authenticated MapBiomas
+Collection 4 aggregates under the [land-cover amendment](../docs/extension-landcover-amendment.md).
+Their test-year results are exploratory; no completed 2026 confirmation is supported.
+See [the covariate guide](../docs/covariates.md) for acquisition evidence.
 
 ## Coverage and splits
 
@@ -66,6 +70,7 @@ omits cell climatology. See [the protocol](../docs/protocol.md) and
 | Detections and observation days | [Detection schema](schemas/detections.yaml): parsed observations, selection flags, source file/line, acquisition and documented outage coverage |
 | Weekly panel | [Panel schema](schemas/panel.yaml): nullable labels, observed counts, history, recency, neighborhoods, seasonality, training climatology and completeness flags |
 | Retrospective features | [Covariate schema](schemas/covariates.yaml): antecedent rainfall sums, dry days, training-reference anomalies and optional previous-year land-cover fractions |
+| Later environmental features | [Vegetation schema](schemas/vegetation_features.yaml) and [land-cover schema](schemas/landcover.yaml): MOD13A2 lags, five Collection 4 fractions, availability flags and combined tables |
 
 Raw bounding-box observations are retained without confidence or country
 filtering. Exact duplicates across all original source columns are removed
@@ -122,14 +127,20 @@ its exact inputs. The [storage guide](README.md) explains snapshot versioning.
 
 | Source | Terms and redistribution status |
 | --- | --- |
-| [NASA FIRMS](licenses/FIRMS.md) | NASA open-data reuse basis with source attribution; retain product, processing tier and dates; no Creative Commons licence is assigned here |
+| [NASA FIRMS](licenses/FIRMS.md) | NASA open-data reuse basis; retain product, processing tier, dates and NASA FIRMS/LANCE/ESDIS acknowledgement |
 | [geoBoundaries / GeoBolivia](licenses/geoBoundaries.md) | gbOpen BOL ADM0/ADM1 revision `9469f09`: official `boundaryLicense` is `Public Domain` for both, verified 2026-10-31; retain GeoBolivia, geoBoundaries and Runfola et al. (2020) attribution and source pins with derived intersections |
 | [CHIRPS v3](licenses/CHIRPS.md) | CC BY 4.0 with the provider's copyright-waiver statement; credit Climate Hazards Center and CHIRPS3 Data Repository (2025), final daily `rnl`, ERA5 disaggregation, native-pixel mapping to cell centers and antecedent-rainfall aggregation |
-| [MapBiomas Bolivia](licenses/MapBiomas.md) | CC BY 4.0 permits attributed derivatives, but no real fractions were acquired |
+| [MOD13A2](licenses/MODIS.md) | NASA open data; cite Didan (2021) and acknowledge LP DAAC and AppEEARS |
+| [MapBiomas Bolivia](licenses/MapBiomas.md) | CC BY 4.0; Collection 4 aggregates and derived H4/H5 features are local |
+| [GeoNames](licenses/GeoNames.md) | CC BY 4.0; place metadata is for display, not fitting |
 
-There is no blanket MIT licence for these data. Code uses [MIT](../LICENSE).
-Licensed derivatives may be redistributed under the applicable source terms,
-with attribution and processing descriptions. Raw and processed data are not
-bundled in Git. Follow [reproduction](../docs/reproduction.md) to acquire pinned
-sources and rebuild; preserve manifests and hashes with any distributed snapshot.
+Compiled and derived release data use CC BY 4.0; upstream inputs retain their source
+terms. Code uses [MIT](../LICENSE). Preserve attribution, processing descriptions,
+manifests and hashes when redistributing. Raw and processed data are not bundled in Git,
+and [data access](../README.md#data-access) records publication status and download links.
+
+The [versioned release format](README.md#versioned-data-release) defines the three archive
+groups, supported dataset reuse, partial prediction-based recalculation and partial
+raw-input rebuilding. [Reproduction limits](../docs/reproduction.md#release-reproduction-limits)
+record absent prediction families, historical hash discrepancies and the test-access policy.
 Cite the software using [CITATION.cff](../CITATION.cff) and credit each data source.

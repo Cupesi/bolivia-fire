@@ -20,6 +20,8 @@ contains 37,146 cells, 678 issue weeks and 25,184,988 rows; see the
 | `processed/cells.parquet` | Eligible grid, national areas, departments and holdout flags | Local |
 | `processed/panel/year=YYYY/part.parquet` | Labels and strict features, keyed by cell and issue | Local |
 | `processed/covariates/` | CHIRPS native windows, extraction manifests and retrospective features | Local |
+| `raw/vegetation/`, `processed/vegetation/` | MOD13A2 subset, composites, weights and lagged vegetation features | Local |
+| `processed/landcover/` | MapBiomas aggregates, issue features and combined vegetation/land-cover tables | Local |
 | `.tmp/`, `.quarantine/` | Transfer checkpoints, locks, quota state and rejected responses | Local |
 
 Covariate extraction manifests are stored with their local outputs; preserve them
@@ -57,11 +59,50 @@ Git supplies metadata, not the observations. FIRMS acquisition needs a local
 [reproduction sequence](../docs/reproduction.md) to acquire the source range,
 restore pinned boundaries and outage HTML, build cells/detections/panel, extract
 CHIRPS and build features. CHIRPS acquisition and retrospective features are
-complete, and [primary final-test results](../docs/results.md) are published;
-pre-registered sensitivity results remain pending. Verified public MapBiomas
-raster access returned HTTP 403, so no real land-cover fractions are included.
-See [covariate status](../docs/covariates.md).
+complete, and [primary final-test and sensitivity results](../docs/results.md) are recorded.
+The original retrospective comparison uses rainfall only after anonymous MapBiomas raster
+access failed. Later MOD13A2 vegetation and authenticated MapBiomas Collection 4 features
+support the registered H3 and amended H4/H5 experiments. See
+[covariate status](../docs/covariates.md) and [environmental results](../docs/results.md#environmental-covariates).
 
-Code is [MIT licensed](../LICENSE); data remain under the source terms listed in
+Code is [MIT licensed](../LICENSE); compiled and derived release data use CC BY 4.0,
+and upstream inputs retain the source terms listed in
 [the dataset card](dataset_card.md). Retain source attribution, pins and
 processing descriptions with redistributed derivatives; never redistribute keys.
+
+## Versioned data release
+
+Version 0.1.0 packages the retained research snapshot. See
+[data access](../README.md#data-access) for publication status and download links.
+
+The format uses three independently extractable ZIP64 archives with repository-relative paths:
+
+| Archive | Contents |
+| --- | --- |
+| `bolivia-fire-0.1.0-benchmark-data.zip` | Panel, cells, rainfall, vegetation and land-cover features, schemas and interpretation manifests |
+| `bolivia-fire-0.1.0-reproduction-artifacts.zip` | Configurations, environment lockfile, fitted models and calibrators, saved predictions including comparison vectors, evaluation history, figure JSON, producing-code revisions and historical source registries |
+| `bolivia-fire-0.1.0-raw-inputs.zip` | FIRMS SP snapshots, MOD13A2 AppEEARS subset, CHIRPS native windows, MapBiomas aggregate exports, boundaries, GeoNames and outage HTML |
+
+The record-level format includes `README.md`, `LICENSES.md`, `DATA_DICTIONARY.md`,
+`inventory.json` and `SHA256SUMS`. Exclusions are operational live forecasts,
+serving derivatives, regenerable caches, temporary files and logs, deleted global CHIRPS
+rasters, MODIS HDF granules and native MapBiomas 30 m maps. The retained comparison prediction
+vectors under `artifacts/.cache/comparison/` are reproduction evidence and are included.
+
+1. **Reuse the dataset: supported.** Tables retain keys, nullable labels, observation flags
+   and partition/holdout assignments; see the [dataset card](dataset_card.md).
+2. **Recalculate reported results from saved predictions: partially supported.** Only strict
+   primary `val_select`/`val_calib`/`test` exports and alternative-learner cached vectors are
+   retained. Rainfall, sensitivity and H3/H4/H5 per-row predictions were not persisted;
+   their result records and fitted models are retained. Regenerating those predictions
+   requires the logged test-access procedure. Every final-test metric recalculation is a
+   logged opening under [the frozen policy](../configs/protocol.yaml#final_test_access).
+   Release verification does not open the test.
+3. **Rebuild from raw inputs: partially supported.** FIRMS, boundaries, outages, GeoNames,
+   the MOD13A2 subset and CHIRPS native windows are retained. Global CHIRPS rasters,
+   MODIS HDF granules and native MapBiomas maps are absent; MapBiomas re-extraction needs
+   an Earth Engine account.
+
+Use family-specific producing revisions and historical `datasets/sources.yaml` bytes;
+the current merged registry cannot satisfy every frozen experiment hash. See
+[reproduction limits and discrepancies](../docs/reproduction.md#release-reproduction-limits).

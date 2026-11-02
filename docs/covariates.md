@@ -235,8 +235,9 @@ All paths below are under `datasets/processed/covariates/`:
 - `http_requests.jsonl`, `chirps_errors.jsonl`, `access_state.json`,
   `request_gate.json`, `transfer_budget.json`: access accounting, retry evidence,
   cooldown and pacing checkpoints.
-- `mapbiomas_fractions.parquet`: optional unique cell-year fractions; not
-  produced from real data while the public URLs return 403.
+- `mapbiomas_fractions.parquet`: legacy optional cell-year output, absent from the original
+  rainfall comparison after anonymous URLs returned 403. Later authenticated Collection 4
+  aggregates are under `datasets/processed/landcover/`, as documented above.
 - `last_*.json`, `acceptance_partial_2024.json`: command resources and acquisition
   status, separate from any predictive evaluation.
 
@@ -301,9 +302,10 @@ The FTP acquisition process peaked at **598.72 MiB**. The 55 GB free-space
 floor remained enforced before downloads and output writes.
 
 Measured audit details are in annual_daily_validation.json and
-annual_feature_validation.json. MapBiomas remains unavailable through the
-verified anonymous URLs and is omitted from the published retrospective dataset.
-Authenticated extension outputs are documented above.
+annual_feature_validation.json. MapBiomas was unavailable through the verified anonymous
+URLs for the original rainfall comparison. Authenticated Collection 4 aggregates and
+H4/H5 issue features are local under `datasets/processed/landcover/`; the
+[versioned release format](../datasets/README.md#versioned-data-release) includes them.
 
 The stored covariate tree totals **1,563,039,121 bytes**, including
 daily archives, features, manifests, access logs and audit records.
@@ -313,8 +315,8 @@ The resource summary is acceptance_annual.json.
 
 ```powershell
 uv run --no-sync ruff check src tests
-uv run --no-sync pytest -q
-uv run --no-sync pytest -q tests/covariates
+uv run --no-sync python -m pytest -q
+uv run --no-sync python -m pytest -q tests/covariates
 ```
 
 Synthetic tests cover native index mapping and precision offsets, nodata,

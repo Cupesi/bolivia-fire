@@ -102,7 +102,7 @@ uv run --no-sync bolivia-fire predict --help
 uv run --no-sync bolivia-fire compare --help
 uv run --no-sync bolivia-fire live --help
 uv run --no-sync python -m backend.app.prepare --help
-uv run --no-sync pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider
+uv run --no-sync python -m pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider
 ```
 
 The [reproduction guide](docs/reproduction.md) gives acquisition, dataset construction, rainfall
@@ -116,14 +116,21 @@ in order. The four notebooks cover [exploration](notebooks/01_exploration.ipynb)
 
 Obtain a NASA FIRMS map key, copy [.env.example](.env.example) to `.env`, and set `FIRMS_MAP_KEY`
 locally; an environment variable takes precedence. Keep the key and credential-bearing URLs out
-of logs and source control. Source pins and attribution cover FIRMS, geoBoundaries, GeoNames and
-CHIRPS in [datasets/sources.yaml](datasets/sources.yaml). MapBiomas was omitted after verified
-anonymous raster requests failed; the fitted retrospective model uses CHIRPS rainfall inputs.
+of logs and source control. Source pins and attribution cover FIRMS, geoBoundaries, GeoNames,
+CHIRPS, MOD13A2 and MapBiomas in [datasets/sources.yaml](datasets/sources.yaml). The original
+retrospective comparison uses CHIRPS rainfall; MapBiomas was omitted after anonymous raster
+requests failed. MOD13A2 vegetation and authenticated MapBiomas Collection 4 aggregates were
+evaluated later under the [vegetation protocol](docs/extension-vegetation.md) and
+[land-cover amendment](docs/extension-landcover-amendment.md).
 
 Git contains manifests, source pins, schemas, licence notes and descriptive summaries. Raw
 snapshots, intermediate bundles, processed datasets, model binaries and prediction Parquet files
 are local generated artifacts. Manifests record retrieval identity and hashes, without the source
 observations. See [dataset storage and rebuilding](datasets/README.md).
+
+There is no public frozen data archive yet. The [versioned release format](datasets/README.md#versioned-data-release)
+defines separate benchmark-data, reproduction-artifacts and raw-inputs archives, their contents,
+exclusions and reproduction limits.
 
 ## Limitations
 
@@ -141,10 +148,11 @@ observations. See [dataset storage and rebuilding](datasets/README.md).
 
 ## Licence and citation
 
-Code is [MIT licensed](LICENSE). Data retain their source-specific terms:
+Code is [MIT licensed](LICENSE). Compiled and derived release data use CC BY 4.0;
+upstream inputs retain their source-specific terms:
 [FIRMS](datasets/licenses/FIRMS.md), [geoBoundaries](datasets/licenses/geoBoundaries.md),
 [GeoNames](datasets/licenses/GeoNames.md), [CHIRPS](datasets/licenses/CHIRPS.md),
-[MapBiomas](datasets/licenses/MapBiomas.md) and the [dataset card](datasets/dataset_card.md).
+[MOD13A2](datasets/licenses/MODIS.md), [MapBiomas](datasets/licenses/MapBiomas.md) and the [dataset card](datasets/dataset_card.md).
 The pinned geoBoundaries gbOpen BOL ADM0/ADM1 releases at revision `9469f09` report
 `boundaryLicense: Public Domain`. Retain GeoBolivia, geoBoundaries and Runfola et al. (2020)
 attribution. GeoNames place names use CC BY 4.0. CHIRPS v3.0 final daily `rnl` uses CC BY 4.0

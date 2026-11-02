@@ -4,6 +4,12 @@ The frozen specification is `configs/protocol.yaml`. Builds use local,
 hash-verified geoBoundaries pins and successful manifest-recorded FIRMS snapshots.
 They make no network requests and do not require a FIRMS key.
 
+There is no public frozen data archive yet. The local snapshot's
+[versioned release format](../datasets/README.md#versioned-data-release) defines archive
+contents, exclusions and partial reproduction capabilities. The original retrospective
+comparison adds CHIRPS rainfall; later vegetation and land-cover tables follow their
+registered and amended protocols. See [covariate availability](covariates.md).
+
 ```powershell
 uv sync --all-extras
 uv run --no-sync bolivia-fire build cells
@@ -11,7 +17,7 @@ uv run --no-sync bolivia-fire build detections
 uv run --no-sync bolivia-fire build panel --start-issue 2024-09-02 --end-issue 2024-09-09
 uv run --no-sync bolivia-fire explain-label r1345c2314 2024-09-02
 uv run --no-sync ruff check src tests
-uv run --no-sync pytest -q
+uv run --no-sync python -m pytest -q
 ```
 
 Omitting the issue bounds builds every protocol Monday. Each selected year is

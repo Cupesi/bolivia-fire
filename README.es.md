@@ -112,7 +112,7 @@ uv run --no-sync bolivia-fire predict --help
 uv run --no-sync bolivia-fire compare --help
 uv run --no-sync bolivia-fire live --help
 uv run --no-sync python -m backend.app.prepare --help
-uv run --no-sync pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider
+uv run --no-sync python -m pytest tests backend/tests -m "not live and not local_data" -q -p no:cacheprovider
 ```
 
 La [guía de reproducción](docs/reproduction.md) presenta, en orden, la adquisición, construcción
@@ -129,14 +129,23 @@ Obtenga una clave de mapas de NASA FIRMS, copie [.env.example](.env.example) a `
 `FIRMS_MAP_KEY` localmente; una variable de entorno tiene prioridad. Mantenga la clave y las URL
 con credenciales fuera de los registros y del control de versiones. Las versiones fijadas y la
 atribución de FIRMS, geoBoundaries, GeoNames y CHIRPS figuran en
-[datasets/sources.yaml](datasets/sources.yaml). MapBiomas se omitió tras fallar solicitudes
-anónimas verificadas de sus rásteres; el modelo retrospectivo ajustado utiliza precipitación de CHIRPS.
+[datasets/sources.yaml](datasets/sources.yaml), junto con MOD13A2 y MapBiomas. La comparación
+retrospectiva original utiliza precipitación de CHIRPS; MapBiomas se omitió tras fallar las
+solicitudes anónimas de sus rásteres. La vegetación MOD13A2 y los agregados de MapBiomas
+Colección 4 obtenidos mediante acceso autenticado se evaluaron después, según el
+[protocolo de vegetación](docs/extension-vegetation.md) y la
+[enmienda de cobertura del suelo](docs/extension-landcover-amendment.md).
 
 Git contiene manifiestos, versiones fijadas de las fuentes, esquemas, notas de licencia y
 resúmenes descriptivos. Los datos originales, paquetes intermedios, conjuntos procesados,
 binarios de modelos y archivos Parquet de predicciones son artefactos generados localmente.
 Los manifiestos registran la identidad de las descargas y sus hashes, sin las observaciones
 originales. Consulte [almacenamiento y reconstrucción](datasets/README.md).
+
+Todavía no existe un archivo público congelado de los datos. El
+[formato de la versión de datos](datasets/README.md#versioned-data-release) define archivos
+separados de datos de evaluación, artefactos de reproducción e insumos originales, con su
+contenido, exclusiones y límites de reproducción.
 
 ## Limitaciones
 
@@ -155,10 +164,11 @@ originales. Consulte [almacenamiento y reconstrucción](datasets/README.md).
 
 ## Licencia y cita
 
-El código tiene [licencia MIT](LICENSE). Los datos conservan los términos de sus fuentes:
+El código tiene [licencia MIT](LICENSE). Los datos compilados y derivados de la versión usan
+CC BY 4.0; los insumos originales conservan los términos de sus fuentes:
 [FIRMS](datasets/licenses/FIRMS.md), [geoBoundaries](datasets/licenses/geoBoundaries.md),
 [GeoNames](datasets/licenses/GeoNames.md), [CHIRPS](datasets/licenses/CHIRPS.md),
-[MapBiomas](datasets/licenses/MapBiomas.md) y la [ficha del conjunto de datos](datasets/dataset_card.md).
+[MOD13A2](datasets/licenses/MODIS.md), [MapBiomas](datasets/licenses/MapBiomas.md) y la [ficha del conjunto de datos](datasets/dataset_card.md).
 Las versiones fijadas de geoBoundaries gbOpen BOL ADM0/ADM1 en la revisión `9469f09` indican
 `boundaryLicense: Public Domain`. Conserve la atribución a GeoBolivia, geoBoundaries y
 Runfola et al. (2020). Los nombres de lugares de GeoNames tienen licencia CC BY 4.0.

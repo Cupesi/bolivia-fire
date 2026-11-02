@@ -15,6 +15,6 @@
 - [Live estimates](live.md): near-real-time inputs, publication timing, backfills and verification.
 - [Media inventory](media.md): screenshot, animation, chart and diagram contents, sources and sizes.
 - [Related work](related-work.md): references comparing targets, datasets and evaluation approaches.
-- [Dataset directory](../datasets/README.md): storage layout, manifests, schemas and rebuilding.
+- [Dataset directory](../datasets/README.md): storage layout, manifests, schemas, versioned release format and rebuilding limits.
 - [Dataset card](../datasets/dataset_card.md): population, coverage, variables, biases and licences.
 - [Citation](../CITATION.cff): software attribution and repository metadata.

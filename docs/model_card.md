@@ -181,7 +181,14 @@ ignitions, individual fire events, causes or damages.
 
 ## Licences
 
-Code is [MIT licensed](../LICENSE). Source observations retain their own terms:
+Model binaries, calibrators and saved predictions are local artifacts; there is no public
+frozen data archive yet. The [versioned release format](../datasets/README.md#versioned-data-release)
+describes their reproduction-artifacts group and the limits of prediction-based recalculation.
+See [reproduction](reproduction.md#release-reproduction-limits) for producing revisions,
+historical registry requirements and trusted-deserialization precautions.
+
+Code is [MIT licensed](../LICENSE). Compiled and derived release data use CC BY 4.0;
+source observations retain their own terms:
 
 - [FIRMS](../datasets/licenses/FIRMS.md): NASA open-data reuse basis with source attribution;
   no Creative Commons licence is asserted for the detections.
@@ -195,6 +202,9 @@ Code is [MIT licensed](../LICENSE). Source observations retain their own terms:
 - [MapBiomas](../datasets/licenses/MapBiomas.md): Creative Commons Attribution 4.0 International;
   Collection 4 features enter the amended H4/H5 models. The primary strict and retrospective
   models contain no MapBiomas inputs.
+- [MOD13A2](../datasets/licenses/MODIS.md): NASA open data; cite Didan (2021) and
+  acknowledge LP DAAC and AppEEARS.
+- [GeoNames](../datasets/licenses/GeoNames.md): CC BY 4.0; display metadata only.
 
 The code licence does not replace source-specific terms. Preserve source pins, attribution and
 processing descriptions when redistributing derived inputs or outputs.

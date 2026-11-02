@@ -16,6 +16,43 @@ Sensitivity artifacts cover [all confidence classes](../artifacts/evaluation/tes
 Later test openings are logged separately with their reasons. The commands below reproduce
 the pipeline and require the named local artifacts and credentials.
 
+## Release reproduction limits
+
+There is no public frozen data archive yet. The local snapshot follows the
+[versioned data-release format](../datasets/README.md#versioned-data-release), which
+defines the benchmark-data, reproduction-artifacts and raw-inputs archives.
+
+Reuse is supported; recalculation from saved predictions and rebuilding from raw inputs
+are partially supported. Strict primary validation/test exports and alternative-learner
+cached vectors are retained. Rainfall, sensitivity and H3/H4/H5 per-row prediction exports
+and standalone scored-row masks are absent. Their fitted models and result records are
+available, but regenerating predictions requires the logged test-access procedure below.
+Recomputing any final-test metric is a logged opening under
+[the protocol](../configs/protocol.yaml#final_test_access), including prediction-only
+recalculation. Release verification does not open the test.
+
+The reproduction-artifacts archive includes `release/code_revisions.json` with producing
+revisions per experiment family and `release/historical_sources/` with the source-registry
+bytes required by historical hashes. Use those revisions and snapshots; the packaging
+revision and current merged registry do not replace them. Existing guards can reject a
+mismatched registry. Preserve the original H3 archive and the separate H4/H5 amendment
+namespace; an older `not_evaluated` entry does not describe the amended results.
+
+Known discrepancies remain explicit:
+
+- `cell_places.parquet` differs from an older manifest hash; those older bytes were not
+  retained. These fields are display metadata, not model inputs.
+- Fourteen intermediate states were not retained; exact exceptions and reasons are in
+  [the provenance checks](../tests/test_provenance_hashes.py).
+- The MOD13A2 acquisition AOI buffer was 0.05 degrees rather than the registered 0.1;
+  audit records retain this deviation.
+- CatBoost GPU scores are not digit-reproducible with identical inputs and parameters.
+
+Global CHIRPS rasters were deleted after native-window extraction. MODIS HDF granules
+and native MapBiomas 30 m maps are absent; MapBiomas re-extraction requires an Earth
+Engine account. See [covariate availability](covariates.md) for retained products.
+Only load trusted model files: joblib/pickle deserialization can execute arbitrary code.
+
 ## 1. Install and configure access
 
 Install Git, uv, Python 3.12 or newer and Node 22.12 or newer with npm.
@@ -114,8 +151,10 @@ for cooldowns and provider access; do not treat partial years as full coverage.
 
 Features join by cell and issue date. Missing rainfall is never zero-filled;
 retrospective fitting rejects incomplete values or invalid provenance. Current
-retrospective model inputs are the frozen CHIRPS rainfall columns. MapBiomas
-remains omitted because public raster access returned HTTP 403.
+retrospective model inputs are the frozen CHIRPS rainfall columns. Anonymous MapBiomas
+raster access failed for that original comparison. Later MOD13A2 and authenticated
+MapBiomas inputs belong to the [vegetation protocol](extension-vegetation.md) and
+[land-cover amendment](extension-landcover-amendment.md); they are separate from step 4.
 
 ## 5. Train, select and calibrate on validation years
 
@@ -185,8 +224,8 @@ observations remain available. See [API](api.md) and [frontend](frontend.md).
 Offline verification commands, from the repository root:
 
 ```powershell
-uv run --no-sync pytest -q
-uv run --no-sync pytest -q backend/tests -p no:cacheprovider
+uv run --no-sync python -m pytest -q
+uv run --no-sync python -m pytest -q backend/tests -p no:cacheprovider
 ```
 
 The suites include synthetic build/model workflows and coverage/provenance
