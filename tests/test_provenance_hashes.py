@@ -7,7 +7,7 @@ import re
 import shutil
 import subprocess
 from collections.abc import Iterator
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import pytest
@@ -138,6 +138,22 @@ def _references(value: Any, tracked: set[str]) -> Iterator[tuple[str, str]]:
             yield from _references(item, tracked)
 
 
+def _reference_paths(origin: str, target: str) -> tuple[str, ...]:
+    record_parts = PurePosixPath(origin).parts
+    target_parts = PurePosixPath(target).parts
+    if (
+        len(record_parts) >= 4
+        and record_parts[:2] == ("artifacts", "evaluation")
+        and record_parts[2].startswith("extension_archive_attempt_")
+        and len(target_parts) == 3
+        and target_parts[:2] == ("artifacts", "evaluation")
+    ):
+        archive = "/".join(record_parts[:3])
+        name = target_parts[-1]
+        return target, f"{archive}/{name}", f"{archive}/retired_active/{name}"
+    return (target,)
+
+
 def _historical_hashes(root: Path, paths: set[str]) -> dict[str, set[str]]:
     objects: dict[str, set[str]] = {}
     for path in sorted(paths):
@@ -183,6 +199,66 @@ def test_appeears_intermediate_manifest_claim(path: str, digest: str) -> None:
     assert bundle["bytes_verified"] == sum(item["file_size"] for item in manifest["files"])
 
 
+@pytest.mark.parametrize(
+    "case",
+    [
+        "same_archive", "retired_active", "deleted_historical_copy", "outside_archive",
+        "other_archive", "wrong_hash", "mixed_live_and_archived_origins",
+    ],
+)
+def test_synthetic_archived_provenance_resolution(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: str
+) -> None:
+    if shutil.which("git") is None:
+        pytest.skip("Synthetic archive provenance requires Git")
+    _git(tmp_path, "init")
+    monkeypatch.setitem(globals(), "ROOT", tmp_path)
+    evaluation = "artifacts/evaluation"
+    archive = f"{evaluation}/extension_archive_attempt_007"
+    target = f"{evaluation}/fit.json"
+    old = b'{"synthetic": "archived"}\n'
+    digest = hashlib.sha256(old).hexdigest()
+    if case == "wrong_hash":
+        digest = hashlib.sha256(b"synthetic absent bytes").hexdigest()
+    destination = f"{archive}/fit.json"
+    if case == "retired_active":
+        destination = f"{archive}/retired_active/fit.json"
+    elif case == "other_archive":
+        destination = f"{evaluation}/extension_archive_attempt_008/fit.json"
+    origins = [f"{archive}/nested/report.json"]
+    if case == "outside_archive":
+        origins = [f"{evaluation}/report.json"]
+    elif case == "mixed_live_and_archived_origins":
+        origins.append(f"{evaluation}/report.json")
+    contents = {
+        target: b'{"synthetic": "current"}\n',
+        destination: old,
+        **{
+            origin: json.dumps({"path": target, "sha256": digest}).encode()
+            for origin in origins
+        },
+    }
+    for name, content in contents.items():
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    _git(tmp_path, "add", ".")
+    commit_args = (
+        "-c", "user.name=Synthetic Test", "-c", "user.email=synthetic@example.invalid",
+        "commit", "-m", "synthetic provenance fixture",
+    )
+    _git(tmp_path, *commit_args)
+    if case == "deleted_historical_copy":
+        (tmp_path / destination).unlink()
+        _git(tmp_path, "add", "-u")
+        _git(tmp_path, *commit_args)
+    if case in {"same_archive", "retired_active", "deleted_historical_copy"}:
+        test_recorded_hashes_match_reachable_git_blobs()
+    else:
+        with pytest.raises(AssertionError, match="Recorded hashes absent"):
+            test_recorded_hashes_match_reachable_git_blobs()
+
+
 def test_recorded_hashes_match_reachable_git_blobs() -> None:
     _require_git_history()
     tracked = set(_git(ROOT, "ls-tree", "-r", "--name-only", "HEAD").decode().splitlines())
@@ -200,15 +276,26 @@ def test_recorded_hashes_match_reachable_git_blobs() -> None:
             for pair in _references(value, tracked):
                 references.setdefault(pair, set()).add(path)
     assert references, "No tracked provenance references were collected"
-    historical = _historical_hashes(ROOT, {path for path, _ in references})
+    candidates = {
+        (path, origin): _reference_paths(origin, path)
+        for (path, _), origins in references.items()
+        for origin in origins
+    }
+    historical = _historical_hashes(
+        ROOT, {path for paths in candidates.values() for path in paths}
+    )
     missing = []
     for (path, digest), origins in sorted(references.items()):
-        if digest in historical[path]:
+        unmatched = {
+            origin for origin in origins
+            if not any(digest in historical[name] for name in candidates[path, origin])
+        }
+        if not unmatched:
             continue
         if (path, digest) == LEGACY_SOURCE:
             old = _git(ROOT, "show", "de457a9:datasets/sources.yaml")
             assert b"\r\n" not in old
             assert hashlib.sha256(old.replace(b"\n", b"\r\n")).hexdigest() == digest
         elif (path, digest) not in EXCEPTIONS:
-            missing.append(f"{path} {digest} referenced by {', '.join(sorted(origins))}")
+            missing.append(f"{path} {digest} referenced by {', '.join(sorted(unmatched))}")
     assert not missing, "Recorded hashes absent from reachable Git blobs:\n" + "\n".join(missing)
