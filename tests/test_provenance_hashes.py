@@ -130,12 +130,56 @@ def _references(value: Any, tracked: set[str]) -> Iterator[tuple[str, str]]:
                     filename = value.get("file_name")
                     if isinstance(filename, str) and "/" in filename:
                         candidates.append(filename)
-                if key == "registration_sha256" and "amendment_id" in value:
+                if (
+                    key == "registration_sha256"
+                    and "amendment_id" in value
+                    and "amendment_registration_sha256" not in value
+                ):
                     candidates = [AMENDMENT_REGISTRATION]
                 for path in candidates:
                     if isinstance(path, str) and path in tracked:
                         yield path, item.lower()
             yield from _references(item, tracked)
+
+
+def _record_references(
+    value: Any, tracked: set[str], origin: str
+) -> Iterator[tuple[str, str, str]]:
+    parts = PurePosixPath(origin).parts
+    if not (
+        len(parts) == 5
+        and parts[:3] == ("artifacts", "evaluation", "amendments")
+        and parts[-1] == "extension_selection.json"
+        and isinstance(value, dict)
+        and "preserved_h3" in value
+    ):
+        for target, digest in _references(value, tracked):
+            yield target, digest, origin
+        return
+    ordinary = {key: item for key, item in value.items() if key != "preserved_h3"}
+    for target, digest in _references(ordinary, tracked):
+        yield target, digest, origin
+    copies = value["preserved_h3"]
+    assert isinstance(copies, dict), f"Invalid preserved_h3 mapping in {origin}"
+    for source, evidence in copies.items():
+        message = f"Unverified preserved_h3 source {source} in {origin}"
+        assert source in tracked and isinstance(evidence, dict), message
+        content = _git(ROOT, "show", f"HEAD:{source}")
+        digest = evidence.get("sha256")
+        assert isinstance(digest, str) and digest.lower() == hashlib.sha256(content).hexdigest(), (
+            message
+        )
+        assert "record" in evidence, message
+        # JSON serialization distinguishes booleans from equal-valued integers.
+        assert json.dumps(evidence["record"], sort_keys=True) == json.dumps(
+            json.loads(content), sort_keys=True
+        ), message
+        yield source, digest.lower(), origin
+        metadata = {key: item for key, item in evidence.items() if key != "record"}
+        for target, metadata_digest in _references(metadata, tracked):
+            yield target, metadata_digest, origin
+        for target, nested_digest in _references(evidence["record"], tracked):
+            yield target, nested_digest, source
 
 
 def _reference_paths(origin: str, target: str) -> tuple[str, ...]:
@@ -259,6 +303,126 @@ def test_synthetic_archived_provenance_resolution(
             test_recorded_hashes_match_reachable_git_blobs()
 
 
+@pytest.fixture
+def synthetic_provenance_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    if shutil.which("git") is None:
+        pytest.skip("Synthetic provenance requires Git")
+    _git(tmp_path, "init")
+    _git(tmp_path, "config", "core.autocrlf", "false")
+    monkeypatch.setitem(globals(), "ROOT", tmp_path)
+    return tmp_path
+
+
+def _commit_synthetic_records(root: Path, records: dict[str, Any]) -> None:
+    for name, value in records.items():
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(json.dumps(value).encode("utf-8"))
+    _git(root, "add", ".")
+    _git(
+        root, "-c", "user.name=Synthetic Test", "-c", "user.email=synthetic@example.invalid",
+        "commit", "-m", "synthetic provenance fixture",
+    )
+
+
+@pytest.mark.parametrize(
+    "case", ["base", "standalone_guard", "dual_metadata", "swapped_dual", "wrong_guard"]
+)
+def test_synthetic_registration_provenance(synthetic_provenance_repo: Path, case: str) -> None:
+    base = {"synthetic": "base registration"}
+    amendment = {"synthetic": "amendment registration"}
+    base_digest = hashlib.sha256(json.dumps(base).encode()).hexdigest()
+    amendment_digest = hashlib.sha256(json.dumps(amendment).encode()).hexdigest()
+    records = {
+        "base": {"registration_sha256": base_digest},
+        "standalone_guard": {
+            "amendment_id": "synthetic", "registration_sha256": amendment_digest,
+        },
+        "dual_metadata": {
+            "amendment_id": "synthetic", "registration_sha256": base_digest,
+            "amendment_registration_sha256": amendment_digest,
+        },
+        "swapped_dual": {
+            "amendment_id": "synthetic", "registration_sha256": amendment_digest,
+            "amendment_registration_sha256": base_digest,
+        },
+        "wrong_guard": {"amendment_id": "synthetic", "registration_sha256": base_digest},
+    }
+    _commit_synthetic_records(synthetic_provenance_repo, {
+        REGISTRATION: base,
+        AMENDMENT_REGISTRATION: amendment,
+        "artifacts/evaluation/report.json": records[case],
+    })
+    if case in {"swapped_dual", "wrong_guard"}:
+        with pytest.raises(AssertionError, match="Recorded hashes absent"):
+            test_recorded_hashes_match_reachable_git_blobs()
+    else:
+        test_recorded_hashes_match_reachable_git_blobs()
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        "verified_archive", "verified_retired_active", "wrong_source_digest",
+        "missing_source", "tampered_record", "tampered_type", "cross_archive",
+        "live_source", "outside_selection", "mixed_live_origin", "historical_source",
+        "uncommitted_source", "unverified_wrapper_reference",
+    ],
+)
+def test_synthetic_preserved_h3_provenance(synthetic_provenance_repo: Path, case: str) -> None:
+    evaluation = "artifacts/evaluation"
+    archive = f"{evaluation}/extension_archive_attempt_007"
+    target = f"{evaluation}/fit.json"
+    destination = f"{archive}/fit.json"
+    source = f"{archive}/report.json"
+    selection_path = f"{evaluation}/amendments/synthetic/extension_selection.json"
+    if case == "verified_retired_active":
+        destination = f"{archive}/retired_active/fit.json"
+    elif case == "cross_archive":
+        destination = f"{evaluation}/extension_archive_attempt_008/fit.json"
+    elif case == "live_source":
+        source = f"{evaluation}/report.json"
+    elif case == "outside_selection":
+        selection_path = f"{evaluation}/amendments/synthetic/report.json"
+    old = {"synthetic": "archived fit"}
+    digest = hashlib.sha256(json.dumps(old).encode()).hexdigest()
+    record = {"path": target, "sha256": digest, "synthetic_version": 1}
+    source_digest = hashlib.sha256(json.dumps(record).encode()).hexdigest()
+    embedded = dict(record)
+    if case == "wrong_source_digest":
+        source_digest = "0" * 64
+    elif case == "tampered_record":
+        embedded["synthetic_version"] = 2
+    elif case == "tampered_type":
+        embedded["synthetic_version"] = True
+    selection = {"preserved_h3": {source: {"sha256": source_digest, "record": embedded}}}
+    if case == "mixed_live_origin":
+        selection["live_reference"] = {"path": target, "sha256": digest}
+    elif case == "unverified_wrapper_reference":
+        selection["preserved_h3"][source]["extra"] = {"path": target, "sha256": digest}
+    contents = {
+        target: {"synthetic": "current fit"},
+        destination: old,
+        selection_path: selection,
+    }
+    if case not in {"missing_source", "uncommitted_source"}:
+        contents[source] = record
+    _commit_synthetic_records(synthetic_provenance_repo, contents)
+    if case == "historical_source":
+        _commit_synthetic_records(
+            synthetic_provenance_repo, {source: {"synthetic": "replacement report"}}
+        )
+    elif case == "uncommitted_source":
+        path = synthetic_provenance_repo / source
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(json.dumps(record).encode())
+    if case in {"verified_archive", "verified_retired_active"}:
+        test_recorded_hashes_match_reachable_git_blobs()
+    else:
+        with pytest.raises(AssertionError):
+            test_recorded_hashes_match_reachable_git_blobs()
+
+
 def test_recorded_hashes_match_reachable_git_blobs() -> None:
     _require_git_history()
     tracked = set(_git(ROOT, "ls-tree", "-r", "--name-only", "HEAD").decode().splitlines())
@@ -273,8 +437,8 @@ def test_recorded_hashes_match_reachable_git_blobs() -> None:
         values = [json.loads(line) for line in content.splitlines() if line.strip()] \
             if path.endswith(".jsonl") else [json.loads(content)]
         for value in values:
-            for pair in _references(value, tracked):
-                references.setdefault(pair, set()).add(path)
+            for target, digest, origin in _record_references(value, tracked, path):
+                references.setdefault((target, digest), set()).add(origin)
     assert references, "No tracked provenance references were collected"
     candidates = {
         (path, origin): _reference_paths(origin, path)
