@@ -4,11 +4,22 @@ The frozen specification is `configs/protocol.yaml`. Builds use local,
 hash-verified geoBoundaries pins and successful manifest-recorded FIRMS snapshots.
 They make no network requests and do not require a FIRMS key.
 
-There is no public frozen data archive yet. The local snapshot's
-[versioned release format](../datasets/README.md#versioned-data-release) defines archive
-contents, exclusions and partial reproduction capabilities. The original retrospective
-comparison adds CHIRPS rainfall; later vegetation and land-cover tables follow their
-registered and amended protocols. See [covariate availability](covariates.md).
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
+the benchmark-data, reproduction-artifacts and raw-inputs archives described in
+[the release format](../datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary,
+member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
+and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
+native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
+prediction-based recalculation and raw-input rebuilding remain partially supported.
+
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
+
+The original retrospective comparison adds CHIRPS rainfall; later vegetation and
+land-cover tables follow their registered and amended protocols. See
+[covariate availability](covariates.md).
 
 ```powershell
 uv sync --all-extras

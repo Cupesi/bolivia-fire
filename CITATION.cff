@@ -18,3 +18,15 @@ keywords:
   - VIIRS
   - weekly prediction
   - reproducible evaluation
+references:
+  - type: data
+    authors:
+      - given-names: "Victor Hugo"
+        family-names: "Cuellar Flores"
+    title: "Bolivia Fire benchmark data and reproduction artifacts"
+    version: "0.1.0"
+    year: 2026
+    doi: "10.5281/zenodo.23895316"
+    publisher:
+      name: Zenodo
+    license: CC-BY-4.0

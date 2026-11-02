@@ -142,10 +142,19 @@ binarios de modelos y archivos Parquet de predicciones son artefactos generados 
 Los manifiestos registran la identidad de las descargas y sus hashes, sin las observaciones
 originales. Consulte [almacenamiento y reconstrucción](datasets/README.md).
 
-Todavía no existe un archivo público congelado de los datos. El
-[formato de la versión de datos](datasets/README.md#versioned-data-release) define archivos
-separados de datos de evaluación, artefactos de reproducción e insumos originales, con su
-contenido, exclusiones y límites de reproducción.
+La versión 0.1.0 del conjunto de datos está disponible en
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). El registro incluye
+los tres archivos descritos en [el formato de la versión](datasets/README.md#versioned-data-release), además del README,
+las notas de licencia, el diccionario de datos, el inventario y las sumas SHA-256.
+Se excluyen los pronósticos operativos, los derivados para servir la aplicación y las
+cachés regenerables; no se incluyen los rásteres globales CHIRPS, los gránulos MODIS
+HDF ni los mapas nativos MapBiomas de 30 m. La reutilización está respaldada; el
+recálculo desde predicciones y la reconstrucción desde insumos originales siguen
+parcialmente respaldados, con los límites allí documentados.
+
+DOI de concepto (todas las versiones):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315).
+Cite el DOI de la versión 0.1.0 indicado arriba para identificar estos archivos exactos.
 
 ## Limitaciones
 
@@ -177,5 +186,18 @@ cite Climate Hazards Center y CHIRPS3 Data Repository (2025), la desagregación 
 la asignación a centros de celda y la agregación de precipitación antecedente.
 Use [CITATION.cff](CITATION.cff) para citar el software y conserve las atribuciones de las fuentes
 al redistribuir datos derivados.
+
+### Cómo citar
+
+Conjunto de datos: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and
+reproduction artifacts*, versión 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
+benchmark software*, versión 0.1.0.
+[Repositorio](https://github.com/Cupesi/bolivia-fire);
+[versión v0.1.0](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+
+Cite el conjunto de datos y el software por separado y conserve las atribuciones de
+las fuentes. Esta versión cita el software mediante las URL del repositorio y de la versión.
 
 Bolivia Fire es mantenido por Victor Hugo Cuellar Flores y alojado por la organización de código abierto Cupesí Labs.

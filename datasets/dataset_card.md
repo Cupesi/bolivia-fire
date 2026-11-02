@@ -136,11 +136,35 @@ its exact inputs. The [storage guide](README.md) explains snapshot versioning.
 
 Compiled and derived release data use CC BY 4.0; upstream inputs retain their source
 terms. Code uses [MIT](../LICENSE). Preserve attribution, processing descriptions,
-manifests and hashes when redistributing. Raw and processed data are not bundled in Git,
-and [data access](../README.md#data-access) records publication status and download links.
+manifests and hashes when redistributing. Retained raw inputs and processed data are
+available in the versioned dataset record rather than bundled in Git.
 
-The [versioned release format](README.md#versioned-data-release) defines the three archive
-groups, supported dataset reuse, partial prediction-based recalculation and partial
-raw-input rebuilding. [Reproduction limits](../docs/reproduction.md#release-reproduction-limits)
-record absent prediction families, historical hash discrepancies and the test-access policy.
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
+the benchmark-data, reproduction-artifacts and raw-inputs archives described in
+[the release format](README.md#versioned-data-release), plus the README, licence notices, data dictionary,
+member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
+and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
+native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
+prediction-based recalculation and raw-input rebuilding remain partially supported.
+
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
+
+[Reproduction limits](../docs/reproduction.md#release-reproduction-limits) record absent
+prediction families, historical hash discrepancies and the test-access policy.
 Cite the software using [CITATION.cff](../CITATION.cff) and credit each data source.
+
+## How to cite
+
+Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction
+artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
+benchmark software*, version 0.1.0.
+[Repository](https://github.com/Cupesi/bolivia-fire);
+[v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+
+Cite the dataset and software separately and retain upstream source attributions.
+This version cites the software through its repository and release URLs.

@@ -128,9 +128,18 @@ snapshots, intermediate bundles, processed datasets, model binaries and predicti
 are local generated artifacts. Manifests record retrieval identity and hashes, without the source
 observations. See [dataset storage and rebuilding](datasets/README.md).
 
-There is no public frozen data archive yet. The [versioned release format](datasets/README.md#versioned-data-release)
-defines separate benchmark-data, reproduction-artifacts and raw-inputs archives, their contents,
-exclusions and reproduction limits.
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
+the benchmark-data, reproduction-artifacts and raw-inputs archives described in
+[the release format](datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary,
+member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
+and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
+native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
+prediction-based recalculation and raw-input rebuilding remain partially supported.
+
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
 
 ## Limitations
 
@@ -160,5 +169,18 @@ with the provider's stated waiver; credit Climate Hazards Center and CHIRPS3 Dat
 (2025), ERA5 disaggregation, cell-center mapping and antecedent-rainfall aggregation.
 Use [CITATION.cff](CITATION.cff) to cite the software and retain source attributions when
 redistributing derived data.
+
+### How to cite
+
+Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction
+artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
+benchmark software*, version 0.1.0.
+[Repository](https://github.com/Cupesi/bolivia-fire);
+[v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+
+Cite the dataset and software separately and retain upstream source attributions.
+This version cites the software through its repository and release URLs.
 
 Bolivia Fire is maintained by Victor Hugo Cuellar Flores and hosted by the Cupesí Labs open-source organization.

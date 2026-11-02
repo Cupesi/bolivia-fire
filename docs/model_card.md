@@ -181,11 +181,21 @@ ignitions, individual fire events, causes or damages.
 
 ## Licences
 
-Model binaries, calibrators and saved predictions are local artifacts; there is no public
-frozen data archive yet. The [versioned release format](../datasets/README.md#versioned-data-release)
-describes their reproduction-artifacts group and the limits of prediction-based recalculation.
-See [reproduction](reproduction.md#release-reproduction-limits) for producing revisions,
-historical registry requirements and trusted-deserialization precautions.
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
+the benchmark-data, reproduction-artifacts and raw-inputs archives described in
+[the release format](../datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary,
+member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
+and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
+native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
+prediction-based recalculation and raw-input rebuilding remain partially supported.
+
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
+
+See [reproduction](reproduction.md#release-reproduction-limits) for model-producing
+revisions, historical registry requirements and trusted-deserialization precautions.
 
 Code is [MIT licensed](../LICENSE). Compiled and derived release data use CC BY 4.0;
 source observations retain their own terms:

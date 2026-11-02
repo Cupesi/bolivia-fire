@@ -72,8 +72,12 @@ processing descriptions with redistributed derivatives; never redistribute keys.
 
 ## Versioned data release
 
-Version 0.1.0 packages the retained research snapshot. See
-[data access](../README.md#data-access) for publication status and download links.
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316).
+
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
 
 The format uses three independently extractable ZIP64 archives with repository-relative paths:
 
@@ -106,3 +110,16 @@ vectors under `artifacts/.cache/comparison/` are reproduction evidence and are i
 Use family-specific producing revisions and historical `datasets/sources.yaml` bytes;
 the current merged registry cannot satisfy every frozen experiment hash. See
 [reproduction limits and discrepancies](../docs/reproduction.md#release-reproduction-limits).
+
+## How to cite
+
+Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction
+artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
+benchmark software*, version 0.1.0.
+[Repository](https://github.com/Cupesi/bolivia-fire);
+[v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+
+Cite the dataset and software separately and retain upstream source attributions.
+This version cites the software through its repository and release URLs.

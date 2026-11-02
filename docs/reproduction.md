@@ -18,13 +18,21 @@ the pipeline and require the named local artifacts and credentials.
 
 ## Release reproduction limits
 
-There is no public frozen data archive yet. The local snapshot follows the
-[versioned data-release format](../datasets/README.md#versioned-data-release), which
-defines the benchmark-data, reproduction-artifacts and raw-inputs archives.
+Dataset version 0.1.0 is available at
+[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
+the benchmark-data, reproduction-artifacts and raw-inputs archives described in
+[the release format](../datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary,
+member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
+and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
+native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
+prediction-based recalculation and raw-input rebuilding remain partially supported.
 
-Reuse is supported; recalculation from saved predictions and rebuilding from raw inputs
-are partially supported. Strict primary validation/test exports and alternative-learner
-cached vectors are retained. Rainfall, sensitivity and H3/H4/H5 per-row prediction exports
+Concept DOI (all versions):
+[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
+version DOI above to identify these exact files.
+
+Strict primary validation/test exports and alternative-learner cached vectors are
+retained. Rainfall, sensitivity and H3/H4/H5 per-row prediction exports
 and standalone scored-row masks are absent. Their fitted models and result records are
 available, but regenerating predictions requires the logged test-access procedure below.
 Recomputing any final-test metric is a logged opening under
@@ -52,6 +60,19 @@ Global CHIRPS rasters were deleted after native-window extraction. MODIS HDF gra
 and native MapBiomas 30 m maps are absent; MapBiomas re-extraction requires an Earth
 Engine account. See [covariate availability](covariates.md) for retained products.
 Only load trusted model files: joblib/pickle deserialization can execute arbitrary code.
+
+## How to cite
+
+Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction
+artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
+benchmark software*, version 0.1.0.
+[Repository](https://github.com/Cupesi/bolivia-fire);
+[v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+
+Cite the dataset and software separately and retain upstream source attributions.
+This version cites the software through its repository and release URLs.
 
 ## 1. Install and configure access
 
