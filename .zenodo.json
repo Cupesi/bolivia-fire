@@ -1,0 +1,19 @@
+{
+  "upload_type": "software",
+  "title": "Bolivia Fire: weekly VIIRS fire-detection benchmark software",
+  "creators": [
+    {
+      "name": "Cuellar Flores, Victor Hugo"
+    }
+  ],
+  "description": "Weekly satellite fire-detection dataset construction and evaluation for Bolivia, with validation-selected probability models, calibration, geographic holdouts, environmental covariates and recorded final-test access.",
+  "license": "mit",
+  "version": "0.1.0",
+  "keywords": [
+    "Bolivia",
+    "satellite fire detections",
+    "VIIRS",
+    "weekly prediction",
+    "reproducible evaluation"
+  ]
+}

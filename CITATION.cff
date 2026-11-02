@@ -1,9 +1,20 @@
 cff-version: 1.2.0
+type: software
 message: "Please cite this software and attribute the source datasets when using Bolivia Fire."
-title: "Bolivia Fire"
+title: "Bolivia Fire: weekly VIIRS fire-detection benchmark software"
 authors:
   - given-names: "Victor Hugo"
     family-names: "Cuellar Flores"
 repository-code: "https://github.com/Cupesi/bolivia-fire"
 license: MIT
 version: "0.1.0"
+abstract: >-
+  Weekly satellite fire-detection dataset construction and evaluation for Bolivia,
+  with validation-selected probability models, calibration, geographic holdouts,
+  environmental covariates and recorded final-test access.
+keywords:
+  - Bolivia
+  - satellite fire detections
+  - VIIRS
+  - weekly prediction
+  - reproducible evaluation
