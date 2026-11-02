@@ -2,3 +2,9 @@
 *.png binary
 *.pdf binary
 *.parquet binary
+artifacts/** -text
+configs/** -text
+datasets/** -text
+docs/** -text
+src/** -text
+tests/** -text
