@@ -20,8 +20,15 @@ cell areas. The two methods can differ at borders and in degree-versus-geodesic
 weighting; see [covariate notes](../../docs/covariates.md).
 
 Anonymous raster access returned HTTP 403. Authenticated Earth Engine access
-was verified on 2026-11-01 for the official public Collection 4 asset, and real
-2012 samples and partial raster tiles were downloaded directly to local storage.
-The polygon method exceeded the workstream's fixed 30 EECU-hour planning cap.
-The raster pilot stopped when a request's EECU profile was unavailable; its
-partial outputs do not establish national annual feature availability.
+was verified on 2026-11-01 for the official public Collection 4 asset.
+National maps for 2012-2025 were downloaded directly to local files, with
+project-level Cloud Monitoring as the primary usage ledger. Request profiles
+remain secondary evidence. The full 2012 raster passed the predeclared 0.01
+absolute class-fraction and coverage tolerance against 1,000 polygon cells.
+Per-year hashes, measured usage, collection metadata and the proposed shared
+source-registry update are in `datasets/manifests/mapbiomas_source.jsonl`.
+Partial files remain historical evidence and do not establish feature availability.
+
+Collection 4 was released on 2026-10-01 and uses temporal rules involving
+following years and filtering across the series. Derived issue-level features
+are retrospective: a Y-1 map reference does not establish historical availability.
