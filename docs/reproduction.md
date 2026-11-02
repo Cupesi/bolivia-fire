@@ -211,6 +211,9 @@ hashes precede resume passes that rewrote retrieval timestamps; the test checks
 their task identities, file counts and total bytes against committed manifests.
 Intermediate registry states used by E6 are recorded in history. The exact
 exception pairs and their reasons are retained in the test.
+For records within an `artifacts/evaluation/extension_archive_attempt_*/`
+directory, references to top-level evaluation files may also match historical
+blobs in that same archive or its `retired_active/` subdirectory.
 
 ## Recorded-artifact notebooks
 
