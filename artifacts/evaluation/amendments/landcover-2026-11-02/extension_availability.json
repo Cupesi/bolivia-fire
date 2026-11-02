@@ -1,0 +1,18 @@
+{
+  "registration_sha256": "8e8dcc14a416e02dd2f0804355592a4a55a72b5be76a3a235759b7697328f85a",
+  "amendment_registration_sha256": "ddb6695e7882abf4885aa4cb9e2dc1d755bfd296495551a3cc76776cfb7f015d",
+  "input_plan": "artifacts/evaluation/amendments/landcover-2026-11-02/extension_inputs.json",
+  "input_plan_sha256": "238ee2e3693b78fb9fa0e4f5ca110c90ecf1045cd5390b852118578566fa428d",
+  "available_runs": [
+    "retrospective_land_cover",
+    "retrospective_land_cover_geo",
+    "retrospective_vegetation_geo_lag16",
+    "retrospective_vegetation_geo_lag32",
+    "retrospective_vegetation_lag16",
+    "retrospective_vegetation_lag32",
+    "retrospective_vegetation_land_cover_geo_lag16",
+    "retrospective_vegetation_land_cover_geo_lag32",
+    "retrospective_vegetation_land_cover_lag16",
+    "retrospective_vegetation_land_cover_lag32"
+  ]
+}
