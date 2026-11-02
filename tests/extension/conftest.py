@@ -63,3 +63,16 @@ def refresh_synthetic_registration(paths, blobs):
     write_json(path, entry)
     for name in blobs:
         blobs[name] = (paths.root / name).read_bytes()
+
+
+def commit_synthetic_amendment(paths, blobs):
+    from bolivia_fire.extension.amendment import AMENDMENT_REGISTRATION, register_amendment
+
+    for name in (
+        "configs/extension_amendment_landcover.yaml",
+        "docs/extension-landcover-amendment.md",
+    ):
+        shutil.copyfile(REPO_ROOT / name, paths.root / name)
+        blobs[name] = (paths.root / name).read_bytes()
+    register_amendment(paths)
+    blobs[AMENDMENT_REGISTRATION] = (paths.root / AMENDMENT_REGISTRATION).read_bytes()

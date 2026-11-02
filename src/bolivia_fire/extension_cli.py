@@ -21,6 +21,12 @@ def run(args: argparse.Namespace, paths: Paths) -> int:
             )
         )
         return 0
+    if args.extension_stage == "register-landcover-amendment":
+        from bolivia_fire.extension.amendment import register_amendment
+
+        record = register_amendment(paths)
+        print(json.dumps({"status": "prepared_pending_record_commit", **record}))
+        return 0
     from bolivia_fire.extension.runner import Extension
 
     experiment = Extension(paths, args.inputs)
@@ -54,10 +60,10 @@ def register(subparsers: argparse._SubParsersAction) -> None:
         dest="extension_stage",
         required=True,
     )
-    for name in ("guard", "select", "score-test", "confirm"):
+    for name in ("guard", "register-landcover-amendment", "select", "score-test", "confirm"):
         parser = commands.add_parser(name)
         parser.set_defaults(pipeline_handler=run)
-        if name != "guard":
+        if name not in {"guard", "register-landcover-amendment"}:
             parser.add_argument("--inputs", required=True, help="Frozen label-free input plan JSON")
         if name == "score-test":
             parser.add_argument("--open-test", action="store_true")

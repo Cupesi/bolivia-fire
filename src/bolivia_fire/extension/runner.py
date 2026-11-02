@@ -3,6 +3,7 @@ from __future__ import annotations
 import gc
 import os
 import time
+from pathlib import Path
 from typing import Any
 
 import joblib
@@ -22,6 +23,7 @@ from bolivia_fire.extension.access import (
     now,
     open_batch,
 )
+from bolivia_fire.extension.amendment import amendment_provenance, preserved_h3
 from bolivia_fire.extension.inference import (
     common_support,
     compare_lags,
@@ -71,8 +73,23 @@ class Extension:
         self.comparator_hashes: dict[str, str] = {}
         self.comparator_training_counts: dict[str, Any] = {}
         self.models = paths.root / "artifacts/models/extension"
-        self.selection_path = paths.root / "artifacts/evaluation/extension_selection.json"
+        if self.amendment:
+            self.models /= self.amendment["amendment_id"]
+        self.selection_path = self.evaluation_directory / "extension_selection.json"
         self.tick = time.perf_counter()
+
+    @property
+    def amendment(self) -> dict[str, Any] | None:
+        return getattr(self.source, "amendment", None)
+
+    @property
+    def evaluation_directory(self) -> Path:
+        directory = self.paths.root / "artifacts/evaluation"
+        return (
+            directory / "amendments" / self.amendment["amendment_id"]
+            if self.amendment
+            else directory
+        )
 
     def close(self) -> None:
         self.source.close()
@@ -80,6 +97,7 @@ class Extension:
     def metadata(self) -> dict[str, Any]:
         return {
             **self.registration.provenance(),
+            **amendment_provenance(self.amendment),
             "timestamp_utc": now(),
             "seed": 7,
             "input_hashes": self.source.hashes,
@@ -93,6 +111,8 @@ class Extension:
         }
 
     def _resources(self, stage: str) -> Resources:
+        if self.amendment:
+            stage = f"{self.amendment['amendment_id']}_{stage}"
         return Resources(
             self.registration,
             stage,
@@ -128,6 +148,7 @@ class Extension:
             run
             for run in self.runs
             if run["geography"] == geography
+            and (not self.amendment or run["hypothesis"] in {"H4", "H5"})
             and self.source.available[run["run_id"]]["status"] == "evaluated_eligible"
         ]
 
@@ -162,6 +183,14 @@ class Extension:
         try:
             resources.check(projected_ram=sum(data.x.nbytes * 2 for data in panels.values()))
             primary = [run["run_id"] for run in active if run["availability_lag_days"] != 32]
+            if self.amendment:
+                families, support = {}, {}
+                for run in active:
+                    name = run["run_id"]
+                    families[name], support[name] = common_support(
+                        {key: panels[key] for key in [name, *comparator_names]}
+                    )
+                return families, support
             aligned, counts = common_support(
                 {name: panels[name] for name in primary + comparator_names}
             )
@@ -194,7 +223,7 @@ class Extension:
         support_record = {
             key: value for key, value in support.items() if key != "calibration_panels"
         }
-        destination = self.paths.root / f"artifacts/evaluation/extension_fit_{identity}.json"
+        destination = self.evaluation_directory / f"extension_fit_{identity}.json"
         if destination.exists():
             previous = read_json(destination)
             if previous.get("implementation_hashes") != implementation_hashes():
@@ -271,7 +300,7 @@ class Extension:
             if best_key is None or key < best_key:
                 best, best_key = candidate, key
             atomic_json(
-                self.paths.root / f"artifacts/evaluation/extension_checkpoint_{identity}.json",
+                self.evaluation_directory / f"extension_checkpoint_{identity}.json",
                 {
                     "run_id": identity,
                     "stage": "search",
@@ -411,6 +440,8 @@ class Extension:
         with FileLock(str(self.selection_path.with_suffix(".lock"))):
             if self.selection_path.exists():
                 raise ValueError("Extension selection is already frozen")
+            if hasattr(self.source, "freeze"):
+                self.source.freeze()
             self._load_comparators()
             reports = {
                 run["run_id"]: {"run": run, **self.source.available[run["run_id"]]}
@@ -426,6 +457,23 @@ class Extension:
                 hashes.update(report.get("artifact_hashes", {}))
             hypotheses = {}
             for hypothesis in ("H3", "H4", "H5"):
+                if self.amendment and hypothesis == "H3":
+                    hypotheses["H3"] = {"status": "preserved", "reason": "see_prior_h3_records"}
+                    for evidence in preserved_h3(self.registration, self.amendment).values():
+                        previous = evidence["record"]
+                        decision_record = previous.get(
+                            "hypotheses", previous.get("primary_hypotheses", {})
+                        ).get("H3")
+                        run = previous.get("run", {})
+                        if (
+                            run.get("hypothesis") == "H3"
+                            and run.get("geography") == "temporal"
+                            and run.get("availability_lag_days") == 16
+                        ):
+                            decision_record = previous.get("validation", {}).get("decision")
+                        if decision_record:
+                            hypotheses["H3"] = decision_record
+                    continue
                 primary = next(
                     run
                     for run in self.runs
@@ -449,6 +497,8 @@ class Extension:
                 "frozen_at_utc": now(),
                 **self.metadata(),
             }
+            if self.amendment:
+                report["preserved_h3"] = preserved_h3(self.registration, self.amendment)
             atomic_json(self.selection_path, report)
             atomic_json(
                 self.selection_path.with_name("extension_selection_sha256.json"),
@@ -531,7 +581,7 @@ class Extension:
                         if frozen["runs"][name]["run"]["availability_lag_days"] != 32
                     ]
                     finite = None
-                    for identity in primary:
+                    for identity in [] if self.amendment else primary:
                         data, p = predictions[identity]
                         mask = np.isfinite(p)
                         for name in (
@@ -555,7 +605,7 @@ class Extension:
                         )
                         mask = (
                             finite
-                            if identity in primary
+                            if identity in primary and not self.amendment
                             else np.isfinite(p) & np.isfinite(baseline) & np.isfinite(context)
                         )
                         indices = np.flatnonzero(mask)
@@ -626,6 +676,12 @@ class Extension:
             if scope == "confirmation":
                 result["hypotheses"] = {}
                 for hypothesis, validation in frozen["hypotheses"].items():
+                    if self.amendment and hypothesis == "H3":
+                        result["hypotheses"]["H3"] = {
+                            "validation": validation,
+                            "status": "preserved",
+                        }
+                        continue
                     identity = next(
                         run["run_id"]
                         for run in self.runs
@@ -644,10 +700,7 @@ class Extension:
                         and agreement["status"] == "adds_information",
                     }
             self.source.validate()
-            destination = (
-                self.paths.root
-                / f"artifacts/evaluation/extension_{scope}_{opening.identifier}.json"
-            )
+            destination = self.evaluation_directory / f"extension_{scope}_{opening.identifier}.json"
             atomic_json(destination, result)
             finish_opening(self.registration, opening, "completed")
             return result

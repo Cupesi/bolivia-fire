@@ -9,7 +9,7 @@ import psutil
 import pyarrow as pa
 import pytest
 import yaml
-from conftest import refresh_synthetic_registration
+from conftest import commit_synthetic_amendment, refresh_synthetic_registration, write_json
 from sklearn.dummy import DummyClassifier
 
 from bolivia_fire.evaluation.artifacts import save_candidate
@@ -17,6 +17,189 @@ from bolivia_fire.extension.runner import Extension
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.models.data import PanelData
 from bolivia_fire.models.estimators import Candidate
+
+
+def test_synthetic_amended_fit_restarts_and_preserves_base_metrics(
+    synthetic_registration, monkeypatch
+):
+    from bolivia_fire.extension.access import check_hashes
+    from bolivia_fire.extension.amendment import (
+        authorize_availability,
+        metric_artifacts,
+        verify_amendment,
+    )
+    from bolivia_fire.extension.registration import verify_registration
+
+    paths, blobs = synthetic_registration
+    directory = paths.root / "artifacts/evaluation"
+    h3 = "retrospective_vegetation_lag16"
+    identity = "retrospective_land_cover"
+    write_json(
+        directory / f"extension_checkpoint_{h3}.json",
+        {"run_id": h3, "completed_configurations": 1, "results": [{"average_precision": 0.4}]},
+    )
+    write_json(
+        directory / "extension_selection.json",
+        {
+            "runs": {h3: {"status": "evaluated_eligible"}},
+            "hypotheses": {"H3": {"status": "inconclusive"}},
+        },
+    )
+    commit_synthetic_amendment(paths, blobs)
+    registration = verify_registration(paths)
+    baseline = metric_artifacts(registration)
+    base_bytes = {path: path.read_bytes() for path in directory.glob("*.json")}
+
+    class SyntheticAmendedInputs:
+        input_bytes = 0
+
+        def __init__(self, registration, plan_path):
+            self.amendment = authorize_availability(registration, {identity, h3})
+            self.hashes = {
+                "configs/experiments.yaml": sha256_file(paths.root / "configs/experiments.yaml"),
+                **self.amendment["prior_artifact_hashes"],
+            }
+            self.available = {
+                run["run_id"]: {
+                    "status": "evaluated_eligible"
+                    if run["run_id"] in {identity, h3}
+                    else "not_evaluated"
+                }
+                for run in registration.runs
+            }
+
+        def validate(self):
+            check_hashes(registration, self.hashes)
+            verify_amendment(registration)
+
+        def close(self):
+            pass
+
+        def release(self, *panels):
+            pass
+
+        def load(self, run, stage, resources, **options):
+            assert run["run_id"] != h3, "Preserved H3 rows must never be reloaded"
+            names = run["ordered_features"]
+            n = 32
+            year = {"train": 2013, "val_select": 2021, "val_calib": 2022, "test": 2024}[stage]
+            return PanelData(
+                np.random.default_rng(4).normal(size=(n, len(names))).astype(np.float32),
+                np.arange(n) % 2,
+                pa.table(
+                    {
+                        "cell_id": np.arange(n),
+                        "issue_date": [f"{year}-01-07"] * n,
+                        "national_area_km2": np.ones(n),
+                        "block_id": np.arange(n) % 4,
+                    }
+                ),
+                names,
+                {"eligible": n},
+            )
+
+        plan_support = load
+
+    def synthetic_comparators(experiment):
+        for name, entry in experiment.contract["comparators"].items():
+            experiment.comparators[name] = Candidate(
+                "synthetic",
+                DummyClassifier().fit(np.zeros((4, len(entry["features"]))), [0, 1, 0, 1]),
+                entry["features"],
+                calibration_status="fitted",
+            )
+
+    monkeypatch.setattr("bolivia_fire.extension.runner.FrozenInputs", SyntheticAmendedInputs)
+    monkeypatch.setattr(Extension, "_load_comparators", synthetic_comparators)
+    first = Extension(paths, "synthetic_plan.json")
+    first.configurations = first.configurations[:1]
+    first.contract["estimation"]["search"].update(boosting_rounds=5, early_stopping_rounds=2)
+    select_geography = first._select_geography
+
+    def synthetic_interruption(geography, reports):
+        select_geography(geography, reports)
+        raise RuntimeError("synthetic interruption after completed fit")
+
+    monkeypatch.setattr(first, "_select_geography", synthetic_interruption)
+    try:
+        with pytest.raises(RuntimeError, match="synthetic interruption"):
+            first.select()
+        checkpoint = first.evaluation_directory / f"extension_checkpoint_{identity}.json"
+        assert checkpoint.is_file()
+        assert json.loads(checkpoint.read_text("utf-8"))["completed_configurations"] == 1
+        assert not (directory / checkpoint.name).exists()
+    finally:
+        first.close()
+    assert metric_artifacts(registration) == baseline
+    assert verify_amendment(registration)
+
+    restarted = Extension(paths, "synthetic_plan.json")
+    restarted.configurations = restarted.configurations[:1]
+    monkeypatch.setattr(
+        "bolivia_fire.extension.runner.lgb.train",
+        lambda *args, **kwargs: pytest.fail("A completed amended fit must be resumed"),
+    )
+    try:
+        selected = restarted.select()
+        assert selected["runs"][identity]["status"] == "evaluated_eligible"
+        assert restarted._frozen()["selection_sha256"] == sha256_file(restarted.selection_path)
+        with restarted._resources("synthetic_scoring_preflight") as resources:
+            planned, _ = restarted._family("temporal", "test", resources, labels=False)
+        assert set(planned) == {identity}
+        assert restarted.selection_path.parent == checkpoint.parent
+        assert verify_amendment(restarted.registration)
+        assert metric_artifacts(restarted.registration) == baseline
+        assert all(path.read_bytes() == data for path, data in base_bytes.items())
+    finally:
+        restarted.close()
+
+
+def test_synthetic_amended_families_preserve_h3_and_use_separate_common_rows(
+    synthetic_registration,
+):
+    from types import SimpleNamespace
+
+    from bolivia_fire.extension.registration import verify_registration
+
+    paths, _ = synthetic_registration
+    registration = verify_registration(paths)
+    extension = Extension.__new__(Extension)
+    extension.registration = registration
+    extension.runs = registration.runs
+    extension.contract = registration.contract
+    calls = []
+
+    def synthetic_load(run, stage, resources, **kwargs):
+        identity = run["run_id"]
+        calls.append(identity)
+        if "vegetation" in identity and "land_cover" not in identity:
+            pytest.fail("Amended execution attempted to reload preserved H3 rows")
+        cells = [1, 2] if "vegetation_land_cover" in identity else [1, 2, 3]
+        return PanelData(
+            np.ones((len(cells), 1)),
+            np.zeros(len(cells)),
+            pa.table({"cell_id": cells, "issue_date": ["2021-01-04"] * len(cells)}),
+            ["synthetic"],
+            {"eligible": len(cells)},
+        )
+
+    extension.source = SimpleNamespace(
+        amendment={"amendment_id": "synthetic-amendment"},
+        available={run["run_id"]: {"status": "evaluated_eligible"} for run in extension.runs},
+        load=synthetic_load,
+        release=lambda *args: None,
+    )
+    families, _ = extension._family(
+        "temporal",
+        "val_select",
+        SimpleNamespace(check=lambda **kwargs: None),
+    )
+    assert not any("vegetation_lag" in identity for identity in calls)
+    assert families["retrospective_land_cover"]["retrospective_land_cover"].column(
+        "cell_id"
+    ).tolist() == [1, 2, 3]
+    combined = "retrospective_vegetation_land_cover_lag16"
+    assert families[combined][combined].column("cell_id").tolist() == [1, 2]
 
 
 @pytest.mark.parametrize(

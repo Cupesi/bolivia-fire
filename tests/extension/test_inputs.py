@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import datetime
 from pathlib import Path
@@ -8,7 +9,7 @@ import numpy as np
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
-from conftest import write_json
+from conftest import commit_synthetic_amendment, write_json
 
 from bolivia_fire.covariates.chirps import PRODUCT, REFERENCE_RULE
 from bolivia_fire.extension.inputs import FrozenInputs
@@ -222,20 +223,7 @@ def test_synthetic_annual_panels_skip_empty_partition_batches(
         source.close()
 
 
-@pytest.mark.parametrize(
-    "fractions",
-    [
-        [0.2] * 5,
-        [
-            0.3275774419307709,
-            0.39724981784820557,
-            0.16077028214931488,
-            0.05955145135521889,
-            0.054851967841386795,
-        ],
-    ],
-)
-def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inputs, fractions):
+def add_synthetic_landcover(synthetic_inputs, fractions):
     reg, plan_path = synthetic_inputs
     plan_file = reg.paths.root / plan_path
     plan = json.loads(plan_file.read_text("utf-8"))
@@ -246,11 +234,74 @@ def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inpu
     land = reg.paths.root / "datasets/processed/vegetation/synthetic_land_cover.parquet"
     dates = [datetime(2013, 1, 7), datetime(2021, 1, 4), datetime(2022, 1, 3), datetime(2024, 1, 1)]
     fields = [name for name in combined["ordered_features"] if name.startswith("mapbiomas_")]
+    source_name = "datasets/processed/landcover/source.json"
+    raster_name = "datasets/manifests/mapbiomas_raster.jsonl"
+    source_hashes = {
+        "configs/extension_vegetation.yaml": reg.record["contract_sha256"],
+        "datasets/processed/cells.parquet": plan["input_hashes"][
+            "datasets/processed/cells.parquet"
+        ],
+    }
+    identities = []
+    for year in (2012, 2020, 2021, 2023):
+        name = f"datasets/processed/landcover/mapbiomas_{year}.parquet"
+        path = reg.paths.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"synthetic frozen annual map")
+        source_hashes[name] = sha256_file(path)
+        identities.append(
+            {
+                "year": year,
+                "collection": "MapBiomas Bolivia Collection 4",
+                "asset": reg.contract["land_cover"]["access"]["gee_route"]["asset"],
+                "classification_band": f"classification_{year}",
+                "output": name,
+                "output_sha256": source_hashes[name],
+            }
+        )
+    raster = reg.paths.root / raster_name
+    raster.write_text("\n".join(json.dumps(row) for row in identities), encoding="utf-8")
+    source_hashes[raster_name] = sha256_file(raster)
+    snapshot = hashlib.sha256(json.dumps(source_hashes, sort_keys=True).encode()).hexdigest()
+    import yaml
+
+    from bolivia_fire.config import REPO_ROOT
+
+    amendment = yaml.safe_load(
+        (REPO_ROOT / "configs/extension_amendment_landcover.yaml").read_text()
+    )
+    acceptance = amendment["estimator"]["acceptance_evidence"]
+    source = {
+        "collection": 4,
+        "no_labels_accessed": True,
+        "no_training_selection_or_scoring": True,
+        "extension_contract_sha256": reg.record["contract_sha256"],
+        "land_cover_snapshot_sha256": snapshot,
+        "input_hashes": source_hashes,
+        "map_years": [2012, 2020, 2021, 2023],
+        "polygon_pilot_validation": {
+            k: acceptance[k]
+            for k in (
+                "cells",
+                "fraction_max_absolute_error",
+                "coverage_max_absolute_error",
+                "absolute_tolerance",
+                "passed",
+            )
+        },
+    }
+    write_json(reg.paths.root / source_name, source)
+    plan["input_hashes"].update(source_hashes)
+    plan["input_hashes"][source_name] = sha256_file(reg.paths.root / source_name)
     pq.write_table(
         pa.table(
             {
                 "cell_id": [1, 2, 3, 4],
                 "issue_date": dates,
+                "land_cover_nominal_map_year": [date.year - 1 for date in dates],
+                "land_cover_map_year": [date.year - 1 for date in dates],
+                "land_cover_reference_age_years": [1] * 4,
+                "land_cover_mapped_area_fraction": [0.99] * 4,
                 **{
                     name: pa.array([fraction] * 4, type=pa.float32())
                     for name, fraction in zip(fields, fractions, strict=True)
@@ -259,7 +310,7 @@ def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inpu
         ).replace_schema_metadata(
             {
                 b"extension_contract_sha256": reg.record["contract_sha256"].encode(),
-                b"land_cover_snapshot_sha256": b"synthetic land-cover fingerprint",
+                b"land_cover_snapshot_sha256": snapshot.encode(),
             }
         ),
         land,
@@ -278,6 +329,8 @@ def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inpu
     )
     audit["checks"].update(zero_cost_mapbiomas_verification=True, land_cover_features=True)
     audit["input_hashes"][land_name] = sha256_file(land)
+    audit["input_hashes"].update(source_hashes)
+    audit["input_hashes"][source_name] = plan["input_hashes"][source_name]
     write_json(reg.paths.root / audit_name, audit)
     plan["input_hashes"][audit_name] = sha256_file(reg.paths.root / audit_name)
     plan["runs"][combined["run_id"]] = {
@@ -286,6 +339,30 @@ def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inpu
         "feature_files": [*plan["runs"][vegetation["run_id"]]["feature_files"], land_name],
     }
     write_json(plan_file, plan)
+    return combined, land_name
+
+
+@pytest.mark.parametrize(
+    "fractions",
+    [
+        [0.2] * 5,
+        [
+            0.3275774419307709,
+            0.39724981784820557,
+            0.16077028214931488,
+            0.05955145135521889,
+            0.054851967841386795,
+        ],
+    ],
+)
+def test_synthetic_combined_variant_joins_separate_audited_groups(
+    synthetic_inputs,
+    synthetic_registration,
+    fractions,
+):
+    reg, plan_path = synthetic_inputs
+    commit_synthetic_amendment(*synthetic_registration)
+    combined, _ = add_synthetic_landcover(synthetic_inputs, fractions)
     source = FrozenInputs(reg, plan_path)
     try:
         with Resources(reg, "synthetic_combined") as resources:
@@ -297,6 +374,194 @@ def test_synthetic_combined_variant_joins_separate_audited_groups(synthetic_inpu
         assert source.available["retrospective_land_cover"]["status"] == "not_evaluated"
     finally:
         source.close()
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "absent_source",
+        "snapshot",
+        "grid",
+        "collection",
+        "annual_identity",
+        "evidence",
+        "missing_provenance",
+        "missing_snapshot_metadata",
+        "mismatched_snapshot_metadata",
+        "future",
+        "stale",
+        "not_latest",
+        "age",
+        "nominal",
+        "coverage",
+    ],
+)
+def test_synthetic_combined_landcover_admission_refusals(
+    synthetic_inputs,
+    synthetic_registration,
+    fault,
+):
+    reg, plan_path = synthetic_inputs
+    commit_synthetic_amendment(*synthetic_registration)
+    run, land_name = add_synthetic_landcover(synthetic_inputs, [0.2] * 5)
+    plan_file = reg.paths.root / plan_path
+    plan = json.loads(plan_file.read_text("utf-8"))
+    source_name = "datasets/processed/landcover/source.json"
+    source_file = reg.paths.root / source_name
+    source = json.loads(source_file.read_text("utf-8"))
+    if fault == "absent_source":
+        del plan["input_hashes"][source_name]
+    elif fault in {"snapshot", "grid", "collection", "annual_identity", "evidence"}:
+        if fault == "snapshot":
+            source["land_cover_snapshot_sha256"] = "f" * 64
+        elif fault == "grid":
+            source["input_hashes"]["datasets/processed/cells.parquet"] = "f" * 64
+        elif fault == "collection":
+            source["collection"] = 3
+        elif fault == "evidence":
+            source["polygon_pilot_validation"]["fraction_max_absolute_error"] = 0.001
+        else:
+            source["map_years"] = [2012, 2020, 2021]
+        write_json(source_file, source)
+        plan["input_hashes"][source_name] = sha256_file(source_file)
+    else:
+        path = reg.paths.root / land_name
+        table = pq.read_table(path)
+        if fault == "missing_provenance":
+            table = table.drop(["land_cover_map_year"])
+        elif fault in {"missing_snapshot_metadata", "mismatched_snapshot_metadata"}:
+            metadata = dict(table.schema.metadata)
+            metadata.pop(b"land_cover_snapshot_sha256")
+            if fault == "mismatched_snapshot_metadata":
+                metadata[b"land_cover_snapshot_sha256"] = b"synthetic mismatched snapshot"
+            table = table.replace_schema_metadata(metadata)
+        else:
+            field, value = {
+                "future": ("land_cover_map_year", 2025),
+                "stale": ("land_cover_map_year", 2010),
+                "not_latest": ("land_cover_map_year", 2019),
+                "age": ("land_cover_reference_age_years", -4),
+                "nominal": ("land_cover_nominal_map_year", 2025),
+                "coverage": ("land_cover_mapped_area_fraction", 0.1),
+            }[fault]
+            values = table[field].to_pylist()
+            values[1] = value
+            table = table.set_column(table.schema.get_field_index(field), field, pa.array(values))
+        pq.write_table(table, path)
+        plan["input_hashes"][land_name] = sha256_file(path)
+    audit_name = plan["runs"][run["run_id"]]["audit"]
+    audit = json.loads((reg.paths.root / audit_name).read_text("utf-8"))
+    audit["input_hashes"] = {
+        name: plan["input_hashes"][name]
+        for name in audit["input_hashes"]
+        if name in plan["input_hashes"]
+    }
+    write_json(reg.paths.root / audit_name, audit)
+    plan["input_hashes"][audit_name] = sha256_file(reg.paths.root / audit_name)
+    write_json(plan_file, plan)
+    with pytest.raises(ValueError, match="Land-cover|land-cover|checksum"):
+        source = FrozenInputs(reg, plan_path)
+        try:
+            with Resources(reg, "synthetic_landcover_refusal") as resources:
+                source.plan_support(run, "val_select", resources)
+        finally:
+            source.close()
+
+
+def test_synthetic_landcover_only_uses_the_same_source_and_admission_gate(
+    synthetic_inputs,
+    synthetic_registration,
+):
+    reg, plan_path = synthetic_inputs
+    commit_synthetic_amendment(*synthetic_registration)
+    combined, land_name = add_synthetic_landcover(synthetic_inputs, [0.2] * 5)
+    plan_file = reg.paths.root / plan_path
+    plan = json.loads(plan_file.read_text("utf-8"))
+    entry = plan["runs"].pop(combined["run_id"])
+    run = next(run for run in reg.runs if run["run_id"] == "retrospective_land_cover")
+    audit = json.loads((reg.paths.root / entry["audit"]).read_text("utf-8"))
+    audit.update(
+        {
+            key: run[key]
+            for key in (
+                "run_id",
+                "ordered_features",
+                "geography",
+                "availability_lag_days",
+            )
+        }
+    )
+    entry["audit"] = "artifacts/evaluation/synthetic_landcover_only_audit.json"
+    entry["feature_files"] = [land_name]
+    write_json(reg.paths.root / entry["audit"], audit)
+    plan["input_hashes"][entry["audit"]] = sha256_file(reg.paths.root / entry["audit"])
+    plan["runs"][run["run_id"]] = entry
+    write_json(plan_file, plan)
+    source = FrozenInputs(reg, plan_path)
+    try:
+        with Resources(reg, "synthetic_landcover_only") as resources:
+            loaded = source.load(run, "val_select", resources)
+            planned = source.plan_support(run, "val_select", resources)
+        assert loaded.x.shape == (1, 31)
+        assert planned.column("cell_id").tolist() == loaded.column("cell_id").tolist() == [2]
+    finally:
+        source.close()
+
+
+def test_synthetic_prior_h3_metrics_and_new_audit_require_committed_amendment(
+    synthetic_inputs,
+    synthetic_registration,
+):
+    reg, plan_path = synthetic_inputs
+    prior = reg.paths.root / "artifacts/evaluation/extension_execution_report.json"
+    write_json(
+        prior,
+        {
+            "runs": {
+                "retrospective_vegetation_lag16": {
+                    "status": "evaluated_eligible",
+                    "average_precision": 0.4,
+                }
+            },
+        },
+    )
+    prior_bytes = prior.read_bytes()
+    add_synthetic_landcover(synthetic_inputs, [0.2] * 5)
+    assert not (reg.paths.root / "artifacts/evaluation/extension_selection.json").exists()
+    with pytest.raises(ValueError, match="amendment"):
+        FrozenInputs(reg, plan_path)
+    commit_synthetic_amendment(*synthetic_registration)
+    source = FrozenInputs(reg, plan_path)
+    try:
+        assert source.available["retrospective_vegetation_land_cover_lag16"]["status"] == (
+            "evaluated_eligible"
+        )
+        assert prior.read_bytes() == prior_bytes
+    finally:
+        source.close()
+    amendment = reg.paths.root / "artifacts/evaluation/extension_amendment_registration.json"
+    amendment.write_bytes(amendment.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="committed"):
+        FrozenInputs(reg, plan_path)
+
+
+def test_synthetic_frozen_input_plan_survives_adapter_restart(synthetic_inputs):
+    reg, plan_path = synthetic_inputs
+    first = FrozenInputs(reg, plan_path)
+    try:
+        first.freeze()
+        frozen = dict(first.hashes)
+    finally:
+        first.close()
+    second = FrozenInputs(reg, plan_path)
+    try:
+        assert second.hashes == frozen
+    finally:
+        second.close()
+    path = reg.paths.root / plan_path
+    path.write_bytes(path.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="frozen"):
+        FrozenInputs(reg, plan_path)
 
 
 def test_synthetic_registered_input_mutation_refuses_before_projection(synthetic_inputs):

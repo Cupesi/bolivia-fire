@@ -15,7 +15,16 @@ import pyarrow.dataset as ds
 import pyarrow.parquet as pq
 import yaml
 
+from bolivia_fire.evaluation.artifacts import atomic_json
 from bolivia_fire.extension.access import Opening, check_hashes, verify_opening
+from bolivia_fire.extension.amendment import (
+    AMENDMENT_CONTRACT,
+    AMENDMENT_DOCUMENT,
+    AMENDMENT_REGISTRATION,
+    AVAILABILITY,
+    authorize_availability,
+)
+from bolivia_fire.extension.landcover import PROVENANCE, SOURCE, admission_mask, verify_source
 from bolivia_fire.extension.registration import (
     REGISTERED_FILES,
     REGISTRATION,
@@ -40,6 +49,12 @@ class FrozenInputs:
         if self.plan.get("contract_sha256") != registration.record["contract_sha256"]:
             raise ValueError("Extension input plan contract hash mismatch")
         check_hashes(registration, self.plan["input_hashes"])
+        requested = {
+            name
+            for name, entry in self.plan.get("runs", {}).items()
+            if entry.get("status") == "evaluated_eligible"
+        }
+        self.amendment = authorize_availability(registration, requested)
         self.hashes = {
             **self.plan["input_hashes"],
             plan_path: sha256_file(path),
@@ -50,6 +65,18 @@ class FrozenInputs:
             },
         }
         self.panel_files = self._files(self.plan["panel_files"])
+        if self.amendment:
+            self.hashes.update(
+                {
+                    name: sha256_file(self.paths.root / name)
+                    for name in (
+                        AMENDMENT_CONTRACT,
+                        AMENDMENT_DOCUMENT,
+                        AMENDMENT_REGISTRATION,
+                    )
+                }
+            )
+            self.hashes.update(self.amendment["prior_artifact_hashes"])
         self._files(
             [
                 "datasets/processed/cells.parquet",
@@ -65,6 +92,7 @@ class FrozenInputs:
         if set(self.plan.get("runs", {})) - {run["run_id"] for run in registration.runs}:
             raise ValueError("Input plan requests an unregistered extension run")
         self.available: dict[str, dict[str, Any]] = {}
+        self.landcover_sources: dict[str, dict[str, Any]] = {}
         for run in registration.runs:
             identity = run["run_id"]
             entry = self.plan.get("runs", {}).get(identity, {})
@@ -143,6 +171,13 @@ class FrozenInputs:
                         "acquisition_buffer_degrees": source.get("acquisition_buffer_degrees"),
                         "contract_buffer_degrees": source.get("contract_buffer_degrees"),
                     }
+                if any(name.startswith("mapbiomas_") for name in schema.names):
+                    source = verify_source(registration, self.hashes, audit, schema)
+                    self.landcover_sources[identity] = source
+                    source_manifests[SOURCE] = {
+                        "sha256": self.hashes[SOURCE],
+                        "snapshot_sha256": source["land_cover_snapshot_sha256"],
+                    }
                 if any(metadata.get(key) != value for key, value in required.items()):
                     raise ValueError(
                         f"Feature snapshot metadata differs from registered run: {identity}"
@@ -159,6 +194,11 @@ class FrozenInputs:
                     "source_manifests": source_manifests,
                 },
             }
+            if (
+                any(name.startswith("mapbiomas_") for name in run["ordered_features"])
+                and identity not in self.landcover_sources
+            ):
+                raise ValueError("Land-cover run lacks a source-bound feature snapshot")
         feature_files = [
             local_path(self.paths, name)
             for entry in self.available.values()
@@ -173,6 +213,16 @@ class FrozenInputs:
         self.arrays: list[np.memmap] = []
         self.serial = 0
         self._partitions_validated = False
+        frozen = (
+            self.paths.root
+            / "artifacts/evaluation/amendments"
+            / self.amendment["amendment_id"]
+            / "extension_availability.json"
+            if self.amendment
+            else self.paths.root / AVAILABILITY
+        )
+        if frozen.exists():
+            self.freeze()
 
     def _files(self, names: list[str]) -> list[Path]:
         if not names or any(name not in self.hashes for name in names):
@@ -181,6 +231,35 @@ class FrozenInputs:
 
     def validate(self) -> None:
         check_hashes(self.registration, self.hashes)
+
+    def freeze(self) -> None:
+        self.validate()
+        relative = AVAILABILITY
+        if self.amendment:
+            relative = (
+                f"artifacts/evaluation/amendments/{self.amendment['amendment_id']}/"
+                "extension_availability.json"
+            )
+        destination = local_path(self.paths, relative)
+        record = {
+            "registration_sha256": self.registration.digest,
+            "amendment_registration_sha256": (
+                self.amendment["registration_sha256"] if self.amendment else None
+            ),
+            "input_plan": self.plan_path,
+            "input_plan_sha256": self.hashes[self.plan_path],
+            "available_runs": sorted(
+                name
+                for name, entry in self.available.items()
+                if entry["status"] == "evaluated_eligible"
+            ),
+        }
+        if destination.exists():
+            if read_json(destination) != record:
+                raise ValueError("Availability and input plan are already frozen")
+        else:
+            atomic_json(destination, record)
+        self.hashes[relative] = sha256_file(destination)
 
     def close(self) -> None:
         for array in self.arrays:
@@ -334,6 +413,8 @@ class FrozenInputs:
             available = tuple(name for name in extra if name in dataset.schema.names)
             if not available:
                 continue
+            if any(name.startswith("mapbiomas_") for name in available):
+                available = (*available, *PROVENANCE)
             pieces = groups.setdefault(available, [])
             date_filter = pc.year(ds.field("issue_date")).isin(list(years)) & ds.field(
                 "issue_date"
@@ -349,10 +430,17 @@ class FrozenInputs:
                 if set(names) & set(table.column_names):
                     raise ValueError("Overlapping feature snapshot definitions")
                 table = self._ordered_join(table, pa.concat_tables(pieces))
-        for name in extra:
+        required = extra + (PROVENANCE if any(n.startswith("mapbiomas_") for n in extra) else [])
+        for name in required:
             if name not in table.column_names:
                 table = table.append_column(name, pa.nulls(len(table), type=pa.float32()))
         return table
+
+    def _land_valid(self, table: pa.Table, run: dict[str, Any]) -> np.ndarray:
+        land = [name for name in run["ordered_features"] if name.startswith("mapbiomas_")]
+        if not land:
+            return np.ones(len(table), dtype=bool)
+        return admission_mask(table, land, self.landcover_sources[run["run_id"]])
 
     def _condition(self, stage: str) -> ds.Expression:
         if stage not in {"train", "val_select", "val_calib", "test", "confirmation"}:
@@ -419,13 +507,7 @@ class FrozenInputs:
                     fraction = table["veg_valid_pixel_fraction"].to_numpy()
                     age = table["veg_observation_age_days"].to_numpy()
                     valid &= (fraction >= 0.5) & (fraction <= 1) & (age >= 0) & (age <= 64)
-                land = [name for name in names if name.startswith("mapbiomas_")]
-                if land:
-                    fractions = np.column_stack(
-                        [table[name].to_numpy().astype(float) for name in land]
-                    )
-                    valid &= ((fractions >= 0) & (fractions <= 1)).all(axis=1)
-                    valid &= np.abs(fractions.sum(axis=1) - 1) <= 1e-6
+                valid &= self._land_valid(table, run)
                 pieces.append(table.select(columns).filter(pa.array(valid)))
         metadata = pa.concat_tables(pieces) if pieces else pa.table({name: [] for name in columns})
         n = len(metadata)
@@ -444,6 +526,8 @@ class FrozenInputs:
         holdout: bool = False,
     ) -> PanelData:
         self.validate()
+        if labels:
+            self.freeze()
         if stage not in {"train", "val_select", "val_calib", "test", "confirmation"}:
             raise ValueError("Unknown extension partition")
         if stage == "confirmation" or labels and stage == "test":
@@ -526,14 +610,7 @@ class FrozenInputs:
                         age = table["veg_observation_age_days"].to_numpy().astype(float)
                         quality_ok = (fraction >= 0.5) & (fraction <= 1)
                         fresh_ok = (age >= 0) & (age <= 64)
-                    land_ok = np.ones(len(table), dtype=bool)
-                    land = [name for name in names if name.startswith("mapbiomas_")]
-                    if land:
-                        fractions = np.column_stack(
-                            [table[name].to_numpy().astype(float) for name in land]
-                        )
-                        land_ok = ((fractions >= 0) & (fractions <= 1)).all(axis=1)
-                        land_ok &= np.abs(fractions.sum(axis=1) - 1) <= 1e-6
+                    land_ok = self._land_valid(table, run)
                     mask = np.ones(len(table), dtype=bool)
                     rules = [
                         ("missing_label", np.isfinite(y) if labels else mask.copy()),
