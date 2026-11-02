@@ -229,8 +229,8 @@ landcover:
   license: CC BY 4.0
   license_url: https://creativecommons.org/licenses/by/4.0/
   access_mode: authenticated Earth Engine, noncommercial Community Tier, no linked billing
-  tier_and_billing_evidence: owner-attested, verified 2026-11-01
-  api_and_usage_visibility: verified 2026-11-01; free console Monitoring and request profiling
+  tier_and_billing_evidence: Community Tier owner-attested; independent read-only billingEnabled=false and no linked account, 2026-11-01
+  api_and_usage_visibility: verified 2026-11-01; primary read-only Monitoring timeSeries.list; request profiles are secondary
   native_crs: EPSG:4326
   native_pixel_width_degrees: 0.00026949458523585647
   nominal_resolution_m: 30
@@ -250,13 +250,19 @@ landcover:
   raster_manifest: datasets/manifests/mapbiomas_raster.jsonl
   raster_request_manifest: datasets/manifests/mapbiomas_raster_requests.jsonl
   partial_raster_manifest: datasets/manifests/mapbiomas_raster_partial.jsonl
-  raster_method: national binary masks; nested mean reductions to exact project affine; local geodesic national-area weighting
+  resume_audit_manifest: datasets/manifests/mapbiomas_resume_audit.jsonl
+  monitoring_batch_manifest: datasets/manifests/mapbiomas_monitoring_batches.jsonl
+  monitoring_audit_manifest: datasets/manifests/mapbiomas_monitoring_audit.jsonl
+  raster_method: national binary masks; native overlap means to exact project affine; local geodesic national-area weighting
   raster_safety_factor: 1.5
   raster_agreement_absolute_tolerance: 0.01
   verification_manifest: datasets/manifests/mapbiomas_access.jsonl
   schema: datasets/schemas/landcover.yaml
   access_status: authenticated_metadata_polygon_pilots_and_partial_2012_raster_verified
-  full_extraction_status: paused_unknown_request_eecu_no_annual_raster_features
+  full_extraction_status: monitoring_primary_national_pilot_in_progress
+  workstream_safety_cap_eecu_hours: 60
+  project_monthly_budget_eecu_hours: 150
+  monitoring_reconciled_eecu_hours: 0.4344201955111111
   polygon_full_grid_rate_estimate_eecu_hours: 40.16863193
   raster_full_year_measurement_eecu_hours: null
   raster_full_14_year_projection_eecu_hours_1_5x: null
