@@ -194,10 +194,16 @@ reproduction artifacts*, versión 0.1.0. https://doi.org/10.5281/zenodo.23895316
 
 Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
 benchmark software*, versión 0.1.0.
+[10.5281/zenodo.23898298](https://doi.org/10.5281/zenodo.23898298).
 [Repositorio](https://github.com/Cupesi/bolivia-fire);
 [versión v0.1.0](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
 
+DOI de concepto del software (todas las versiones):
+[10.5281/zenodo.23898297](https://doi.org/10.5281/zenodo.23898297).
+El archivo del software conserva la etiqueta `v0.1.0` en el commit `0c5ca2c`.
+Los cambios posteriores en la documentación quedan fuera de ese archivo.
+
 Cite el conjunto de datos y el software por separado y conserve las atribuciones de
-las fuentes. Esta versión cita el software mediante las URL del repositorio y de la versión.
+las fuentes.
 
 Bolivia Fire es mantenido por Victor Hugo Cuellar Flores y alojado por la organización de código abierto Cupesí Labs.

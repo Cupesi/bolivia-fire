@@ -8,6 +8,12 @@ authors:
 repository-code: "https://github.com/Cupesi/bolivia-fire"
 license: MIT
 version: "0.1.0"
+doi: "10.5281/zenodo.23898298"
+date-released: "2026-11-02"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23898297"
+    description: "Software concept DOI (all versions)."
 abstract: >-
   Weekly satellite fire-detection dataset construction and evaluation for Bolivia,
   with validation-selected probability models, calibration, geographic holdouts,
