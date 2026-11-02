@@ -126,6 +126,9 @@ def open_batch(
                 "input_hashes": frozen["input_hashes"],
                 "selection_sha256": frozen.get("selection_sha256"),
                 "confirmation_evidence": evidence,
+                "confirmation_evidence_path": confirmation_evidence
+                if scope == "confirmation"
+                else None,
                 **registration.provenance(),
             }
         )
@@ -134,18 +137,46 @@ def open_batch(
 
 
 def verify_opening(registration: Registration, opening: Opening | None, scope: str) -> None:
+    expected_log = {
+        "test": "artifacts/evaluation/final_test_log.json",
+        "confirmation": "artifacts/evaluation/extension_confirmation_log.json",
+    }.get(scope)
     if (
         opening is None
+        or expected_log is None
         or opening.scope != scope
+        or opening.log_path != expected_log
         or opening.registration_sha256 != registration.digest
     ):
         raise ValueError("Label access requires a matching durable extension opening")
-    entries = read_json(registration.paths.root / opening.log_path)
+    entries = read_json(local_path(registration.paths, expected_log))
+    if not isinstance(entries, list) or any(not isinstance(entry, dict) for entry in entries):
+        raise ValueError("Malformed durable extension opening log")
     attempt = [entry for entry in entries if entry.get("opening_id") == opening.identifier]
     if not attempt or attempt[0].get("state") != "opened" or len(attempt) != 1:
         raise ValueError("Extension opening is missing or closed")
-    check_hashes(registration, attempt[0]["artifact_hashes"])
-    check_hashes(registration, attempt[0]["input_hashes"])
+    entry = attempt[0]
+    if (
+        entry.get("type") != f"extension_{scope}"
+        or entry.get("classification")
+        != ("exploratory" if scope == "test" else "supplementary_confirmation")
+        or any(entry.get(key) != value for key, value in registration.provenance().items())
+        or entry.get("reopening") is not (scope == "test")
+        or not entry.get("planned_runs")
+        or not isinstance(entry.get("row_key_hashes_before_labels"), dict)
+        or any(
+            not entry["row_key_hashes_before_labels"].get(name) for name in entry["planned_runs"]
+        )
+    ):
+        raise ValueError("Durable extension opening identity mismatch")
+    check_hashes(registration, entry.get("artifact_hashes"))
+    check_hashes(registration, entry.get("input_hashes"))
+    if scope == "confirmation":
+        evidence_path = entry.get("confirmation_evidence_path")
+        if confirmation_gates(registration, entry, evidence_path) != entry.get(
+            "confirmation_evidence"
+        ):
+            raise ValueError("Durable confirmation opening evidence mismatch")
 
 
 def finish_opening(

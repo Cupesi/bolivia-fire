@@ -1,4 +1,5 @@
 import json
+from dataclasses import replace
 
 import pytest
 from conftest import write_json
@@ -91,6 +92,7 @@ def test_synthetic_confirmation_failure_consumes_single_opening(synthetic_regist
         row_hashes={"synthetic": "synthetic row-key digest"},
         confirmation_evidence=audit.relative_to(paths.root).as_posix(),
     )
+    verify_opening(reg, opening, "confirmation")
     finish_opening(reg, opening, "failed", "synthetic failure after access")
     with pytest.raises(ValueError, match="already"):
         open_batch(
@@ -112,3 +114,46 @@ def test_synthetic_hash_mutation_prevents_test_opening(synthetic_registration):
         open_batch(
             verify_registration(paths), frozen, scope="test", explicit=True, reason="synthetic"
         )
+
+
+def test_synthetic_test_opening_cannot_be_relabelled_confirmation(synthetic_registration):
+    paths, _ = synthetic_registration
+    reg = verify_registration(paths)
+    opening = open_batch(
+        reg,
+        synthetic_frozen(paths),
+        scope="test",
+        explicit=True,
+        reason="synthetic",
+        row_hashes={"synthetic": "abc"},
+    )
+    with pytest.raises(ValueError, match="opening|scope"):
+        verify_opening(reg, replace(opening, scope="confirmation"), "confirmation")
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("type", "extension_confirmation"),
+        ("classification", "supplementary_confirmation"),
+        ("registration_sha256", "wrong registration"),
+        ("row_key_hashes_before_labels", {}),
+    ],
+)
+def test_synthetic_opening_verifies_durable_identity(synthetic_registration, field, value):
+    paths, _ = synthetic_registration
+    reg = verify_registration(paths)
+    opening = open_batch(
+        reg,
+        synthetic_frozen(paths),
+        scope="test",
+        explicit=True,
+        reason="synthetic",
+        row_hashes={"synthetic": "abc"},
+    )
+    path = paths.root / opening.log_path
+    entries = json.loads(path.read_text("utf-8"))
+    entries[0][field] = value
+    write_json(path, entries)
+    with pytest.raises(ValueError, match="opening|identity"):
+        verify_opening(reg, opening, "test")

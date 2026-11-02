@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import gc
+import os
 import time
 from typing import Any
 
@@ -30,17 +32,36 @@ from bolivia_fire.extension.inference import (
 )
 from bolivia_fire.extension.inputs import FrozenInputs
 from bolivia_fire.extension.registration import local_path, read_json, verify_registration
-from bolivia_fire.extension.resources import Resources
+from bolivia_fire.extension.resources import Resources, implementation_hashes
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.models.data import PanelData
 from bolivia_fire.models.estimators import Candidate, lightgbm_datasets, search_parameters
 
 
 class Extension:
-    def __init__(self, paths: Paths, plan_path: str) -> None:
+    def __init__(
+        self, paths: Paths, plan_path: str, *, memory_limit_gib: float | None = None
+    ) -> None:
         self.registration = verify_registration(paths)
         self.paths = paths
         self.contract = self.registration.contract
+        override = os.environ.get("BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB")
+        self.memory_limit_gib = (
+            memory_limit_gib
+            if memory_limit_gib is not None
+            else float(override)
+            if override is not None
+            else self.contract["resources"]["memory_limit_gib"]
+        )
+        self.memory_limit_source = (
+            "runner_argument"
+            if memory_limit_gib is not None
+            else "BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB"
+            if override is not None
+            else "registered_contract"
+        )
+        # Validate the override before loading any panels.
+        Resources(self.registration, "configuration", memory_limit_gib=self.memory_limit_gib)
         self.source = FrozenInputs(self.registration, plan_path)
         self.runs = self.registration.runs
         self.configurations = search_parameters(
@@ -65,7 +86,20 @@ class Extension:
             "environment": environment(),
             "hardware": hardware(),
             "runtime_seconds": time.perf_counter() - self.tick,
+            "registered_memory_limit_gib": self.contract["resources"]["memory_limit_gib"],
+            "effective_memory_limit_gib": self.memory_limit_gib,
+            "memory_limit_source": self.memory_limit_source,
+            "implementation_hashes": implementation_hashes(),
         }
+
+    def _resources(self, stage: str) -> Resources:
+        return Resources(
+            self.registration,
+            stage,
+            input_bytes=self.source.input_bytes,
+            memory_limit_gib=self.memory_limit_gib,
+            memory_limit_source=self.memory_limit_source,
+        )
 
     def _load_comparators(self) -> None:
         for name, entry in self.contract["comparators"].items():
@@ -110,43 +144,42 @@ class Extension:
         active = self._active(geography)
         if not active:
             return {}, {}
-        panels = {
-            run["run_id"]: self.source.load(
-                run, stage, resources, opening=opening, labels=labels, holdout=holdout
-            )
-            for run in active
-        }
+
+        def load(run: dict[str, Any]) -> PanelData:
+            if not labels:
+                return self.source.plan_support(run, stage, resources, holdout=holdout)
+            return self.source.load(run, stage, resources, opening=opening, holdout=holdout)
+
+        panels = {run["run_id"]: load(run) for run in active}
         comparator_names = [active[0]["comparator"], active[0]["contextual_comparator"]]
         for name in comparator_names:
-            panels[name] = self.source.load(
+            panels[name] = load(
                 {
                     "run_id": name,
                     "ordered_features": self.contract["comparators"][name]["features"],
                 },
-                stage,
-                resources,
-                opening=opening,
-                labels=labels,
-                holdout=holdout,
             )
-        resources.check(projected_ram=sum(data.x.nbytes * 2 for data in panels.values()))
-        primary = [run["run_id"] for run in active if run["availability_lag_days"] != 32]
-        aligned, counts = common_support(
-            {name: panels[name] for name in primary + comparator_names}
-        )
-        families = {
-            name: {key: aligned[key] for key in [name, *comparator_names]} for name in primary
-        }
-        support = {
-            name: {key: counts[key] for key in [name, *comparator_names]} for name in primary
-        }
-        for run in active:
-            name = run["run_id"]
-            if run["availability_lag_days"] == 32:
-                families[name], support[name] = common_support(
-                    {key: panels[key] for key in [name, *comparator_names]}
-                )
-        return families, support
+        try:
+            resources.check(projected_ram=sum(data.x.nbytes * 2 for data in panels.values()))
+            primary = [run["run_id"] for run in active if run["availability_lag_days"] != 32]
+            aligned, counts = common_support(
+                {name: panels[name] for name in primary + comparator_names}
+            )
+            families = {
+                name: {key: aligned[key] for key in [name, *comparator_names]} for name in primary
+            }
+            support = {
+                name: {key: counts[key] for key in [name, *comparator_names]} for name in primary
+            }
+            for run in active:
+                name = run["run_id"]
+                if run["availability_lag_days"] == 32:
+                    families[name], support[name] = common_support(
+                        {key: panels[key] for key in [name, *comparator_names]}
+                    )
+            return families, support
+        finally:
+            self.source.release(*panels.values())
 
     def _fit(
         self,
@@ -164,6 +197,8 @@ class Extension:
         destination = self.paths.root / f"artifacts/evaluation/extension_fit_{identity}.json"
         if destination.exists():
             previous = read_json(destination)
+            if previous.get("implementation_hashes") != implementation_hashes():
+                raise ValueError("Archive extension checkpoint from a different implementation")
             if (
                 previous.get("registration_sha256") != self.registration.digest
                 or previous.get("input_hashes") != self.source.hashes
@@ -175,8 +210,15 @@ class Extension:
         for data in (train, selection):
             if len(np.unique(data.y)) != 2:
                 raise ValueError("Extension train and val_select each require both classes")
-        resources.check(projected_ram=train.x.nbytes * 4 + selection.x.nbytes * 2)
+        # Float32 raw input, up to two byte-wide bin buffers, and float64 labels.
+        # The raw matrix term reserves pages of the mapped training input.
+        allocation = train.x.nbytes + (train.x.size + selection.x.size) * 2
+        allocation += (train.y.size + selection.y.size) * 8
+        resources.check(projected_ram=allocation)
         datasets = lightgbm_datasets(train.x, train.y, selection.x, selection.y, train.features)
+        for dataset in datasets:
+            dataset.free_raw_data = True
+        del dataset
         settings = self.contract["estimation"]["search"]
         best: Candidate | None = None
         best_key: tuple[float, str] | None = None
@@ -210,6 +252,7 @@ class Extension:
                     enforce_resources,
                 ],
             )
+            estimator.free_dataset()
             candidate = Candidate(
                 f"lightgbm_{index:02d}",
                 estimator,
@@ -242,6 +285,8 @@ class Extension:
             )
         if best is None:
             raise ValueError("Extension search produced no candidate")
+        del datasets, estimator, candidate
+        gc.collect()
         resources.check(projected_ram=calibration.x.nbytes * 2)
         best.calibrate(calibration.x, calibration.y)
         model = self.models / identity / f"{best.name}.joblib"
@@ -285,6 +330,7 @@ class Extension:
                 ),
             ),
             "feature_audit": self.source.available[identity].get("audit_evidence"),
+            "projected_fit_allocation_bytes": allocation,
             "resources": resources.record("completed"),
             **self.metadata(),
         }
@@ -292,6 +338,73 @@ class Extension:
         resources.check()
         atomic_json(destination, report)
         return report
+
+    def _select_geography(self, geography: str, reports: dict[str, Any]) -> dict[str, Any]:
+        with self._resources(f"{geography}_support") as resources:
+            selection, selection_counts = self._family(geography, "val_select", resources)
+            calibration, calibration_counts = self._family(geography, "val_calib", resources)
+        try:
+            for run in self._active(geography):
+                identity = run["run_id"]
+                with self._resources(identity) as resources:
+                    train = self.source.load(run, "train", resources)
+                    try:
+                        reports[identity] = self._fit(
+                            run,
+                            train,
+                            selection[identity][identity],
+                            calibration[identity][identity],
+                            resources,
+                            {
+                                "val_select": selection_counts[identity],
+                                "val_calib": calibration_counts[identity],
+                                "calibration_panels": calibration[identity],
+                            },
+                        )
+                    finally:
+                        self.source.release(train)
+                        del train
+                        gc.collect()
+            lag_sensitivity = {}
+            with self._resources(f"{geography}_lag_comparison") as resources:
+                for run in self._active(geography):
+                    identity = run["run_id"]
+                    if run["availability_lag_days"] != 16:
+                        continue
+                    sensitivity = identity.replace("lag16", "lag32")
+                    if (
+                        reports.get(sensitivity, {}).get("status") != "evaluated_eligible"
+                        or identity not in calibration
+                        or identity not in calibration[identity]
+                        or sensitivity not in calibration
+                        or sensitivity not in calibration[sensitivity]
+                    ):
+                        lag_sensitivity[identity] = {
+                            "status": "not_evaluated",
+                            "reason": "sensitivity_calibration_panel_unavailable",
+                        }
+                        continue
+                    left = calibration[identity][identity]
+                    right = calibration[sensitivity][sensitivity]
+                    left_model = joblib.load(
+                        local_path(self.paths, reports[identity]["model_path"])
+                    )
+                    right_model = joblib.load(
+                        local_path(self.paths, reports[sensitivity]["model_path"])
+                    )
+                    resources.check(projected_ram=left.x.nbytes + right.x.nbytes)
+                    lag_sensitivity[identity] = compare_lags(
+                        left,
+                        left_model.predict(left.x, calibrated=True),
+                        right,
+                        right_model.predict(right.x, calibrated=True),
+                        calibration_status=reports[sensitivity]["calibration_status"],
+                    )
+                    del left, right, left_model, right_model
+            return lag_sensitivity
+        finally:
+            del selection, calibration
+            gc.collect()
 
     def select(self) -> dict[str, Any]:
         self.selection_path.parent.mkdir(parents=True, exist_ok=True)
@@ -306,61 +419,8 @@ class Extension:
             }
             lag_sensitivity = {}
             for geography in ("temporal", "geographic"):
-                with Resources(
-                    self.registration, f"{geography}_support", input_bytes=self.source.input_bytes
-                ) as resources:
-                    selection, selection_counts = self._family(geography, "val_select", resources)
-                    calibration, calibration_counts = self._family(
-                        geography, "val_calib", resources
-                    )
-                for run in self._active(geography):
-                    identity = run["run_id"]
-                    with Resources(
-                        self.registration, identity, input_bytes=self.source.input_bytes
-                    ) as resources:
-                        train = self.source.load(run, "train", resources)
-                        support = {
-                            "val_select": selection_counts[identity],
-                            "val_calib": calibration_counts[identity],
-                            "calibration_panels": calibration[identity],
-                        }
-                        reports[identity] = self._fit(
-                            run,
-                            train,
-                            selection[identity][identity],
-                            calibration[identity][identity],
-                            resources,
-                            support,
-                        )
-                with Resources(
-                    self.registration,
-                    f"{geography}_lag_comparison",
-                    input_bytes=self.source.input_bytes,
-                ) as resources:
-                    for run in self._active(geography):
-                        identity = run["run_id"]
-                        if run["availability_lag_days"] != 16:
-                            continue
-                        sensitivity = identity.replace("lag16", "lag32")
-                        if sensitivity not in reports:
-                            continue
-                        left = calibration[identity][identity]
-                        right = calibration[sensitivity][sensitivity]
-                        left_model = joblib.load(
-                            local_path(self.paths, reports[identity]["model_path"])
-                        )
-                        right_model = joblib.load(
-                            local_path(self.paths, reports[sensitivity]["model_path"])
-                        )
-                        resources.check(projected_ram=left.x.nbytes + right.x.nbytes)
-                        lag_sensitivity[identity] = compare_lags(
-                            left,
-                            left_model.predict(left.x, calibrated=True),
-                            right,
-                            right_model.predict(right.x, calibrated=True),
-                            calibration_status=reports[sensitivity]["calibration_status"],
-                        )
-                del selection, calibration
+                lag_sensitivity.update(self._select_geography(geography, reports))
+                gc.collect()
             hashes = dict(self.comparator_hashes)
             for report in reports.values():
                 hashes.update(report.get("artifact_hashes", {}))
@@ -424,9 +484,7 @@ class Extension:
             raise ValueError("Extension scoring requires an explicit opening and nonempty reason")
         frozen = self._frozen()
         self._load_comparators()
-        with Resources(
-            self.registration, f"{scope}_support", input_bytes=self.source.input_bytes
-        ) as resources:
+        with self._resources(f"{scope}_support") as resources:
             planned_hashes = {}
             for geography in (
                 ("temporal",) if scope == "confirmation" else ("temporal", "geographic")
@@ -451,9 +509,7 @@ class Extension:
             for geography in (
                 ("temporal",) if scope == "confirmation" else ("temporal", "geographic")
             ):
-                with Resources(
-                    self.registration, f"{scope}_{geography}", input_bytes=self.source.input_bytes
-                ) as resources:
+                with self._resources(f"{scope}_{geography}") as resources:
                     families, support = self._family(
                         geography,
                         scope,

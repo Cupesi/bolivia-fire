@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import shutil
 import threading
 import time
@@ -11,19 +12,46 @@ import psutil
 from bolivia_fire.evaluation.artifacts import atomic_json
 from bolivia_fire.extension.access import now
 from bolivia_fire.extension.registration import Registration
+from bolivia_fire.firms.storage import sha256_file
 
 GIB = 1024**3
 
 
+def implementation_hashes() -> dict[str, str]:
+    return {
+        f"src/bolivia_fire/extension/{path.name}": sha256_file(path)
+        for path in sorted(Path(__file__).parent.glob("*.py"))
+    }
+
+
 class Resources:
-    def __init__(self, registration: Registration, stage: str, *, input_bytes: int = 0) -> None:
+    def __init__(
+        self,
+        registration: Registration,
+        stage: str,
+        *,
+        input_bytes: int = 0,
+        memory_limit_gib: float | None = None,
+        memory_limit_source: str | None = None,
+    ) -> None:
         self.registration, self.stage = registration, stage
         self.root = registration.paths.root
-        self.limits = registration.contract["resources"]
+        self.limits = dict(registration.contract["resources"])
+        self.registered_memory_limit = self.limits["memory_limit_gib"]
+        self.memory_limit_source = memory_limit_source or (
+            "runner_argument" if memory_limit_gib is not None else "registered_contract"
+        )
+        if memory_limit_gib is not None:
+            if not math.isfinite(memory_limit_gib) or not 0.25 < memory_limit_gib <= 20:
+                raise ValueError(
+                    "Runtime memory limit must be finite, above 0.25 and at most 20 GiB"
+                )
+            self.limits["memory_limit_gib"] = memory_limit_gib
         self.input_bytes = input_bytes
         self.started = now()
         self.tick = time.perf_counter()
         self.peak_rss = 0
+        self.current_rss = 0
         self.peak_timestamp: str | None = None
         self.minimum_free = shutil.disk_usage(self.root).free
         self.peak_disk = 0
@@ -54,6 +82,7 @@ class Resources:
                     continue
             if resident > self.peak_rss:
                 self.peak_rss, self.peak_timestamp = resident, now()
+            self.current_rss = resident
             self.minimum_free = min(self.minimum_free, shutil.disk_usage(self.root).free)
             self.peak_disk = max(self.peak_disk, self._disk_bytes())
             if resident >= (self.limits["memory_limit_gib"] - 0.25) * GIB:
@@ -73,7 +102,7 @@ class Resources:
         self._measure()
         if self.violation:
             raise RuntimeError(self.violation)
-        if self.peak_rss + projected_ram >= (self.limits["memory_limit_gib"] - 0.25) * GIB:
+        if self.current_rss + projected_ram >= (self.limits["memory_limit_gib"] - 0.25) * GIB:
             raise RuntimeError("Projected allocation exceeds process-tree memory reserve")
         if (
             shutil.disk_usage(self.root).free - projected_disk
@@ -91,6 +120,11 @@ class Resources:
             "timestamp_utc": now(),
             "runtime_seconds": time.perf_counter() - self.tick,
             "peak_process_tree_rss_bytes": self.peak_rss,
+            "current_process_tree_rss_bytes": self.current_rss,
+            "registered_memory_limit_gib": self.registered_memory_limit,
+            "effective_memory_limit_gib": self.limits["memory_limit_gib"],
+            "memory_limit_source": self.memory_limit_source,
+            "implementation_hashes": implementation_hashes(),
             "peak_process_tree_rss_timestamp_utc": self.peak_timestamp,
             "minimum_free_disk_bytes": self.minimum_free,
             "peak_extension_disk_bytes": self.peak_disk,

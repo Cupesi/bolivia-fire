@@ -265,6 +265,16 @@ buffer deviation in that evidence; it does not override eligibility checks.
 CHIRPS manifests, annual feature hashes, parent-protocol metadata and
 training-reference definitions must pass preflight before any label projection.
 Joins retain panel order, reject duplicate keys and never impute missing features.
+Before projecting labels, every panel passes a bounded-memory metadata scan that
+checks registered partition dates, Monday UTC issues, target-boundary purging and
+unique `cell_id, issue_date` keys across files and partitions. The confirmation
+window comes from the registered contract; confirmation dates cannot enter any
+development partition. Pre-opening support planning projects an explicit
+metadata allowlist, applies frozen predictor-completeness filters and joins
+verified covariates without projecting outcomes or label-derived predictors.
+Full confirmation loading requires a verified durable opening even when the
+caller requests no labels. Verification binds the canonical log, entry type,
+classification, registration identifiers, row hashes and frozen evidence.
 
 Each available registered fit independently searches the same ordered 20
 LightGBM configurations with seed 7, selects uncalibrated `val_select` AP with
@@ -274,6 +284,8 @@ Temporal and geographic families keep separate common support; held-out labels
 enter no fitting, selection or calibration. Primary fits share ordered rows
 across both comparators and all available primary variants. The 32-day fits
 retain their own support and an additional common-support lag comparison.
+Unavailable primary/sensitivity combinations retain explicit `not_evaluated`
+results; a report entry alone does not establish that a calibration panel exists.
 
 Validation H3-H5 decisions use calibrated AP differences and 500 paired UTC
 calendar-month bootstrap replicates with seed 7. Both interval endpoints must
@@ -311,6 +323,20 @@ proof, input and model hashes, ordered configurations, stage support and
 exclusions, row-key hashes, environment, hardware and runtime. Models live under
 `artifacts/models/extension`. Completed fit checkpoints are reused only when
 their frozen inputs, support and model hashes still match. Interrupted searches
-restart that fit. Resource monitoring samples summed process-tree RSS every
+restart that fit. Implementation SHA-256 hashes are recorded in run and resource
+provenance; checkpoints from another implementation must be archived before a
+new fit. Resource monitoring samples summed process-tree RSS every
 second, checks allocations and boosting iterations, preserves per-stage peaks
-and failure checkpoints, and enforces the contract's memory and disk reserves.
+and failure checkpoints, and enforces the effective memory and registered disk
+reserves. Projected allocations use current measured process-tree RSS while
+retaining the historical peak for reporting. Training memmaps and native
+LightGBM datasets are released between fits; temporal support and comparison
+frames are released before geographic fitting. Matrices remain float32.
+
+The registered memory limit remains 12 GiB. An explicit runner argument
+`memory_limit_gib=20`, or the environment setting
+`BOLIVIA_FIRE_EXTENSION_MEMORY_LIMIT_GIB=20` for the existing CLI, selects the
+authorized 20 GiB runtime limit without changing the contract. Limits must be
+finite, greater than 0.25 GiB and at most 20 GiB; the 0.25 GiB pre-limit margin
+still applies. Every run and resource record includes the registered limit,
+effective limit and override source. Omission retains the registered limit.

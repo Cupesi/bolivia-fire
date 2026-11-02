@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import sqlite3
 import tempfile
+from contextlib import closing
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +13,7 @@ import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.dataset as ds
 import pyarrow.parquet as pq
+import yaml
 
 from bolivia_fire.extension.access import Opening, check_hashes, verify_opening
 from bolivia_fire.extension.registration import (
@@ -24,6 +27,7 @@ from bolivia_fire.extension.resources import Resources, owned_bytes
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.models.data import META_COLUMNS, PanelData
 from bolivia_fire.models.retrospective import completeness_columns
+from bolivia_fire.splits import partition_for_issue
 
 
 class FrozenInputs:
@@ -167,6 +171,8 @@ class FrozenInputs:
             prefix="matrix_", dir=cache, ignore_cleanup_errors=True
         )
         self.arrays: list[np.memmap] = []
+        self.serial = 0
+        self._partitions_validated = False
 
     def _files(self, names: list[str]) -> list[Path]:
         if not names or any(name not in self.hashes for name in names):
@@ -182,6 +188,90 @@ class FrozenInputs:
             array._mmap.close()
         self.arrays.clear()
         self.temporary.cleanup()
+
+    def release(self, *panels: PanelData) -> None:
+        for panel in panels:
+            for index, array in enumerate(self.arrays):
+                if panel.x is array:
+                    path = Path(array.filename)
+                    array.flush()
+                    array._mmap.close()
+                    del self.arrays[index]
+                    path.unlink()
+                    break
+
+    def _validate_partitions(self, resources: Resources) -> None:
+        if self._partitions_validated:
+            return
+        protocol = yaml.safe_load(
+            local_path(self.paths, REGISTERED_FILES["protocol"]).read_text("utf-8")
+        )
+        windows = {
+            name: tuple(pd.Timestamp(value, tz="UTC") for value in protocol["partitions"][name])
+            for name in ("train", "val_select", "val_calib", "test")
+        }
+        confirmation = self.registration.contract["fresh_confirmation"]
+        windows["confirmation"] = (
+            pd.Timestamp(confirmation["issue_first"], tz="UTC"),
+            pd.Timestamp(confirmation["issue_last"], tz="UTC"),
+        )
+        key_path = Path(self.temporary.name) / "partition_keys.sqlite"
+        try:
+            with closing(sqlite3.connect(key_path)) as keys:
+                keys.execute("PRAGMA cache_size=-8192")
+                keys.execute(
+                    "CREATE TABLE row_keys (cell TEXT NOT NULL, issue INTEGER NOT NULL, "
+                    "PRIMARY KEY (cell, issue)) WITHOUT ROWID"
+                )
+                for path in self.panel_files:
+                    dataset = ds.dataset(path, format="parquet")
+                    for batch in dataset.to_batches(
+                        columns=["cell_id", "issue_date", "partition"], batch_size=100_000
+                    ):
+                        resources.check(
+                            projected_ram=batch.nbytes * 8, projected_disk=len(batch) * 128
+                        )
+                        frame = batch.to_pandas()
+                        dates = pd.DatetimeIndex(pd.to_datetime(frame["issue_date"], utc=True))
+                        if (
+                            dates.isna().any()
+                            or frame["cell_id"].isna().any()
+                            or (dates.day_of_week != 0).any()
+                            or (dates != dates.normalize()).any()
+                        ):
+                            raise ValueError("Invalid extension partition issue calendar or key")
+                        for partition in frame["partition"].dropna().unique():
+                            if partition not in windows:
+                                raise ValueError("Unknown extension panel partition")
+                            selected = dates[frame["partition"].eq(partition).to_numpy()]
+                            first, last = windows[partition]
+                            if (selected < first).any() or (selected > last).any():
+                                raise ValueError(
+                                    "Issue date falls outside registered partition window"
+                                )
+                            if partition != "confirmation" and any(
+                                partition_for_issue(issue, protocol) != partition
+                                for issue in selected.unique()
+                            ):
+                                raise ValueError("Target crosses registered partition boundary")
+                        try:
+                            keys.executemany(
+                                "INSERT INTO row_keys VALUES (?, ?)",
+                                zip(
+                                    frame["cell_id"].astype(str),
+                                    (int(value) for value in dates.as_unit("ns").asi8),
+                                    strict=True,
+                                ),
+                            )
+                        except sqlite3.IntegrityError as exc:
+                            raise ValueError(
+                                "Duplicate cell-issue keys across panel partitions"
+                            ) from exc
+                        del frame, dates, batch
+                self._partitions_validated = True
+        finally:
+            if key_path.exists():
+                key_path.unlink()
 
     def _rain_source(self, year: int) -> Path:
         from bolivia_fire.covariates.chirps import PRODUCT, REFERENCE_RULE
@@ -264,6 +354,85 @@ class FrozenInputs:
                 table = table.append_column(name, pa.nulls(len(table), type=pa.float32()))
         return table
 
+    def _condition(self, stage: str) -> ds.Expression:
+        if stage not in {"train", "val_select", "val_calib", "test", "confirmation"}:
+            raise ValueError("Unknown extension partition")
+        if stage != "confirmation":
+            return ds.field("partition") == stage
+        window = self.registration.contract["fresh_confirmation"]
+        return (ds.field("issue_date") >= pd.Timestamp(window["issue_first"]).date()) & (
+            ds.field("issue_date") <= pd.Timestamp(window["issue_last"]).date()
+        )
+
+    def plan_support(
+        self, run: dict[str, Any], stage: str, resources: Resources, *, holdout: bool = False
+    ) -> PanelData:
+        self.validate()
+        self._validate_partitions(resources)
+        condition = self._condition(stage)
+        if holdout and stage not in {"test", "confirmation"}:
+            raise ValueError("Held-out rows cannot enter development support")
+        columns = [
+            "cell_id",
+            "issue_date",
+            "partition",
+            "geo_holdout",
+            "santa_cruz",
+            "block_id",
+            "national_area_km2",
+        ]
+        approved = {
+            feature for item in self.registration.runs for feature in item["ordered_features"]
+        } | {
+            feature
+            for item in self.registration.contract["comparators"].values()
+            for feature in item["features"]
+        }
+        names = run["ordered_features"]
+        if not set(names) <= approved:
+            raise ValueError("Support planning requires registered predictor columns")
+        extra = [name for name in names if name.startswith(("veg_", "mapbiomas_"))]
+        condition &= ds.field("geo_holdout") == holdout
+        condition &= ds.field("window_obs_complete_28d") == True  # noqa: E712
+        for name in names:
+            if name not in self.rain + extra:
+                condition &= pc.is_finite(ds.field(name).cast(pa.float64()))
+        pieces = []
+        for path in self.panel_files:
+            dataset = ds.dataset(path, format="parquet")
+            # This projection is an explicit allowlist, independent of run features.
+            if set(columns) - set(META_COLUMNS) or "count_last_7d" in columns:
+                raise ValueError("Unsafe support metadata projection")
+            for batch in dataset.to_batches(columns=columns, filter=condition, batch_size=100_000):
+                if not len(batch):
+                    continue
+                resources.check(projected_ram=batch.nbytes * 16)
+                table = self._feature_join(
+                    self._rain_join(pa.Table.from_batches([batch])), run, extra
+                )
+                valid = np.ones(len(table), dtype=bool)
+                for name in self.rain + extra:
+                    valid &= np.isfinite(table[name].to_numpy().astype(float))
+                for name in self.rain_flags:
+                    valid &= pc.fill_null(table[name], False).to_numpy()
+                if "veg_valid_pixel_fraction" in names:
+                    fraction = table["veg_valid_pixel_fraction"].to_numpy()
+                    age = table["veg_observation_age_days"].to_numpy()
+                    valid &= (fraction >= 0.5) & (fraction <= 1) & (age >= 0) & (age <= 64)
+                land = [name for name in names if name.startswith("mapbiomas_")]
+                if land:
+                    fractions = np.column_stack(
+                        [table[name].to_numpy().astype(float) for name in land]
+                    )
+                    valid &= ((fractions >= 0) & (fractions <= 1)).all(axis=1)
+                    valid &= np.abs(fractions.sum(axis=1) - 1) <= 1e-6
+                pieces.append(table.select(columns).filter(pa.array(valid)))
+        metadata = pa.concat_tables(pieces) if pieces else pa.table({name: [] for name in columns})
+        n = len(metadata)
+        return PanelData(
+            np.empty((n, 0), dtype=np.float32), np.full(n, np.nan), metadata, [], {"eligible": n}
+        )
+
     def load(
         self,
         run: dict[str, Any],
@@ -277,10 +446,11 @@ class FrozenInputs:
         self.validate()
         if stage not in {"train", "val_select", "val_calib", "test", "confirmation"}:
             raise ValueError("Unknown extension partition")
-        if labels and stage in {"test", "confirmation"}:
+        if stage == "confirmation" or labels and stage == "test":
             verify_opening(self.registration, opening, stage)
         if holdout and stage not in {"test", "confirmation"}:
             raise ValueError("Held-out labels cannot enter fitting, selection or calibration")
+        self._validate_partitions(resources)
         names = run["ordered_features"]
         extra = [name for name in names if name.startswith(("veg_", "mapbiomas_"))]
         base = list(
@@ -294,11 +464,7 @@ class FrozenInputs:
         )
         if labels:
             base.append("y_primary")
-        condition = ds.field("partition") == stage
-        if stage == "confirmation":
-            condition = (ds.field("issue_date") >= pd.Timestamp("2026-01-05").date()) & (
-                ds.field("issue_date") <= pd.Timestamp("2026-07-20").date()
-            )
+        condition = self._condition(stage)
         counts = dict.fromkeys(
             (
                 "scanned",
@@ -329,6 +495,8 @@ class FrozenInputs:
             for path in self.panel_files:
                 dataset = ds.dataset(path, format="parquet")
                 for batch in dataset.to_batches(columns=base, filter=condition, batch_size=100_000):
+                    if not len(batch):
+                        continue
                     resources.check(projected_ram=max(1, len(batch)) * (len(names) + 20) * 32)
                     table = pa.Table.from_batches([batch])
                     table = self._rain_join(table)
@@ -406,12 +574,13 @@ class FrozenInputs:
         resources.check(projected_disk=size, projected_ram=n * 100)
         if n:
             x = np.memmap(
-                Path(self.temporary.name) / f"{len(self.arrays)}.f32",
+                Path(self.temporary.name) / f"{self.serial}.f32",
                 mode="w+",
                 shape=(n, len(names)),
                 dtype=np.float32,
             )
             self.arrays.append(x)
+            self.serial += 1
         else:
             x = np.empty((0, len(names)), dtype=np.float32)
         y = np.empty(n, dtype=np.float32)
