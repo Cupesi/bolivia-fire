@@ -1,0 +1,48 @@
+amendment_id: landcover-2026-11-02
+amendment_version: "1.0"
+date: "2026-11-02"
+status: pending_coordinator_commit_and_registration
+base_registration:
+  path: artifacts/evaluation/extension_registration.json
+  contract_sha256: 978fedb68dc04a8866d13ff8f2fb5602497b5b0fc2143cc63fac47b46179d0b2
+  document_sha256: a4928f2e9556a4c4b1d3c6df9c2c6d9129d07995343f7267934e4c9102d6add8
+scope:
+  hypotheses: [H4, H5]
+  run_manifest: inherit_exactly_from_base
+  ordered_features: unchanged
+  comparators: unchanged
+  search_seed_budget: unchanged
+  selection_and_calibration: unchanged
+  identical_rows: same_comparators_separate_H4_H5_intersections_preserving_frozen_H3
+  bootstrap_and_decision_rules: unchanged
+  exploratory_test_handling: unchanged
+  confirmation_gates: unchanged
+  H3: preserve_all_runs_scores_decisions_and_frozen_rows_without_recomputation
+disclosure:
+  h3_validation_metrics_previously_seen: true
+  no_landcover_or_combined_labels_or_metrics_accessed: true
+  timing: after_H3_validation_metrics_before_any_H4_H5_label_or_metric_stage
+estimator:
+  id: binary-mask-degree-area-mean-v1
+  operation: binary_class_masks_reduceResolution_mean
+  crs: EPSG:4326
+  normalization: mapped_class_means_divided_by_sum_of_mapped_class_means
+  national_border: native_pixel_national_mask_approximation_with_zero_filled_exterior
+  area_totals: normalized_shares_scaled_by_pinned_geodesic_national_cell_area
+  limitation: degree_area_means_and_border_mask_are_not_native_geodesic_intersection_weights
+  acceptance_evidence:
+    source: datasets/processed/landcover/source.json
+    manifest: datasets/manifests/mapbiomas_raster.jsonl
+    field: polygon_pilot_validation
+    cells: 1000
+    fraction_max_absolute_error: 0.0006533796633643452
+    coverage_max_absolute_error: 0.0002451674139329896
+    absolute_tolerance: 0.01
+    passed: true
+    scope: observed_polygon_pilot_only_not_a_national_error_bound
+registration:
+  path: artifacts/evaluation/extension_amendment_registration.json
+  committed_files_required: true
+  preserve_prior_metric_artifact_hashes: true
+  freeze_input_plan_before_labels: true
+  command: bolivia-fire extension register-landcover-amendment
