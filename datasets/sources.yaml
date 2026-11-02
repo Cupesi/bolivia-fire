@@ -234,18 +234,58 @@ landcover:
   native_crs: EPSG:4326
   native_pixel_width_degrees: 0.00026949458523585647
   nominal_resolution_m: 30
-  available_years: [1985, 2025]
-  planned_map_years: [2012, 2025]
+  available_years:
+  - 1985
+  - 2025
+  planned_map_years:
+  - 2012
+  - 2025
   classes:
-    forest: [1, 3, 4, 6]
-    nonforest: [10, 11, 12, 13, 29, 63, 66, 77, 81, 82]
-    farming: [14, 15, 18, 21, 39, 40, 72]
-    nonvegetated: [22, 23, 24, 25, 30, 61, 68, 92]
-    water: [26, 31, 33, 34]
-  invalid_codes: [0, 27, all_codes_outside_declared_groups]
+    forest:
+    - 1
+    - 3
+    - 4
+    - 6
+    nonforest:
+    - 10
+    - 11
+    - 12
+    - 13
+    - 29
+    - 63
+    - 66
+    - 77
+    - 81
+    - 82
+    farming:
+    - 14
+    - 15
+    - 18
+    - 21
+    - 39
+    - 40
+    - 72
+    nonvegetated:
+    - 22
+    - 23
+    - 24
+    - 25
+    - 30
+    - 61
+    - 68
+    - 92
+    water:
+    - 26
+    - 31
+    - 33
+    - 34
+  invalid_codes:
+  - 0
+  - 27
+  - all_codes_outside_declared_groups
   minimum_mapped_area_fraction: 0.95
   classification: retrospective
-  direct_download: computeFeatures polygon pilots; computePixels NumPy raster arrays; serial local files
+  direct_download: computeFeatures polygon pilots; computePixels NumPy tiles; local files
   pilot_manifest: datasets/manifests/mapbiomas_pilot.jsonl
   raster_manifest: datasets/manifests/mapbiomas_raster.jsonl
   raster_request_manifest: datasets/manifests/mapbiomas_raster_requests.jsonl
@@ -258,12 +298,35 @@ landcover:
   raster_agreement_absolute_tolerance: 0.01
   verification_manifest: datasets/manifests/mapbiomas_access.jsonl
   schema: datasets/schemas/landcover.yaml
-  access_status: authenticated_metadata_polygon_pilots_and_partial_2012_raster_verified
-  full_extraction_status: monitoring_primary_national_pilot_in_progress
-  workstream_safety_cap_eecu_hours: 60
+  access_status: authenticated_2012_2025_national_maps_verified
+  full_extraction_status: completed_monitoring_reconciled
+  workstream_safety_cap_eecu_hours: 100
   project_monthly_budget_eecu_hours: 150
-  monitoring_reconciled_eecu_hours: 0.4344201955111111
+  monitoring_reconciled_eecu_hours: 22.86946952701639
   polygon_full_grid_rate_estimate_eecu_hours: 40.16863193
-  raster_full_year_measurement_eecu_hours: null
-  raster_full_14_year_projection_eecu_hours_1_5x: null
-  verified_date: '2026-11-01'
+  raster_full_year_measurement_eecu_hours: 1.868176889253611
+  raster_full_14_year_projection_eecu_hours_1_5x: 39.231714674325836
+  verified_date: '2026-11-02'
+  raster_full_year_measurement_scope: All project usage through national pilot, including earlier pilots and failures
+  completed_map_years:
+  - 2012
+  - 2013
+  - 2014
+  - 2015
+  - 2016
+  - 2017
+  - 2018
+  - 2019
+  - 2020
+  - 2021
+  - 2022
+  - 2023
+  - 2024
+  - 2025
+  maximum_concurrent_requests: 6
+  maximum_monitoring_batch_tiles: 360
+  final_batch_years:
+  - 2024
+  - 2025
+  source_manifest: datasets/manifests/mapbiomas_source.jsonl
+  feature_manifest: datasets/manifests/mapbiomas_features.jsonl
