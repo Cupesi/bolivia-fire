@@ -146,7 +146,7 @@ without opening labels. Land-cover (H4) and combined (H5) fits are complete unde
 dated [amendment](extension-landcover-amendment.md), specified after H3 validation results
 were inspected and before accessing outcome labels or computing metrics for H4/H5.
 Primary temporal H4 and 16-day H5 validation decisions are inconclusive, with paired AP
-difference intervals [-0.005, 0.004] and [-0.00083, 0.012], respectively; neither establishes
+difference intervals [-0.0046, 0.0039] and [-0.0008, 0.0117], respectively; neither establishes
 no effect. Positive H4 geographic and H5 geographic 32-day validation intervals remain
 exploratory. H4/H5 test-year scores are logged exploratory reopenings and did not select
 models or lags. Confirmation under the amendment was also refused without opening labels;

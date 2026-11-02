@@ -6,8 +6,9 @@ are logged separately with their reasons; they do not replace the primary result
 
 Measured values come from [test_strict.json](../artifacts/evaluation/test_strict.json), the
 [closed selections](../artifacts/evaluation/selection_strict.json), and
-[results_summary.json](../artifacts/figures/results_summary.json). Metrics and interval endpoints
-are rounded to three decimals; ECE and values below 0.001 retain two significant digits.
+[results_summary.json](../artifacts/figures/results_summary.json). Unless stated otherwise,
+metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001
+retain two significant digits.
 Counts are exact. Exact metric values are in the cited evaluation JSON artifacts.
 AP means average precision over eligible
 cell-weeks, rather than a mean of annual scores.
@@ -299,18 +300,23 @@ validation rows; only a 95% paired interval entirely above zero supports added i
 Both feature families exclude geographic holdout rows from validation. Calibration and
 decision labels overlap, and the intervals condition on fixed fitted models and calibrators.
 
+Both covariate tables use three decimals for AP levels and their interval endpoints, and four
+decimals for paired AP differences and their interval endpoints, rounded from the source
+artifacts. A negative endpoint that rounds to zero retains its sign as `-0.0000`. Validation
+findings remain authoritative and use the unrounded intervals.
+
 | Hypothesis / feature family / lag (selected model) | Paired validation rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] | Validation finding |
 |---|---:|---|---:|---|---|
-| H3 temporal, 16 days (`lightgbm_02`) | 645,548 | 0.348 [0.271, 0.409] | 0.349 | -0.00097 [-0.008, 0.017] | Inconclusive / no detected gain |
-| H3 temporal, 32 days (`lightgbm_09`) | 580,563 | 0.356 [0.273, 0.418] | 0.350 | 0.006 [0.00057, 0.011] | Positive sensitivity interval |
-| H3 geographic, 16 days (`lightgbm_05`) | 684,528 | 0.332 [0.248, 0.400] | 0.335 | -0.003 [-0.007, 0.010] | Inconclusive / no detected gain |
-| H3 geographic, 32 days (`lightgbm_03`) | 607,980 | 0.341 [0.246, 0.409] | 0.336 | 0.005 [-0.003, 0.011] | Inconclusive / no detected gain |
-| H4 land cover, temporal (`lightgbm_08`) | 1,172,000 | 0.317 [0.227, 0.373] | 0.319 | -0.002 [-0.005, 0.004] | Inconclusive |
-| H4 land cover, geographic (`lightgbm_03`) | 1,172,000 | 0.313 [0.223, 0.372] | 0.306 | 0.007 [0.003, 0.011] | Positive exploratory interval |
-| H5 vegetation + land cover, temporal, 16 days (`lightgbm_00`) | 640,862 | 0.357 [0.268, 0.414] | 0.349 | 0.008 [-0.00083, 0.012] | Inconclusive |
-| H5 vegetation + land cover, temporal, 32 days (`lightgbm_14`) | 576,222 | 0.358 [0.272, 0.420] | 0.350 | 0.008 [-3.8e-06, 0.013] | Inconclusive sensitivity |
-| H5 vegetation + land cover, geographic, 16 days (`lightgbm_07`) | 679,634 | 0.344 [0.259, 0.403] | 0.335 | 0.009 [-0.001, 0.019] | Inconclusive exploratory result |
-| H5 vegetation + land cover, geographic, 32 days (`lightgbm_14`) | 603,525 | 0.350 [0.259, 0.412] | 0.336 | 0.014 [0.00096, 0.020] | Positive exploratory interval |
+| H3 temporal, 16 days (`lightgbm_02`) | 645,548 | 0.348 [0.271, 0.409] | 0.349 | -0.0010 [-0.0083, 0.0174] | Inconclusive / no detected gain |
+| H3 temporal, 32 days (`lightgbm_09`) | 580,563 | 0.356 [0.273, 0.418] | 0.350 | 0.0058 [0.0006, 0.0111] | Positive sensitivity interval |
+| H3 geographic, 16 days (`lightgbm_05`) | 684,528 | 0.332 [0.248, 0.400] | 0.335 | -0.0030 [-0.0074, 0.0103] | Inconclusive / no detected gain |
+| H3 geographic, 32 days (`lightgbm_03`) | 607,980 | 0.341 [0.246, 0.409] | 0.336 | 0.0048 [-0.0027, 0.0106] | Inconclusive / no detected gain |
+| H4 land cover, temporal (`lightgbm_08`) | 1,172,000 | 0.317 [0.227, 0.373] | 0.319 | -0.0021 [-0.0046, 0.0039] | Inconclusive |
+| H4 land cover, geographic (`lightgbm_03`) | 1,172,000 | 0.313 [0.223, 0.372] | 0.306 | 0.0074 [0.0030, 0.0115] | Positive exploratory interval |
+| H5 vegetation + land cover, temporal, 16 days (`lightgbm_00`) | 640,862 | 0.357 [0.268, 0.414] | 0.349 | 0.0077 [-0.0008, 0.0117] | Inconclusive |
+| H5 vegetation + land cover, temporal, 32 days (`lightgbm_14`) | 576,222 | 0.358 [0.272, 0.420] | 0.350 | 0.0085 [-0.0000, 0.0131] | Inconclusive sensitivity |
+| H5 vegetation + land cover, geographic, 16 days (`lightgbm_07`) | 679,634 | 0.344 [0.259, 0.403] | 0.335 | 0.0095 [-0.0011, 0.0195] | Inconclusive exploratory result |
+| H5 vegetation + land cover, geographic, 32 days (`lightgbm_14`) | 603,525 | 0.350 [0.259, 0.412] | 0.336 | 0.0140 [0.0010, 0.0205] | Positive exploratory interval |
 
 The primary 16-day H3 result is inconclusive/no detected gain. The positive 32-day temporal
 validation interval is a prespecified sensitivity; it does not replace the primary lag or
@@ -355,16 +361,16 @@ recorded above, evaluated on each row's common feature-complete support.
 
 | Feature family / lag | Paired test rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] |
 |---|---:|---|---:|---|
-| H3 temporal, 16 days | 1,754,909 | 0.354 [0.259, 0.415] | 0.352 | 0.003 [-0.003, 0.013] |
-| H3 temporal, 32 days | 1,624,869 | 0.367 [0.267, 0.427] | 0.359 | 0.009 [0.004, 0.016] |
-| H3 geographic, 16 days | 557,107 | 0.424 [0.268, 0.513] | 0.409 | 0.016 [0.002, 0.030] |
-| H3 geographic, 32 days | 513,107 | 0.429 [0.272, 0.520] | 0.413 | 0.016 [0.010, 0.022] |
-| H4 land cover, temporal | 3,105,800 | 0.325 [0.223, 0.384] | 0.323 | 0.002 [0.00027, 0.004] |
-| H4 land cover, geographic | 800,194 | 0.393 [0.257, 0.476] | 0.383 | 0.010 [0.005, 0.016] |
-| H5 vegetation + land cover, temporal, 16 days | 1,742,193 | 0.360 [0.262, 0.418] | 0.352 | 0.008 [0.002, 0.016] |
-| H5 vegetation + land cover, temporal, 32 days | 1,612,765 | 0.375 [0.273, 0.435] | 0.359 | 0.015 [0.010, 0.024] |
-| H5 vegetation + land cover, geographic, 16 days | 549,893 | 0.434 [0.276, 0.525] | 0.409 | 0.025 [0.009, 0.040] |
-| H5 vegetation + land cover, geographic, 32 days | 506,143 | 0.436 [0.282, 0.522] | 0.413 | 0.023 [0.012, 0.036] |
+| H3 temporal, 16 days | 1,754,909 | 0.354 [0.259, 0.415] | 0.352 | 0.0027 [-0.0033, 0.0128] |
+| H3 temporal, 32 days | 1,624,869 | 0.367 [0.267, 0.427] | 0.359 | 0.0086 [0.0036, 0.0160] |
+| H3 geographic, 16 days | 557,107 | 0.424 [0.268, 0.513] | 0.409 | 0.0159 [0.0023, 0.0298] |
+| H3 geographic, 32 days | 513,107 | 0.429 [0.272, 0.520] | 0.413 | 0.0156 [0.0102, 0.0221] |
+| H4 land cover, temporal | 3,105,800 | 0.325 [0.223, 0.384] | 0.323 | 0.0018 [0.0003, 0.0040] |
+| H4 land cover, geographic | 800,194 | 0.393 [0.257, 0.476] | 0.383 | 0.0096 [0.0047, 0.0157] |
+| H5 vegetation + land cover, temporal, 16 days | 1,742,193 | 0.360 [0.262, 0.418] | 0.352 | 0.0081 [0.0020, 0.0164] |
+| H5 vegetation + land cover, temporal, 32 days | 1,612,765 | 0.375 [0.273, 0.435] | 0.359 | 0.0154 [0.0095, 0.0242] |
+| H5 vegetation + land cover, geographic, 16 days | 549,893 | 0.434 [0.276, 0.525] | 0.409 | 0.0253 [0.0093, 0.0398] |
+| H5 vegetation + land cover, geographic, 32 days | 506,143 | 0.436 [0.282, 0.522] | 0.413 | 0.0229 [0.0120, 0.0360] |
 
 Sources: the H3 [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json)
 and the H4/H5 [amended exploratory test report](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_test_a469d9bc13b149d9997f2a6e9c30971a.json).
