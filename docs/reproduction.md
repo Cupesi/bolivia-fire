@@ -194,6 +194,24 @@ checks. Live FIRMS tests are deselected by default; backend tests also exercise
 local artifacts when present. Passing synthetic tests does not establish real
 model skill, full acquisition coverage or a full-scale resource bound.
 
+## Byte-exact provenance
+
+Git stores `artifacts/`, `configs/`, `datasets/`, `docs/`, `src/` and `tests/`
+byte-exact so recorded SHA-256 digests match committed evidence. Code is written
+with LF line endings. Commits before `52f9565` store LF copies of 56 evidence
+files; their recorded hashes are reproduced by converting LF to CRLF. Reruns on
+Linux and macOS write LF, so cross-platform comparisons require parsed content
+when byte digests differ.
+
+The provenance test checks recorded hashes against reachable Git blobs, with
+explicit exceptions for a legacy CRLF source registry and intermediate states
+that were never committed. These include audit documents, request manifests,
+schemas, code, tests and input plans. Five AppEEARS integrity-check manifest
+hashes precede resume passes that rewrote retrieval timestamps; the test checks
+their task identities, file counts and total bytes against committed manifests.
+Intermediate registry states used by E6 are recorded in history. The exact
+exception pairs and their reasons are retained in the test.
+
 ## Recorded-artifact notebooks
 
 After restoring the local dataset, recorded evaluation JSON and static figures, execute
