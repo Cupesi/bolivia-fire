@@ -14,6 +14,7 @@ from bolivia_fire.config import Paths, load_protocol
 from bolivia_fire.detections import resolve_detection_bundle
 from bolivia_fire.firms.storage import sha256_file
 from bolivia_fire.grid import load_boundary_geometries
+from bolivia_fire.live.coverage import apply_coverage
 from bolivia_fire.live.files import write_json, write_parquet
 from bolivia_fire.live.model import export_model
 from bolivia_fire.live.pipeline import (
@@ -26,10 +27,10 @@ from bolivia_fire.live.pipeline import (
     refresh_outages,
     update_metadata,
 )
+from bolivia_fire.live.retire import refuse_retired
 from bolivia_fire.live.source import NRT, PROXY, SP, LiveClient, StaticSourceMask
 from bolivia_fire.live.state import LiveState, aggregate_detections
 from bolivia_fire.live.static import export_static, refresh_static
-from bolivia_fire.outages import observation_days
 
 
 def local_state(source: Path, days: pd.DataFrame, last: pd.Timestamp) -> LiveState:
@@ -103,6 +104,7 @@ def build_static_source_mask(source: Path, cache: Path) -> tuple[StaticSourceMas
 def bootstrap(
     paths: Paths, out: Path, cache: Path, client: LiveClient, now: datetime
 ) -> dict[str, Any]:
+    refuse_retired(out)
     protocol = load_protocol(paths.root)
     source, days_source, _ = resolve_detection_bundle(paths, protocol)
     original_days = pd.read_parquet(days_source)
@@ -137,7 +139,7 @@ def bootstrap(
         raise ValueError("NRT archive no longer covers the required 2026-08-01 bootstrap start")
     fetch_interval(state, client, cache, NRT, pd.Timestamp("2026-08-01"), last, bbox, country, mask)
     outages, outage_hash = refresh_outages(client, cache)
-    state.days = observation_days(state.days.drop(columns="outage_hours", errors="ignore"), outages)
+    state.days = apply_coverage(state.days, outages)
     state.roll(last).save(out)
     source_pins = yaml.safe_load((paths.datasets / "sources.yaml").read_text())
     meta = {

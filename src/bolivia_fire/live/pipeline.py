@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import io
 import logging
 from datetime import datetime
@@ -10,15 +9,16 @@ from typing import Any
 import pandas as pd
 
 from bolivia_fire.config import Paths, load_protocol
-from bolivia_fire.firms.storage import durable_write
+from bolivia_fire.live.coverage import SNPP_DELIVERY_END, apply_coverage
 from bolivia_fire.live.files import publish_forecast, read_json, write_json
 from bolivia_fire.live.model import FrozenModel
+from bolivia_fire.live.outages import fetch_outages
+from bolivia_fire.live.retire import refuse_retired
 from bolivia_fire.live.source import NRT, PROXY, LiveClient, StaticSourceMask, cached_download
 from bolivia_fire.live.state import LiveState, aggregate_detections, feature_rows, observation
 from bolivia_fire.live.state import unobserved_days as missing_days
 from bolivia_fire.live.static import climatology_for_issue
 from bolivia_fire.live.verify import read_track, record_verification, verification_row
-from bolivia_fire.outages import OUTAGE_URL, observation_days, parse_outages
 
 LOGGER = logging.getLogger("bolivia_fire.live")
 LABEL = "Experimental weekly estimate (near-real-time data)"
@@ -153,16 +153,7 @@ def make_forecast(
 
 
 def refresh_outages(client: LiveClient, cache: Path) -> tuple[pd.DataFrame, str]:
-    with client.http.stream("GET", OUTAGE_URL) as response:
-        response.raise_for_status()
-        body = bytearray()
-        for chunk in response.iter_bytes():
-            body.extend(chunk)
-            if len(body) > 4 * 1024 * 1024:
-                raise ValueError("MODAPS outage response exceeds 4 MiB")
-    outages = parse_outages(body.decode("utf-8"))
-    durable_write(cache / "outages.html", bytes(body))
-    return outages, hashlib.sha256(body).hexdigest()
+    return fetch_outages(client.http, cache)
 
 
 def availability(client: LiveClient, now: datetime) -> tuple[pd.Timestamp, pd.Timestamp]:
@@ -177,7 +168,7 @@ def availability(client: LiveClient, now: datetime) -> tuple[pd.Timestamp, pd.Ti
 
 def fetch_interval(
     state: LiveState,
-    client: LiveClient,
+    client: LiveClient | None,
     cache: Path,
     product: str,
     first: pd.Timestamp,
@@ -188,6 +179,7 @@ def fetch_interval(
 ) -> None:
     from bolivia_fire.live.source import parse_download
 
+    last = min(last, pd.Timestamp(SNPP_DELIVERY_END.ended_utc).tz_localize(None).normalize())
     day = first
     while day <= last:
         length = min(5, (last - day).days + 1)
@@ -336,6 +328,7 @@ def update(
 ) -> dict[str, Any]:
     from shapely.geometry import shape
 
+    refuse_retired(out)
     state = LiveState.load(out)
     first, last = availability(client, now)
     if last < state.days.date.max():
@@ -354,7 +347,7 @@ def update(
         fetch_interval(state, client, cache, NRT, day, end, bbox, country, mask)
         state.save(out)
     outages, outage_hash = refresh_outages(client, cache)
-    state.days = observation_days(state.days.drop(columns="outage_hours", errors="ignore"), outages)
+    state.days = apply_coverage(state.days, outages)
     state.roll(last).save(out)
     update_metadata(out, state, now, outage_hash)
     selected_issue = issue if issue is not None else default_issue(state, now)

@@ -120,7 +120,7 @@ def parse_download(
 
 
 def cached_download(
-    client: LiveClient, cache: Path, product: str, start: date, length: int, bbox: BBox
+    client: LiveClient | None, cache: Path, product: str, start: date, length: int, bbox: BBox
 ) -> tuple[bytes, dict[str, Any]]:
     path = cache / "raw" / product / f"{start}_{length}d.csv"
     metadata_path = path.with_suffix(".json")
@@ -140,6 +140,8 @@ def cached_download(
         if not validation.ok:
             raise ValueError("Cached live response failed validation")
         return body, metadata
+    if client is None:
+        raise ValueError(f"Missing cached {product} response for {start}, {length} days")
     download = client.fetch_product(product, start, length, bbox)
     durable_write(path, download.body)
     metadata = {
