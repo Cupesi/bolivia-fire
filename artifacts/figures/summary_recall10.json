@@ -1,0 +1,73 @@
+{
+  "evaluation_artifact": {
+    "path": "artifacts/evaluation/test_strict.json",
+    "sha256": "31242d34ef75076678dc0675ea578c96acfadf97d68c6503415c31b54b126cec"
+  },
+  "dataset_summary_artifact": {
+    "path": "artifacts/figures/dataset_summary.json",
+    "sha256": "75c774326a8b3dcdd094b20f79936ddd903d916f64e397b7e8c9d39d4f953346"
+  },
+  "publication": {
+    "citation": "arXiv:2611.08539v1, Table 3",
+    "pdf_sha256": "719c0e85c97c1e6e5be612732fe36f919ed2bc56f19c7f829ae253c922a7aee4",
+    "table3_recall_at_10pct": {
+      "train_climatology": 0.397,
+      "lightgbm_08": 0.558
+    },
+    "table3_population": "3,127,636 eligible non-held-out cell-weeks"
+  },
+  "methods": [
+    {
+      "label": "Historical baseline",
+      "json_path": "models.train_climatology.uncalibrated.recall_at_area_budget_10pct",
+      "value": 0.3973744526124836,
+      "display": "39.7%",
+      "definition": "Historical baseline: climatology, the detection frequency per cell and time of year in training data.",
+      "figure_note": "Historical baseline: climatology from training years"
+    },
+    {
+      "label": "Bolivia Fire",
+      "json_path": "models.lightgbm_08.calibrated.recall_at_area_budget_10pct",
+      "value": 0.5576986768319101,
+      "display": "55.8%",
+      "definition": "Bolivia Fire: calibrated LightGBM using satellite detections acquired before each week.",
+      "figure_note": "Bolivia Fire: calibrated LightGBM using earlier detections"
+    }
+  ],
+  "comparison_population": {
+    "cell_weeks": 3127636,
+    "json_path": "models.lightgbm_08.calibrated.rows",
+    "baseline_json_path": "models.train_climatology.uncalibrated.rows"
+  },
+  "dataset_population": {
+    "cell_weeks": 25184988,
+    "rows_per_partition": {
+      "purged": 111438,
+      "test": 5831922,
+      "train": 15452736,
+      "val_calib": 1894446,
+      "val_select": 1894446
+    },
+    "national_cells": 37146,
+    "issue_weeks": 678,
+    "first_issue": "2013-01-07",
+    "last_issue": "2025-12-29",
+    "json_paths": {
+      "rows_per_partition": "rows_per_partition",
+      "national_cells": "eligible_cells",
+      "issue_weeks": "issue_weeks",
+      "first_issue": "first_issue",
+      "last_issue": "last_issue"
+    }
+  },
+  "weeks": {
+    "eligible": 106,
+    "total": 157,
+    "eligible_rows": 3127636,
+    "non_held_out_cells": 29506,
+    "test_rows": 5831922,
+    "national_cells": 37146
+  },
+  "metric_definition": "Pooled recall of cell-weeks with detections at the stated weekly area budget. Each week, cells are ranked within the eligible non-held-out population; the budget is 10% of its national intersection area. The boundary cell contributes only the fraction needed to reach the area limit.",
+  "alt_text": "Retrospective temporal test in Bolivia, 2023–2025, covering 3,127,636 cell-weeks. Dataset: 25,184,988 cell-weeks, 2013–2025. At a weekly budget of 10% of eligible area, the climatology baseline covered 39.7% and calibrated LightGBM (Bolivia Fire) 55.8% of detection-positive cell-weeks. Climatology uses training detection frequency by cell and time of year; LightGBM uses satellite detections acquired before each week. A cell-week is one 0.05-degree grid cell during a seven-day target interval. 106 of 157 test weeks met the observation requirements. Source: arXiv:2611.08539v1, Table 3."
+}
