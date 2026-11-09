@@ -111,9 +111,9 @@ Code is [MIT licensed](LICENSE). Compiled and derived release data use CC BY 4.0
 
 Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
 
-Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection benchmark software*, version 0.1.0. [10.5281/zenodo.23898298](https://doi.org/10.5281/zenodo.23898298). [Repository](https://github.com/Cupesi/bolivia-fire); [v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection benchmark software*, version 0.2.0. [10.5281/zenodo.24090358](https://doi.org/10.5281/zenodo.24090358). [Repository](https://github.com/Cupesi/bolivia-fire); [v0.2.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.2.0).
 
-Software concept DOI (all versions): [10.5281/zenodo.23898297](https://doi.org/10.5281/zenodo.23898297). The software archive preserves tag `v0.1.0` at commit `0c5ca2c`. Later documentation changes are outside that archive.
+Software concept DOI (all versions): [10.5281/zenodo.23898297](https://doi.org/10.5281/zenodo.23898297). The software archive preserves tag `v0.2.0` at commit `0f3cd83`. Later documentation changes are outside that archive.
 
 Cite the dataset and software separately and retain upstream source attributions.
 
