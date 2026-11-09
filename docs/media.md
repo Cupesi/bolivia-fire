@@ -1,22 +1,19 @@
 # Media inventory
 
-Rendered documentation media and static scientific figures are listed below. Dimensions
-are width × height in pixels; sizes are exact bytes. Live browser views use the snapshot
-updated 2026-10-31T18:16:52 UTC. Historical views use the prepared benchmark panel and
-prediction export. The [figure guide](figures.md) describes sources and regeneration.
+Rendered documentation media and static scientific figures are listed below. Dimensions are width × height in pixels; sizes are exact bytes. Archived browser views use the retired live-data snapshot with final issue 2026-11-02. Historical views use the prepared benchmark panel and prediction export. The [figure guide](figures.md) describes sources and regeneration.
 
 ## Screenshots and animations
 
 | File | What it shows | Source / issue or date | Language | Dimensions (px) | Size (bytes) |
 |---|---|---|---|---:|---:|
-| [live-forecast-desktop.png](assets/screenshots/live-forecast-desktop.png) | National live estimate and selected San José cell history. | Live snapshot; issue 2026-10-26 | English | 1,440 × 900 | 68,858 |
-| [live-cell-detail.png](assets/screenshots/live-cell-detail.png) | Zoomed estimate, administrative outlines, town labels and selected-cell places. | Live snapshot; issue 2026-10-26 | English | 1,440 × 900 | 68,803 |
-| [table-desktop.png](assets/screenshots/table-desktop.png) | Estimate table filtered to Campesina el Soto, place columns and cell history. | Live snapshot; issue 2026-10-26 | English | 1,440 × 900 | 36,620 |
-| [estimate-mobile.png](assets/screenshots/estimate-mobile.png) | National weekly estimate and probability legend on mobile. | Live snapshot; issue 2026-10-26 | English | 390 × 844 | 40,772 |
-| [live-spanish-desktop.png](assets/screenshots/live-spanish-desktop.png) | National weekly estimate and selected-cell history in Spanish. | Live snapshot; issue 2026-10-26 | Spanish | 1,440 × 900 | 70,928 |
+| [live-forecast-desktop.png](assets/screenshots/live-forecast-desktop.png) | National weekly estimate and selected San José cell history. | Retired archive; issue 2026-11-02; history 2026-08-03 through 2026-11-02 | English | 1,440 × 900 | 68,785 |
+| [live-cell-detail.png](assets/screenshots/live-cell-detail.png) | Zoomed estimate, administrative outlines, town labels and selected-cell places. | Retired archive; issue 2026-11-02; history 2026-08-03 through 2026-11-02 | English | 1,440 × 900 | 70,381 |
+| [table-desktop.png](assets/screenshots/table-desktop.png) | Estimate table filtered to Campesina el Soto, place columns and cell history. | Retired archive; issue 2026-11-02; history 2026-08-03 through 2026-11-02 | English | 1,440 × 900 | 40,467 |
+| [estimate-mobile.png](assets/screenshots/estimate-mobile.png) | National weekly estimate and probability legend on mobile. | Retired archive; final issue 2026-11-02 | English | 390 × 844 | 39,886 |
+| [live-spanish-desktop.png](assets/screenshots/live-spanish-desktop.png) | National weekly estimate and selected-cell history in Spanish. | Retired archive; issue 2026-11-02; history 2026-08-03 through 2026-11-02 | Spanish | 1,440 × 900 | 70,473 |
 | [estimate-desktop.png](assets/screenshots/estimate-desktop.png) | Historical temporal/geographic estimates, holdout outlines and model identity. | Historical export; issue 2024-09-02 | English | 1,440 × 900 | 79,577 |
 | [observed-desktop.png](assets/screenshots/observed-desktop.png) | Historical observed indicators and complete-label legend. | Historical panel; issue 2024-09-02 | English | 1,440 × 900 | 45,112 |
-| [track-record-desktop.png](assets/screenshots/track-record-desktop.png) | Backfill scores and an empty prospective track record. | Live snapshot; backfill issue 2026-10-19 | English | 1,440 × 900 | 39,325 |
+| [track-record-desktop.png](assets/screenshots/track-record-desktop.png) | One verification table for all complete target weeks. | Retired archive; 11 scored weeks | English | 1,440 × 900 | 41,574 |
 | [week_navigation.gif](assets/screenshots/week_navigation.gif) | Four complete historical estimate weeks. | Historical export; issues 2024-09-02, 09-09, 09-16 and 09-23 | English | 1,476 × 936 | 327,531 |
 | [national_weekly.gif](assets/charts/national_weekly.gif) | National weekly detection counts and observation outages. | Detection bundle; 2012-2025 | English | 1,026 × 443 | 60,601 |
 | [seasonal_cycle.gif](assets/charts/seasonal_cycle.gif) | Annual detection cycles by week of year. | Detection bundle; 2012-2025 | English | 960 × 476 | 511,164 |
@@ -32,9 +29,7 @@ prediction export. The [figure guide](figures.md) describes sources and regenera
 | [information_products.gif](assets/diagrams/information_products.gif) | Retrospective analysis, availability-constrained simulation and operational use. | [Information rules](protocol.md); protocol frozen 2026-10-31 | English | 1,356 × 376 | 227,133 |
 | [partitions.gif](assets/diagrams/partitions.gif) | Training, selection, calibration and test dates, purges and geographic holdout. | [Protocol 1.1](../configs/protocol.yaml); issue calendar 2013-2025 | English | 1,356 × 586 | 107,918 |
 
-The chart sources are summarized in [results_summary.json](../artifacts/figures/results_summary.json)
-and [dataset_summary.json](../artifacts/figures/dataset_summary.json). The machine-readable
-animation inventory is [media.json](assets/media.json).
+The chart sources are summarized in [results_summary.json](../artifacts/figures/results_summary.json) and [dataset_summary.json](../artifacts/figures/dataset_summary.json). The machine-readable animation inventory is [media.json](assets/media.json).
 
 ## Diagram sources
 

@@ -1,47 +1,22 @@
 # Evaluation results
 
-The primary final-test opening was `2026-10-31T10:30:00.578581+00:00`, recorded with `reopening: false` in
-[final_test_log.json](../artifacts/evaluation/final_test_log.json). Later sensitivity openings
-are logged separately with their reasons; they do not replace the primary results below.
+The primary final-test opening was `2026-10-31T10:30:00.578581+00:00`, recorded with `reopening: false` in [final_test_log.json](../artifacts/evaluation/final_test_log.json). Later sensitivity openings are logged separately with their reasons; they do not replace the primary results below.
 
-Measured values come from [test_strict.json](../artifacts/evaluation/test_strict.json), the
-[closed selections](../artifacts/evaluation/selection_strict.json), and
-[results_summary.json](../artifacts/figures/results_summary.json). Unless stated otherwise,
-metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001
-retain two significant digits.
-Counts are exact. Exact metric values are in the cited evaluation JSON artifacts.
-AP means average precision over eligible
-cell-weeks, rather than a mean of annual scores.
+Measured values come from [test_strict.json](../artifacts/evaluation/test_strict.json), the [closed selections](../artifacts/evaluation/selection_strict.json), and [results_summary.json](../artifacts/figures/results_summary.json). Unless stated otherwise, metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001 retain two significant digits. Counts are exact. Exact metric values are in the cited evaluation JSON artifacts. AP means average precision over eligible cell-weeks, rather than a mean of annual scores.
 
 ## Protocol and comparator
 
-The [frozen protocol](../configs/protocol.yaml) defines a weekly binary target: at least one
-selected VIIRS S-NPP standard-processing vegetation-fire detection in the national portion of a
-cell. Primary labels use nominal or high confidence. Incomplete target weeks have null labels;
-ordinary eligibility also requires complete recent observation history.
+The [frozen protocol](../configs/protocol.yaml) defines a weekly binary target: at least one selected VIIRS S-NPP standard-processing vegetation-fire detection in the national portion of a cell. Primary labels use nominal or high confidence. Incomplete target weeks have null labels; ordinary eligibility also requires complete recent observation history.
 
-Model choice and early stopping use `val_select`; isotonic calibration uses `val_calib` only.
-The best baseline and fitted candidate are selected by **uncalibrated validation AP**. Primary
-test comparisons use **uncalibrated baselines versus calibrated candidates**. Calibrated-baseline
-comparisons are a separate sensitivity result, not the primary comparator.
+Model choice and early stopping use `val_select`; isotonic calibration uses `val_calib` only. The best baseline and fitted candidate are selected by **uncalibrated validation AP**. Primary test comparisons use **uncalibrated baselines versus calibrated candidates**. Calibrated-baseline comparisons are a separate sensitivity result, not the primary comparator.
 
-The temporal winner is `strict/lightgbm_08` and its comparator is
-`train_climatology`; the geographic winner is `strict_geo/lightgbm_04` and its
-comparator is `persistence`. These choices were closed in
-[selection_strict.json](../artifacts/evaluation/selection_strict.json) and
-[selection_strict_geo.json](../artifacts/evaluation/selection_strict_geo.json).
+The temporal winner is `strict/lightgbm_08` and its comparator is `train_climatology`; the geographic winner is `strict_geo/lightgbm_04` and its comparator is `persistence`. These choices were closed in [selection_strict.json](../artifacts/evaluation/selection_strict.json) and [selection_strict_geo.json](../artifacts/evaluation/selection_strict_geo.json).
 
-The test issue years are 2023-2025.
-Temporal intervals resample the 28 represented calendar-month blocks;
-geographic intervals resample 24 represented one-degree blocks.
-Both use 500 seeded replicates and 95% percentile intervals.
-Paired comparisons use the same rows and block multiplicities. Source:
-[test_strict.json](../artifacts/evaluation/test_strict.json), `bootstrap` and `candidate_bootstrap`.
+The test issue years are 2023-2025. Temporal intervals resample the 28 represented calendar-month blocks; geographic intervals resample 24 represented one-degree blocks. Both use 500 seeded replicates and 95% percentile intervals. Paired comparisons use the same rows and block multiplicities. Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `bootstrap` and `candidate_bootstrap`.
 
 ## Temporal test
 
-The temporal population contains 3,127,636 eligible cell-weeks outside held-out blocks.
-The table follows the primary probability rule above; losses and ECE are better when smaller.
+The temporal population contains 3,127,636 eligible cell-weeks outside held-out blocks. The table follows the primary probability rule above; losses and ECE are better when smaller.
 
 | Model (probabilities) | AP [95% CI] | Brier | Log loss | ROC-AUC | ECE |
 |---|---|---|---|---|---|
@@ -50,9 +25,7 @@ The table follows the primary probability rule above; losses and ECE are better 
 | `logistic_regression` (calibrated) | 0.293 [0.195, 0.353] | 0.016 | 0.064 | 0.923 | 0.0039 |
 | `lightgbm_08` (calibrated) | 0.323 [0.222, 0.383] | 0.016 | 0.062 | 0.928 | 0.0031 |
 
-Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` and
-`candidate_bootstrap.temporal`; the AP values and intervals are also copied in
-[results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal`.
+Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` and `candidate_bootstrap.temporal`; the AP values and intervals are also copied in [results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal`.
 
 ![Temporal test AP and paired differences](assets/charts/temporal_ap.gif)
 
@@ -65,18 +38,9 @@ Temporal-test AP and paired intervals reveal the recorded models from `artifacts
 | H1 | Calibrated strict winner minus uncalibrated climatology | [0.100, 0.218] | Supported: interval entirely above zero |
 | H2 | Calibrated retrospective winner minus calibrated strict winner | [-0.004, 0.002] | Supported: interval contains zero |
 
-H1's recorded AP difference is 0.157,
-derived in the figure summary by subtracting recorded APs on identical support. H2 compares
-`retrospective/lightgbm_16` with `strict/lightgbm_08` on
-3,127,636 paired rows. Its point estimate is
-not recorded, so only the interval is reported. H2's rule is not an equivalence test and does not
-establish an absence of useful rainfall information. The retrospective addition is CHIRPS
-rainfall; the selected feature list contains no MapBiomas inputs.
+H1's recorded AP difference is 0.157, derived in the figure summary by subtracting recorded APs on identical support. H2 compares `retrospective/lightgbm_16` with `strict/lightgbm_08` on 3,127,636 paired rows. Its point estimate is not recorded, so only the interval is reported. H2's rule is not an equivalence test and does not establish an absence of useful rainfall information. The retrospective addition is CHIRPS rainfall; the selected feature list contains no MapBiomas inputs.
 
-Sources: [test_strict.json](../artifacts/evaluation/test_strict.json), `hypotheses` and
-`strict_retrospective_bootstrap`;
-[selection_retrospective.json](../artifacts/evaluation/selection_retrospective.json), `features`;
-[results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal` and `figures.h2`.
+Sources: [test_strict.json](../artifacts/evaluation/test_strict.json), `hypotheses` and `strict_retrospective_bootstrap`; [selection_retrospective.json](../artifacts/evaluation/selection_retrospective.json), `features`; [results_summary.json](../artifacts/figures/results_summary.json), `figures.temporal` and `figures.h2`.
 
 ![H2 retrospective-minus-strict paired AP interval](assets/charts/h2_interval.gif)
 
@@ -84,10 +48,7 @@ The H2 animation shows the recorded paired interval from `strict_retrospective_b
 
 ## Geographic holdout
 
-The geographic test contains 809,840 eligible cell-weeks in blocks excluded
-from fitting, selection and calibration. It uses `strict_geo`, which removes cell climatology
-and retains department climatology. Historical detections from held-out locations may still
-contribute history features under the frozen information rule.
+The geographic test contains 809,840 eligible cell-weeks in blocks excluded from fitting, selection and calibration. It uses `strict_geo`, which removes cell climatology and retains department climatology. Historical detections from held-out locations may still contribute history features under the frozen information rule.
 
 | Model (probabilities) | AP [95% CI] | Brier | Log loss | ROC-AUC | ECE |
 |---|---|---|---|---|---|
@@ -96,14 +57,9 @@ contribute history features under the frozen information rule.
 | `logistic_regression` (calibrated) | 0.351 [0.218, 0.436] | 0.011 | 0.046 | 0.940 | 0.0028 |
 | `lightgbm_04` (calibrated) | 0.384 [0.250, 0.468] | 0.011 | 0.043 | 0.944 | 0.00092 |
 
-The calibrated geographic winner's paired AP-gain interval against uncalibrated persistence is
-[0.145, 0.233].
-This population differs from the temporal test, so its higher AP is not evidence that spatial
-transfer is easier.
+The calibrated geographic winner's paired AP-gain interval against uncalibrated persistence is [0.145, 0.233]. This population differs from the temporal test, so its higher AP is not evidence that spatial transfer is easier.
 
-Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `geographic_holdout` and
-`candidate_bootstrap.geographic`; [results_summary.json](../artifacts/figures/results_summary.json),
-`figures.geographic`.
+Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `geographic_holdout` and `candidate_bootstrap.geographic`; [results_summary.json](../artifacts/figures/results_summary.json), `figures.geographic`.
 
 ![Geographic holdout AP and paired differences](assets/charts/geographic_ap.gif)
 
@@ -111,8 +67,7 @@ Geographic AP and paired intervals use the recorded strict_geo population and sp
 
 ## Per-year results and Santa Cruz
 
-Annual temporal AP uses the same models and probability versions as the pooled temporal table;
-no model is reselected within a year.
+Annual temporal AP uses the same models and probability versions as the pooled temporal table; no model is reselected within a year.
 
 | Issue year | Eligible rows | Climatology AP | Persistence AP | Logistic AP | LightGBM AP |
 |---|---|---|---|---|---|
@@ -120,9 +75,7 @@ no model is reselected within a year.
 | 2024 | 678,638 | 0.100 | 0.208 | 0.319 | 0.374 |
 | 2025 | 1,209,746 | 0.166 | 0.084 | 0.229 | 0.246 |
 
-Santa Cruz contains 1,095,934 eligible temporal-test
-cell-weeks. Its area-budget denominator is the eligible national cell area within the department
-for each issue week.
+Santa Cruz contains 1,095,934 eligible temporal-test cell-weeks. Its area-budget denominator is the eligible national cell area within the department for each issue week.
 
 | Model (probabilities) | AP | Brier | ECE | Recall at 5% area | Recall at 10% area |
 |---|---|---|---|---|---|
@@ -131,10 +84,7 @@ for each issue week.
 | `logistic_regression` (calibrated) | 0.333 | 0.019 | 0.0045 | 0.373 | 0.558 |
 | `lightgbm_08` (calibrated) | 0.381 | 0.018 | 0.0038 | 0.388 | 0.573 |
 
-Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `per_year` and `santa_cruz`.
-Annual differences reflect the evaluated populations, including observation exclusions; the
-artifact supplies no annual or Santa Cruz bootstrap intervals. The temporal comparator remains
-the validation-selected climatology even where another baseline scores higher in a subset.
+Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `per_year` and `santa_cruz`. Annual differences reflect the evaluated populations, including observation exclusions; the artifact supplies no annual or Santa Cruz bootstrap intervals. The temporal comparator remains the validation-selected climatology even where another baseline scores higher in a subset.
 
 ![Temporal AP by issue year](assets/charts/per_year_ap.gif)
 
@@ -142,9 +92,7 @@ Annual AP uses the three recorded issue-year subsets in `artifacts/evaluation/te
 
 ## Calibration
 
-ECE uses ten equal-frequency bins under the [protocol](../configs/protocol.yaml). The following
-values compare each model before and after isotonic calibration. Baseline calibration is shown
-for sensitivity only; primary baseline comparisons retain their original probabilities.
+ECE uses ten equal-frequency bins under the [protocol](../configs/protocol.yaml). The following values compare each model before and after isotonic calibration. Baseline calibration is shown for sensitivity only; primary baseline comparisons retain their original probabilities.
 
 | Population and model | ECE uncalibrated | ECE calibrated |
 |---|---|---|
@@ -157,16 +105,11 @@ for sensitivity only; primary baseline comparisons retain their original probabi
 | Geographic: `logistic_regression` | 0.0028 | 0.0028 |
 | Geographic: `lightgbm_04` | 0.010 | 0.00092 |
 
-Calibration lowers the selected LightGBM's pooled ECE in both populations, but does not improve
-every model or every annual subset. In particular, temporal logistic-regression ECE increases.
-Calibration is fitted only on the calibration partition; these test values do not guide fitting.
+Calibration lowers the selected LightGBM's pooled ECE in both populations, but does not improve every model or every annual subset. In particular, temporal logistic-regression ECE increases. Calibration is fitted only on the calibration partition; these test values do not guide fitting.
 
-Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` and
-`geographic_holdout.models`; plotted reliability-bin values are copied in
-[results_summary.json](../artifacts/figures/results_summary.json), `figures.reliability`.
+Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `models` and `geographic_holdout.models`; plotted reliability-bin values are copied in [results_summary.json](../artifacts/figures/results_summary.json), `figures.reliability`.
 
-The reliability figure uses the temporal test population only; its second panel
-zooms into low predicted probabilities.
+The reliability figure uses the temporal test population only; its second panel zooms into low predicted probabilities.
 
 ![Temporal-test reliability curves with a low-probability zoom panel](assets/charts/reliability.gif)
 
@@ -174,10 +117,7 @@ Recorded temporal reliability bins accumulate from `artifacts/evaluation/test_st
 
 ## Recall at area budgets
 
-For each issue week, cells are ranked by probability and accumulated to the budget share of the
-eligible population's national cell area. The crossing cell contributes fractionally; selected
-positive contributions are pooled across weeks. Equal probabilities follow input row order.
-These are shares of positive cell-weeks captured, not shares of detected fires or burned area.
+For each issue week, cells are ranked by probability and accumulated to the budget share of the eligible population's national cell area. The crossing cell contributes fractionally; selected positive contributions are pooled across weeks. Equal probabilities follow input row order. These are shares of positive cell-weeks captured, not shares of detected fires or burned area.
 
 | Population and model (probabilities) | Recall at 5% area | Recall at 10% area |
 |---|---|---|
@@ -190,9 +130,7 @@ These are shares of positive cell-weeks captured, not shares of detected fires o
 | Geographic: `logistic_regression` (calibrated) | 0.453 | 0.651 |
 | Geographic: `lightgbm_04` (calibrated) | 0.469 | 0.673 |
 
-Source: [test_strict.json](../artifacts/evaluation/test_strict.json),
-`recall_at_area_budget_5pct` and `recall_at_area_budget_10pct` in each population;
-[results_summary.json](../artifacts/figures/results_summary.json), `figures.area_budget`.
+Source: [test_strict.json](../artifacts/evaluation/test_strict.json), `recall_at_area_budget_5pct` and `recall_at_area_budget_10pct` in each population; [results_summary.json](../artifacts/figures/results_summary.json), `figures.area_budget`.
 
 ![Recall at eligible area budgets](assets/charts/area_budget.gif)
 
@@ -200,15 +138,9 @@ Area-budget recall uses the recorded temporal and geographic summaries in `artif
 
 ## Example spatial distribution
 
-The map is a descriptive example for issue `2024-09-02`, with target ending
-`2024-09-09` (exclusive). It was chosen as the largest observed
-detection total among complete target weeks in the example year with national prediction
-coverage; ties choose the earliest issue date. Predictions use the strict model outside held-out
-blocks and the geographic model inside them. The observed panel displays satellite detections,
-not fire-event counts. This selected example is not an additional performance test.
+The map is a descriptive example for issue `2024-09-02`, with target ending `2024-09-09` (exclusive). It was chosen as the largest observed detection total among complete target weeks in the example year with national prediction coverage; ties choose the earliest issue date. Predictions use the strict model outside held-out blocks and the geographic model inside them. The observed panel displays satellite detections, not fire-event counts. This selected example is not an additional performance test.
 
-Source: [results_summary.json](../artifacts/figures/results_summary.json), `figures.map`, including
-the recorded selection rule, input provenance and figure caption.
+Source: [results_summary.json](../artifacts/figures/results_summary.json), `figures.map`, including the recorded selection rule, input provenance and figure caption.
 
 ![Example weekly predictions and observed satellite detections](assets/charts/fire_season_2024.gif)
 
@@ -216,10 +148,7 @@ The July–October 2024 map sequence joins the strict test prediction export to 
 
 ## Exclusions
 
-Counts follow the sequential eligibility filters. `Wrong geography` means held-out rows for
-fitting and temporal evaluation, and non-held-out rows for geographic evaluation. `Purged` is an
-independent count across the panel, repeated in each report; `Scanned` includes that count and
-the requested partition. Do not sum these repeated counts across partitions.
+Counts follow the sequential eligibility filters. `Wrong geography` means held-out rows for fitting and temporal evaluation, and non-held-out rows for geographic evaluation. `Purged` is an independent count across the panel, repeated in each report; `Scanned` includes that count and the requested partition. Do not sum these repeated counts across partitions.
 
 | Population | Scanned | Purged | Missing label | Wrong geography | Incomplete recent history | Eligible |
 |---|---|---|---|---|---|---|
@@ -229,31 +158,15 @@ the requested partition. Do not sum these repeated counts across partitions.
 | Temporal test | 5,943,360 | 111,438 | 557,190 | 1,084,880 | 1,062,216 | 3,127,636 |
 | Geographic test | 5,943,360 | 111,438 | 557,190 | 4,189,852 | 275,040 | 809,840 |
 
-The primary run has `exclude_low_coverage: false`; its `target_low_coverage` exclusion counter
-is 0, which reports no exclusion by that optional filter,
-not absence of flagged weeks. All primary table models report
-0 missing probabilities on their
-eligible populations. Paired temporal and geographic comparisons contain
-3,127,636 and 809,840
-rows respectively.
+The primary run has `exclude_low_coverage: false`; its `target_low_coverage` exclusion counter is 0, which reports no exclusion by that optional filter, not absence of flagged weeks. All primary table models report 0 missing probabilities on their eligible populations. Paired temporal and geographic comparisons contain 3,127,636 and 809,840 rows respectively.
 
-Sources: [selection_strict.json](../artifacts/evaluation/selection_strict.json), `exclusions`;
-[selection_strict_geo.json](../artifacts/evaluation/selection_strict_geo.json), matching fitting
-and validation eligibility; [test_strict.json](../artifacts/evaluation/test_strict.json),
-`exclusions`, model `missing_probability` and bootstrap `paired_rows`.
+Sources: [selection_strict.json](../artifacts/evaluation/selection_strict.json), `exclusions`; [selection_strict_geo.json](../artifacts/evaluation/selection_strict_geo.json), matching fitting and validation eligibility; [test_strict.json](../artifacts/evaluation/test_strict.json), `exclusions`, model `missing_probability` and bootstrap `paired_rows`.
 
 ## Sensitivity analyses
 
-All pre-registered sensitivity analyses are published below. Each was evaluated as a logged
-reopening after the frozen primary opening, with `reopening: true` and its recorded reason in
-[final_test_log.json](../artifacts/evaluation/final_test_log.json).
+All pre-registered sensitivity analyses are published below. Each was evaluated as a logged reopening after the frozen primary opening, with `reopening: true` and its recorded reason in [final_test_log.json](../artifacts/evaluation/final_test_log.json).
 
-All-confidence targets retain primary-selection history features. The ablations remove
-neighborhood history, cell and department climatology, or national activity features,
-respectively. Each run includes its corresponding geographic feature set under the same
-validation selection and calibration procedure. The temporal protocol comparator is the
-validation-selected, **uncalibrated `train_climatology`** in every run; differences below subtract
-its AP from the calibrated selected model's AP on paired rows.
+All-confidence targets retain primary-selection history features. The ablations remove neighborhood history, cell and department climatology, or national activity features, respectively. Each run includes its corresponding geographic feature set under the same validation selection and calibration procedure. The temporal protocol comparator is the validation-selected, **uncalibrated `train_climatology`** in every run; differences below subtract its AP from the calibrated selected model's AP on paired rows.
 
 | Run and source report | Selected temporal model | Calibrated temporal AP [95% CI] | Paired AP difference vs protocol comparator [95% CI] | H1 decision | Calibrated geographic-holdout AP [95% CI] (selected model) |
 |---|---|---|---|---|---|
@@ -263,47 +176,19 @@ its AP from the calibrated selected model's AP on paired rows.
 | [Without climatology features](../artifacts/evaluation/test_strict_drop_climatology.json) | `lightgbm_03` | 0.316 [0.215, 0.375] | 0.149 [0.091, 0.221] | Supported | 0.387 [0.252, 0.472] (`lightgbm_03`) |
 | [Without national activity features](../artifacts/evaluation/test_strict_drop_national.json) | `lightgbm_14` | 0.327 [0.228, 0.386] | 0.160 [0.106, 0.221] | Supported | 0.389 [0.252, 0.476] (`lightgbm_04`) |
 
-Sources are linked by run: `selected_model`, `best_baseline`, `models`, `bootstrap`,
-`hypotheses.H1` and `geographic_holdout`. Point differences subtract the recorded APs;
-difference intervals are the recorded paired bootstrap intervals. H1 remains supported in each run
-because its paired interval lies entirely above zero. The all-confidence run changes the
-target definition, so its AP is not a performance gain on the primary target.
+Sources are linked by run: `selected_model`, `best_baseline`, `models`, `bootstrap`, `hypotheses.H1` and `geographic_holdout`. Point differences subtract the recorded APs; difference intervals are the recorded paired bootstrap intervals. H1 remains supported in each run because its paired interval lies entirely above zero. The all-confidence run changes the target definition, so its AP is not a performance gain on the primary target.
 
-The low-coverage run equals the primary result because the evaluated test rows contain zero
-low-coverage-flagged target weeks: `exclusions.test.target_low_coverage` and
-`exclusions.geographic_holdout.target_low_coverage` both record 0 exclusions, leaving
-3,127,636 temporal and 809,840 geographic cell-weeks. Its selected-model APs, intervals and
-paired baseline comparisons match the primary evaluation. Source:
-[test_strict_exclude_low_coverage.json](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
-`exclusions`, `models`, `geographic_holdout` and `bootstrap`.
+The low-coverage run equals the primary result because the evaluated test rows contain zero low-coverage-flagged target weeks: `exclusions.test.target_low_coverage` and `exclusions.geographic_holdout.target_low_coverage` both record 0 exclusions, leaving 3,127,636 temporal and 809,840 geographic cell-weeks. Its selected-model APs, intervals and paired baseline comparisons match the primary evaluation. Source: [test_strict_exclude_low_coverage.json](../artifacts/evaluation/test_strict_exclude_low_coverage.json), `exclusions`, `models`, `geographic_holdout` and `bootstrap`.
 
-Relative to the primary AP reproduced by the low-coverage run, temporal AP changes by
--0.013 without neighborhood features, -0.007 without climatology features and +0.004
-without national activity features, calculated from the linked reports' calibrated APs.
-Their AP and comparator-gain intervals are shown above; no paired ablation-minus-primary
-intervals are recorded. These point changes measure predictive performance after feature
-removal and validation selection, not causal effects, and do not establish a reliable ordering
-of feature contributions.
+Relative to the primary AP reproduced by the low-coverage run, temporal AP changes by -0.013 without neighborhood features, -0.007 without climatology features and +0.004 without national activity features, calculated from the linked reports' calibrated APs. Their AP and comparator-gain intervals are shown above; no paired ablation-minus-primary intervals are recorded. These point changes measure predictive performance after feature removal and validation selection, not causal effects, and do not establish a reliable ordering of feature contributions.
 
-The calibrated-baseline sensitivity remains separate in
-[test_strict.json](../artifacts/evaluation/test_strict.json) under
-`calibrated_baseline_sensitivity`. Primary tables and figures above describe the original
-primary report.
+The calibrated-baseline sensitivity remains separate in [test_strict.json](../artifacts/evaluation/test_strict.json) under `calibrated_baseline_sensitivity`. Primary tables and figures above describe the original primary report.
 
 ## Environmental covariates
 
-Vegetation (H3), land cover (H4) and their combination (H5) are assessed after the primary
-analysis under a [separately specified protocol](extension-vegetation.md). Candidates are
-selected on uncalibrated 2021 AP and calibrated on 2022. The covariate decision uses
-calibrated AP minus the saved retrospective comparator's calibrated AP on identical 2022
-validation rows; only a 95% paired interval entirely above zero supports added information.
-Both feature families exclude geographic holdout rows from validation. Calibration and
-decision labels overlap, and the intervals condition on fixed fitted models and calibrators.
+Vegetation (H3), land cover (H4) and their combination (H5) are assessed after the primary analysis under a [separately specified protocol](extension-vegetation.md). Candidates are selected on uncalibrated 2021 AP and calibrated on 2022. The covariate decision uses calibrated AP minus the saved retrospective comparator's calibrated AP on identical 2022 validation rows; only a 95% paired interval entirely above zero supports added information. Both feature families exclude geographic holdout rows from validation. Calibration and decision labels overlap, and the intervals condition on fixed fitted models and calibrators.
 
-Both covariate tables use three decimals for AP levels and their interval endpoints, and four
-decimals for paired AP differences and their interval endpoints, rounded from the source
-artifacts. A negative endpoint that rounds to zero retains its sign as `-0.0000`. Validation
-findings remain authoritative and use the unrounded intervals.
+Both covariate tables use three decimals for AP levels and their interval endpoints, and four decimals for paired AP differences and their interval endpoints, rounded from the source artifacts. A negative endpoint that rounds to zero retains its sign as `-0.0000`. Validation findings remain authoritative and use the unrounded intervals.
 
 | Hypothesis / feature family / lag (selected model) | Paired validation rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] | Validation finding |
 |---|---:|---|---:|---|---|
@@ -318,46 +203,19 @@ findings remain authoritative and use the unrounded intervals.
 | H5 vegetation + land cover, geographic, 16 days (`lightgbm_07`) | 679,634 | 0.344 [0.259, 0.403] | 0.335 | 0.0095 [-0.0011, 0.0195] | Inconclusive exploratory result |
 | H5 vegetation + land cover, geographic, 32 days (`lightgbm_14`) | 603,525 | 0.350 [0.259, 0.412] | 0.336 | 0.0140 [0.0010, 0.0205] | Positive exploratory interval |
 
-The primary 16-day H3 result is inconclusive/no detected gain. The positive 32-day temporal
-validation interval is a prespecified sensitivity; it does not replace the primary lag or
-change that decision. This is not evidence of equivalence.
+The primary 16-day H3 result is inconclusive/no detected gain. The positive 32-day temporal validation interval is a prespecified sensitivity; it does not replace the primary lag or change that decision. This is not evidence of equivalence.
 
-Sources: the H3 [frozen selection](../artifacts/evaluation/extension_selection.json) and
-[execution report](../artifacts/evaluation/extension_execution_report.json), and the
-H4/H5 [amended selection](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_selection.json).
-All shown validation intervals use 10 represented calendar-month blocks, 500 valid
-replicates and seed 7.
-Each comparison pairs the same candidate and comparator rows; support differs between
-lags and from the primary analysis. AP levels across different populations are not directly
-comparable.
+Sources: the H3 [frozen selection](../artifacts/evaluation/extension_selection.json) and [execution report](../artifacts/evaluation/extension_execution_report.json), and the H4/H5 [amended selection](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_selection.json). All shown validation intervals use 10 represented calendar-month blocks, 500 valid replicates and seed 7. Each comparison pairs the same candidate and comparator rows; support differs between lags and from the primary analysis. AP levels across different populations are not directly comparable.
 
-H4/H5 follow a dated [land-cover amendment](extension-landcover-amendment.md), specified
-after H3 validation results were inspected and before accessing outcome labels or computing
-metrics for H4/H5. It specifies the implemented degree-grid mean estimator and its
-polygon-comparison evidence. The original vegetation selection retains H4/H5 as
-`not_evaluated` under its original availability freeze; the amended selection records
-the six completed fits above. Prior H3 scores and decisions remain unchanged.
+H4/H5 follow a dated [land-cover amendment](extension-landcover-amendment.md), specified after H3 validation results were inspected and before accessing outcome labels or computing metrics for H4/H5. It specifies the implemented degree-grid mean estimator and its polygon-comparison evidence. The original vegetation selection retains H4/H5 as `not_evaluated` under its original availability freeze; the amended selection records the six completed fits above. Prior H3 scores and decisions remain unchanged.
 
-The primary temporal H4 and 16-day H5 decisions are inconclusive; their paired intervals
-contain zero. This does not establish no effect or equivalence. The 32-day temporal H5
-interval also includes zero, with its negative lower bound retained above. Positive H4
-geographic and H5 geographic 32-day intervals are exploratory and do not change the
-primary decisions. H4/H5 each use their own common-support intersection against the
-published retrospective comparator for the corresponding feature family.
+The primary temporal H4 and 16-day H5 decisions are inconclusive; their paired intervals contain zero. This does not establish no effect or equivalence. The 32-day temporal H5 interval also includes zero, with its negative lower bound retained above. Positive H4 geographic and H5 geographic 32-day intervals are exploratory and do not change the primary decisions. H4/H5 each use their own common-support intersection against the published retrospective comparator for the corresponding feature family.
 
-Vegetation acquisition and feature construction are complete; all 2012-2025 land-cover maps
-and the land-cover and combined feature partitions are also complete. See
-[vegetation acquisition](vegetation-acquisition.md) and
-[land-cover features and acquisition evidence](covariates.md#land-cover-and-joining).
-The amended selection records the completed H4/H5 fits separately from feature availability.
+Vegetation acquisition and feature construction are complete; all 2012-2025 land-cover maps and the land-cover and combined feature partitions are also complete. See [vegetation acquisition](vegetation-acquisition.md) and [land-cover features and acquisition evidence](covariates.md#land-cover-and-joining). The amended selection records the completed H4/H5 fits separately from feature availability.
 
 ### Exploratory test-year scores
 
-The already inspected 2023-2025 test years were reopened for exploratory scoring after
-selection was frozen. The opening is recorded in
-[the access log](../artifacts/evaluation/final_test_log.json); these scores did not inform
-selection or the validation decision. The models and calibrated comparator are those
-recorded above, evaluated on each row's common feature-complete support.
+The already inspected 2023-2025 test years were reopened for exploratory scoring after selection was frozen. The opening is recorded in [the access log](../artifacts/evaluation/final_test_log.json); these scores did not inform selection or the validation decision. The models and calibrated comparator are those recorded above, evaluated on each row's common feature-complete support.
 
 | Feature family / lag | Paired test rows | Covariate AP [95% CI] | Comparator AP | Paired AP difference [95% CI] |
 |---|---:|---|---:|---|
@@ -372,16 +230,6 @@ recorded above, evaluated on each row's common feature-complete support.
 | H5 vegetation + land cover, geographic, 16 days | 549,893 | 0.434 [0.276, 0.525] | 0.409 | 0.0253 [0.0093, 0.0398] |
 | H5 vegetation + land cover, geographic, 32 days | 506,143 | 0.436 [0.282, 0.522] | 0.413 | 0.0229 [0.0120, 0.0360] |
 
-Sources: the H3 [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json)
-and the H4/H5 [amended exploratory test report](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_test_a469d9bc13b149d9997f2a6e9c30971a.json).
-All shown test intervals retain 500 valid replicates: 28 represented calendar-month blocks
-for temporal scores and 24 one-degree spatial blocks for geographic holdout. Subgroups and
-secondary metrics are retained in the reports. These exploratory scores did not select
-models or lags and do not change the primary H3/H4/H5 decisions.
+Sources: the H3 [exploratory test report](../artifacts/evaluation/extension_test_b16f4fddf16c4711a779b6f8639dc5f7.json) and the H4/H5 [amended exploratory test report](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_test_a469d9bc13b149d9997f2a6e9c30971a.json). All shown test intervals retain 500 valid replicates: 28 represented calendar-month blocks for temporal scores and 24 one-degree spatial blocks for geographic holdout. Subgroups and secondary metrics are retained in the reports. These exploratory scores did not select models or lags and do not change the primary H3/H4/H5 decisions.
 
-The 2026 confirmation attempt was
-[refused without opening labels](../artifacts/evaluation/extension_confirmation_guard_retry.json),
-including under the [H4/H5 amendment](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_confirmation_guard.json):
-vegetation archive timing, complete confirmation inputs and untouched access history were
-not established. No fresh confirmation or model promotion is supported. The deployed weekly
-model remains unchanged.
+The 2026 confirmation attempt was [refused without opening labels](../artifacts/evaluation/extension_confirmation_guard_retry.json), including under the [H4/H5 amendment](../artifacts/evaluation/amendments/landcover-2026-11-02/extension_confirmation_guard.json): vegetation archive timing, complete confirmation inputs and untouched access history were not established. No fresh confirmation or model promotion is supported. The archived weekly estimates use the strict model without environmental covariates.

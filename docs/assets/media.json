@@ -133,7 +133,7 @@
       "border_clear": false
     },
     "screenshots/table-desktop.png": {
-      "bytes": 36620,
+      "bytes": 40467,
       "frames": 1,
       "width": 1440,
       "height": 900,
@@ -143,7 +143,7 @@
       "border_clear": false
     },
     "screenshots/estimate-mobile.png": {
-      "bytes": 40772,
+      "bytes": 39886,
       "frames": 1,
       "width": 390,
       "height": 844,
@@ -201,7 +201,7 @@
       "mathtext_fontset": "stix"
     },
     "screenshots/live-cell-detail.png": {
-      "bytes": 68803,
+      "bytes": 70381,
       "frames": 1,
       "width": 1440,
       "height": 900,
@@ -211,7 +211,7 @@
       "border_clear": false
     },
     "screenshots/live-forecast-desktop.png": {
-      "bytes": 68858,
+      "bytes": 68785,
       "frames": 1,
       "width": 1440,
       "height": 900,
@@ -221,7 +221,7 @@
       "border_clear": false
     },
     "screenshots/live-spanish-desktop.png": {
-      "bytes": 70928,
+      "bytes": 70473,
       "frames": 1,
       "width": 1440,
       "height": 900,
@@ -231,7 +231,7 @@
       "border_clear": false
     },
     "screenshots/track-record-desktop.png": {
-      "bytes": 39325,
+      "bytes": 41574,
       "frames": 1,
       "width": 1440,
       "height": 900,
