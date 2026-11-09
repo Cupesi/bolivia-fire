@@ -39,6 +39,38 @@ function syntheticFetch() {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("static client with synthetic data", () => {
+  it("retains retirement fields and never treats ended target days as pending", async () => {
+    syntheticFetch();
+    const original = fetch;
+    vi.stubGlobal("fetch", async (url: string) => {
+      const path = url.split("/data/")[1];
+      if (path === "index.json" || path?.endsWith("2026-11-02.json"))
+        return new Response(
+          await readFile(
+            new URL(`../retired-live-data/${path}`, fixture),
+            "utf8",
+          ),
+        );
+      return original(url);
+    });
+    const source = client();
+    expect((await source.loadInitial(signal())).live.retirement).toMatchObject({
+      status: "ended",
+      final_issue: "2026-11-02",
+      ended_utc: "2026-11-02T15:40:00Z",
+    });
+    const layer = await source.loadLayer(
+      "2026-11-02",
+      "observed",
+      "",
+      "",
+      signal(),
+    );
+    expect(layer.observation?.coverage?.pendingDays).toEqual([]);
+    expect(layer.observation?.coverage?.unobservedDays).toEqual(
+      Array.from({ length: 7 }, (_, index) => `2026-11-0${index + 2}`),
+    );
+  });
   it("decodes dictionary columns without changing nulls, accents or numbers", () => {
     const synthetic = {
       format: "dictionary-v1",

@@ -1,5 +1,20 @@
 import type { Messages } from "./en";
 export const es = {
+  archiveHeading: "Archivo de estimaciones semanales",
+  archiveIntro:
+    "Estimaciones semanales experimentales archivadas (datos casi en tiempo real)",
+  archivePageTitle: "Bolivia Fire · Archivo de estimaciones semanales",
+  archiveDescription:
+    "Estimaciones semanales experimentales archivadas de detecciones satelitales de incendios en Bolivia y su historial de verificación.",
+  retirementNotice:
+    "Las estimaciones semanales finalizaron. NASA dejó de entregar datos Suomi NPP el {ended}; la estimación del {target} es la última y no puede verificarse.",
+  retirementSource: "Fuente de NASA",
+  noVerifiedArchiveWeeks: "Este archivo no contiene semanas verificadas.",
+  weeklyVerification: "Verificación semanal",
+  archiveVerificationNote:
+    "Estas estimaciones se calcularon después de sus fechas de emisión, usando solo datos adquiridos antes de cada emisión.",
+  archiveLimitations:
+    "El modelo se entrenó con detecciones de procesamiento estándar y se aplicó a detecciones casi en tiempo real. Estas estimaciones experimentales no constituyen alertas oficiales.",
   geographicHoldout: "Reserva geográfica (modelo geográfico)",
   geographicUnavailable:
     "Reserva geográfica (sin estimación geográfica esta semana)",

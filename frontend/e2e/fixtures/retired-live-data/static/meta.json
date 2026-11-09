@@ -1,0 +1,30 @@
+{
+  "project_name": "Synthetic Bolivia Fire",
+  "protocol": {
+    "version": "1.1",
+    "sha256": "synthetic-protocol"
+  },
+  "models": {
+    "strict": [
+      "synthetic/lightgbm"
+    ]
+  },
+  "variants": [
+    "strict"
+  ],
+  "source_attributions": [
+    {
+      "name": "NASA FIRMS",
+      "url": "https://firms.modaps.eosdis.nasa.gov/",
+      "product": "VIIRS_SNPP_NRT",
+      "license": "NASA data policy"
+    }
+  ],
+  "retirement": {
+    "status": "ended",
+    "ended_utc": "2026-11-02T15:40:00Z",
+    "final_issue": "2026-11-02",
+    "reason": "NASA stopped delivering Suomi NPP science data.",
+    "source_url": "https://www.earthdata.nasa.gov/data/alerts-outages/reminder-new-suomi-npp-observations-cease-november-2-2026"
+  }
+}

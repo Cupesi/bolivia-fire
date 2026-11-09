@@ -58,6 +58,23 @@ await build({
   publicDir: "public",
   build: { copyPublicDir: true },
 });
+if (index.retirement?.status === "ended") {
+  const path = resolve("dist/index.html");
+  const title = "Bolivia Fire · Weekly estimate archive";
+  const description =
+    "Archived experimental weekly estimates of satellite fire detections in Bolivia and their verification record.";
+  const html = (await readFile(path, "utf8"))
+    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
+    .replace(
+      /(<meta\s+(?:name="description"|property="og:description"|name="twitter:description")\s+content=")[^"]*/g,
+      `$1${description}`,
+    )
+    .replace(
+      /(<meta\s+(?:property="og:title"|name="twitter:title")\s+content=")[^"]*/g,
+      `$1${title}`,
+    );
+  await writeFile(path, html);
+}
 const out = resolve("dist/data");
 await mkdir(out, { recursive: true });
 await writeFile(join(out, "index.json"), JSON.stringify(index));

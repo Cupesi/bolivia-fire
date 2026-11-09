@@ -11,23 +11,30 @@
   import { onMount } from "svelte";
   import { liveClient } from "../lib/data-client";
   import type { TrackRecord } from "../lib/types";
+  import { verificationGroups } from "../lib/live-presentation";
+  let { ended = false }: { ended?: boolean } = $props();
   let records = $state<TrackRecord[]>([]);
   let loading = $state(true);
   let error = $state<Error | null>(null);
   let controller: AbortController | null = null;
   const prospective = $derived(records.filter((record) => record.prospective));
-  const groups = $derived([
-    {
-      title: $i18n.messages.prospectiveWeeks,
-      label: $i18n.messages.weeklyVerificationScores,
-      rows: prospective,
-    },
-    {
-      title: $i18n.messages.backfillWeeksGeneratedAfterIssueTime,
-      label: $i18n.messages.backfillVerificationScores,
-      rows: records.filter((record) => !record.prospective),
-    },
-  ]);
+  const groups = $derived(
+    verificationGroups(records, ended).map((group) => ({
+      ...group,
+      title:
+        group.kind === "archive"
+          ? $i18n.messages.weeklyVerification
+          : group.kind === "prospective"
+            ? $i18n.messages.prospectiveWeeks
+            : $i18n.messages.backfillWeeksGeneratedAfterIssueTime,
+      label:
+        group.kind === "archive"
+          ? $i18n.messages.weeklyVerification
+          : group.kind === "prospective"
+            ? $i18n.messages.weeklyVerificationScores
+            : $i18n.messages.backfillVerificationScores,
+    })),
+  );
   async function load() {
     controller?.abort();
     const request = new AbortController();
@@ -73,10 +80,12 @@
 </script>
 
 <section class="track-panel" aria-label={$i18n.messages.trackRecord}>
-  <h2>{$i18n.messages.trackRecord}</h2>
-  <p class="muted small">
-    {$i18n.messages.verificationHint}
-  </p>
+  <h2>
+    {ended ? $i18n.messages.weeklyVerification : $i18n.messages.trackRecord}
+  </h2>
+  {#if !ended}<p class="muted small">
+      {$i18n.messages.verificationHint}
+    </p>{/if}
   {#if loading}<p role="status">{$i18n.messages.loadingVerificationScores}</p>
   {:else if error}<div role="alert" class="error-text">
       <p>{errorText($i18n, error)}</p>
@@ -85,10 +94,13 @@
       >
     </div>
   {:else if !records.length}<p class="empty-state">
-      {$i18n.messages.noVerifiedWeeksYet}
+      {ended
+        ? $i18n.messages.noVerifiedArchiveWeeks
+        : $i18n.messages.noVerifiedWeeksYet}
     </p>
   {:else}
-    {#if prospective.length}
+    {#if ended}<p class="small">{$i18n.messages.archiveVerificationNote}</p>
+    {:else if prospective.length}
       <p class="small muted">
         {$i18n.messages.prospectiveHint}
       </p>
@@ -152,7 +164,7 @@
         {$i18n.messages.noProspectiveVerifiedWeeksYet}
       </p>{/if}
     {#each groups as group}{#if group.rows.length}
-        <h3>{group.title}</h3>
+        {#if !ended}<h3>{group.title}</h3>{/if}
         <!-- svelte-ignore a11y_no_noninteractive_tabindex (The scrolling table needs keyboard access.) -->
         <div
           class="table-scroll"
@@ -175,7 +187,8 @@
                   scope="col">{$i18n.messages.climatologyAp2}</th
                 ><th scope="col">{$i18n.messages.rocAuc}</th><th scope="col"
                   >{$i18n.messages.ece}</th
-                ><th scope="col">{$i18n.messages.notes}</th></tr
+                >{#if !ended}<th scope="col">{$i18n.messages.notes}</th
+                  >{/if}</tr
               ></thead
             >
             <tbody
@@ -195,9 +208,9 @@
                     >{metric(record.recall_area_10)}</td
                   ><td>{metric(record.climatology_ap)}</td><td
                     >{metric(record.roc_auc)}</td
-                  ><td>{metric(record.ece)}</td><td
-                    >{localizeText($i18n, record.notes)}</td
-                  ></tr
+                  ><td>{metric(record.ece)}</td>{#if !ended}<td
+                      >{localizeText($i18n, record.notes)}</td
+                    >{/if}</tr
                 >{/each}</tbody
             >
           </table>

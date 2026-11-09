@@ -1,0 +1,115 @@
+{
+  "synthetic": true,
+  "latest_issue": "2026-11-02",
+  "last_updated_utc": "2026-11-09T10:00:00+00:00",
+  "issues": [
+    {
+      "issue_date": "2026-08-03",
+      "forecast": true,
+      "observation": true,
+      "verified": false,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-08-10",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-08-17",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-08-24",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-08-31",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-09-07",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-09-14",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-09-21",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-09-28",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-10-05",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-10-12",
+      "forecast": true,
+      "observation": true,
+      "verified": false,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-10-19",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-10-26",
+      "forecast": true,
+      "observation": true,
+      "verified": true,
+      "prospective": false
+    },
+    {
+      "issue_date": "2026-11-02",
+      "forecast": true,
+      "observation": true,
+      "verified": false,
+      "prospective": false
+    }
+  ],
+  "limitations": [
+    "Synthetic fixture for browser tests."
+  ],
+  "retirement": {
+    "status": "ended",
+    "ended_utc": "2026-11-02T15:40:00Z",
+    "final_issue": "2026-11-02",
+    "reason": "NASA stopped delivering Suomi NPP science data.",
+    "source_url": "https://www.earthdata.nasa.gov/data/alerts-outages/reminder-new-suomi-npp-observations-cease-november-2-2026"
+  }
+}

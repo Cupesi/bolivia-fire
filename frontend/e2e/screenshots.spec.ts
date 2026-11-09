@@ -3,12 +3,54 @@ import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { normalizeGrid } from "../src/lib/api";
 import { fitGrid, screenPoint } from "../src/lib/projection";
+import { parseTrackRecord } from "../src/lib/static";
+import { formatDate } from "../src/lib/i18n";
 
 test.skip(
   process.env.CAPTURE_DOCS_MEDIA !== "1",
   "Set CAPTURE_DOCS_MEDIA=1 to capture documentation",
 );
 const destination = resolve("../docs/assets/screenshots");
+
+test("inspect retired archive notice in both languages and widths", async ({
+  page,
+}) => {
+  test.skip(
+    !process.env.RETIREMENT_CAPTURE_DIR,
+    "Set RETIREMENT_CAPTURE_DIR for archive inspection",
+  );
+  const directory = process.env.RETIREMENT_CAPTURE_DIR!;
+  await mkdir(directory, { recursive: true });
+  await page.route("**/*", (route) => {
+    if (new URL(route.request().url()).hostname !== "127.0.0.1")
+      return route.abort();
+    return route.continue();
+  });
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    await page.goto(
+      `${process.env.DOCS_STATIC_URL || "http://127.0.0.1:4173"}/?lang=en`,
+    );
+    for (const language of ["en", "es"]) {
+      if (language === "es")
+        await page.locator('.language-control button[lang="es"]').click();
+      await expect(page.getByTestId("retirement-notice")).toContainText(
+        language === "en" ? "cannot be verified" : "no puede verificarse",
+      );
+      await expect(page).toHaveTitle(
+        language === "en"
+          ? /Weekly estimate archive/
+          : /Archivo de estimaciones semanales/,
+      );
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBe(width);
+      await page.screenshot({
+        path: resolve(directory, `retired-${language}-${width}.png`),
+      });
+    }
+  }
+});
 
 async function settled(page: Page) {
   await expect(page.getByTestId("layer-status")).toHaveText(
@@ -62,11 +104,100 @@ async function frame(page: Page, selector = ".workspace", margin = 0) {
   await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
 }
 async function capture(page: Page, name: string) {
+  const selected = process.env.DOCS_MEDIA_FILES?.split(",");
+  if (selected && !selected.includes(name)) return;
   await settled(page);
   await page.mouse.move(0, 0);
   await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
   await page.screenshot({ path: resolve(destination, name) });
 }
+
+test("inspect the extended archive table and cell history", async ({
+  page,
+}) => {
+  test.skip(
+    !process.env.BACKFILL_CAPTURE_DIR,
+    "Set BACKFILL_CAPTURE_DIR for archive inspection",
+  );
+  const destination = process.env.BACKFILL_CAPTURE_DIR!;
+  const origin = process.env.DOCS_STATIC_URL || "http://127.0.0.1:4173";
+  await mkdir(destination, { recursive: true });
+  await page.route("**/*", (route) =>
+    new URL(route.request().url()).hostname === "127.0.0.1"
+      ? route.continue()
+      : route.abort(),
+  );
+  const catalog = await (
+    await page.request.get(`${origin}/data/index.json`)
+  ).json();
+  const records = parseTrackRecord(
+    await (
+      await page.request.get(`${origin}/data/verification/track_record.csv`)
+    ).text(),
+  );
+  expect(catalog.issues).toHaveLength(14);
+  expect(records).toHaveLength(11);
+  expect(records.every((record) => !record.prospective)).toBe(true);
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    for (const language of ["en", "es"] as const) {
+      await page.goto(`${origin}/?lang=${language}`);
+      await expect(page.getByTestId("retirement-notice")).toBeVisible();
+      await expect(page.locator(".forecast-timing")).toHaveCount(0);
+      await expect(page.locator(".track-chart")).toHaveCount(0);
+      const table = page.getByRole("table", {
+        name:
+          language === "en" ? "Weekly verification" : "Verificación semanal",
+        exact: true,
+      });
+      await expect(table.locator("tbody tr")).toHaveCount(records.length);
+      await expect(table.locator("tbody th")).toHaveText(
+        records.map((row) => formatDate(row.issue_date, language)),
+      );
+      await expect(
+        table.getByRole("columnheader", {
+          name: language === "en" ? "Notes" : "Notas",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await expect(table).not.toContainText(/backfill|prospective|prospectiv/i);
+      await expect(
+        page.getByText(
+          language === "en"
+            ? "These estimates were computed after their issue dates, using only data acquired before each issue."
+            : "Estas estimaciones se calcularon después de sus fechas de emisión, usando solo datos adquiridos antes de cada emisión.",
+          { exact: true },
+        ),
+      ).toHaveCount(1);
+      await selectCell(page, true);
+      await expect(
+        page.locator('.series-chart circle[fill="#176577"]'),
+      ).toHaveCount(14);
+      await expect(
+        page.locator('.series-chart circle[fill="#8b4a18"]'),
+      ).toHaveCount(11);
+      await expect(page.locator(".series-data tbody tr")).toHaveCount(14);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBe(width);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({
+        path: resolve(destination, `archive-${language}-${width}.png`),
+      });
+      await page.evaluate(() =>
+        window.scrollTo(
+          0,
+          document.querySelector(".track-panel")!.getBoundingClientRect().top +
+            scrollY -
+            12,
+        ),
+      );
+      await page.screenshot({
+        path: resolve(destination, `verification-${language}-${width}.png`),
+      });
+    }
+  }
+});
 async function selectCell(page: Page, staticMode: boolean, holdout = false) {
   const raw = await (
     await page.request.get(

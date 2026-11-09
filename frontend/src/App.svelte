@@ -1,4 +1,5 @@
 <script lang="ts">
+  import RetirementNotice from "./components/RetirementNotice.svelte";
   import {
     i18n,
     message,
@@ -63,6 +64,7 @@
     languageError = false;
     try {
       await selectLanguage(language, persist);
+      if (retirement) document.title = $i18n.messages.archivePageTitle;
     } catch {
       languageError = true;
     }
@@ -71,6 +73,31 @@
     data?.weeks.findIndex((week) => week.date === date) ?? -1,
   );
   const currentWeek = $derived(data?.weeks[weekIndex]);
+  const retirement = $derived(
+    data?.live?.retirement?.status === "ended"
+      ? data.live.retirement
+      : undefined,
+  );
+  $effect(() => {
+    if (retirement) {
+      document.title = $i18n.messages.archivePageTitle;
+      for (const selector of [
+        'meta[name="description"]',
+        'meta[property="og:description"]',
+        'meta[name="twitter:description"]',
+      ])
+        document
+          .querySelector(selector)
+          ?.setAttribute("content", $i18n.messages.archiveDescription);
+      for (const selector of [
+        'meta[property="og:title"]',
+        'meta[name="twitter:title"]',
+      ])
+        document
+          .querySelector(selector)
+          ?.setAttribute("content", $i18n.messages.archivePageTitle);
+    }
+  });
   const showHoldout = $derived(!staticMode && kind === "estimate");
   const holdoutCells = $derived(
     showHoldout
@@ -330,9 +357,17 @@
     </p>{/if}
   <div class="page-intro">
     <p class="eyebrow">{$i18n.messages.eyebrow}</p>
-    <h1>{$i18n.messages.weeklyFireDetections}</h1>
+    <h1>
+      {retirement
+        ? $i18n.messages.archiveHeading
+        : $i18n.messages.weeklyFireDetections}
+    </h1>
     <p class="intro-copy">
-      {staticMode ? $i18n.messages.liveIntro : $i18n.messages.apiIntro}
+      {retirement
+        ? $i18n.messages.archiveIntro
+        : staticMode
+          ? $i18n.messages.liveIntro
+          : $i18n.messages.apiIntro}
     </p>
   </div>
 
@@ -357,6 +392,7 @@
     </div>
   {:else if data}
     <section id="explorer" aria-label={$i18n.messages.dataExplorer}>
+      {#if retirement}<RetirementNotice {retirement} />{/if}
       <div class="filter-bar">
         <div class="week-control">
           <label for="issue-week"
@@ -462,11 +498,11 @@
           class="forecast-summary"
           aria-label={$i18n.messages.forecastMetadata}
         >
-          <p class="forecast-timing">
-            {layer.forecast.prospective
-              ? $i18n.messages.prospectiveEstimate
-              : $i18n.messages.backfillEstimate}
-          </p>
+          {#if !retirement}<p class="forecast-timing">
+              {layer.forecast.prospective
+                ? $i18n.messages.prospectiveEstimate
+                : $i18n.messages.backfillEstimate}
+            </p>{/if}
           <p>
             {$i18n.messages.issue}
             <strong
@@ -833,9 +869,11 @@
       </div>
     </section>
     {#if staticMode}{#await import("./components/TrackRecord.svelte") then module}<module.default
+          ended={Boolean(retirement)}
         />{/await}{/if}
     {#await import("./components/About.svelte") then module}<module.default
         meta={data.meta}
+        ended={Boolean(retirement)}
       />{/await}
   {/if}
   <footer class="page-footer">

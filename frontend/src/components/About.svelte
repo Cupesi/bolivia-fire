@@ -3,7 +3,7 @@
   import { provenanceRows } from "../lib/provenance";
   import { staticMode } from "../lib/data-client";
   import type { Meta } from "../lib/types";
-  let { meta }: { meta: Meta } = $props();
+  let { meta, ended = false }: { meta: Meta; ended?: boolean } = $props();
   const provenance = $derived(provenanceRows(meta, $i18n.messages));
   const safeLink = (url: string) => /^https:\/\//.test(url);
 </script>
@@ -40,7 +40,9 @@
             : $i18n.messages.retrospectiveEstimates}
         </h3>
         {#if staticMode}<p>
-            {$i18n.messages.liveLimitations}
+            {ended
+              ? $i18n.messages.archiveLimitations
+              : $i18n.messages.liveLimitations}
           </p>{:else}
           <p>
             {$i18n.messages.retrospectiveLimitations}

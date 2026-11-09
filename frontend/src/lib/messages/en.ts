@@ -1,4 +1,18 @@
 export const en = {
+  archiveHeading: "Weekly estimate archive",
+  archiveIntro: "Archived experimental weekly estimates (near-real-time data)",
+  archivePageTitle: "Bolivia Fire · Weekly estimate archive",
+  archiveDescription:
+    "Archived experimental weekly estimates of satellite fire detections in Bolivia and their verification record.",
+  retirementNotice:
+    "Weekly estimates ended. NASA stopped delivering Suomi NPP data on {ended}; the {target} estimate is the last one and cannot be verified.",
+  retirementSource: "NASA source",
+  noVerifiedArchiveWeeks: "No verified weeks in this archive.",
+  weeklyVerification: "Weekly verification",
+  archiveVerificationNote:
+    "These estimates were computed after their issue dates, using only data acquired before each issue.",
+  archiveLimitations:
+    "The model was trained on standard-processing detections and applied to near-real-time detections. These experimental estimates are not official warnings.",
   geographicHoldout: "Geographic holdout (geographic model)",
   geographicUnavailable:
     "Geographic holdout (no geographic estimate this week)",

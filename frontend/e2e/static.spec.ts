@@ -1,8 +1,137 @@
 import { formatDate, formatTime } from "../src/lib/i18n";
 import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 import { inspectMapDetail } from "./map-detail";
 import { inspectCellTable, inspectObservedTable } from "./cell-table";
 import type { Observation } from "../src/lib/types";
+
+test.use({ timezoneId: "Pacific/Kiritimati" });
+
+const archiveDescriptions = {
+  en: "Archived experimental weekly estimates of satellite fire detections in Bolivia and their verification record.",
+  es: "Estimaciones semanales experimentales archivadas de detecciones satelitales de incendios en Bolivia y su historial de verificación.",
+};
+
+for (const width of [390, 1440]) {
+  for (const language of ["en", "es"] as const) {
+    test(`shows the synthetic ended archive in ${language} at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      const fixture = new URL("./fixtures/retired-live-data/", import.meta.url);
+      await page.route("**/data/**", async (route) => {
+        const file = new URL(route.request().url()).pathname.split("/data/")[1];
+        try {
+          await route.fulfill({
+            contentType: "application/json",
+            body: await readFile(new URL(file, fixture), "utf8"),
+          });
+        } catch {
+          await route.continue();
+        }
+      });
+      await page.goto(`./?lang=${language}`);
+      const notice = page.getByTestId("retirement-notice");
+      await expect(notice).toBeVisible();
+      await expect(notice).toHaveAttribute("role", "status");
+      await expect(notice).toContainText(
+        language === "en" ? "2 Nov 2026" : "2 nov 2026",
+      );
+      await expect(notice).toContainText(
+        language === "en"
+          ? "Weekly estimates ended"
+          : "Las estimaciones semanales finalizaron",
+      );
+      await expect(notice).toContainText(
+        language === "en" ? "cannot be verified" : "no puede verificarse",
+      );
+      await expect(notice.getByRole("link")).toHaveAttribute(
+        "href",
+        /earthdata.nasa.gov/,
+      );
+      await expect(page).toHaveTitle(
+        language === "en"
+          ? /Weekly estimate archive/
+          : /Archivo de estimaciones semanales/,
+      );
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        "content",
+        archiveDescriptions[language],
+      );
+      await expect(page.locator("#about")).not.toContainText(
+        language === "en" ? "cannot be verified" : "no puede verificarse",
+      );
+      const verification = page.getByRole("table", {
+        name:
+          language === "en" ? "Weekly verification" : "Verificación semanal",
+        exact: true,
+      });
+      await expect(verification.getByRole("row")).toHaveCount(12);
+      await expect(
+        verification.getByRole("columnheader", {
+          name: language === "en" ? "Notes" : "Notas",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await expect(verification).not.toContainText(
+        /backfill|prospective|prospectiv/i,
+      );
+      await expect(page.locator(".forecast-timing")).toHaveCount(0);
+      await expect(page.locator(".track-chart")).toHaveCount(0);
+      await expect(
+        page.getByText(
+          language === "en"
+            ? "These estimates were computed after their issue dates, using only data acquired before each issue."
+            : "Estas estimaciones se calcularon después de sus fechas de emisión, usando solo datos adquiridos antes de cada emisión.",
+          { exact: true },
+        ),
+      ).toHaveCount(1);
+      await expect(
+        page
+          .getByLabel(language === "en" ? "Issue week" : "Semana de emisión")
+          .locator("option"),
+      ).toHaveCount(14);
+      await expect(page.getByTestId("target-progress")).toHaveCount(0);
+      await expect(
+        page.getByRole("button", {
+          name:
+            language === "en"
+              ? "Observed detections"
+              : "Detecciones observadas",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await page.locator(".map-canvas").focus();
+      await page.keyboard.press("Enter");
+      await expect(
+        page.locator('.series-chart circle[fill="#176577"]'),
+      ).toHaveCount(14);
+      await expect(
+        page.locator('.series-chart circle[fill="#8b4a18"]'),
+      ).toHaveCount(11);
+      await expect(page.locator(".series-data tbody tr")).toHaveCount(14);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBe(width);
+      await page
+        .locator(
+          `.language-control button[lang="${language === "en" ? "es" : "en"}"]`,
+        )
+        .click();
+      await expect(page).toHaveTitle(
+        language === "en"
+          ? /Archivo de estimaciones semanales/
+          : /Weekly estimate archive/,
+      );
+      await expect(
+        page.locator('meta[property="og:description"]'),
+      ).toHaveAttribute(
+        "content",
+        archiveDescriptions[language === "en" ? "es" : "en"],
+      );
+    });
+  }
+}
 
 test("@smoke observed table shows source indicators and counts on desktop and mobile", async ({
   page,

@@ -104,7 +104,9 @@ export function parseTrackRecord(csv: string): TrackRecord[] {
     .sort((a, b) => a.issue_date.localeCompare(b.issue_date));
 }
 
-export function decodePlaces(raw: Record<string, unknown>): Record<string, unknown> {
+export function decodePlaces(
+  raw: Record<string, unknown>,
+): Record<string, unknown> {
   if (!("format" in raw)) return raw;
   const { format, strings, ...columns } = raw;
   if (
@@ -345,9 +347,12 @@ export function createStaticClient(base: string) {
         ...raw,
         coverage: {
           lastObservedDay: observedDays.at(-1) ?? null,
-          pendingDays: days.filter((day) => day >= snapshotDay),
+          pendingDays:
+            live.retirement?.status === "ended"
+              ? []
+              : days.filter((day) => day >= snapshotDay),
           unobservedDays: raw.unobserved_days.filter(
-            (day) => day < snapshotDay,
+            (day) => live.retirement?.status === "ended" || day < snapshotDay,
           ),
         },
       },

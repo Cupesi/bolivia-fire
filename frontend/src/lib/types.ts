@@ -79,11 +79,19 @@ export interface LiveIssue {
   verified: boolean;
 }
 export interface LiveIndex {
+  retirement?: Retirement;
   issues: LiveIssue[];
   latest_issue: string | null;
   last_updated_utc: string;
   limitations?: string[];
   synthetic?: boolean;
+}
+export interface Retirement {
+  status: "ended";
+  ended_utc: string;
+  final_issue: string;
+  reason: string;
+  source_url: string;
 }
 export interface Forecast {
   issue_date: string;
