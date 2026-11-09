@@ -8,7 +8,7 @@
   ],
   "description": "Weekly satellite fire-detection dataset construction and evaluation for Bolivia, with validation-selected probability models, calibration, geographic holdouts, environmental covariates and recorded final-test access.",
   "license": "mit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "Bolivia",
     "satellite fire detections",
@@ -21,6 +21,12 @@
       "identifier": "10.5281/zenodo.23895316",
       "relation": "compiles",
       "resource_type": "dataset",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.48550/arXiv.2611.08539",
+      "relation": "isDescribedBy",
+      "resource_type": "publication-preprint",
       "scheme": "doi"
     }
   ]

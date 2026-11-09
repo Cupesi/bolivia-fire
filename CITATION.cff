@@ -1,15 +1,15 @@
 cff-version: 1.2.0
 type: software
-message: "Please cite this software and attribute the source datasets when using Bolivia Fire."
+message: "Please cite the paper and this software, and attribute the source datasets when using Bolivia Fire."
 title: "Bolivia Fire: weekly VIIRS fire-detection benchmark software"
 authors:
   - given-names: "Victor Hugo"
     family-names: "Cuellar Flores"
 repository-code: "https://github.com/Cupesi/bolivia-fire"
 license: MIT
-version: "0.1.0"
-doi: "10.5281/zenodo.23898298"
-date-released: "2026-11-02"
+version: "0.2.0"
+doi: "10.5281/zenodo.23898297"
+date-released: "2026-11-09"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.23898297"
@@ -36,3 +36,14 @@ references:
     publisher:
       name: Zenodo
     license: CC-BY-4.0
+preferred-citation:
+  type: article
+  title: "Predicting next-week VIIRS fire detections in Bolivia: a reproducible benchmark with temporal and geographic evaluation"
+  authors:
+    - given-names: "Victor Hugo"
+      family-names: "Cuellar Flores"
+  journal: "arXiv"
+  year: 2026
+  month: 11
+  doi: "10.48550/arXiv.2611.08539"
+  url: "https://arxiv.org/abs/2611.08539"
