@@ -31,48 +31,17 @@ The table below contrasts related research and operational platforms with Bolivi
 
 ---
 
-Benchmark details follow [Huot et al., sections II.B–C and Table II](https://arxiv.org/pdf/2112.02447)
-and [Mesogeos, sections 4.1–4.2 and Tables 1–2](https://arxiv.org/pdf/2306.05144).
+Benchmark details follow [Huot et al., sections II.B–C and Table II](https://arxiv.org/pdf/2112.02447) and [Mesogeos, sections 4.1–4.2 and Tables 1–2](https://arxiv.org/pdf/2306.05144).
 
 ## Positioning
 
-Bolivia Fire evaluates weekly satellite detection probabilities retrospectively and compares an
-availability-constrained simulation with a rainfall-augmented variant. It does not establish
-operational forecast performance. The implemented study follows the [frozen protocol](protocol.md)
-and the closed input lists described in the [model card](model_card.md):
+Bolivia Fire evaluates weekly satellite detection probabilities retrospectively and compares an availability-constrained simulation with a rainfall-augmented variant. It does not establish operational forecast performance. The implemented study follows the [frozen protocol](protocol.md) and the closed input lists described in the [model card](model_card.md):
 
-1. **Detection target.** The target is at least one FIRMS VIIRS S-NPP standard-processing
-   detection (`type = 0`, nominal or high confidence) in the national part of a 0.05° cell during
-   `[t, t + 7 days)`. Issues occur on Mondays at 00:00 UTC, from 2013 through 2025. Detections
-   are not fires, ignitions or burned area.
-2. **Availability assumption.** The strict simulation uses observation-derived features from
-   detections acquired before `t`, calendar terms and training climatology. It assumes SP
-   detections approximate those available in NRT; SP-versus-NRT agreement is not evaluated.
-   This assumption limits interpretation of the historical simulation.
-3. **Rainfall-only retrospective addition.** The implemented retrospective variant adds five
-   CHIRPS v3 variables: `rain_sum_7d`, `rain_sum_30d`, `rain_sum_90d`, `dry_days_30d` and
-   `rain_anomaly_90d`. Revised historical vintages do not recreate issue-time availability.
-   MapBiomas land cover was planned but omitted after verified public raster requests returned
-   HTTP 403; the comparison does not measure land-cover information gain. See
-   [covariate acquisition](covariates.md).
-4. **Partitions and cross-fitting.** Fitting uses 2013–2020, selection uses 2021 (`val_select`),
-   calibration uses 2022 (`val_calib`), and testing uses 2023–2025. A seeded 20% holdout of 1°
-   blocks tests geographic generalization. The frozen leave-one-year-out climatology exception
-   lets training rows use other training calendar years, including later training years;
-   validation, test and held-out geographic labels never enter climatology fitting. The
-   geographic model omits cell climatology. One primary final-test opening follows closed
-   selection. All five pre-registered sensitivity analyses are published:
-   [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json),
-   [low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
-   [neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json),
-   [climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and
-   [national-activity removal](../artifacts/evaluation/test_strict_drop_national.json).
-   Each has a separately logged reopening with its reason;
-   [primary and sensitivity results](results.md) remain distinct.
-5. **Probability evaluation.** Step-wise average precision is primary, with Brier score, log
-   loss, ROC-AUC, equal-frequency ECE and recall at 5% and 10% area budgets. Training climatology
-   and persistence provide baselines. These metrics assess detection probabilities under the
-   recorded data and information rules; they do not validate an operational warning system.
+1. **Detection target.** The target is at least one FIRMS VIIRS S-NPP standard-processing detection (`type = 0`, nominal or high confidence) in the national part of a 0.05° cell during `[t, t + 7 days)`. Issues occur on Mondays at 00:00 UTC, from 2013 through 2025. Detections are not fires, ignitions or burned area.
+2. **Availability assumption.** The strict simulation uses observation-derived features from detections acquired before `t`, calendar terms and training climatology. It assumes SP detections approximate those available in NRT; SP-versus-NRT agreement is not evaluated. This assumption limits interpretation of the historical simulation.
+3. **Rainfall-only retrospective addition.** The implemented retrospective variant adds five CHIRPS v3 variables: `rain_sum_7d`, `rain_sum_30d`, `rain_sum_90d`, `dry_days_30d` and `rain_anomaly_90d`. Revised historical vintages do not recreate issue-time availability. MapBiomas land cover was planned but omitted after verified public raster requests returned HTTP 403; the comparison does not measure land-cover information gain. See [covariate acquisition](covariates.md).
+4. **Partitions and cross-fitting.** Fitting uses 2013–2020, selection uses 2021 (`val_select`), calibration uses 2022 (`val_calib`), and testing uses 2023–2025. A seeded 20% holdout of 1° blocks tests geographic generalization. The frozen leave-one-year-out climatology exception lets training rows use other training calendar years, including later training years; validation, test and held-out geographic labels never enter climatology fitting. The geographic model omits cell climatology. One primary final-test opening follows closed selection. All five pre-registered sensitivity analyses are published: [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json), [low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json), [neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json), [climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and [national-activity removal](../artifacts/evaluation/test_strict_drop_national.json). Each has a separately logged reopening with its reason; [primary and sensitivity results](results.md) remain distinct.
+5. **Probability evaluation.** Step-wise average precision is primary, with Brier score, log loss, ROC-AUC, equal-frequency ECE and recall at 5% and 10% area budgets. Training climatology and persistence provide baselines. These metrics assess detection probabilities under the recorded data and information rules; they do not validate an operational warning system.
 
 ---
 

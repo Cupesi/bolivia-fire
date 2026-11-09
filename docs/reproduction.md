@@ -1,81 +1,35 @@
 # Reproduction
 
-Run the PowerShell sequence below from a clean clone. Keep
-[protocol 1.1](../configs/protocol.yaml), [experiment configuration](../configs/experiments.yaml)
-and [source pins](../datasets/sources.yaml) unchanged. The strict snapshot has
-37,146 cells and 678 issues; [the summary](../artifacts/figures/dataset_summary.json)
-records exact input hashes for comparison.
+Run the PowerShell sequence below from a clean clone. Keep [protocol 1.1](../configs/protocol.yaml), [experiment configuration](../configs/experiments.yaml) and [source pins](../datasets/sources.yaml) unchanged. The strict snapshot has 37,146 cells and 678 issues; [the summary](../artifacts/figures/dataset_summary.json) records exact input hashes for comparison.
 
-Primary results, all five pre-registered sensitivity analyses and the exploratory learner
-comparison are published in [results](results.md) and [model comparison](model-comparison.md).
-Sensitivity artifacts cover [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json),
-[low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json),
-[neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json),
-[climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and
-[national-activity removal](../artifacts/evaluation/test_strict_drop_national.json).
-Later test openings are logged separately with their reasons. The commands below reproduce
-the pipeline and require the named local artifacts and credentials.
+Primary results, all five pre-registered sensitivity analyses and the exploratory learner comparison are published in [results](results.md) and [model comparison](model-comparison.md). Sensitivity artifacts cover [all confidence classes](../artifacts/evaluation/test_strict_all_confidence.json), [low-coverage exclusion](../artifacts/evaluation/test_strict_exclude_low_coverage.json), [neighborhood removal](../artifacts/evaluation/test_strict_drop_neighborhood.json), [climatology removal](../artifacts/evaluation/test_strict_drop_climatology.json) and [national-activity removal](../artifacts/evaluation/test_strict_drop_national.json). Later test openings are logged separately with their reasons. The commands below reproduce the pipeline and require the named local artifacts and credentials.
 
 ## Release reproduction limits
 
-Dataset version 0.1.0 is available at
-[10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains
-the benchmark-data, reproduction-artifacts and raw-inputs archives described in
-[the release format](../datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary,
-member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives
-and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and
-native MapBiomas 30 m maps are not supplied. Dataset reuse is supported;
-prediction-based recalculation and raw-input rebuilding remain partially supported.
+Dataset version 0.1.0 is available at [10.5281/zenodo.23895316](https://doi.org/10.5281/zenodo.23895316). The record contains the benchmark-data, reproduction-artifacts and raw-inputs archives described in [the release format](../datasets/README.md#versioned-data-release), plus the README, licence notices, data dictionary, member inventory and SHA-256 checksums. Operational live forecasts, serving derivatives and regenerable caches remain excluded; global CHIRPS rasters, MODIS HDF granules and native MapBiomas 30 m maps are not supplied. Dataset reuse is supported; prediction-based recalculation and raw-input rebuilding remain partially supported.
 
-Concept DOI (all versions):
-[10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the
-version DOI above to identify these exact files.
+Concept DOI (all versions): [10.5281/zenodo.23895315](https://doi.org/10.5281/zenodo.23895315). Cite the version DOI above to identify these exact files.
 
-Strict primary validation/test exports and alternative-learner cached vectors are
-retained. Rainfall, sensitivity and H3/H4/H5 per-row prediction exports
-and standalone scored-row masks are absent. Their fitted models and result records are
-available, but regenerating predictions requires the logged test-access procedure below.
-Recomputing any final-test metric is a logged opening under
-[the protocol](../configs/protocol.yaml#final_test_access), including prediction-only
-recalculation. Release verification does not open the test.
+Strict primary validation/test exports and alternative-learner cached vectors are retained. Rainfall, sensitivity and H3/H4/H5 per-row prediction exports and standalone scored-row masks are absent. Their fitted models and result records are available, but regenerating predictions requires the logged test-access procedure below. Recomputing any final-test metric is a logged opening under [the protocol](../configs/protocol.yaml#final_test_access), including prediction-only recalculation. Release verification does not open the test.
 
-The reproduction-artifacts archive includes `release/code_revisions.json` with producing
-revisions per experiment family and `release/historical_sources/` with the source-registry
-bytes required by historical hashes. Use those revisions and snapshots; the packaging
-revision and current merged registry do not replace them. Existing guards can reject a
-mismatched registry. Preserve the original H3 archive and the separate H4/H5 amendment
-namespace; an older `not_evaluated` entry does not describe the amended results.
+The reproduction-artifacts archive includes `release/code_revisions.json` with producing revisions per experiment family and `release/historical_sources/` with the source-registry bytes required by historical hashes. Use those revisions and snapshots; the packaging revision and current merged registry do not replace them. Existing guards can reject a mismatched registry. Preserve the original H3 archive and the separate H4/H5 amendment namespace; an older `not_evaluated` entry does not describe the amended results.
 
 Known discrepancies remain explicit:
 
-- `cell_places.parquet` differs from an older manifest hash; those older bytes were not
-  retained. These fields are display metadata, not model inputs.
-- Fourteen intermediate states were not retained; exact exceptions and reasons are in
-  [the provenance checks](../tests/test_provenance_hashes.py).
-- The MOD13A2 acquisition AOI buffer was 0.05 degrees rather than the registered 0.1;
-  audit records retain this deviation.
+- `cell_places.parquet` differs from an older manifest hash; those older bytes were not retained. These fields are display metadata, not model inputs.
+- Fourteen intermediate states were not retained; exact exceptions and reasons are in [the provenance checks](../tests/test_provenance_hashes.py).
+- The MOD13A2 acquisition AOI buffer was 0.05 degrees rather than the registered 0.1; audit records retain this deviation.
 - CatBoost GPU scores are not digit-reproducible with identical inputs and parameters.
 
-Global CHIRPS rasters were deleted after native-window extraction. MODIS HDF granules
-and native MapBiomas 30 m maps are absent; MapBiomas re-extraction requires an Earth
-Engine account. See [covariate availability](covariates.md) for retained products.
-Only load trusted model files: joblib/pickle deserialization can execute arbitrary code.
+Global CHIRPS rasters were deleted after native-window extraction. MODIS HDF granules and native MapBiomas 30 m maps are absent; MapBiomas re-extraction requires an Earth Engine account. See [covariate availability](covariates.md) for retained products. Only load trusted model files: joblib/pickle deserialization can execute arbitrary code.
 
 ## How to cite
 
-Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction
-artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
+Dataset: Cuellar Flores, Victor Hugo. *Bolivia Fire benchmark data and reproduction artifacts*, version 0.1.0. https://doi.org/10.5281/zenodo.23895316.
 
-Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection
-benchmark software*, version 0.1.0.
-[10.5281/zenodo.23898298](https://doi.org/10.5281/zenodo.23898298).
-[Repository](https://github.com/Cupesi/bolivia-fire);
-[v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
+Software: Cuellar Flores, Victor Hugo. *Bolivia Fire: weekly VIIRS fire-detection benchmark software*, version 0.1.0. [10.5281/zenodo.23898298](https://doi.org/10.5281/zenodo.23898298). [Repository](https://github.com/Cupesi/bolivia-fire); [v0.1.0 release](https://github.com/Cupesi/bolivia-fire/releases/tag/v0.1.0).
 
-Software concept DOI (all versions):
-[10.5281/zenodo.23898297](https://doi.org/10.5281/zenodo.23898297).
-The software archive preserves tag `v0.1.0` at commit `0c5ca2c`. Later
-documentation changes are outside that archive.
+Software concept DOI (all versions): [10.5281/zenodo.23898297](https://doi.org/10.5281/zenodo.23898297). The software archive preserves tag `v0.1.0` at commit `0c5ca2c`. Later documentation changes are outside that archive.
 
 Cite the dataset and software separately and retain upstream source attributions.
 
@@ -90,10 +44,7 @@ uv sync --all-extras
 uv run --no-sync bolivia-fire --help
 ```
 
-Copy [.env.example](../.env.example) to `.env` and set `FIRMS_MAP_KEY` to a NASA
-FIRMS map key locally. The loader checks the environment first, then the local
-file. Never print the key or put it in commands, manifests or source control.
-Builds after acquisition use local files and do not need the key.
+Copy [.env.example](../.env.example) to `.env` and set `FIRMS_MAP_KEY` to a NASA FIRMS map key locally. The loader checks the environment first, then the local file. Never print the key or put it in commands, manifests or source control. Builds after acquisition use local files and do not need the key.
 
 ## 2. Acquire observations and pinned boundaries
 
@@ -102,17 +53,9 @@ uv run --no-sync bolivia-fire acquire firms --start 2012-01-20 --end 2026-01-04
 uv run --no-sync bolivia-fire acquire boundaries
 ```
 
-The FIRMS range includes antecedent history and the full final target week.
-Acquisition uses bounded five-day requests, validates responses, and records
-identities and SHA256 hashes. Repeating the command resumes and verifies local
-snapshots. Boundary acquisition restores missing files from pinned URLs and
-requires matching hashes. Do not use `--force` to reproduce an existing snapshot.
-See [acquisition](acquisition.md) for quota, disk and resume behavior.
+The FIRMS range includes antecedent history and the full final target week. Acquisition uses bounded five-day requests, validates responses, and records identities and SHA256 hashes. Repeating the command resumes and verifies local snapshots. Boundary acquisition restores missing files from pinned URLs and requires matching hashes. Do not use `--force` to reproduce an existing snapshot. See [acquisition](acquisition.md) for quota, disk and resume behavior.
 
-The outage HTML is a local dated snapshot, while its parsed table and source pin
-are in Git. Restore it before building detections. This command reuses a matching
-local snapshot or fetches the recorded public URL, verifies its hash before
-writing, and checks the parsed table:
+The outage HTML is a local dated snapshot, while its parsed table and source pin are in Git. Restore it before building detections. This command reuses a matching local snapshot or fetches the recorded public URL, verifies its hash before writing, and checks the parsed table:
 
 ```powershell
 @'
@@ -140,11 +83,7 @@ load_outages(Paths(root))
 '@ | uv run --no-sync python -
 ```
 
-The provider URL is mutable. If its current bytes differ, the original dated
-HTML with the recorded hash is required; changing the pin would create a new
-dataset. Fresh FIRMS responses can also differ from the reference acquisition.
-Exact byte reproduction requires the original raw snapshots and manifests;
-a new download alone cannot guarantee their availability or identity.
+The provider URL is mutable. If its current bytes differ, the original dated HTML with the recorded hash is required; changing the pin would create a new dataset. Fresh FIRMS responses can also differ from the reference acquisition. Exact byte reproduction requires the original raw snapshots and manifests; a new download alone cannot guarantee their availability or identity.
 
 ## 3. Build the strict dataset
 
@@ -154,12 +93,7 @@ uv run --no-sync bolivia-fire build detections
 uv run --no-sync bolivia-fire build panel
 ```
 
-Cells use the pinned national and department boundaries. Detection construction
-deduplicates canonical raw observations and publishes detections and observation
-days as one versioned bundle. Panel construction uses every protocol Monday and
-writes yearly files. Do not add issue bounds for a full rebuild: a bounded build
-replaces each selected year's file with only the requested issues.
-[Dataset construction](dataset.md) defines labels, filters and provenance checks.
+Cells use the pinned national and department boundaries. Detection construction deduplicates canonical raw observations and publishes detections and observation days as one versioned bundle. Panel construction uses every protocol Monday and writes yearly files. Do not add issue bounds for a full rebuild: a bounded build replaces each selected year's file with only the requested issues. [Dataset construction](dataset.md) defines labels, filters and provenance checks.
 
 ## 4. Extract CHIRPS and build retrospective features
 
@@ -168,19 +102,9 @@ uv run --no-sync bolivia-fire covariates chirps-annual --start-year 2012 --end-y
 uv run --no-sync bolivia-fire covariates features
 ```
 
-Run one extraction process. Annual downloads are sequential and temporary;
-native Bolivia windows and manifests are retained. HTTP 429 can switch to the
-verified FTP directory. For the incomplete 2026 year, extraction uses January
-1–4 and falls back to daily COG windows when the annual file is absent. Repeating
-the command resumes verified checkpoints. Follow [covariate status](covariates.md)
-for cooldowns and provider access; do not treat partial years as full coverage.
+Run one extraction process. Annual downloads are sequential and temporary; native Bolivia windows and manifests are retained. HTTP 429 can switch to the verified FTP directory. For the incomplete 2026 year, extraction uses January 1–4 and falls back to daily COG windows when the annual file is absent. Repeating the command resumes verified checkpoints. Follow [covariate status](covariates.md) for cooldowns and provider access; do not treat partial years as full coverage.
 
-Features join by cell and issue date. Missing rainfall is never zero-filled;
-retrospective fitting rejects incomplete values or invalid provenance. Current
-retrospective model inputs are the frozen CHIRPS rainfall columns. Anonymous MapBiomas
-raster access failed for that original comparison. Later MOD13A2 and authenticated
-MapBiomas inputs belong to the [vegetation protocol](extension-vegetation.md) and
-[land-cover amendment](extension-landcover-amendment.md); they are separate from step 4.
+Features join by cell and issue date. Missing rainfall is never zero-filled; retrospective fitting rejects incomplete values or invalid provenance. Current retrospective model inputs are the frozen CHIRPS rainfall columns. Anonymous MapBiomas raster access failed for that original comparison. Later MOD13A2 and authenticated MapBiomas inputs belong to the [vegetation protocol](extension-vegetation.md) and [land-cover amendment](extension-landcover-amendment.md); they are separate from step 4.
 
 ## 5. Train, select and calibrate on validation years
 
@@ -191,13 +115,7 @@ uv run --no-sync bolivia-fire train --variant retrospective
 uv run --no-sync bolivia-fire select --variant retrospective
 ```
 
-The strict path can run independently of rainfall extraction;
-the retrospective commands require step 4 to finish. Each train/select command
-also produces its corresponding geographic model with cell climatology omitted.
-Fitting uses 2013–2020, selection and early stopping use 2021, and isotonic
-calibration uses 2022. Held-out geographic labels never enter these stages.
-Preserve all closed selection records and matching input hashes before evaluation.
-See [evaluation](evaluation.md) for the frozen search, eligibility and artifacts.
+The strict path can run independently of rainfall extraction; the retrospective commands require step 4 to finish. Each train/select command also produces its corresponding geographic model with cell climatology omitted. Fitting uses 2013–2020, selection and early stopping use 2021, and isotonic calibration uses 2022. Held-out geographic labels never enter these stages. Preserve all closed selection records and matching input hashes before evaluation. See [evaluation](evaluation.md) for the frozen search, eligibility and artifacts.
 
 ## 6. Log an independent reproduction and export predictions
 
@@ -209,22 +127,9 @@ uv run --no-sync bolivia-fire predict --variant strict --split test
 uv run --no-sync bolivia-fire predict --variant retrospective --split test
 ```
 
-Even a clean clone includes the published access records in
-`artifacts/evaluation/final_test_log.json`. Preserve this log: the command above
-is an explicit, logged reopening for independent reproduction. A bare
-`--open-final-test` applies only to a new study with no previous access records.
-The evaluation records access to 2023–2025 before loading test
-labels, including attempts that subsequently fail. A strict report includes the
-paired retrospective comparison when the matching closed selection and complete
-inputs are available. Do not run a second final-test evaluation as a routine
-check: later openings require an explicit `--reopen-reason` and remain logged.
-If retrospective inputs are unavailable, its comparison is null with a reason;
-omit its prediction export until those inputs and selections exist.
+Even a clean clone includes the published access records in `artifacts/evaluation/final_test_log.json`. Preserve this log: the command above is an explicit, logged reopening for independent reproduction. A bare `--open-final-test` applies only to a new study with no previous access records. The evaluation records access to 2023–2025 before loading test labels, including attempts that subsequently fail. A strict report includes the paired retrospective comparison when the matching closed selection and complete inputs are available. Do not run a second final-test evaluation as a routine check: later openings require an explicit `--reopen-reason` and remain logged. If retrospective inputs are unavailable, its comparison is null with a reason; omit its prediction export until those inputs and selections exist.
 
-Prediction exports contain calibrated estimates for temporal and geographic
-populations and do not compute test metrics. They retain missing labels when
-history eligibility permits. Changing panel, covariate or fitted-model inputs
-requires the matching stages to be rebuilt; do not reuse stale selections.
+Prediction exports contain calibrated estimates for temporal and geographic populations and do not compute test metrics. They retain missing labels when history eligibility permits. Changing panel, covariate or fitted-model inputs requires the matching stages to be rebuilt; do not reuse stale selections.
 
 ## 7. Prepare and serve the API and UI
 
@@ -241,11 +146,7 @@ uv run --no-sync python -m backend.app.prepare
 uv run --no-sync uvicorn backend.app.main:app --host 127.0.0.1 --port 8765
 ```
 
-Open `http://127.0.0.1:8765/` for the explorer and
-`http://127.0.0.1:8765/api/v1/docs` for the API contract. Preparation creates an
-optional compact series index. The API also works without it, using the original
-panel. Restart after artifact changes. Missing predictions disable estimates;
-observations remain available. See [API](api.md) and [frontend](frontend.md).
+Open `http://127.0.0.1:8765/` for the explorer and `http://127.0.0.1:8765/api/v1/docs` for the API contract. Preparation creates an optional compact series index. The API also works without it, using the original panel. Restart after artifact changes. Missing predictions disable estimates; observations remain available. See [API](api.md) and [frontend](frontend.md).
 
 Offline verification commands, from the repository root:
 
@@ -254,36 +155,17 @@ uv run --no-sync python -m pytest -q
 uv run --no-sync python -m pytest -q backend/tests -p no:cacheprovider
 ```
 
-The suites include synthetic build/model workflows and coverage/provenance
-checks. Live FIRMS tests are deselected by default; backend tests also exercise
-local artifacts when present. Passing synthetic tests does not establish real
-model skill, full acquisition coverage or a full-scale resource bound.
+The suites include synthetic build/model workflows and coverage/provenance checks. Live FIRMS tests are deselected by default; backend tests also exercise local artifacts when present. Passing synthetic tests does not establish real model skill, full acquisition coverage or a full-scale resource bound.
 
 ## Byte-exact provenance
 
-Git stores `artifacts/`, `configs/`, `datasets/`, `docs/`, `src/` and `tests/`
-byte-exact so recorded SHA-256 digests match committed evidence. Code is written
-with LF line endings. Commits before `52f9565` store LF copies of 56 evidence
-files; their recorded hashes are reproduced by converting LF to CRLF. Reruns on
-Linux and macOS write LF, so cross-platform comparisons require parsed content
-when byte digests differ.
+Git stores `artifacts/`, `configs/`, `datasets/`, `docs/`, `src/` and `tests/` byte-exact so recorded SHA-256 digests match committed evidence. Code is written with LF line endings. Commits before `52f9565` store LF copies of 56 evidence files; their recorded hashes are reproduced by converting LF to CRLF. Reruns on Linux and macOS write LF, so cross-platform comparisons require parsed content when byte digests differ.
 
-The provenance test checks recorded hashes against reachable Git blobs, with
-explicit exceptions for a legacy CRLF source registry and intermediate states
-that were never committed. These include audit documents, request manifests,
-schemas, code, tests and input plans. Five AppEEARS integrity-check manifest
-hashes precede resume passes that rewrote retrieval timestamps; the test checks
-their task identities, file counts and total bytes against committed manifests.
-Intermediate registry states used by E6 are recorded in history. The exact
-exception pairs and their reasons are retained in the test.
-For records within an `artifacts/evaluation/extension_archive_attempt_*/`
-directory, references to top-level evaluation files may also match historical
-blobs in that same archive or its `retired_active/` subdirectory.
+The provenance test checks recorded hashes against reachable Git blobs, with explicit exceptions for a legacy CRLF source registry and intermediate states that were never committed. These include audit documents, request manifests, schemas, code, tests and input plans. Five AppEEARS integrity-check manifest hashes precede resume passes that rewrote retrieval timestamps; the test checks their task identities, file counts and total bytes against committed manifests. Intermediate registry states used by E6 are recorded in history. The exact exception pairs and their reasons are retained in the test. For records within an `artifacts/evaluation/extension_archive_attempt_*/` directory, references to top-level evaluation files may also match historical blobs in that same archive or its `retired_active/` subdirectory.
 
 ## Recorded-artifact notebooks
 
-After restoring the local dataset, recorded evaluation JSON and static figures, execute
-each notebook from the repository root with a clean kernel:
+After restoring the local dataset, recorded evaluation JSON and static figures, execute each notebook from the repository root with a clean kernel:
 
 ```powershell
 uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/01_exploration.ipynb --ExecutePreprocessor.timeout=240
@@ -292,46 +174,21 @@ uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/0
 uv run --no-sync jupyter nbconvert --to notebook --execute --inplace notebooks/04_evaluation.ipynb --ExecutePreprocessor.timeout=240
 ```
 
-[Exploration](../notebooks/01_exploration.ipynb) describes observation coverage and labels.
-[Features](../notebooks/02_features.ipynb) reconstructs one real 2024 cell-week and checks
-history against the saved panel, future-detection invariance and LOYO climatology.
-[Modeling](../notebooks/03_modeling.ipynb) reads validation records and saved-model gain
-importance. [Evaluation](../notebooks/04_evaluation.ipynb) displays recorded final-test
-and sensitivity results, with a final post-hoc comparison section that remains executable
-when alternative-learner artifacts are absent. If any required comparison JSON
-is missing, all comparison cells are skipped and the notebook lists the missing
-files; the primary and sensitivity sections still run.
+[Exploration](../notebooks/01_exploration.ipynb) describes observation coverage and labels. [Features](../notebooks/02_features.ipynb) reconstructs one real 2024 cell-week and checks history against the saved panel, future-detection invariance and LOYO climatology. [Modeling](../notebooks/03_modeling.ipynb) reads validation records and saved-model gain importance. [Evaluation](../notebooks/04_evaluation.ipynb) displays recorded final-test and sensitivity results, with a final post-hoc comparison section that remains executable when alternative-learner artifacts are absent. If any required comparison JSON is missing, all comparison cells are skipped and the notebook lists the missing files; the primary and sensitivity sections still run.
 
-These commands fit no models, create no new predictions and make no final-test openings.
-They read the local canonical detection bundle, panel, CHIRPS features, selected strict
-model objects, evaluation records and existing PNGs. Only notebook outputs are updated.
-See [figures](figures.md) for the notebook inventory, figure sources and visual checks.
+These commands fit no models, create no new predictions and make no final-test openings. They read the local canonical detection bundle, panel, CHIRPS features, selected strict model objects, evaluation records and existing PNGs. Only notebook outputs are updated. See [figures](figures.md) for the notebook inventory, figure sources and visual checks.
 
 ## Containerized tests
 
-With Docker running and `python:3.13-slim` and `node:22-bookworm-slim` already
-available locally, run from the repository root in a POSIX shell or Git Bash:
+With Docker running and `python:3.13-slim` and `node:22-bookworm-slim` already available locally, run from the repository root in a POSIX shell or Git Bash:
 
 ```sh
 sh scripts/docker-test.sh
 ```
 
-The script mounts a sanitized source snapshot read-only at `/src`, copies it to
-container-local `/work`, lists that workdir and checks that neither path contains
-`.env`. Secrets, local datasets, models, predictions, host dependency directories
-and generated caches are excluded before mounting. The Python stage installs
-Git, `libexpat1`, `libgomp1` and uv, runs `uv sync --all-extras --frozen`, Ruff and
-the offline pytest suites, including backend tests; `live` and `local_data`
-tests are deselected.
-The frontend stage runs `npm ci`, `npm run check`, `npm run test` and `npm run build`.
+The script mounts a sanitized source snapshot read-only at `/src`, copies it to container-local `/work`, lists that workdir and checks that neither path contains `.env`. Secrets, local datasets, models, predictions, host dependency directories and generated caches are excluded before mounting. The Python stage installs Git, `libexpat1`, `libgomp1` and uv, runs `uv sync --all-extras --frozen`, Ruff and the offline pytest suites, including backend tests; `live` and `local_data` tests are deselected. The frontend stage runs `npm ci`, `npm run check`, `npm run test` and `npm run build`.
 
-Stages run sequentially with two CPUs and a 3 GiB memory limit each. Images are
-never pulled; package dependencies require network access. Named volumes
-`bolivia-fire-uv-cache` and `bolivia-fire-npm-cache` retain download caches.
-Containers and the temporary source snapshot are removed after use. The script
-reports stage wall times and exit codes and checks a 55 GiB free-space floor on
-the repository drive before and between stages. All test and build outputs stay
-inside the disposable containers.
+Stages run sequentially with two CPUs and a 3 GiB memory limit each. Images are never pulled; package dependencies require network access. Named volumes `bolivia-fire-uv-cache` and `bolivia-fire-npm-cache` retain download caches. Containers and the temporary source snapshot are removed after use. The script reports stage wall times and exit codes and checks a 55 GiB free-space floor on the repository drive before and between stages. All test and build outputs stay inside the disposable containers.
 
 ## Recorded resource measurements
 
@@ -344,18 +201,6 @@ inside the disposable containers.
 | API with compact index | Startup 2.332 s; RSS 184,893,440 bytes after startup and 235,769,856 after requests | [Measurement JSON](../backend/measurements.json) |
 | API compact-index workload | 50 layers and 50 series; p95 97.12 ms and 105.41 ms respectively | [Measurement JSON](../backend/measurements.json) |
 
-These are local measurements on the snapshots and machines described in the
-linked records. CHIRPS values are partial-extraction measurements, not full-range
-runtime or storage totals. No production model runtime or full-scale peak RAM
-measurement is asserted here. Acquisition duration estimates in older notes are
-not measured full-run durations.
+These are local measurements on the snapshots and machines described in the linked records. CHIRPS values are partial-extraction measurements, not full-range runtime or storage totals. No production model runtime or full-scale peak RAM measurement is asserted here. Acquisition duration estimates in older notes are not measured full-run durations.
 
-CHIRPS extraction preserves a 55 GB free-space floor and reserves the remaining
-annual download before starting it. Preparation requires 60 GiB free to preserve
-a 55 GiB reserve; its DuckDB settings allow 512 MB query memory and up to 4 GB
-temporary spill. Detection staging also uses a 512 MiB DuckDB query limit.
-These are configured limits, not measured total process peaks. Keep room for
-raw snapshots, one annual download, processed outputs and temporary model
-matrices. The [API measurement](../backend/measurements.json) recorded
-108,723,605,504 free disk bytes after its indexed workload; that is a machine
-checkpoint, not a minimum storage requirement for a new clone.
+CHIRPS extraction preserves a 55 GB free-space floor and reserves the remaining annual download before starting it. Preparation requires 60 GiB free to preserve a 55 GiB reserve; its DuckDB settings allow 512 MB query memory and up to 4 GB temporary spill. Detection staging also uses a 512 MiB DuckDB query limit. These are configured limits, not measured total process peaks. Keep room for raw snapshots, one annual download, processed outputs and temporary model matrices. The [API measurement](../backend/measurements.json) recorded 108,723,605,504 free disk bytes after its indexed workload; that is a machine checkpoint, not a minimum storage requirement for a new clone.

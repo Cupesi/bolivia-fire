@@ -4,9 +4,7 @@ This experiment checks whether the benchmark's conclusion is robust to the learn
 
 The validation decision was frozen at 2026-10-31T19:35:50.785313+00:00, before its exploratory scoring began at 2026-10-31T19:36:43.128562+00:00. The decision is in [comparison_selection.json](../artifacts/evaluation/comparison_selection.json), SHA-256 `338e530a9eea33b4f7bd559c258c572ec1892905a6d92a58079b6ea89e5a0e00`. It uses validation evidence only.
 
-Metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001
-retain two significant digits. Counts are exact. Exact values are in the cited evaluation
-JSON artifacts.
+Metrics and interval endpoints are rounded to three decimals; ECE and values below 0.001 retain two significant digits. Counts are exact. Exact values are in the cited evaluation JSON artifacts.
 
 ## Models and information
 

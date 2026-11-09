@@ -1,8 +1,6 @@
 # Evaluation artifact index
 
-Paths below are relative to this directory. Recorded artifacts are stored
-byte-exact because their SHA-256 hashes are recorded in provenance records.
-Do not rewrite, move or rename them. Archived attempts are retained for provenance.
+Paths below are relative to this directory. Recorded artifacts are stored byte-exact because their SHA-256 hashes are recorded in provenance records. Do not rewrite, move or rename them. Archived attempts are retained for provenance.
 
 ## Primary benchmark
 
